@@ -23,9 +23,22 @@ function slide(a) {
         else {
             path = path.substring(0,path.indexOf('_')+1)+--index+".jpg";
         }
+    }else{
+        path = path.substring(0,path.indexOf('_')+1)+a+".jpg";
     }
     $("#slide_img").attr('src',path);
     $("#slide_img").attr('value',index);
+    if(index===0) {
+        $(".slider_sel_btn span:not(0)").css("opacity",1);
+        $(".slider_sel_btn span:eq(0)").css("opacity",0.4);
+    }else if(index===1){
+        $(".slider_sel_btn span:not(1)").css("opacity",1);
+        $(".slider_sel_btn span:eq(1)").css("opacity",0.4);
+    }else if(index===2){
+        $(".slider_sel_btn span:not(2)").css("opacity",1);
+        $(".slider_sel_btn span:eq(2)").css("opacity",0.4);
+    }
+
 }
 /*school clicked*/
 function school_clicked(a) {
@@ -66,7 +79,7 @@ $(document).ready(function () {
                       "     <a href='javascript:void(0)' class='fl'>" +
                       "         <img src="+ cont.bookstore_img_url+" alt='图片加载错误' width='32' height='32'>" +
                       "     </a>" +
-                      "     <p class='fl'>"+cont.bookstore_name+"("+cont.bookstore_id+")"+"</p>" +
+                      "     <p class='fl phover'>"+cont.bookstore_name+"("+cont.bookstore_id+")"+"</p>" +
                       "  </span>" +
                       "</li>";
                   // alert(string);
@@ -159,8 +172,12 @@ $(document).ready(function () {
             $(".book-discount-body-list").append(string);
         });
     });
-
-
+    /*hover click*/
+    $(".slider_sel_btn span").on("click mouseover",function () {
+        $(this).css("opacity",0.4);
+        $(".slider_sel_btn span").not(this).css("opacity",1);
+        slide($(this).attr("value"));
+    });
     /*show the school*/
     $(".a_school").click(function () {
         $(".show_school").show();
@@ -192,14 +209,15 @@ $(document).ready(function () {
     });
     /*slide btn_left */
     $("#btn_left").click(function () {//left
-         slide("left");
+        slide("left");
     });
     /*slide btn_right*/
     $("#btn_right").click(function () {//right
        slide("right")
     });
+
     /*time task*/
-    window.setInterval ("slide('right')", 5000);
+    window.setInterval ("slide('right')", 5000 );
     /*click to join us*/
     $("#joinus").click(function () {
 

@@ -184,6 +184,19 @@ header{
     left:39px;
     top:-200px;
 }
+.slider_sel_btn{
+    text-align: center;
+    position: absolute;
+    width: 72.5%;
+    height: 20px;
+    top: 386px;
+    padding: 2px 5px 2px 5px;
+    background: rgb(0,178,206);
+}
+.slider_sel_btn span{
+    color: white;
+    /*background: white;*/
+}
 #btn_left{
     height: 100px;
     width: 30px;
@@ -239,6 +252,15 @@ header{
 .hot-topic-body-right >span>input[name='search'] {
     height: 32px;
     padding: 5px;
+}
+.phover{
+    color: black;
+}
+.phover:hover{
+    color: rgb(0,168,155);
+    font-size: 15px;
+    cursor: pointer;
+
 }
 #btn_search{
     position: relative;
@@ -442,6 +464,7 @@ header{
     width: 100%;
     height: 95%;
     padding:10px;
+    opacity: 1;
 }
 .book-discount-body-list{
     width: 100%;

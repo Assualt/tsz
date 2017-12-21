@@ -23,9 +23,22 @@ function slide(a) {
         else {
             path = path.substring(0,path.indexOf('_')+1)+--index+".jpg";
         }
+    }else{
+        path = path.substring(0,path.indexOf('_')+1)+a+".jpg";
     }
     $("#slide_img").attr('src',path);
     $("#slide_img").attr('value',index);
+    if(index===0) {
+        $(".slider_sel_btn span:not(0)").css("opacity",1);
+        $(".slider_sel_btn span:eq(0)").css("opacity",0.4);
+    }else if(index===1){
+        $(".slider_sel_btn span:not(1)").css("opacity",1);
+        $(".slider_sel_btn span:eq(1)").css("opacity",0.4);
+    }else if(index===2){
+        $(".slider_sel_btn span:not(2)").css("opacity",1);
+        $(".slider_sel_btn span:eq(2)").css("opacity",0.4);
+    }
+
 }
 /*school clicked*/
 function school_clicked(a) {
@@ -50,90 +63,90 @@ $(document).ready(function () {
     });
     /*define the json for hot-topic*/
     $.getJSON(window.JSONPATH+"hot-topic.json",function (content) {
-        window.hottopic=content;
-        $.each(content,function (info,data) {
-            if(data.name === "hot-topic"){/*define the json for hot-topic-words*/
-                $.each(data.value,function (info,cont) {
-                    $(".hot-topic-body-left").append("<a href='#' class='fl'>"+cont+"</a>");
-                });
-            }
-            if(data.name === "hot-bookstore"){/*define the json for hot-bookstore*/
-                // $("#hot-bookstore").empty();
-                $.each(data.value,function (info,cont) {
-                    var string =
-                        "<li>" +
-                        "  <span>" +
-                        "     <a href='javascript:void(0)' class='fl'>" +
-                        "         <img src="+ cont.bookstore_img_url+" alt='图片加载错误' width='32' height='32'>" +
-                        "     </a>" +
-                        "     <p class='fl'>"+cont.bookstore_name+"("+cont.bookstore_id+")"+"</p>" +
-                        "  </span>" +
-                        "</li>";
-                    // alert(string);
-                    $("#hot-bookstore").append(string);
-                });
-            }
-            if(data.name ==="hot-person"){/*define the json for hot-person*/
-                Pcolor=['red','orange','yellow'];
-                $(".hot-person-list").empty();
-                $.each(data.value,function (info,cont) {
-                    var a=parseInt(info)+1;
-                    var string =
-                        "<li>" +
-                        "  <span>" +
-                        "      <a href='javascript:void(0)' class='fl'>" +
-                        "          <img src='" + cont.img_url + "' alt='图片加载错误' width='32' height='32'>" +
-                        "      </a>" +
-                        "      <p class='fl'> " + cont.name + " (" + cont.count + ")" +
-                        "      </p>" +
-                        "  </span>";
-                    if(info<3) {
-                        string += "<i class='fa fa-free-code-camp fa-2x fr' style='color:" + Pcolor[info] + ";padding-right: 10px'></i></li>";
-                    }
-                    else
-                        string+="</li>";
-                    // alert(string);
-                    $(".hot-person-list").append(string);
-                });
-            }
-            if(data.name ==="most-focus"){/*define the json for most -focus*/
-                $(".most-focus-list").empty();
-                $.each(data.value,function (info,cont) {
-                    var string=
-                        "<li class='hvr-grow'>" +
-                        "  <a href='"+cont.img_url+"'>" +
-                        "      <img src='"+cont.img_url+"' alt='"+cont.name+cont.name_id+"' width='40' height='40'>"+
-                        "  </a>" +
-                        "</li>";
-                    // alert(string);
-                    $(".most-focus-list").append(string);
-                });
-            }
-        });
+       window.hottopic=content;
+       $.each(content,function (info,data) {
+          if(data.name === "hot-topic"){/*define the json for hot-topic-words*/
+              $.each(data.value,function (info,cont) {
+                 $(".hot-topic-body-left").append("<a href='#' class='fl'>"+cont+"</a>");
+              });
+          }
+          if(data.name === "hot-bookstore"){/*define the json for hot-bookstore*/
+              // $("#hot-bookstore").empty();
+              $.each(data.value,function (info,cont) {
+                  var string =
+                      "<li>" +
+                      "  <span>" +
+                      "     <a href='javascript:void(0)' class='fl'>" +
+                      "         <img src="+ cont.bookstore_img_url+" alt='图片加载错误' width='32' height='32'>" +
+                      "     </a>" +
+                      "     <p class='fl phover'>"+cont.bookstore_name+"("+cont.bookstore_id+")"+"</p>" +
+                      "  </span>" +
+                      "</li>";
+                  // alert(string);
+                  $("#hot-bookstore").append(string);
+              });
+          }
+          if(data.name ==="hot-person"){/*define the json for hot-person*/
+              Pcolor=['red','orange','yellow'];
+              $(".hot-person-list").empty();
+              $.each(data.value,function (info,cont) {
+                  var a=parseInt(info)+1;
+                  var string =
+                      "<li>" +
+                      "  <span>" +
+                      "      <a href='javascript:void(0)' class='fl'>" +
+                      "          <img src='" + cont.img_url + "' alt='图片加载错误' width='32' height='32'>" +
+                      "      </a>" +
+                      "      <p class='fl'> " + cont.name + " (" + cont.count + ")" +
+                      "      </p>" +
+                      "  </span>";
+                  if(info<3) {
+                      string += "<i class='fa fa-free-code-camp fa-2x fr' style='color:" + Pcolor[info] + ";padding-right: 10px'></i></li>";
+                  }
+                  else
+                      string+="</li>";
+                 // alert(string);
+                  $(".hot-person-list").append(string);
+              });
+          }
+          if(data.name ==="most-focus"){/*define the json for most -focus*/
+              $(".most-focus-list").empty();
+              $.each(data.value,function (info,cont) {
+                 var string=
+                     "<li class='hvr-grow'>" +
+                     "  <a href='"+cont.img_url+"'>" +
+                     "      <img src='"+cont.img_url+"' alt='"+cont.name+cont.name_id+"' width='40' height='40'>"+
+                     "  </a>" +
+                     "</li>";
+                 // alert(string);
+                  $(".most-focus-list").append(string);
+              });
+          }
+       });
     });
     /*define the json for recommended book */
     $.getJSON(window.JSONPATH+"book-recommend.json",function (content) {
-        window.book_recommend = content;
-        $(".book-recommend-body").empty();
-        $.each(content,function (info ,data) {
-            var string=
-                "<div class='book-info fl'>" +
-                "     <a href='javascript:void(0)' >"+
-                "         <img src="+data.img_url+" alt='"+data.book_name+"&"+data.book_author+"&"+data.book_seller+ "' width='90' height='120'  class='hvr-grow-shadow'>"+
-                "     </a>"+
-                "     <div>" +
-                "         <h6>"+data.book_name +"</h6>"+
-                "         <p class='fl now—price'>" +
-                "             <i class='fa fa-yen'>" + "</i>"+data.price_now+
-                "         </p>"+"" +
-                "         <p class='fr last-price'>" +
-                "             <del class='fa fa-yen'>" +data.price_before+ "</del>"+
-                "         </p>"+
-                "     </div>"+
-                "</div>"
-            // alert(string);
-            $(".book-recommend-body").append(string);
-        });
+       window.book_recommend = content;
+       $(".book-recommend-body").empty();
+       $.each(content,function (info ,data) {
+          var string=
+              "<div class='book-info fl'>" +
+              "     <a href='javascript:void(0)' >"+
+              "         <img src="+data.img_url+" alt='"+data.book_name+"&"+data.book_author+"&"+data.book_seller+ "' width='90' height='120'  class='hvr-grow-shadow'>"+
+              "     </a>"+
+              "     <div>" +
+              "         <h6>"+data.book_name +"</h6>"+
+              "         <p class='fl now—price'>" +
+              "             <i class='fa fa-yen'>" + "</i>"+data.price_now+
+              "         </p>"+"" +
+              "         <p class='fr last-price'>" +
+              "             <del class='fa fa-yen'>" +data.price_before+ "</del>"+
+              "         </p>"+
+              "     </div>"+
+              "</div>"
+           // alert(string);
+           $(".book-recommend-body").append(string);
+       });
     });
     /*define the json for discount book*/
     $.getJSON(window.JSONPATH+"book-discount.json",function (content) {
@@ -159,8 +172,12 @@ $(document).ready(function () {
             $(".book-discount-body-list").append(string);
         });
     });
-
-
+    /*hover click*/
+    $(".slider_sel_btn span").on("click mouseover",function () {
+        $(this).css("opacity",0.4);
+        $(".slider_sel_btn span").not(this).css("opacity",1);
+        slide($(this).attr("value"));
+    });
     /*show the school*/
     $(".a_school").click(function () {
         $(".show_school").show();
@@ -196,10 +213,11 @@ $(document).ready(function () {
     });
     /*slide btn_right*/
     $("#btn_right").click(function () {//right
-        slide("right")
+       slide("right")
     });
+
     /*time task*/
-    window.setInterval ("slide('right')", 5000);
+    window.setInterval ("slide('right')", 5000 );
     /*click to join us*/
     $("#joinus").click(function () {
 
