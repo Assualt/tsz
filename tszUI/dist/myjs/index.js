@@ -48,6 +48,7 @@ function school_clicked(a) {
 }
 /*define the json path*/
 window.JSONPATH="dist/res/json/";
+
 $(document).ready(function () {
 
     /*define the json for area_university*/
@@ -221,8 +222,11 @@ $(document).ready(function () {
     /*click to join us*/
     $("#joinus").click(function () {
 
+
+
         window.location.href="sites/login.html";
     });
+
 
 
 
