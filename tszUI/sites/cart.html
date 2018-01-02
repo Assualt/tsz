@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>我的购物车</title>
+        <meta charset="UTF-8">
+        <link rel="shortcut icon" type="image/x-icon" href="../dist/res/favicon.ico" media="screen" />
+        <!--bootstrap js-->
+        <script type="text/javascript" src="../dist/js/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="../dist/js/bootstrap.min.js"></script>
+        <!--<script type="text/javascript" src="./dist/js/npm.js"></script>-->
+        <!--bootstrap css -->
+        <link rel="stylesheet" href="../dist/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="../dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../dist/font-awesome/css/font-awesome.min.css">
+        <!--hover css-->
+        <link rel="stylesheet" href="../dist/css/hover-min.css">
+        <!--cart css-->
+        <link rel="stylesheet" href="../dist/mycss/cart.css">
+        <!--cart js-->
+        <script type="text/javascript" src="../dist/myjs/cart.js"></script>
+    </head>
+    <body>
+        <div class="container shop">
+            <ul class="shop-header fl">
+                <li class="fl"><a href="#">全部商品&nbsp;5</a></li>
+                <div class="jg fl">|</div>
+                <li class="fl"><a href="#">降价商品&nbsp;4</a></li>
+                <div class="jg fl">|</div>
+                <li class="fl"><a href="#">库存紧张&nbsp;0</a></li>
+                <div class="fr total">
+                    <p class="fl">已选商品:(不含运费)</p>
+                    <p class="fa fa-yen fl">0.00</p>
+                    <input type="button" value="结算" class="btn btn-warning hvr-grow fl" >
+                </div>
+            </ul>
+            <div class="shop_all fl">
+                <div class="fl shop_all_body">
+                    <div class="shop_all_head fl">
+                        <input type="checkbox" class="fl" value="全选">&nbsp;全选&nbsp;
+                    </div>
+                    <div class="shop_all_head fl">商品信息</div>
+                    <div class="shop_all_head fl">单价</div>
+                    <div class="shop_all_head fl">数量</div>
+                    <div class="shop_all_head fl">金额</div>
+                    <div class="shop_all_head fl">操作</div>
+
+                </div>
+                <ul class="shop_list fl">
+                    <li class="fl">
+                        <div class="shop_list_head fl">
+                            <input type="checkbox" class="fl">
+                            <p class="fl">&nbsp;店铺&nbsp;XXXXX&nbsp;</p>
+                            <a href="#" class="fl">
+                                <img src="../dist/res/contact.jpeg" alt="" width="15" height="15">
+                            </a>
+                            <div class="discount fl">
+                                <a href="#">
+                                    &nbsp;&nbsp;&nbsp;优惠券&nbsp;
+                                    <i class="fa fa-angle-down"></i>
+                                    &nbsp;
+                                </a>
+                            </div>
+                        </div>
+                        <div class="shop_list_body fl">
+                            <div class="body_info fl">
+                                <input type="checkbox" name="" id="" class="fl" style="width: 5%;">
+                                <div class="fl body_info_img">
+                                    <a href="#">
+                                        <img src="../dist/res/book_img/亲爱的安德烈.jpg" alt="未能正确加载图片" width="70" height="90">
+                                    </a>
+                                </div>
+                                <div class="fl body_info_des">
+                                    <div class="body_info_des_top">
+                                        <a href="#" class="body_info_des_top_fnt">
+                                            纯色风衣男修身外衣2017春秋季韩版男装连帽中长款夹克男休闲外套
+                                        </a>
+                                    </div>
+                                    <div class="body_info_des_top">
+                                        <a href="#" class="fa fa-credit-card fa-lg"></a>
+                                        <a href="#" class="fa fa-cc-discover fa-lg"></a>
+                                        <a href="#" class="fa fa-cc-diners-club fa-lg"></a>
+                                        <a href="#" class="fa fa-cc-visa fa-lg"></a>
+                                    </div>
+                                </div>
+                                <div class="fl body_info_type">
+                                    <p>颜色:&nbsp;黑色</p>
+                                    <p>尺码:&nbsp;4XL</p>
+                                </div>
+                            </div>
+                            <div class="body_else fl body_price">
+                                <del><i class="fa fa-yen"></i>178.00</del>
+                                <p><i class="fa fa-yen"><strong>120</strong></i></p>
+                            </div>
+                            <div class="body_else fl body_num">
+                                <span>
+                                    <button type="button" class="fl">-</button>
+                                    <input type="text" value="1" class="fl">
+                                    <button type="button" class="fl">+</button>
+                                </span>
+                            </div>
+                            <div class="body_else fl body_all_price">
+                                <p><i class="fa fa-yen"></i>99.98</p>
+                            </div>
+                            <div class="body_else fl body_op">
+                                <a href="#">移入收藏夹</a><br>
+                                <a href="#">删除</a>
+                            </div>
+
+                        </div>
+
+                    </li>
+                    <li class="fl">
+                        <div class="shop_list_head fl">
+                            <input type="checkbox" class="fl">
+                            <p class="fl">&nbsp;店铺&nbsp;XXXXX&nbsp;</p>
+                            <a href="#" class="fl">
+                                <img src="../dist/res/contact.jpeg" alt="" width="15" height="15">
+                            </a>
+                            <div class="discount fl">
+                                <a href="#">
+                                    &nbsp;&nbsp;&nbsp;优惠券&nbsp;
+                                    <i class="fa fa-angle-down"></i>
+                                    &nbsp;
+                                </a>
+                            </div>
+                        </div>
+                        <div class="shop_list_body fl">
+                            <div class="body_info fl">
+                                <input type="checkbox" class="fl" style="width: 5%;">
+                                <div class="fl body_info_img">
+                                    <a href="#">
+                                        <img src="../dist/res/book_img/一看就会的英语语法书.jpg" alt="未能正确加载图片" width="70" height="90">
+                                    </a>
+                                </div>
+                                <div class="fl body_info_des">
+                                    <div class="body_info_des_top">
+                                        <a href="#" class="body_info_des_top_fnt">
+                                            纯色风衣男修身外衣2017春秋季韩版男装连帽中长款夹克男休闲外套
+                                        </a>
+                                    </div>
+                                    <div class="body_info_des_top">
+                                        <a href="#" class="fa fa-credit-card fa-lg"></a>
+                                        <a href="#" class="fa fa-cc-discover fa-lg"></a>
+                                        <a href="#" class="fa fa-cc-diners-club fa-lg"></a>
+                                        <a href="#" class="fa fa-cc-visa fa-lg"></a>
+                                    </div>
+                                </div>
+                                <div class="fl body_info_type">
+                                    <p>颜色:&nbsp;黑色</p>
+                                    <p>尺码:&nbsp;4XL</p>
+                                </div>
+                            </div>
+                            <div class="body_else fl body_price">
+                                <del><i class="fa fa-yen"></i>178.00</del>
+                                <p><i class="fa fa-yen"><strong>120</strong></i></p>
+                            </div>
+                            <div class="body_else fl body_num">
+                                <span>
+                                    <button type="button" class="fl">-</button>
+                                    <input type="text" value="1" class="fl">
+                                    <button type="button" class="fl">+</button>
+                                </span>
+                            </div>
+                            <div class="body_else fl body_all_price">
+                                <p><i class="fa fa-yen"></i>99.98</p>
+                            </div>
+                            <div class="body_else fl body_op">
+                                <a href="#">移入收藏夹</a><br>
+                                <a href="#">删除</a>
+                            </div>
+
+                        </div>
+
+                    </li>
+                </ul>
+                <div class="all_total fl">
+                    <div class="all_total_left fl">
+                        <input  type="checkbox" value="全选">&nbsp;全选&nbsp;&nbsp;&nbsp;
+                        <a href="#" >删除</a>
+                        <a href="#" >清除失效宝贝</a>
+                        <a href="#" >移入收藏夹</a>
+                        <a href="#" >分享</a>
+                    </div>
+
+                    <div class="all_total_center fl">
+                        <p class="fl">共选商品</p>
+                        <strong class="fl">&nbsp;0&nbsp;</strong>
+                        <p class="fl">件&nbsp;&nbsp;&nbsp;</p>
+                        <p class="fl">合计(不含运费):&nbsp;&nbsp;&nbsp;</p>
+                        <p class="fl" id="total"><i class="fa fa-yen"></i>&nbsp;0.00</p>
+                    </div>
+                </div>
+                <input type="button" class="fl btn btn-danger" value="结算" id="js" disabled>
+            </div>
+        </div>
+    </body>
+</html>
