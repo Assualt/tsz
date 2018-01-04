@@ -80,7 +80,7 @@ $(document).ready(function () {
                       "     <a href='javascript:void(0)' class='fl'>" +
                       "         <img src="+ cont.bookstore_img_url+" alt='图片加载错误' width='32' height='32'>" +
                       "     </a>" +
-                      "     <p class='fl phover'>"+cont.bookstore_name+"("+cont.bookstore_id+")"+"</p>" +
+                      "     <p class='fl phover'>"+cont.bookstore_name+"&nbsp;&nbsp;(&nbsp;"+cont.bookstore_id+"&nbsp;)"+"</p>" +
                       "  </span>" +
                       "</li>";
                   // alert(string);
@@ -98,7 +98,7 @@ $(document).ready(function () {
                       "      <a href='javascript:void(0)' class='fl'>" +
                       "          <img src='" + cont.img_url + "' alt='图片加载错误' width='32' height='32'>" +
                       "      </a>" +
-                      "      <p class='fl'> " + cont.name + " (" + cont.count + ")" +
+                      "      <p class='fl'> " + cont.name + "&nbsp;&nbsp;&nbsp;&nbsp;<span class='badge fr' style='background:#ff6d58;'>" + cont.count + "</span>" +
                       "      </p>" +
                       "  </span>";
                   if(info<3) {
@@ -221,9 +221,6 @@ $(document).ready(function () {
     window.setInterval ("slide('right')", 5000 );
     /*click to join us*/
     $("#joinus").click(function () {
-
-
-
         window.location.href="sites/login.html";
     });
 
