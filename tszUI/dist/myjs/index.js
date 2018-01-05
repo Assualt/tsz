@@ -47,10 +47,10 @@ function school_clicked(a) {
     $(".show_school").hide(100);
 }
 /*define the json path*/
-window.JSONPATH="dist/res/json/";
+
 
 $(document).ready(function () {
-
+    window.JSONPATH="dist/res/json/";
     /*define the json for area_university*/
     $.getJSON(window.JSONPATH+"area_university.json",function (content) {
         window.area_university=content;
@@ -80,7 +80,7 @@ $(document).ready(function () {
                       "     <a href='javascript:void(0)' class='fl'>" +
                       "         <img src="+ cont.bookstore_img_url+" alt='图片加载错误' width='32' height='32'>" +
                       "     </a>" +
-                      "     <p class='fl phover'>"+cont.bookstore_name+"&nbsp;&nbsp;(&nbsp;"+cont.bookstore_id+"&nbsp;)"+"</p>" +
+                      "     <p class='fl hvr-grow'>"+cont.bookstore_name+"&nbsp;&nbsp;(&nbsp;"+cont.bookstore_id+"&nbsp;)"+"</p>" +
                       "  </span>" +
                       "</li>";
                   // alert(string);
@@ -88,7 +88,7 @@ $(document).ready(function () {
               });
           }
           if(data.name ==="hot-person"){/*define the json for hot-person*/
-              Pcolor=['red','orange','yellow'];
+              Pcolor=['rgb(245,69,69)','rgb(255,133,71)','rgb(255,172,56)'];
               $(".hot-person-list").empty();
               $.each(data.value,function (info,cont) {
                   var a=parseInt(info)+1;
@@ -98,14 +98,14 @@ $(document).ready(function () {
                       "      <a href='javascript:void(0)' class='fl'>" +
                       "          <img src='" + cont.img_url + "' alt='图片加载错误' width='32' height='32'>" +
                       "      </a>" +
-                      "      <p class='fl'> " + cont.name + "&nbsp;&nbsp;&nbsp;&nbsp;<span class='badge fr' style='background:#ff6d58;'>" + cont.count + "</span>" +
+                      "      <p class='fl hvr-grow' href='javascript:void(0)'> " + cont.name +
                       "      </p>" +
                       "  </span>";
                   if(info<3) {
-                      string += "<i class='fa fa-free-code-camp fa-2x fr' style='color:" + Pcolor[info] + ";padding-right: 10px'></i></li>";
+                      string += "<span class='badge fr' style='background:" + Pcolor[info] + ";color: #bbbbbb gb;margin-right: 10px;'>&nbsp;"+cont.count+"&nbsp;</span></li>";
                   }
                   else
-                      string+="</li>";
+                      string+="<span class='badge fr' style='background:rgb(142,185,245);margin-right: 10px;'>&nbsp;"+cont.count+"&nbsp;</span></li>";
                  // alert(string);
                   $(".hot-person-list").append(string);
               });
@@ -216,7 +216,6 @@ $(document).ready(function () {
     $("#btn_right").click(function () {//right
        slide("right")
     });
-
     /*time task*/
     window.setInterval ("slide('right')", 5000 );
     /*click to join us*/
@@ -224,6 +223,9 @@ $(document).ready(function () {
         window.location.href="sites/login.html";
     });
 
+    $(".show_school_body_3 p").click(function () {
+       alert($(this).attr('name'));
+    });
 
 
 
