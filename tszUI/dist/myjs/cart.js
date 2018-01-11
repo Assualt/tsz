@@ -3,6 +3,42 @@
 * create 2018.1.3 by T_T
 *
 */
+
+function Gen_goods_list() {
+    var arry = $("input:checkbox[value='goods_item']:checked");
+    $(".table tbody").empty();
+    $.each(arry,function () {
+        var book_name = $(this).nextAll('.body_info_img').find('a img').attr('title');
+        var str = $(this).nextAll('.body_info_type').find('p:last-child').html();
+        var book_author = str.substring(str.indexOf(';')+1,str.length);
+        var book_price = $(this).parents('.body_info').nextAll('.body_price').find('p strong').html();
+        var book_num = $(this).parents('.body_info').nextAll('.body_num').find('span input').val();
+        var book_all_price = $(this).parents('.body_info').nextAll('.body_all_price').find('p ').html();
+        var str =
+            "<tr>" +
+            "   <td>"+book_name+"</td>" +
+            "   <td>"+book_author+"</td>" +
+            "   <td>"+book_price+"</td>" +
+            "   <td>"+book_num+"</td>" +
+            "   <td>"+book_all_price+"</td>" +
+            "</tr>";
+        $(".table tbody").append(str);
+        // alert(book_author +book_name + singer_price +num + all_price);
+    });
+    var total_price = $(".total p:eq(1)").html();
+    var total_num = $(".all_total_right strong").html();
+
+    var str =
+        "<tr>" +
+        "   <td> 总计 </td>" +
+        "   <td> --- </td>" +
+        "   <td> --- </td>" +
+        "   <td>"+total_num+"</td>" +
+        "   <td>"+total_price+"</td>" +
+        "</tr>";
+    $(".table tbody").append(str);
+
+}
 function Set_All_Num_Price(flag) {
     if(flag === true) {
         var arry = $("input:text[name='goods_num']");
@@ -31,9 +67,26 @@ function Set_All_Num_Price(flag) {
     }
     $("input:button[value='结算']").attr('disabled',!flag);
 }
+function Set_All_Goods_mum() {
+    var goods_length = $(".body_info input:checkbox[value='goods_item']").length;
+    $(".shop-header li:first-child a strong").html(goods_length);
+    // alert($(".shop-header li:first-child a strong").html() + $(".shop-header li a strong").length);
+    $(".shop-header li:eq(1) a strong").html(goods_length);
+    $(".shop-header li:eq(2) a strong").html(goods_length);
+}
+function Set_Address(Address) {
+   var str = $(".step-two ul li input:checked").next('p').html();
+   var i = str.indexOf('<strong');
+   str = Address + str.substring(i,str.length);
+   $(".step-two ul li input:checked").next('p').html(str);
+
+}
 
 $(document).ready(function () {
     window.JSONPATH="../dist/res/json/";
+
+    var name= window.localStorage.username;
+    document.title = name+ '的购物车';
 
     $.getJSON(window.JSONPATH+'cart.json',function (content) {
         $(".shop_list").empty();
@@ -66,7 +119,7 @@ $(document).ready(function () {
                                 "       <input type='checkbox' value='goods_item' class='fl' style='width: 5%;'>" +
                                 "       <div class='fl body_info_img'>" +
                                 "           <a href='#' class='hvr-grow-shadow'>" +
-                                "               <img src='"+good.book_img+"' alt='未能正确加载图片' width='70' height='90'>" +
+                                "               <img src='"+good.book_img+"' alt='未能正确加载图片' width='70' height='90' title='"+good.book_name+"'>" +
                                 "           </a>" +
                                 "       </div>" +
                                 "       <div class='fl body_info_des'>" +
@@ -74,10 +127,21 @@ $(document).ready(function () {
                                 "               <a href='#' class='body_info_des_top_fnt'>" +good.book_ad+"</a>" +
                                 "           </div>" +
                                 "           <div class='body_info_des_top'>" +
-                                "               <a href='#' class='fa fa-credit-card fa-lg'></a>" +
-                                "               <a href='#' class='fa fa-cc-discover fa-lg'></a>" +
-                                "               <a href='#' class='fa fa-cc-diners-club fa-lg'></a>" +
-                                "               <a href='#' class='fa fa-cc-visa fa-lg'></a>" +
+                                "               <a href='#' title='信用卡支付'>" +
+                                "                   <img src='../dist/res/pay_icon/xcard.png' alt=''>" +
+                                "               </a>" +
+                                "               <a href='#' title='0首付，慢慢还，拥有所爱，无需等待！'>" +
+                                "                   <img src='../dist/res/pay_icon/fenqi.png' alt=''>" +
+                                "               </a>" +
+                                "               <a href='#' title='消费者保障服务，卖家承诺商品如实描述'>" +
+                                "                   <img src='../dist/res/pay_icon/Customer%20guarantee.png' alt=''>" +
+                                "               </a>" +
+                                "               <a href='#' title='订单险'>" +
+                                "                    <img src='../dist/res/pay_icon/book%20guarantee.png' alt=''>" +
+                                "               </a>" +
+                                "               <a href='#' title='满足7天无理由退货申请的前提下，包邮商品需要买家承担退货邮费，非包邮商品需要买家承担发货和退货邮费。'>" +
+                                "                   <img src='../dist/res/pay_icon/7day.jpg' alt=''>" +
+                                "               </a>" +
                                 "            </div>" +
                                 "       </div>" +
                                 "       <div class='fl body_info_type'>";
@@ -121,7 +185,7 @@ $(document).ready(function () {
         });
         // alert(append_str);
         $(".shop_list").append(append_str);
-
+        Set_All_Goods_mum();
     });
 
     /*btn all select*/
@@ -147,7 +211,7 @@ $(document).ready(function () {
     $(".shop_list").on("input propertychange","input:text[name='goods_num']",function () {
         var uprice = parseFloat($(this).parents('.body_num').prev('.body_price').find('p strong').html());
         var num= parseInt($(this).val());
-        if(num === 0) {
+        if(num === 0 || num === 1) {
             alert('商品数量不能为0');
             $(this).prev('button').attr('disabled',true);
             $(this).val(1);
@@ -206,20 +270,21 @@ $(document).ready(function () {
 
     /*body_op*/
     $(".shop_list").on("click",".body_op a:last-child",function () {
-
-        var confirm = prompt("确认删除此本书？ Yes !  No！");
-        if(confirm === 'yes'){
+        var flag = confirm("确认删除次本书");
+        if(flag === true){
             $(this).parents('.shop_list_body').remove();
             Set_All_Num_Price(true);
+            Set_All_Goods_mum();
         }
-
     });
     /*delete*/
     $("#delete").click(function () {
        var all= $("input:checkbox[value='all_sel']").is(":checked");
        // alert(all);
        if(all == true){
-            $(".shop_list").remove();
+           if(confirm("确认删除所有图书？")===true) {
+               $(".shop_list").remove();
+           }
        }
        var delete_shop=$("input:checkbox[value='shop_name']");
        $.each(delete_shop,function () {
@@ -240,19 +305,128 @@ $(document).ready(function () {
                    });
                }
            }
-       });
-       // var delete_books =$("input:checkbox[value='goods_item']");
-       // $.each(delete_books,function () {
-       //    if($(this).is(":checked") === true) {
-       //        $(this).parents('.shop_list_body').remove();
-       //    }
-       // });
 
+       });
+       Set_All_Goods_mum();
     });
 
+    /*Address sel*/
+    $(".step-two ul").on("click","li input",function () {
+        var all_address = $(this).parents('li').siblings().find('p');
+        var Sel_Address = $(this).next('p').html();
+        var i = Sel_Address.indexOf("<a");
+        if(Sel_Address.indexOf('<strong')===-1){
+            Sel_Address = Sel_Address.substring(0,i) +"<strong style='color:#888888;'>默认地址</strong><a href='#' data-toggle='modal' data-target='#edit_add'>&nbsp;&nbsp;修改默认地址</a>";
+            $(this).next('p').html(Sel_Address);
+            $(this).parents('li').css('border','solid 1px red');
+        }else{}
+        $.each(all_address,function () {
+            i= $(this).html().indexOf('<strong');
+            if(i != -1){
+               var html = $(this).html().substring(0,i)+ "<a href='#' >&nbsp;&nbsp;设置为默认地址</a>" ;
+               $(this).html(html);
 
+            }else{}
+            $(this).parents('li').css("border","none");
+        });
+    });
 
+    $(".step-two ul").on("click","li p a",function () {
+        var checked = $(this).parents('li').find('input');
+        $.each(checked,function () {
+           if($(this).is(":checked") === true){//修改默认地址
+           }else if($(this).is(":checked") === false){//设置为默认地址
+               var html = $(this).next('p').html();
+               var i = html.indexOf('<a');
+               html = html.substring(0,i)+"<strong style='color:#888888;'>默认地址</strong><a href='#' data-toggle='modal' data-target='#edit_add'>&nbsp;&nbsp;修改默认地址</a>";
+               $(this).next('p').html(html);
+               $(this).prop('checked',true);
+               $(this).parents('li').css('border','solid 1px red');
+               var all_address = $(this).parents('li').siblings().find('p').not(this);
+               $.each(all_address,function () {
+                   i= $(this).html().indexOf('<strong');
+                   if(i != -1){
+                       $(this).prev('input').prop('checked',false);
+                       var html = $(this).html().substring(0,i)+ "<a href='#' >&nbsp;&nbsp;设置为默认地址</a>" ;
+                       $(this).html(html);
+                   }else{}
+                   $(this).parents('li').css("border","none");
+               });
 
+           }
+        });
 
+    });
+    /*edit address ok btn*/
+    $("#edit_address_ok").click(function () {
 
+        $("#edit_add").modal('hide');
+        var provice = $("#province2").val();
+        var city = $("#city2").val();
+        var district = $("#district2").val();
+        var tel = $(".add-more input[type='tel']").val();
+        var more = $(".add-more input[type='text']").val();
+        var string = "&nbsp;"+provice +"&nbsp;"+city +"&nbsp;"+district+"&nbsp;"+ more+ "&nbsp;(&nbsp;"+tel+"&nbsp;)";
+        Set_Address(string);
+    });
+    /*edit_address_cancel*/
+    $("#edit_address_cancel").click(function () {
+        $("#edit_add").modal('hide');
+    });
+
+    /*js btn*/
+    $("input:button[value='结算']").click(function () {
+        var arry = $("input:text[name='goods_num']");
+        Gen_goods_list();
+    });
+
+    /*step_prev*/
+    $("#step_prev").click(function () {
+        var flag1=$(".step-one").css('display') == 'block';
+        var flag2=$(".step-two").css('display') == 'block';
+        var flag3=$(".step-three").css('display') =='block';
+        // alert(flag1 +" "+flag2 +"  " +flag3);
+        if(flag2 === true){
+            $(".step-one").css('display','block');
+            $(".step-two").css('display','none');
+            $(".step-three").css('display','none');
+            $(".modal-body-head p:last-child").remove();
+            $("#step_prev").attr('disabled',true);
+        }else if(flag3 === true){
+            $(".step-one").css('display','none');
+            $(".step-two").css('display','block');
+            $(".step-three").css('display','none');
+            $(".modal-body-head p:last-child").remove();
+            $("#step_next").attr('disabled',false);
+        }else{}
+        $("#step_submit").attr('disabled',true);
+
+    });
+    $("#step_next").click(function () {
+        var flag1=$(".step-one").css('display') == 'block';
+        var flag2=$(".step-two").css('display') == 'block';
+        var flag3=$(".step-three").css('display') =='block';
+        // alert( flag3 + " "+ flag2 +" "+flag1);
+        $("#step_prev").attr('disabled',false);
+        if(flag1 === true){
+            $(".step-one").css('display','none');
+            $(".step-two").css('display','block');
+            $(".step-three").css('display','none');
+            var str = "<p class='fl'><a>&nbsp;STEP 2 &nbsp;</a><i class='fa fa-angle-right'></i></p>";
+            $(".modal-body-head").append(str);
+        }else if(flag2 === true){
+            $(".step-one").css('display','none');
+            $(".step-two").css('display','none');
+            $(".step-three").css('display','block');
+            var str = "<p class='fl'><a>&nbsp;STEP 3 &nbsp;</a></p>";
+            $(".modal-body-head").append(str);
+            $("#step_next").attr('disabled',true);
+        }else{}
+
+        $("#step_submit").attr('disabled',!$("#step_next").attr('disabled'));
+
+    });
+    $("#step_submit").click(function () {
+
+    });
 });

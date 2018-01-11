@@ -227,6 +227,9 @@ $(document).ready(function () {
        alert($(this).attr('name'));
     });
 
+    $(".header_login li:first-child a").click(function () {
+        var storage =  window.localStorage;
+        storage['username']= '侯鑫';
 
-
+    });
 });

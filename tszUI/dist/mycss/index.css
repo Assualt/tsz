@@ -22,6 +22,8 @@ header{
 .fr{
     float: right;
 }
+
+
 .a_school{
     color:rgb(1,200,181);
     font-style: normal;
@@ -140,8 +142,6 @@ header{
     color: #007a71;
 }
 
-
-
 .main{
     background: #f5f5f5;
     width:100%;
@@ -195,8 +195,8 @@ header{
     position: absolute;
     width: 72.5%;
     height: 20px;
-    top: 386px;
-    padding: 2px 5px 2px 5px;
+    top: 388px;
+    padding: 2px 5px 0px 5px;
     background: rgb(0,178,206);
 }
 .slider_sel_btn span{
@@ -459,7 +459,7 @@ header{
 }
 .book-discount-body{
     width: 100%;
-    height: 95%;
+    height: 95%;/**/
     padding:10px;
     opacity: 1;
 }
@@ -486,6 +486,49 @@ header{
     cursor: pointer;
 
 }
+
+.person-recommend{
+    width: 100%;
+    margin-top: 10px;
+    background: white;
+    height: 450px;
+}
+.person-recommend h4{
+    padding-left: 15px;
+    padding-bottom: 5px;
+    font-weight:600;
+    border-bottom: solid 1px #dedede;
+    width: 100%;
+}
+.person-info{
+    text-align: center;
+    width: 100%;
+    height: 90%;
+}
+.psr-img{
+    height: 60%;
+}
+.psr-img img:last-child{
+    position: relative;
+    top: -60px;
+    border: solid 5px white;
+}
+.person-body{
+    height: 35%;
+}
+.person-body ul{
+    width: 100%;
+    margin: 0;
+    height: 28px;
+    padding: 0 50px 0 50px;
+}
+.person-body ul li{
+    width: 25%;
+}
+.person-body p{
+    margin-top: 30px;
+}
+
 
 
 /*@-webkit-keyframes key1 {*/

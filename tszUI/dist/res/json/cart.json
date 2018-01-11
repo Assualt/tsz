@@ -46,8 +46,8 @@
         "goods_store_name":"兴大爱图书",
         "goods_info":[
           {
-            "book_name": "一千零一夜",
-            "book_img": "../dist/res/book_img/一千零一夜.jpg",
+            "book_name": "三栖人",
+            "book_img": "../dist/res/book_img/三栖人.jpg",
             "book_ad":"这是个广告",
             "book_des": [
               {
@@ -55,16 +55,16 @@
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
                 "author":"王多多",
-                "edition":"第二版",
-                "old_price":"25.98",
-                "dis_price":"12.98"
+                "edition":"第三版",
+                "old_price":"19.98",
+                "dis_price":"11.98"
               }
             ]
           },
           {
-            "book_name": "一千零二夜",
-            "book_img": "../dist/res/book_img/一千零一夜.jpg",
-            "book_ad":"这是个广告",
+            "book_name": "亲爱的安德烈",
+            "book_img": "../dist/res/book_img/亲爱的安德烈.jpg",
+            "book_ad":"亲爱的安德烈",
             "book_des": [
               {
                 "num":"1",
@@ -72,8 +72,8 @@
                 "publisher":"人民出版社",
                 "author":"王多多",
                 "edition":"第二版",
-                "old_price":"24.98",
-                "dis_price":"12.98"
+                "old_price":"29.98",
+                "dis_price":"15.98"
               }
             ]
           }
