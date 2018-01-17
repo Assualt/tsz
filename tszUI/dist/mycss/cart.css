@@ -111,6 +111,7 @@ li{
     min-height:50px;
     max-height:600px;
     overflow: auto;
+    margin-bottom: 20px;
 }
 .shop_list li{
     width: 100%;

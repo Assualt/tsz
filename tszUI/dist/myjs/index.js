@@ -123,6 +123,19 @@ $(document).ready(function () {
                   $(".most-focus-list").append(string);
               });
           }
+          if(data.name ==="new-register"){
+              $(".new-register-list").empty();
+              $.each(data.value,function (info,cont) {
+                  var string =
+                      "<li class='hvr-grow'>" +
+                      "  <a href='" + cont.img_url + "'>" +
+                      "      <img src='" + cont.img_url + "' alt='" + cont.name + cont.name_id + "' width='40' height='40'>" +
+                      "  </a>" +
+                      "</li>";
+                  // alert(string);
+                  $(".new-register-list").append(string);
+              });
+          }
        });
     });
     /*define the json for recommended book */
@@ -153,8 +166,9 @@ $(document).ready(function () {
     $.getJSON(window.JSONPATH+"book-discount.json",function (content) {
         window.book_discout=content;
         $(".book-discount-body-list").empty();
+        var string ="";
         $.each(content,function (info,data) {
-            var string=
+            string +=
                 "<li class='book-info fl'>" +
                 "     <a href='javascript:void(0)' >"+
                 "         <img src="+data.img_url+" alt='"+data.book_name+"&"+data.book_author+"&"+data.book_seller+ "' width='90' height='120'  class='hvr-grow-shadow'>"+
@@ -168,11 +182,60 @@ $(document).ready(function () {
                 "             <s class='fa fa-yen'>" +data.price_before+ "</s>"+
                 "         </p>"+
                 "     </div>"+
-                "</li>"
-            // alert(string);
-            $(".book-discount-body-list").append(string);
+                "</li>";
         });
+        $(".book-discount-body-list").append(string);
     });
+    /*define the json for new comment book*/
+    $.getJSON(window.JSONPATH+"book-new-comment.json",function (content) {
+       window.book_new_comment = content;
+       $(".book-new-comment-body-list").empty();
+       var string ="";
+       $.each(content,function (info,data) {
+           string +=
+               "<li class='book-info2 fl'>" +
+               "     <a href='javascript:void(0)' >"+
+               "         <img src="+data.img_url+" alt='"+data.book_name+"&"+data.book_author+"&"+data.book_seller+ "' width='90' height='120'  class='hvr-grow-shadow'>"+
+               "     </a>"+
+               "     <div>" +
+               "         <h6>"+data.book_name +"</h6>"+
+               "         <p class='fl now—price'>" +
+               "             <i class='fa fa-yen'>" + "</i>"+data.price_now+
+               "         </p>"+"" +
+               "         <p class='fr last-price'>" +
+               "             <s class='fa fa-yen'>" +data.price_before+ "</s>"+
+               "         </p>"+
+               "     </div>"+
+               "</li>";
+       });
+       $(".book-new-comment-body-list").append(string);
+    });
+
+    /*define the json for new comment book*/
+    $.getJSON(window.JSONPATH+"book-popular.json",function (content) {
+        window.book_new_comment = content;
+        $(".book-popular-body-list").empty();
+        var string ="";
+        $.each(content,function (info,data) {
+            string +=
+                "<li class='book-info3 fl'>" +
+                "     <a href='javascript:void(0)' >"+
+                "         <img src="+data.img_url+" alt='"+data.book_name+"&"+data.book_author+"&"+data.book_seller+ "' width='90' height='120'  class='hvr-grow-shadow'>"+
+                "     </a>"+
+                "     <div>" +
+                "         <h6>"+data.book_name +"</h6>"+
+                "         <p class='fl now—price'>" +
+                "             <i class='fa fa-yen'>" + "</i>"+data.price_now+
+                "         </p>"+"" +
+                "         <p class='fr last-price'>" +
+                "             <s class='fa fa-yen'>" +data.price_before+ "</s>"+
+                "         </p>"+
+                "     </div>"+
+                "</li>";
+        });
+        $(".book-popular-body-list").append(string);
+    });
+
     /*hover click*/
     $(".slider_sel_btn span").on("click mouseover",function () {
         $(this).css("opacity",0.4);
@@ -230,6 +293,48 @@ $(document).ready(function () {
     $(".header_login li:first-child a").click(function () {
         var storage =  window.localStorage;
         storage['username']= '侯鑫';
+    });
+
+    /*more books btn click*/
+    $(".book-recommend-head a").click(function () {
+       alert(1);
 
     });
+
+    $(".helper-item:eq(0)").mouseenter(function () {
+       $(this).html("帮助中心");
+       $(this).css("padding","10px");
+    }).mouseleave(function () {
+        $(this).css("padding","16px");
+        $(this).html("<i class='fa fa-question-circle-o fa-2x'></i>");
+    });
+    $(".helper-item:eq(1)").mouseenter(function () {
+        $(this).html("返回顶部");
+        $(this).css({
+            "padding":"10px"
+        });
+    }).mouseleave(function () {
+        $(this).css("padding","16px");
+        $(this).html("<i class='fa fa-rocket fa-2x'></i>");
+    }).click(function () {
+        $(window).scrollTop();
+        $('body,html').animate({scrollTop:0},500);
+    });
+    $(".helper-item:eq(2)").mouseenter(function () {
+       $(this).html("微信关注<div class='item3'>"+$(this).find('.item3').html()+"</div>");
+       $(this).css("padding","10px");
+       $(this).find('.item3').fadeIn(400);
+    }).mouseleave(function () {
+        $(this).html("<i class='fa fa-qrcode fa-2x'></i><div class='item3'>"+$(this).find('.item3').html()+"</div>");
+        $(this).css("padding","16px");
+        $(this).find('.item3').fadeOut(400);
+    });
+    $(".helper-item:eq(3)").mouseenter(function () {
+        $(this).html("联系我们");
+        $(this).css({"padding":"10px"});
+    }).mouseleave(function () {
+        $(this).css("padding","16px");
+        $(this).html("<i class='fa fa-phone-square fa-2x'></i>");
+    });
+
 });

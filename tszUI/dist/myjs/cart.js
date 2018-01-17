@@ -87,8 +87,8 @@ $(document).ready(function () {
 
     var name= window.localStorage.username;
     document.title = name+ '的购物车';
-
     $.getJSON(window.JSONPATH+'cart.json',function (content) {
+        window.cartlist = content;
         $(".shop_list").empty();
         var append_str="";
         $.each(content,function (info,person_cart) {/*person cart*/
@@ -163,7 +163,7 @@ $(document).ready(function () {
                                         "<div class='body_else fl body_num'>" +
                                         "   <span>" +
                                         "       <button type='button' class='fl' value='sub'>-</button>" +
-                                        "       <input type='text' value='"+good_des_item.num+"' class='fl' name='goods_num'>" +
+                                        "       <input type='text' value='"+good_des_item.num+"' class='fl' name='goods_num' onkeyup=\"value=value.replace(/[^\\d]/g,'1') \" ng-pattern='/[^a-zA-Z]'>" +
                                         "       <button type='button' class='fl' value='plus'>+</button>" +
                                         "    </span>" +
                                         "</div>" +
@@ -263,7 +263,7 @@ $(document).ready(function () {
            $(this).prev('input').val(goods_num);
        }
         var uprice = parseFloat($(this).parents('.body_num').prev('.body_price').find('p strong').html());
-        var allpri = goods_num * uprice;
+        var allpri = (goods_num * uprice).toFixed(2);
         $(this).parents('.body_num').next('.body_all_price').find('p').html(allpri);
         Set_All_Num_Price(true);
     });
@@ -338,7 +338,7 @@ $(document).ready(function () {
            }else if($(this).is(":checked") === false){//设置为默认地址
                var html = $(this).next('p').html();
                var i = html.indexOf('<a');
-               html = html.substring(0,i)+"<strong style='color:#888888;'>默认地址</strong><a href='#' data-toggle='modal' data-target='#edit_add'>&nbsp;&nbsp;修改默认地址</a>";
+               html = html.substring(0,i)+"<strong style='color:#888888;'>默认地址</strong><a href='javascript:void(0)' data-toggle='modal' data-target='#edit_add'>&nbsp;&nbsp;修改默认地址</a>";
                $(this).next('p').html(html);
                $(this).prop('checked',true);
                $(this).parents('li').css('border','solid 1px red');
@@ -347,7 +347,7 @@ $(document).ready(function () {
                    i= $(this).html().indexOf('<strong');
                    if(i != -1){
                        $(this).prev('input').prop('checked',false);
-                       var html = $(this).html().substring(0,i)+ "<a href='#' >&nbsp;&nbsp;设置为默认地址</a>" ;
+                       var html = $(this).html().substring(0,i)+ "<a href='javascript:void(0)'>&nbsp;&nbsp;设置为默认地址</a>" ;
                        $(this).html(html);
                    }else{}
                    $(this).parents('li').css("border","none");
@@ -365,8 +365,9 @@ $(document).ready(function () {
         var city = $("#city2").val();
         var district = $("#district2").val();
         var tel = $(".add-more input[type='tel']").val();
-        var more = $(".add-more input[type='text']").val();
-        var string = "&nbsp;"+provice +"&nbsp;"+city +"&nbsp;"+district+"&nbsp;"+ more+ "&nbsp;(&nbsp;"+tel+"&nbsp;)";
+        var name = $(".add-more input[type=text]:eq(0)").val();
+        var more = $(".add-more input[type='text']:eq(1)").val();
+        var string = "&nbsp;"+provice +"&nbsp;"+city +"&nbsp;"+district+"&nbsp;"+ more+ "&nbsp;(&nbsp;"+name+"收&nbsp;)&nbsp;"+tel;
         Set_Address(string);
     });
     /*edit_address_cancel*/
@@ -376,8 +377,42 @@ $(document).ready(function () {
 
     /*js btn*/
     $("input:button[value='结算']").click(function () {
-        var arry = $("input:text[name='goods_num']");
+        var append_str = "";
+        $(".step-two ul").empty();
+        $.each(window.cartlist,function (info,item) {//
+            if(item.id === "1".trim()){//verify the customer
+                var cart_add = item.address;
+                $.each(cart_add,function (info,item) {//query add
+                    if(item.add_default === true){
+                        append_str +=
+                            "<li>" +
+                            "   <input type='radio' name='address' class='fl' checked>" +
+                            "   <p>&nbsp;" +item.add_province+"&nbsp;"+item.add_district+"&nbsp;"+item.add_more_detail+"&nbsp;(&nbsp;"+item.add_contact_name+"收&nbsp;)"+item.add_contact_phone+"&nbsp;" +
+                            "   <strong style='color:#888888;'>默认地址</strong>" +
+                            "       <a href='javascript:void(0)' data-toggle='modal' data-target='#edit_add'>" +
+                            "           &nbsp;&nbsp;修改默认地址" +
+                            "       </a>"+
+                            "   </p>" +
+                            "</li>";
+                    }
+                    else{
+                        append_str+=
+                            "<li>" +
+                            "   <input type='radio' name='address' class='fl'>" +
+                            "   <p>&nbsp;" +item.add_province+"&nbsp;"+item.add_district+"&nbsp;"+item.add_more_detail+"&nbsp;(&nbsp;"+item.add_contact_name+"收&nbsp;)"+item.add_contact_phone+"&nbsp;" +
+                            "       <a href='javascript:void(0)'>" +
+                            "           &nbsp;&nbsp;设置为默认地址" +
+                            "       </a>"+
+                            "   </p>" +
+                            "</li>";
+                    }
+
+                });
+                // alert(append_str);
+            }
+        });
         Gen_goods_list();
+        $(".step-two ul").append(append_str);
     });
 
     /*step_prev*/
@@ -429,4 +464,6 @@ $(document).ready(function () {
     $("#step_submit").click(function () {
 
     });
+
+
 });

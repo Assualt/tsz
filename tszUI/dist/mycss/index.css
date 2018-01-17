@@ -142,10 +142,11 @@ header{
     color: #007a71;
 }
 
+/*main*/
 .main{
     background: #f5f5f5;
     width:100%;
-    height: 5000px;
+    height: 3700px;
 }
 .top{
     width: 100%;
@@ -274,14 +275,12 @@ header{
 .book-list{
     padding: 5px 14% 5px 14%;
 }
+/*left*/
 .book-list-left{
     width:35%;
     padding-right: 10px;
 }
-.book-list-right{
-    width: 65%;
-    padding-left: 5px;
-}
+
 .contact{
     width: 100%;
     height: 30px;
@@ -316,69 +315,6 @@ header{
     padding-left: 10px;
     padding-top: 5px;
 }
-.book-recommend{
-    width: 100%;
-    height: 600px;
-    background: white;
-}
-.book-recommend-head{
-    width: 100%;
-    height: 5%;
-    border-bottom: solid 1px #dedede;
-    padding-right: 10px;
-    padding-left: 10px;
-    padding-top: 5px;
-}
-.book-recommend-head p{
-    font-size: 16px;
-    font-weight: 800;
-    font-family: 微软雅黑;
-    margin-bottom: 0;
-}
-.book-recommend-head a{
-    color: rgb(0,168,155);
-    opacity: 0.5;
-}
-.book-recommend-head a:hover{
-    opacity:0.7;
-}
-.book-recommend-body{
-    width: 100%;
-    height: 95%;
-    padding:10px;
-}
-.book-info{
-    width: 20%;
-    height: 33.3%   ;
-    /*border: solid 1px red;*/
-    padding:5px 2px 5px 2px;
-    text-align: center;
-}
-.book-info div h6{
-    margin: 0;
-    padding-top: 7px;
-    height: 20px;
-}
-.book-info div h6:hover{
-    font-size: 14px;
-    color:rgb(0,168,155);
-    cursor: pointer;
-}
-.now—price{
-    width: 50%;
-    font-size: 14px;
-    color: rgb(0,168,155);
-    margin: 0;
-    padding:10px 0 0 15px;
-    font-weight: bold;
-}
-.last-price{
-    width: 50%;
-    font-size: 8px;
-    opacity: 0.4;
-    margin-bottom: 0;
-    padding:14px 10px 0 0;
-}
 
 .hot-person{
     width: 100%;
@@ -409,6 +345,7 @@ header{
     padding-left: 10px;
     padding-top: 7px;
 }
+
 .most-focus{
     margin: 10px 0 0 0 ;
     width: 100%;
@@ -437,54 +374,6 @@ header{
 .most-focus-list li a img:hover{
     opacity: 0.5;
     border: solid 1px lightseagreen;
-}
-
-.book-discount{
-    background: white;
-    width:100%;
-    height: 600px;
-    margin-top: 10px;
-}
-.book-discount-head{
-    width: 100%;
-    height:5%;
-    padding:5px 10px 0 10px;
-    border-bottom:solid 1px #dedede;
-}
-.book-discount-head p{
-    font-size: 16px;
-    font-weight:600;
-    margin: 0;
-    font-family: 微软雅黑;
-}
-.book-discount-body{
-    width: 100%;
-    height: 95%;/**/
-    padding:10px;
-    opacity: 1;
-}
-.book-discount-body-list{
-    width: 100%;
-    height: 100%;
-    padding-left: 0;
-}
-.book-info1{
-    width: 20%;
-    height: 33.3%;
-    /*border: solid 1px red;*/
-    padding: 5px 2px 5px 2px;
-    text-align: center;
-}
-.book-info1 div h6{
-    padding-top: 7px;
-    margin: 0;
-    height: 20px;
-}
-.book-info1 div h6:hover{
-    color:rgb(0,168,155);
-    font-size: 14px;
-    cursor: pointer;
-
 }
 
 .person-recommend{
@@ -529,8 +418,363 @@ header{
     margin-top: 30px;
 }
 
+.new-register{
+    margin: 10px 0 0 0 ;
+    width: 100%;
+    height: 210px;
+    background: white;
+}
+.new-register h4{
+    padding-left: 15px;
+    padding-bottom: 5px;
+    font-weight:600;
+    border-bottom: solid 1px #dedede;
+    width: 100%;
+}
+.new-register-list{
+    padding: 0 10px 0 15px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+}
+.new-register-list li{
+    padding: 5px;
+}
+.new-register-list li a img{
+    opacity: 0.8;
+}
+.new-register-list li a img:hover{
+    opacity: 0.5;
+    border: solid 1px lightseagreen;
+}
 
 
+
+/*book-list-right*/
+
+/*book-recommend*/
+.book-list-right{
+    width: 65%;
+    padding-left: 5px;
+}
+.book-recommend{
+    width: 100%;
+    height: 800px;
+    background: white;
+}
+.book-recommend-head{
+    width: 100%;
+    height: 5%;
+    border-bottom: solid 1px #dedede;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+.book-recommend-head p{
+    font-size: 16px;
+    font-weight: 800;
+    font-family: 微软雅黑;
+    margin-bottom: 0;
+}
+.book-recommend-head a{
+    color: rgb(0,168,155);
+    opacity: 0.5;
+}
+.book-recommend-head a:hover{
+    opacity:0.7;
+}
+.book-recommend-body{
+    width: 100%;
+    height: 95%;
+    padding:10px;
+}
+.book-info{
+    width: 20%;
+    height: 25%   ;
+    /*border: solid 1px red;*/
+    padding:5px 2px 5px 2px;
+    text-align: center;
+}
+.book-info div h6{
+    margin: 0;
+    padding-top: 7px;
+    height: 20px;
+}
+.book-info div h6:hover{
+    font-size: 14px;
+    color:rgb(0,168,155);
+    cursor: pointer;
+}
+/*end book-recommend*/
+
+.now—price{
+    width: 50%;
+    font-size: 14px;
+    color: rgb(0,168,155);
+    margin: 0;
+    padding:10px 0 0 15px;
+    font-weight: bold;
+}
+.last-price{
+    width: 50%;
+    font-size: 8px;
+    opacity: 0.4;
+    margin-bottom: 0;
+    padding:14px 10px 0 0;
+}
+
+/*book-discount*/
+
+.book-discount{
+    background: white;
+    width:100%;
+    height: 800px;
+    margin-top: 10px;
+}
+.book-discount-head{
+    width: 100%;
+    height:5%;
+    padding:5px 10px 0 10px;
+    border-bottom:solid 1px #dedede;
+}
+.book-discount-head a{
+    color: rgba(0,168,155,0.5);
+}
+.book-discount-head a:hover{
+    color: rgba(0,168,155,0.7);
+}
+.book-discount-head p{
+    font-size: 16px;
+    font-weight:600;
+    margin: 0;
+    font-family: 微软雅黑;
+}
+.book-discount-body{
+    width: 100%;
+    height: 95%;/**/
+    padding:10px;
+    opacity: 1;
+}
+.book-discount-body-list{
+    width: 100%;
+    height: 100%;
+    padding-left: 0;
+}
+.book-info1 {
+    width: 20%;
+    height: 25%;
+    /*border: solid 1px red;*/
+    padding: 5px 2px 5px 2px;
+    text-align: center;
+}
+.book-info1 div h6{
+    padding-top: 7px;
+    margin: 0;
+    height: 20px;
+}
+.book-info1 div h6:hover{
+    color:rgb(0,168,155);
+    font-size: 14px;
+    cursor: pointer;
+
+}
+/*end book-discount*/
+
+/*book-new-comment*/
+.book-new-comment{
+    background: white;
+    width: 100%;
+    height: 800px;
+    margin-top: 10px;
+    /*box-shadow: 1px 1px 1px grey;*/
+}
+.book-new-comment-head{
+    width: 100%;
+    height: 5%;
+    padding: 5px 10px 0 10px;
+    border-bottom: solid 1px #dedede;
+}
+.book-new-comment-head a{
+    color: rgba(0,168,155,0.5);
+}
+.book-new-comment-head a{
+    color: rgba(0,168,155,0.7);
+}
+.book-new-comment-head p{
+    font-size: 16px;
+    font-weight:600;
+    margin: 0;
+    font-family: 微软雅黑;
+}
+
+.book-new-comment-body{
+    width: 100%;
+    height: 95%;
+    padding: 10px;
+    opacity: 1;
+}
+.book-new-comment-body-list{
+    width: 100%;
+    height: 100%;
+    padding-left: 0;
+}
+
+.book-info2 {
+    width: 20%;
+    height: 25%;
+    /*border: solid 1px red;*/
+    padding: 5px 2px 5px 2px;
+    text-align: center;
+}
+.book-info2 div h6{
+    padding-top: 7px;
+    margin: 0;
+    height: 20px;
+}
+.book-info2 div h6:hover{
+    color:rgb(0,168,155);
+    font-size: 14px;
+    cursor: pointer;
+
+}
+/*end book-new-comment*/
+
+/*book-popular*/
+.book-popular{
+    background: white;
+    width: 100%;
+    height: 800px;
+    margin-top: 10px;
+    /*box-shadow: 1px 1px 1px grey;*/
+}
+.book-popular-head{
+    width: 100%;
+    height: 5%;
+    padding: 5px 10px 0 10px;
+    border-bottom: solid 1px #dedede;
+}
+.book-popular-head a{
+    color: rgba(0,168,155,0.5);
+}
+.book-popular-head a{
+    color: rgba(0,168,155,0.7);
+}
+.book-popular-head p{
+    font-size: 16px;
+    font-weight:600;
+    margin: 0;
+    font-family: 微软雅黑;
+}
+
+.book-popular-body{
+    width: 100%;
+    height: 95%;
+    padding: 10px;
+    opacity: 1;
+}
+.book-popular-body-list{
+    width: 100%;
+    height: 100%;
+    padding-left: 0;
+}
+
+.book-info3 {
+    width: 20%;
+    height: 25%;
+    /*border: solid 1px red;*/
+    padding: 5px 2px 5px 2px;
+    text-align: center;
+}
+.book-info3 div h6{
+    padding-top: 7px;
+    margin: 0;
+    height: 20px;
+}
+.book-info3 div h6:hover{
+    color:rgb(0,168,155);
+    font-size: 14px;
+    cursor: pointer;
+
+}
+/*end book-popular*/
+/*end book-list-right*/
+/*end main*/
+
+/*footer*/
+.footer{
+    background: rgb(63,63,63);
+    width: 100%;
+    height: 150px;
+}
+.footer-head{
+    width : 100%;
+    height: 25%;
+    padding-top: 20px;
+    padding-left: 38%;
+    margin-bottom:0;
+}
+.footer-head li{
+    width: auto;
+    padding: 0 5px 0 5px;
+    text-align: center;
+}
+.footer-head li a{
+    color: rgb(174,189,185);
+    font-size: 12px;
+    font-family: Consolas;
+}
+.footer-body{
+    width: 100%;
+    height: 75%;
+    text-align: center;
+    padding: 10px;
+}
+.footer-body p{
+    color: rgb(174,189,185);
+}
+/*end footer*/
+
+.helper{
+    position: fixed;
+    width: 60px;
+    height: 252px;
+    background: #e1e1e1;
+    /*border: solid 1px red;*/
+    top: 43%;
+    left: 95.51%;
+}
+.helper-item{
+    width: 100%;
+    height: 24%;
+    margin-bottom: 0px;
+    text-align: center;
+    padding: 12px;
+    font-size: 14px;
+    font-family: cursive;
+    font-weight: 700;
+    color: rgb(29,211,116);
+}
+.helper-item:hover{
+    border: 1px solid rgba(29,211,116,0.8);
+    cursor: pointer;
+}
+.helper-item i{
+    color: rgb(29,211,116);
+}
+.item3{
+    display: none;
+    position: relative;
+    left: -120px;
+    top: -78px;
+    width: 100%;
+    height: 100%;
+    padding: 3px;
+}
+.jg{
+    width: 100%;
+    background: white;
+    height: 1px;
+}
 /*@-webkit-keyframes key1 {*/
     /*from{*/
         /**/

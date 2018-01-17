@@ -50,71 +50,6 @@
 
                 </div>
                 <ul class="shop_list fl">
-                    <li class="fl">
-                        <div class="shop_list_head fl">
-                            <input type="checkbox" class="fl" value="shop_name">
-                            <p class="fl">&nbsp;店铺&nbsp;XXXXX&nbsp;</p>
-                            <a href="#" class="fl hvr-float-shadow">
-                                <img src="../dist/res/contact.jpeg" alt="" width="15" height="15">
-                            </a>
-                            <div class="discount fl">
-                                <a href="#">
-                                    &nbsp;&nbsp;&nbsp;优惠券&nbsp;
-                                    <i class="fa fa-angle-down"></i>
-                                    &nbsp;
-                                </a>
-                            </div>
-                        </div>
-                        <ul class="shop_list_item fl">
-                            <li class="shop_list_body fl">
-                                <div class="body_info fl">
-                                    <input type="checkbox" value="goods_item" class="fl" style="width: 5%;">
-                                    <div class="fl body_info_img">
-                                        <a href="#" class="hvr-grow-shadow"  >
-                                            <img src="../dist/res/book_img/亲爱的安德烈.jpg" alt="未能正确加载图片" width="70" height="90" >
-                                        </a>
-                                    </div>
-                                    <div class="fl body_info_des">
-                                        <div class="body_info_des_top">
-                                            <a href="#" class="body_info_des_top_fnt">
-                                                纯色风衣男修身外衣2017春秋季韩版男装连帽中长款夹克男休闲外套
-                                            </a>
-                                        </div>
-                                        <div class="body_info_des_top">
-                                            <a href="#" class="fa fa-credit-card fa-lg"></a>
-                                            <a href="#" class="fa fa-cc-discover fa-lg"></a>
-                                            <a href="#" class="fa fa-cc-diners-club fa-lg"></a>
-                                            <a href="#" class="fa fa-cc-visa fa-lg"></a>
-                                        </div>
-                                    </div>
-                                    <div class="fl body_info_type">
-                                        <p>颜色:&nbsp;黑色</p>
-                                        <p>尺码:&nbsp;4XL</p>
-                                    </div>
-                                </div>
-                                <div class="body_else fl body_price">
-                                    <del><i class="fa fa-yen"></i>178.00</del>
-                                    <br>
-                                    <p class="fa fa-yen"><strong>119.98</strong></p>
-                                </div>
-                                <div class="body_else fl body_num">
-                                    <span>
-                                        <button type="button" class="fl" value="sub">-</button>
-                                        <input type="text" value="1" class="fl" name="goods_num">
-                                        <button type="button" class="fl" value="plus">+</button>
-                                    </span>
-                                </div>
-                                <div class="body_else fl body_all_price">
-                                    <p class="fa fa-yen">119.98</p>
-                                </div>
-                                <div class="body_else fl body_op">
-                                    <a href="#">移入收藏夹</a><br>
-                                    <a href="#">删除</a>
-                                </div>
-
-                            </li>
-                        </ul>
-                    </li>
                 </ul>
                 <div class="all_total fl">
                     <div class="all_total_left fl">
@@ -168,24 +103,7 @@
                             </div>
                             <div class="step-two ">
                                 <h4>确认收货地址</h4>
-                                <ul>
-                                    <li>
-                                        <input type="radio" name="address" class="fl" checked>
-                                        <p>&nbsp;重庆 重庆市 南岸区 海棠溪街道 重庆交通大学南岸校区学府大道66号知园小区1栋3单元（侯鑫 收）13752913198 <strong style="color:#888888;">默认地址</strong><a href="#" data-toggle="modal" data-target="#edit_add">&nbsp;&nbsp;修改默认地址</a>
-                                        </p>
-                                    </li>
-                                    <li>
-                                        <input type="radio" name="address" class="fl">
-                                        <p  >&nbsp;重庆 重庆市 南岸区 海棠溪街道 重庆交通大学南岸校区学府大道66号知园小区1栋3单元（侯鑫 收）13752913198 <a href="#">&nbsp;&nbsp;设置为默认地址</a>
-                                        </p>
-                                    </li>
-                                    <li>
-                                        <input type="radio" name="address" class="fl">
-                                        <p>&nbsp;重庆 重庆市 南岸区 海棠溪街道 重庆交通大学南岸校区学府大道66号知园小区1栋3单元（侯鑫 收）13752913198<a href="#" >&nbsp;&nbsp;设置为默认地址</a>
-                                        </p>
-                                    </li>
-                                </ul>
-
+                                <ul></ul>
                                 <!-- 模态框（Modal） -->
                                 <div class="modal fade" id="edit_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -215,21 +133,22 @@
                                                         <input type="tel" style="width: 136px" placeholder="联系电话">
                                                     </div>
                                                     <div class="input-group add-more">
+                                                        <span class="fl">姓名</span>
+                                                        <input type="text" placeholder="姓名" >
+                                                    </div>
+                                                    <div class="input-group add-more">
                                                         <span class="fl">具体地址</span>
                                                         <input type="text" placeholder="详细地址" >
                                                     </div>
                                                 </form>
-
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" id="edit_address_cancel">取消更改</button>
                                                 <button type="submit" class="btn btn-primary" id="edit_address_ok" >提交更改</button>
                                             </div>
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal -->
+                                        </div>
+                                    </div>
                                 </div>
-
-
                             </div>
                             <div class="step-three">
                                 <h4>支付选择</h4>
@@ -261,20 +180,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-body-foot">
-
-                        </div>
-
                     </div>
                     <div class="modal-footer ">
                         <button type="button" class="btn btn-default" disabled id="step_prev">上一步</button>
                         <button type="button" class="btn btn-default" id="step_next">下一步</button>
                         <button type="button" class="btn btn-primary" disabled id="step_submit">提交</button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-
+                </div>
+            </div>
+        </div>
         <p class="txt">11</p>
     </body>
 </html>
