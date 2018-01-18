@@ -10,12 +10,7 @@ ul>li{
 p:hover{
     cursor: pointer;
 }
-header{
-    width:1348px;
-    height: 35px;
-    background-color: rgb(51,51,51);
-    padding:3px 15% 3px 15%;
-}
+
 .fl{
     float: left;
 }
@@ -23,7 +18,12 @@ header{
     float: right;
 }
 
-
+header{
+    width:1348px;
+    height: 35px;
+    background-color: rgb(51,51,51);
+    padding:3px 15% 3px 15%;
+}
 .a_school{
     color:rgb(1,200,181);
     font-style: normal;
@@ -34,6 +34,7 @@ header{
 }
 .header-school{
     padding: 3px 0 0 8px;
+
 }
 .header-school i{
     color:rgb(1,200,181);
@@ -82,7 +83,6 @@ header{
     height: 20px;
 }
 .show_school_body_2{
-    float: left;
     color: rgb(0,168,155);
     border: 1px solid #a1a7a6;
     padding: 6px 0 6px 0px;
@@ -124,6 +124,7 @@ header{
 .header_login{
     width: 25%;
     /*background-color: red;*/
+    height: 100%;
 }
 .header_login li{
     list-style: none;

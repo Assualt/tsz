@@ -23,7 +23,90 @@
         <script type="text/javascript" src="../dist/myjs/cart.js"></script>
     </head>
     <body>
+        <header>
+            <div class="header-school">
+                <i class="fa fa-location-arrow fa-lg" aria-hidden="true"></i>
+                <a href="javascript:void(0)" class="a_school" >&nbsp;[&nbsp;所有学校&nbsp;]</a>
+                <div class="show_school"  >
+                    <div class="show_school_head">
+                        <p class="fl">请选择学校</p>
+                        <button class="btn btn-sm fa fa-close fr" id="show_school_btn_cls"></button>
+                    </div>
+                    <div class="show_school_body">
+                        <p class="fl">快捷方式:<a href="#" style="color: rgb(0,168,155);">　所有学校</a>
+                        </p>
+                        <div class="show_school_body_2 fl" >
+                            <a href="#" class="fl">北京</a>
+                            <a href="#" class="fl">上海</a>
+                            <a href="#" class="fl">黑龙江</a>
+                            <a href="#" class="fl">吉林</a>
+                            <a href="#" class="fl">辽宁</a>
+                            <a href="#" class="fl">天津</a>
+                            <a href="#" class="fl">安徽</a>
+                            <a href="#" class="fl">江苏</a>
+                            <a href="#" class="fl">浙江</a>
+                            <a href="#" class="fl">陕西</a>
+                            <a href="#" class="fl">湖北</a>
+                            <a href="#" class="fl">广东</a>
+                            <a href="#" class="fl">湖南</a>
+                            <a href="#" class="fl">甘肃</a>
+                            <a href="#" class="fl">四川</a>
+                            <a href="#" class="fl">山东</a>
+                            <a href="#" class="fl">福建</a>
+                            <a href="#" class="fl">河南</a>
+                            <a href="#" class="fl">重庆</a>
+                            <a href="#" class="fl">云南</a>
+                            <a href="#" class="fl">河北</a>
+                            <a href="#" class="fl">江西</a>
+                            <a href="#" class="fl">山西</a>
+                            <a href="#" class="fl">贵州</a>
+                            <a href="#" class="fl">广西</a>
+                            <a href="#" class="fl">内蒙古</a>
+                            <a href="#" class="fl">宁夏</a>
+                            <a href="#" class="fl">青海</a>
+                            <a href="#" class="fl">西藏</a>
+                            <a href="#" class="fl">香港</a>
+                            <a href="#" class="fl">澳门</a>
+                            <a href="#" class="fl">台湾</a>
+                        </div>
+                        <div class="show_school_body_3 fl">
+                            <!--<p><a href="#">asdasd</a></p>  Just a Test -->
+                        </div>
+                    </div>
+                </div>
+                <div class="header_login fr">
+                    <li class="fl"><a href="./login.html">登录</a>&nbsp;|</li>
+                    <li class="fl"><a href="./sold.html" target="_blank">出售</a>&nbsp;|</li>
+                    <li class="fl"><a href="./register.html" style="color: orange" target="_blank">立即注册</a>&nbsp;|</li>
+                    <li class="fl"><a href="./downloadApp.html" class="fa fa-mobile-phone fa-1x" target="_blank">下载APP</a></li>
+                </div>
+            </div>
+        </header>
+        <div class="header-tools">
+            <div class="header-tools-left fl">
+                <a href="#">
+                    <img src="../dist/res/logo.png" alt="" width="180" height="64">
+                </a>
+            </div>
+            <div class="header-tools-right fr form-inline">
+                <div class="form-inline fr">
+                    <div class="form-group fl">
+                        <select class="form-control fl">
+                            <option value="宝贝">宝贝</option>
+                            <option value="书本">书本</option>
+                            <option value="店铺">店铺</option>
+                        </select>
+                    </div>
+                    <div class="form-group fl">
+                        <input type="text" class="form-control" placeholder="搜&nbsp;索" name="search">
+                    </div>
+                    <div class="form-group fl">
+                        <input type="button" class="form-control btn btn-warning" value="搜&nbsp;索">
+                    </div>
 
+                </div>
+            </div>
+        </div>
         <div class="container shop">
             <ul class="shop-header fl">
                 <li class="fl"><a href="#">全部商品&nbsp;<strong>5</strong></a></li>
@@ -59,7 +142,6 @@
                         <a href="#" id="join">移入收藏夹</a>
                         <a href="#" >分享</a>
                     </div>
-
                     <div class="all_total_right fl">
                         <p class="fl">共选商品</p>
                         <strong class="fl">&nbsp;0&nbsp;</strong>
@@ -97,7 +179,7 @@
                                             <th>小计</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="table-bordered">
                                     </tbody>
                                 </table>
                             </div>
@@ -105,12 +187,12 @@
                                 <h4>确认收货地址</h4>
                                 <ul></ul>
                                 <!-- 模态框（Modal） -->
-                                <div class="modal fade" id="edit_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="edit_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                <h4 class="modal-title" >修改地址</h4>
+                                                <button type="button" class="close" aria-hidden="true" id="close_edit_add">&times;</button>
+                                                <h4 class="modal-title">修改地址</h4>
                                             </div>
                                             <div class="modal-body">
                                                 <form class="form-inline">
@@ -189,6 +271,53 @@
                 </div>
             </div>
         </div>
-        <p class="txt">11</p>
+        <div class="recommend_daily">
+            <div class="recommend_daily_head">
+                <ul class="list-group">
+                    <li class="list-group-item fl">掌柜热卖</li>
+                    <li class="fl list-group-item">|</li>
+                    <li class="list-group-item fl">最近浏览</li>
+                    <li class="fl list-group-item">|</li>
+                    <li class="list-group-item fl">猜你喜欢</li>
+                </ul>
+            </div>
+            <div class="recommend_daily_body">
+                <div class="">
+
+                </div>
+            </div>
+        </div>
+        <div class="footer fl">
+            <ul class="footer-head fl">
+                <li class="fl"><a href="#" class="hvr-grow">关于我们</a></li>
+                <li class="fl"><a href="#" class="hvr-grow">申请合作</a></li>
+                <li class="fl"><a href="#" class="hvr-grow">隐私政策</a></li>
+                <li class="fl"><a href="#" class="hvr-grow">服务条款</a></li>
+                <li class="fl"><a href="#" class="hvr-grow">帮助</a></li>
+                <li class="fl"><a href="#" class="hvr-grow">友情链接</a></li>
+            </ul>
+            <div class="footer-body fl">
+                <p class="fa fa-copyright">&nbsp;by Copyright 淘书斋 渝ICP备12345678号-2</p>
+                <p>淘书斋二手书平台&nbsp;|&nbsp;地址:重庆市xxx区 xxx街道 xxx办公室&nbsp;|&nbsp; 联系电话:13232343531</p>
+                <p>买卖二手书，就上淘书斋。淘书斋二手书交易网-您身边最全的二手书网站</p>
+            </div>
+        </div>
+        <div class="helper">
+            <div class="helper-item"><i class="fa fa-question-circle-o fa-2x"></i></div>
+            <div class="jg1"></div>
+            <div class="helper-item"><i class="fa fa-rocket fa-2x"></i></div>
+            <div class="jg1"></div>
+            <div class="helper-item"><i class="fa fa-qrcode fa-2x"></i>
+                <div class="item3">
+                    <a href="#">
+                        <img src="../dist/res/0.jpg" alt="" width="100" height="100">
+                    </a>
+                </div>
+            </div>
+            <div class="jg1"></div>
+            <div class="helper-item">
+                <i class="fa fa-phone-square fa-2x"></i>
+            </div>
+        </div>
     </body>
 </html>

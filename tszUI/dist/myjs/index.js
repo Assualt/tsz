@@ -46,7 +46,7 @@ function school_clicked(a) {
     $(".a_school").text('[  '+obj.attr('name') +'  ]');
     $(".show_school").hide(100);
 }
-/*define the json path*/
+
 
 
 $(document).ready(function () {
