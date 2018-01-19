@@ -119,7 +119,7 @@ $(document).ready (function () {
                        "<div class='fl discount'>" +
                        "    <a href='#' >" +
                        "        &nbsp;&nbsp;&nbsp;优惠券&nbsp;" +
-                       "        <i class=\"fa fa-angle-down\"></i>&nbsp;" +
+                       "        <i class='fa fa-angle-down'></i>&nbsp;" +
                        "    </a>" +
                        "</div>" +
                        "</div>" +
@@ -241,6 +241,106 @@ $(document).ready (function () {
         });
     });
 
+    /*define the json for daily_recommend*/
+    $.getJSON(window.JSONPATH+'daily_interest.json',function (content) {
+       $.each(content,function (info,data) {
+           var string =" ";
+          if(data.name === "daily_hot"){
+              string +="<ul class='item active daily_list'>"
+              var cont = data.item;
+              $("#daily_hot div.carousel-inner").empty();
+              $.each(cont,function (info,item) {
+                  string +=
+                      "<li>" +
+                      "     <div class='daily_hot_list-head'>" +
+                      "         <img src='"+item.book_img_url+"' alt='未能正确加载图片' title='"+item.book_name+" width='160' height='180'>" +
+                      "     </div>" +
+                      "      <div class='daily_hot_list_body'>" +
+                      "         <div class='daily_hot_list_body_item'>" +
+                      "             <p class='fa fa-yen fl'><strong>"+item.book_price_now+"</strong></p>" +
+                      "             <del class='fa fa-yen fl'>&nbsp;"+item.book_price_before+"</del>" +
+                      "             <a class='fr'><img src='../dist/res/postfree.png' alt='' title='包邮'></a>" +
+                      "         </div>" +
+                      "         <div class='daily_hot_list_body_item'>" +
+                      "             <p>"+item.book_title+"</p>" +
+                      "         </div>" +
+                      "         <div class='daily_hot_list_body_item'>" +
+                      "             <p class='fl'>销量:&nbsp;"+item.book_sell_num+"</p>" +
+                      "             <a class='fr'>"+item.book_else_des+"</a>" +
+                      "         </div>"+
+                      "       </div>" +
+                      "</li>";
+                  if(info %5 ==0 && info !=0) {
+                      string+="</ul><ul class='item daily_list'>";
+                  }
+              });
+              $("#daily_hot div.carousel-inner").append(string);
+              $("#daily_hot div.carousel-inner").find('ul:last-child').remove();
+          }
+          if(data.name === "daily_history"){
+              var cont = data.item ;
+              $("#daily_history div.carousel-inner").find('ul').empty();
+              $.each(cont,function (info,item) {
+                  string +=
+                      "<li>" +
+                      "     <div class='daily_hot_list-head'>" +
+                      "         <img src='"+item.book_img_url+"' alt='未能正确加载图片' title='"+item.book_name+" width='160' height='180'>" +
+                      "     </div>" +
+                      "      <div class='daily_hot_list_body'>" +
+                      "         <div class='daily_hot_list_body_item'>" +
+                      "             <p class='fa fa-yen fl'><strong>"+item.book_price_now+"</strong></p>" +
+                      "             <del class='fa fa-yen fl'>&nbsp;"+item.book_price_before+"</del>" +
+                      "             <a class='fr'><img src='../dist/res/postfree.png' alt='' title='包邮'></a>" +
+                      "         </div>" +
+                      "         <div class='daily_hot_list_body_item'>" +
+                      "             <p>"+item.book_title+"</p>" +
+                      "         </div>" +
+                      "         <div class='daily_hot_list_body_item'>" +
+                      "             <p class='fl'>浏览时间:&nbsp;</p>" +
+                      "             <a class='fr'>"+item.book_else_des+"</a>" +
+                      "         </div>"+
+                      "       </div>" +
+                      "</li>";
+              });
+              $("#daily_history div.carousel-inner").find('ul').append(string);
+          }
+          if(data.name === "guess_like"){
+              string +="<ul class='item active daily_list'>"
+              var cont = data.item;
+              $("#guess_like div.carousel-inner").empty();
+              $.each(cont,function (info,item) {
+                  string +=
+                      "<li>" +
+                      "     <div class='daily_hot_list-head'>" +
+                      "         <img src='"+item.book_img_url+"' alt='未能正确加载图片' title='"+item.book_name+" width='160' height='180'>" +
+                      "     </div>" +
+                      "      <div class='daily_hot_list_body'>" +
+                      "         <div class='daily_hot_list_body_item'>" +
+                      "             <p class='fa fa-yen fl'><strong>"+item.book_price_now+"</strong></p>" +
+                      "             <del class='fa fa-yen fl'>&nbsp;"+item.book_price_before+"</del>" +
+                      "             <a class='fr'><img src='../dist/res/postfree.png' alt='' title='包邮'></a>" +
+                      "         </div>" +
+                      "         <div class='daily_hot_list_body_item'>" +
+                      "             <p>"+item.book_title+"</p>" +
+                      "         </div>" +
+                      "         <div class='daily_hot_list_body_item'>" +
+                      "             <p class='fl'>销量:&nbsp;"+item.book_sell_num+"</p>" +
+                      "             <a class='fr'>"+item.book_else_des+"</a>" +
+                      "         </div>"+
+                      "       </div>" +
+                      "</li>";
+                  if(info %5 ==0 && info !=0){
+                      string+="</ul><ul class='item daily_list'>";
+                  }
+
+              });
+              $("#guess_like div.carousel-inner").append(string);
+              $("#guess_like div.carousel-inner").find('ul:last-child').remove();
+
+          }
+       });
+
+    });
     /*edit add close*/
     $("#close_edit_add").click(function () {
        $("#edit_add").modal('hide');
@@ -559,6 +659,33 @@ $(document).ready (function () {
         $(this).css("padding","16px");
         $(this).html("<i class='fa fa-phone-square fa-2x'></i>");
     });
+
+    /*daily_recommend*/
+    $(".recommend_daily_head ul li:nth-child(odd)").mouseenter(function () {
+       var val = $(this).val();
+       if(val === 1) {
+           $("#daily_hot").css('display','block');
+           $("#daily_history").css('display','none');
+           $("#guess_like").css('display','none');
+       }else if(val ===2){
+           $("#daily_hot").css('display','none');
+           $("#daily_history").css('display','block');
+           $("#guess_like").css('display','none');
+       }else if(val === 3){
+           $("#daily_hot").css('display','none');
+           $("#daily_history").css('display','none');
+           $("#guess_like").css('display','block');
+       }else{}
+
+       $(this).parents('.list-group').find('li:nth-child(odd)').not(this).css('border-bottom','none');
+       $(this).css('border-bottom','solid 3px rgb(255,68,0)');
+
+
+    });
+
+    /*lunbo*/
+    $("#daily_hot").carousel( {interval:5000});
+    $('#guess_like').carousel({interval:5000});
 
 
     window.setInterval(checkbox_submit,1000);

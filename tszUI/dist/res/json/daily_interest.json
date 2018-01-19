@@ -1,0 +1,527 @@
+[
+  {
+    "name": "daily_hot",
+    "item": [
+      {
+        "book_name": "历年考研英语真题解析及复习思路(基础试卷版)",
+        "book_img_url": "../dist/res/book_img/历年考研英语真题解析及复习思路(基础试卷版).jpg",
+        "book_title": "励志书本就选历年考研英语真题解析及复习思路(基础试卷版)",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "卡耐基",
+        "book_img_url": "../dist/res/book_img/卡耐基.jpg",
+        "book_title": "励志书本就选卡耐基",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "亲爱的安德烈",
+        "book_img_url": "../dist/res/book_img/亲爱的安德烈.jpg",
+        "book_title": "励志书本就选亲爱的安德烈",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "痕迹",
+        "book_img_url": "../dist/res/book_img/痕迹.jpg",
+        "book_title": "励志书本就选痕迹",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "皮囊.jpg",
+        "book_img_url": "../dist/res/book_img/皮囊.jpg",
+        "book_title": "励志书本就选皮囊",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "谁偷吃了蔬菜",
+        "book_img_url": "../dist/res/book_img/谁偷吃了蔬菜.jpg",
+        "book_title": "励志书本就选谁偷吃了蔬菜",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "销售就是讲故事",
+        "book_img_url": "../dist/res/book_img/销售就是讲故事.jpg",
+        "book_title": "励志书本就选销售就是讲故事",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "那些古怪又让人忧心的问题",
+        "book_img_url": "../dist/res/book_img/那些古怪又让人忧心的问题.jpg",
+        "book_title": "励志书本就选那些古怪又让人忧心的问题",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "追风筝的人",
+        "book_img_url": "../dist/res/book_img/追风筝的人.jpg",
+        "book_title": "励志书本就选追风筝的人",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "长安乱",
+        "book_img_url": "../dist/res/book_img/长安乱.jpg",
+        "book_title": "励志书本就选长安乱",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "雾中回忆",
+        "book_img_url": "../dist/res/book_img/雾中回忆.jpg",
+        "book_title": "励志书本就选雾中回忆",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "蔷薇岛屿",
+        "book_img_url": "../dist/res/book_img/蔷薇岛屿.jpg",
+        "book_title": "励志书本就选蔷薇岛屿",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "高等数学(第六版上册)",
+        "book_img_url": "../dist/res/book_img/高等数学(第六版上册).jpg",
+        "book_title": "励志书本就选高等数学(第六版上册)",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "外国文化史",
+        "book_img_url": "../dist/res/book_img/外国文化史.jpg",
+        "book_title": "励志书本就选外国文化史",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "利用Python进行数据分析",
+        "book_img_url": "../dist/res/book_img/利用Python进行数据分析.jpg",
+        "book_title": "励志书本就选利用Python进行数据分析",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "活着",
+        "book_img_url": "../dist/res/book_img/活着.jpg",
+        "book_title": "励志书本就选活着",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "卡耐基",
+        "book_img_url": "../dist/res/book_img/卡耐基.jpg",
+        "book_title": "励志书本就选卡耐基",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "湘行散记",
+        "book_img_url": "../dist/res/book_img/湘行散记.jpg",
+        "book_title": "励志书本就选湘行散记",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "离散数学题解",
+        "book_img_url": "../dist/res/book_img/离散数学题解.jpg",
+        "book_title": "励志书本就选离散数学题解",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "罗兰·巴特尔文集",
+        "book_img_url": "../dist/res/book_img/罗兰·巴特尔文集.jpg",
+        "book_title": "励志书本就选罗兰·巴特尔文集",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "花田半亩",
+        "book_img_url": "../dist/res/book_img/花田半亩.jpg",
+        "book_title": "励志书本就选花田半亩",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "笔记本",
+        "book_img_url": "../dist/res/book_img/笔记本.jpg",
+        "book_title": "励志书本就选笔记本",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "卡耐基",
+        "book_img_url": "../dist/res/book_img/卡耐基.jpg",
+        "book_title": "励志书本就选卡耐基",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "被窝是青春的坟墓",
+        "book_img_url": "../dist/res/book_img/被窝是青春的坟墓.jpg",
+        "book_title": "励志书本就选被窝是青春的坟墓",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "许三观卖血记",
+        "book_img_url": "../dist/res/book_img/许三观卖血记.jpg",
+        "book_title": "励志书本就选许三观卖血记",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "面包树上的女人",
+        "book_img_url": "../dist/res/book_img/面包树上的女人.jpg",
+        "book_title": "励志书本就选面包树上的女人",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      }
+    ]
+  },
+  {
+    "name":"daily_history",
+    "item":[
+      {
+        "book_name": "卡耐基",
+        "book_img_url": "../dist/res/book_img/卡耐基.jpg",
+        "book_title": "励志书本就选卡耐基",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "亲爱的安德烈",
+        "book_img_url": "../dist/res/book_img/亲爱的安德烈.jpg",
+        "book_title": "励志书本就选亲爱的安德烈",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "痕迹",
+        "book_img_url": "../dist/res/book_img/痕迹.jpg",
+        "book_title": "励志书本就选痕迹",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "皮囊.jpg",
+        "book_img_url": "../dist/res/book_img/皮囊.jpg",
+        "book_title": "励志书本就选皮囊",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "谁偷吃了蔬菜",
+        "book_img_url": "../dist/res/book_img/谁偷吃了蔬菜.jpg",
+        "book_title": "励志书本就选谁偷吃了蔬菜",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_else_des":"优惠促销"
+      }
+    ]
+  },
+  {
+    "name":"guess_like",
+    "item": [
+      {
+        "book_name": "历年考研英语真题解析及复习思路(基础试卷版)",
+        "book_img_url": "../dist/res/book_img/历年考研英语真题解析及复习思路(基础试卷版).jpg",
+        "book_title": "励志书本就选历年考研英语真题解析及复习思路(基础试卷版)",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "卡耐基",
+        "book_img_url": "../dist/res/book_img/卡耐基.jpg",
+        "book_title": "励志书本就选卡耐基",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "亲爱的安德烈",
+        "book_img_url": "../dist/res/book_img/亲爱的安德烈.jpg",
+        "book_title": "励志书本就选亲爱的安德烈",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "痕迹",
+        "book_img_url": "../dist/res/book_img/痕迹.jpg",
+        "book_title": "励志书本就选痕迹",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "皮囊.jpg",
+        "book_img_url": "../dist/res/book_img/皮囊.jpg",
+        "book_title": "励志书本就选皮囊",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "谁偷吃了蔬菜",
+        "book_img_url": "../dist/res/book_img/谁偷吃了蔬菜.jpg",
+        "book_title": "励志书本就选谁偷吃了蔬菜",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "销售就是讲故事",
+        "book_img_url": "../dist/res/book_img/销售就是讲故事.jpg",
+        "book_title": "励志书本就选销售就是讲故事",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "那些古怪又让人忧心的问题",
+        "book_img_url": "../dist/res/book_img/那些古怪又让人忧心的问题.jpg",
+        "book_title": "励志书本就选那些古怪又让人忧心的问题",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "追风筝的人",
+        "book_img_url": "../dist/res/book_img/追风筝的人.jpg",
+        "book_title": "励志书本就选追风筝的人",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "长安乱",
+        "book_img_url": "../dist/res/book_img/长安乱.jpg",
+        "book_title": "励志书本就选长安乱",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "雾中回忆",
+        "book_img_url": "../dist/res/book_img/雾中回忆.jpg",
+        "book_title": "励志书本就选雾中回忆",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "蔷薇岛屿",
+        "book_img_url": "../dist/res/book_img/蔷薇岛屿.jpg",
+        "book_title": "励志书本就选蔷薇岛屿",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "高等数学(第六版上册)",
+        "book_img_url": "../dist/res/book_img/高等数学(第六版上册).jpg",
+        "book_title": "励志书本就选高等数学(第六版上册)",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "外国文化史",
+        "book_img_url": "../dist/res/book_img/外国文化史.jpg",
+        "book_title": "励志书本就选外国文化史",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "利用Python进行数据分析",
+        "book_img_url": "../dist/res/book_img/利用Python进行数据分析.jpg",
+        "book_title": "励志书本就选利用Python进行数据分析",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "活着",
+        "book_img_url": "../dist/res/book_img/活着.jpg",
+        "book_title": "励志书本就选活着",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "卡耐基",
+        "book_img_url": "../dist/res/book_img/卡耐基.jpg",
+        "book_title": "励志书本就选卡耐基",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "湘行散记",
+        "book_img_url": "../dist/res/book_img/湘行散记.jpg",
+        "book_title": "励志书本就选湘行散记",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "离散数学题解",
+        "book_img_url": "../dist/res/book_img/离散数学题解.jpg",
+        "book_title": "励志书本就选离散数学题解",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "罗兰·巴特尔文集",
+        "book_img_url": "../dist/res/book_img/罗兰·巴特尔文集.jpg",
+        "book_title": "励志书本就选罗兰·巴特尔文集",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "花田半亩",
+        "book_img_url": "../dist/res/book_img/花田半亩.jpg",
+        "book_title": "励志书本就选花田半亩",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "笔记本",
+        "book_img_url": "../dist/res/book_img/笔记本.jpg",
+        "book_title": "励志书本就选笔记本",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "卡耐基",
+        "book_img_url": "../dist/res/book_img/卡耐基.jpg",
+        "book_title": "励志书本就选卡耐基",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "被窝是青春的坟墓",
+        "book_img_url": "../dist/res/book_img/被窝是青春的坟墓.jpg",
+        "book_title": "励志书本就选被窝是青春的坟墓",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "许三观卖血记",
+        "book_img_url": "../dist/res/book_img/许三观卖血记.jpg",
+        "book_title": "励志书本就选许三观卖血记",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      },
+      {
+        "book_name": "面包树上的女人",
+        "book_img_url": "../dist/res/book_img/面包树上的女人.jpg",
+        "book_title": "励志书本就选面包树上的女人",
+        "book_price_now":"12.00",
+        "book_price_before":"23.00",
+        "book_sell_num":"30",
+        "book_else_des":"优惠促销"
+      }
+    ]
+  }
+
+]

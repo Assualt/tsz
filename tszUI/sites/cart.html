@@ -274,17 +274,51 @@
         <div class="recommend_daily">
             <div class="recommend_daily_head">
                 <ul class="list-group">
-                    <li class="list-group-item fl">掌柜热卖</li>
+                    <li class="list-group-item fl" value="1">掌柜热卖</li>
                     <li class="fl list-group-item">|</li>
-                    <li class="list-group-item fl">最近浏览</li>
+                    <li class="list-group-item fl" value="2">最近浏览</li>
                     <li class="fl list-group-item">|</li>
-                    <li class="list-group-item fl">猜你喜欢</li>
+                    <li class="list-group-item fl" value="3">猜你喜欢</li>
                 </ul>
             </div>
-            <div class="recommend_daily_body">
-                <div class="">
-
+            <div class="recommend_daily_body carousel slide" id="daily_hot">
+                <ol class="fl carousel-indicators">
+                    <li data-target="#daily_hot" data-slide-to="0" class="active"></li>
+                    <li data-target="#daily_hot" data-slide-to="1"></li>
+                    <li data-target="#daily_hot" data-slide-to="2"></li>
+                    <li data-target="#daily_hot" data-slide-to="3"></li>
+                    <li data-target="#daily_hot" data-slide-to="4"></li>
+                </ol>
+                <div class="carousel-inner"></div>
+                <div class="carousel_btn">
+                    <a class="carousel-control fl" href="#daily_hot"
+                       data-slide="prev" type="button">&lsaquo;</a>
+                    <a class="carousel-control fl" href="#daily_hot"
+                       data-slide="next">&rsaquo;</a>
                 </div>
+            </div>
+            <div class="recommend_daily_body carousel slide" id="daily_history">
+                <ol class="fl carousel-indicators"></ol>
+                <div class="carousel-inner">
+                    <ul class="item active daily_list"></ul>
+                </div>
+            </div>
+            <div class="recommend_daily_body carousel slide" id="guess_like">
+                <ol class="fl carousel-indicators">
+                    <li data-target="#guess_like" data-slide-to="0" class="active"></li>
+                    <li data-target="#guess_like" data-slide-to="1"></li>
+                    <li data-target="#guess_like" data-slide-to="2"></li>
+                    <li data-target="#guess_like" data-slide-to="3"></li>
+                    <li data-target="#guess_like" data-slide-to="4"></li>
+                </ol>
+                <div class="carousel-inner"></div>
+                <div class="carousel_btn">
+                    <a class="carousel-control fl" href="#guess_like"
+                       data-slide="prev" type="button">&lsaquo;</a>
+                    <a class="carousel-control fl" href="#guess_like"
+                       data-slide="next">&rsaquo;</a>
+                </div>
+
             </div>
         </div>
         <div class="footer fl">
@@ -319,5 +353,6 @@
                 <i class="fa fa-phone-square fa-2x"></i>
             </div>
         </div>
+        <div id="txt"></div>
     </body>
 </html>
