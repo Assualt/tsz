@@ -1,6 +1,6 @@
 /**
-* Created by T_T on 2018/1/18.
-**/
+ * Created by T_T on 2018/1/18.
+ **/
 
 /*school clicked*/
 function school_clicked(a) {

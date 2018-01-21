@@ -27,7 +27,6 @@ function Gen_goods_list() {
     });
     var total_price = $(".total p:eq(1)").html();
     var total_num = $(".all_total_right strong").html();
-
     var str =
         "<tr>" +
         "   <td> 总计 </td>" +
@@ -94,7 +93,27 @@ function checkbox_submit() {
         $("input:button[value='结算']").attr('disabled',true);
     }
 }
-
+function Check_shop_num() {
+    var len =$(".shop_list").find('li').length;
+    if(len === 0){
+        $(".shop_list").append("<h1 align='center' style='opacity: 0.5;'>抱歉 购物车为空！</h1>");
+    }
+}
+function Set_daily_recommend_block(flag){
+    if(flag === 1){
+        $("#daily_hot").css('display','block');
+        $("#daily_history").css('display','none');
+        $("#guess_like").css('display','none');
+    }else if(flag === 2){
+        $("#daily_hot").css('display','none');
+        $("#daily_history").css('display','block');
+        $("#guess_like").css('display','none');
+    }else if(flag === 3){
+        $("#daily_hot").css('display','none');
+        $("#daily_history").css('display','none');
+        $("#guess_like").css('display','block');
+    }else{}
+}
 
 $(document).ready (function () {
     window.JSONPATH="../dist/res/json/";
@@ -427,9 +446,15 @@ $(document).ready (function () {
 
     /*body_op*/
     $(".shop_list").on("click",".body_op a:last-child",function () {
-        var flag = confirm("确认删除次本书");
+        var flag = confirm("确认删除次本书?");
         if(flag === true){
-            $(this).parents('.shop_list_body').remove();
+            var all_del = $(this).parents('.shop_list_item').find('.shop_list_body').length-1;
+            if(all_del === 0) /*all books del*/
+                $(this).parents('li').remove();
+            else
+                $(this).parents('.shop_list_body').remove();
+            // alert(all_del);
+            Check_shop_num();
             Set_All_Num_Price(true);
             Set_All_Goods_mum();
         }
@@ -440,30 +465,34 @@ $(document).ready (function () {
        // alert(all);
        if(all == true){
            if(confirm("确认删除所有图书？")===true) {
-               $(".shop_list").remove();
+               $(".shop_list li").remove();
+           }
+       }else{
+           if(confirm("确认删除所选图书吗?")===true) {
+               var delete_shop = $("input:checkbox[value='shop_name']");
+               $.each(delete_shop, function () {
+                   if ($(this).is(":checked") === true) {
+                       var delete_goods = $(this).parent(".shop_list_head").next(".shop_list_item").find('.shop_list_body .body_info input');
+                       var flag = true;
+                       $.each(delete_goods, function () {
+                           if ($(this).is(":checked") === false)
+                               flag = false;
+                       });
+                       if (flag == true)
+                           $(this).parents('li').remove();
+                       else {
+                           $.each(delete_goods, function () {
+                               if ($(this).is(":checked") === true) {
+                                   $(this).parents('.shop_list_body').remove();
+                               }
+                           });
+                       }
+                   }
+               });
            }
        }
-       var delete_shop=$("input:checkbox[value='shop_name']");
-       $.each(delete_shop,function () {
-           if($(this).is(":checked") === true){
-               var delete_goods = $(this).parent(".shop_list_head").next(".shop_list_item").find('.shop_list_body .body_info input');
-               var flag = true;
-               $.each(delete_goods,function () {
-                  if($(this).is(":checked") === false)
-                      flag = false;
-               });
-               if(flag == true)
-                    $(this).parents('li').remove();
-               else{
-                   $.each(delete_goods,function () {
-                       if($(this).is(":checked") === true) {
-                           $(this).parents('.shop_list_body').remove();
-                       }
-                   });
-               }
-           }
-
-       });
+       Check_shop_num();
+       Set_All_Num_Price();
        Set_All_Goods_mum();
     });
 
@@ -663,24 +692,9 @@ $(document).ready (function () {
     /*daily_recommend*/
     $(".recommend_daily_head ul li:nth-child(odd)").mouseenter(function () {
        var val = $(this).val();
-       if(val === 1) {
-           $("#daily_hot").css('display','block');
-           $("#daily_history").css('display','none');
-           $("#guess_like").css('display','none');
-       }else if(val ===2){
-           $("#daily_hot").css('display','none');
-           $("#daily_history").css('display','block');
-           $("#guess_like").css('display','none');
-       }else if(val === 3){
-           $("#daily_hot").css('display','none');
-           $("#daily_history").css('display','none');
-           $("#guess_like").css('display','block');
-       }else{}
-
+       Set_daily_recommend_block(val);
        $(this).parents('.list-group').find('li:nth-child(odd)').not(this).css('border-bottom','none');
        $(this).css('border-bottom','solid 3px rgb(255,68,0)');
-
-
     });
 
     /*lunbo*/
