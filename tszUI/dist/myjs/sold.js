@@ -89,4 +89,31 @@ $(document).ready(function () {
         $(this).html("<i class='fa fa-phone-square fa-2x'></i>");
     });
 
+
+    /*search tag */
+    $(".search_keyword li a").click(function () {
+       $(this).addClass('selected');
+       $(".search_keyword li a").not(this).removeClass('selected');
+    });
+
+    /*display order*/
+    $(".list_order li ").on('click','a',function () {
+        var flag = $(this).parent('li').html().indexOf('<i');
+        if(flag === -1){/*has no i*/
+            var li = $(this).parents('ul').find('li:not(:first-child) i');
+            li.remove();
+            var start = $(this).parents('li').html().indexOf('</a>');
+            start = $(this).parents('li').html().substring(0,start+4) +"<i class='fa fa-sort-down'></i>";
+            $(this).parents('li').html(start);
+        }else{
+            var i = $(this).next('i');
+            i.toggleClass('fa-sort-down').toggleClass('fa-sort-up');
+        }
+    });
+
+    /*pagination tools*/
+    $("#page_tools li:not(:first-child,:last-child) a").click(function () {
+       $("#page_tools li:not(:first-child,:last-child)").not(this).removeClass('active');
+       $(this).parents('li').toggleClass('active');
+    });
 });

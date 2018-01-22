@@ -115,7 +115,7 @@ function Set_daily_recommend_block(flag){
     }else{}
 }
 
-$(document).ready (function () {
+$(document).ready(function () {
     window.JSONPATH="../dist/res/json/";
     var name= window.localStorage.username;
     document.title = name+ '的购物车';
