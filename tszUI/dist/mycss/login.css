@@ -21,7 +21,7 @@ p:hover{
 }
 
 header{
-    width:1348px;
+    width:100%;
     height: 35px;
     background-color: rgb(51,51,51);
     padding:3px 15% 3px 15%;
@@ -144,6 +144,7 @@ header{
     text-decoration: none;
     color: #007a71;
 }
+
 
 .main{
     width: 100%;

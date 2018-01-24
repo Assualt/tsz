@@ -272,7 +272,7 @@ $(document).ready(function () {
                   string +=
                       "<li>" +
                       "     <div class='daily_hot_list-head'>" +
-                      "         <img src='"+item.book_img_url+"' alt='未能正确加载图片' title='"+item.book_name+" width='160' height='180'>" +
+                      "         <img src='"+item.book_img_url+"' alt='未能正确加载图片' title='"+item.book_name+"' width='160' height='180'>" +
                       "     </div>" +
                       "      <div class='daily_hot_list_body'>" +
                       "         <div class='daily_hot_list_body_item'>" +
@@ -303,7 +303,7 @@ $(document).ready(function () {
                   string +=
                       "<li>" +
                       "     <div class='daily_hot_list-head'>" +
-                      "         <img src='"+item.book_img_url+"' alt='未能正确加载图片' title='"+item.book_name+" width='160' height='180'>" +
+                      "         <img src='"+item.book_img_url+"' alt='未能正确加载图片' title='"+item.book_name+" ' width='160' height='180'>" +
                       "     </div>" +
                       "      <div class='daily_hot_list_body'>" +
                       "         <div class='daily_hot_list_body_item'>" +
@@ -331,7 +331,7 @@ $(document).ready(function () {
                   string +=
                       "<li>" +
                       "     <div class='daily_hot_list-head'>" +
-                      "         <img src='"+item.book_img_url+"' alt='未能正确加载图片' title='"+item.book_name+" width='160' height='180'>" +
+                      "         <img src='"+item.book_img_url+"' alt='未能正确加载图片' title='"+item.book_name+" ' width='160' height='180'>" +
                       "     </div>" +
                       "      <div class='daily_hot_list_body'>" +
                       "         <div class='daily_hot_list_body_item'>" +

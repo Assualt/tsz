@@ -21,11 +21,20 @@ ul{
     margin: 0;
 }
 p:hover{
-    cursor: pointer;
+    /*cursor: pointer;*/
+}
+p{
+    margin: 0;
+}
+i.fa-female{
+    color: rgb(255,137,72);
+}
+i.fa-male{
+    color: #196bc8;
 }
 
 header{
-    width:1348px;
+    width:100%;
     height: 35px;
     background-color: rgb(51,51,51);
     padding:3px 15% 3px 15%;
@@ -181,7 +190,7 @@ header{
 .scanner_view_list_ul li a:hover{
     color:rgb(0,168,155);
 }
-.scanner_view_list_ul li:first-child a{
+.scanner_view_list_ul li:nth-child(2) a{
     color:rgb(0,168,155);
     font-size: 17px;
 }
@@ -190,13 +199,13 @@ header{
     background: rgb(232,232,232);
     width: 100%;
     height: 97.4%;
-    border: solid 1px red;
+    /*border: solid 1px red;*/
     padding: 10px 15% 10px 15%;
 }
 .main_book_list_left{
     height: 100%;
     width: 33%;
-    border: solid 1px red;
+    /*border: solid 1px red;*/
 }
 .main_book_list_right{
     height: 100%;
@@ -253,7 +262,7 @@ header{
 .content_list_head{
     width: 100%;
     height: 40px;
-    border: solid 1px red;
+    /*border: solid 1px red;*/
     padding: 5px;
 }
 .list_order{
@@ -277,18 +286,19 @@ header{
 }
 .list_order li i.fa-sort-up{
     position: absolute;
-    bottom: 30px;
+    top: 186px;
 }
 
-#page_tools{
+#page_tools,#page_tools_1{
     margin: 0;
 }
 
 .content_list_body{
     width: 100%;
     height: 96.85%;
-    border: solid 1px red;
+    /*border: solid 1px red;*/
     padding: 10px;
+    /*display: none;*/
 }
 .content_list{
     width: 100%;
@@ -296,33 +306,130 @@ header{
 }
 .list_info{
     width: 100%;
-    height: 8.5%;
-    border: solid 1px red;
+    height: 8.25%;
+    /*border: solid 1px red;*/
+    border-bottom: dotted 2px #d1d1d1;
+    padding: 10px 0 0 0;
 }
 .book_img{
     width: 33%;
     height: 100%;
     padding: 1%;
-    border: solid 1px red;
+    /*border: solid 1px red;*/
     text-align: center;
-}
-.book_img img{
-    margin-left: 16%;
 }
 .book_des{
     width: 67%;
     height: 100%;
+    /*border: 1px solid red;*/
+}
+.book_des_head{
+    width: 100%;
+    height: 20%;
+    /*border: 1px solid red;*/
+    padding: 7px 5px 7px 15px;
+
+}
+.book_des_head a{
+    color: rgb(0,168,155);
 }
 
+.book_des_body{
+    width: 100%;
+    height: 60%;
+    /*border: 1px solid red;*/
+    padding: 7px 5px;
+    border-top: dashed 1px #9b9b9b;
+    border-bottom: dashed 1px #9b9b9b;
+}
+.body_item:first-child{
+    width: 70%;
+    height: 100%;
+}
+.body_item:last-child{
+    width: 30%;
+    height: 100%;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+.body_item:last-child button{
+    margin: 2px;
+}
+.body_item li{
+    width: 100%;
+    height: 33%;
+    /*border: 1px solid red;*/
+    padding: 6px 0 6px 10px ;
+    text-align: center;
+}
+.body_item_tags{
+    margin-left: 5px;
+    color:whitesmoke;
+}
+.body_item_tags:nth-child(2){
+    background: rgb(245,69,69);
+}
+.body_item_tags:nth-child(3){
+    background: rgb(255,133,71);
+}
+.body_item_tags:nth-child(4){
+    background: rgb(255,172,56);
+}
+.body_item li:nth-child(2) p{
+    font-family: 微软雅黑;
+    font-size: 12px;
+    opacity: 0.7;
+}
+.body_item li:nth-child(3) p{
+    font-size: 12px;
+    opacity: 0.8;
+}
+.body_item li:nth-child(3) p.fa-yen{
+    color: rgb(255,68,0);
+    font-weight: bold;
+}
 
+.body_item li:nth-child(3) del{
+    opacity: 0.5;
+    font-size: 12px;
+}
+.book_des_rear{
+    width: 100%;
+    height: 20%;
+    /*border: 1px solid red;*/
+    padding: 4px 7px 2px ;
+}
+.book_des_rear a{
+    color: rgb(0,168,155);
+    margin-right: 10px;
+}
+.book_des_rear p{
+    padding-top: 5px;
+    padding-left: 5px;
+    margin-left: 10px;
+}
 .content_list_rear{
     width: 100%;
     height: 50px;
-    border: solid 1px red;
+    /*border: solid 1px red;*/
+    padding-top: 0px;
+    padding-right: 35px;
 }
-
-
+.page_total{
+    width: 50%;
+    padding: 5px 0 0 5px;
+    height: 30px;
+}
+.page_total input{
+    margin-left: 4px;
+}
 /*end main*/
+
+/*cart*/
+
+
+/*end cart*/
+
 
 
 /*helper*/
@@ -334,6 +441,7 @@ header{
     /*border: solid 1px red;*/
     top: 43%;
     left: 95.51%;
+    display: none;
 }
 .helper-item{
     width: 100%;
