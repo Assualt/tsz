@@ -169,6 +169,10 @@ function Get_Page_Max_Num() {
     $(".page_total p:last-child").html('&nbsp;共&nbsp;'+Max_page+'页');
     return Max_page;
 }
+function Get_Page_Sel_Num() {
+    var val = $("#page_tools li:not(:first-child,:last-child).active").find('a').html();
+    return val;
+}
 
 $(document).ready(function () {
     window.JSONPATH="../dist/res/json/";
@@ -375,18 +379,31 @@ $(document).ready(function () {
 
     $("#page_tools_2").click(function () {
        var val = $(this).prev('input').val();
-       alert(val);
        if(val !=""){
           if(parseInt(val)>Get_Page_Max_Num()){
               alert('输入页数大于总页数');
+              $(this).prev('input').val(Get_Page_Sel_Num());
           }
           else{
-
+              var Local_Min_Page_Num = $("#page_tools li:first-child").next('li').find('a').html();
+              var Local_Max_Page_Num = $("#page_tools li:last-child").prev('li').find('a').html();
+              if(val>=Local_Min_Page_Num && val <= Local_Max_Page_Num){
+                  Set_page_active(val);
+              }else {
+                  if(val <= 5 && val >=1){
+                      page_refresh(val-Local_Min_Page_Num);
+                      Set_page_active(val);
+                  }else if(val>5 && val<=Get_Page_Max_Num()){
+                      page_refresh(val - Local_Max_Page_Num);
+                      Set_page_active(val);
+                  }else{
+                      alert("输入页数操出索引范围!");
+                      $(this).prev('input').val(Get_Page_Sel_Num());
+                  }
+              }
           }
-
-
        }
-
+        return false;
     });
 
     window.setInterval(helper_display,1000);

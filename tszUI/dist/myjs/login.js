@@ -89,4 +89,100 @@ $(document).ready(function () {
         $(this).html("<i class='fa fa-phone-square fa-2x'></i>");
     });
 
+    /*退出*/
+    $("#login_btn").next('ul').find('li:last-child').click(function () {
+        var list = $(".main_head ul li:not(:first-child)");
+        $.each(list,function () {
+            $(this).addClass('disabled').removeClass('active');
+            $(this).find('a').attr('href','#');
+        });
+        $(".main_head ul li:first-child").removeClass('disabled').addClass('active');
+        /*header login state*/
+        $("#login_btn").html('登录');
+        $("#login_btn").next('ul').addClass('fade');
+        var str =
+            '<h1>登录淘书斋</h1>' +
+            '<hr>' +
+            '<form action="" class="form-horizontal" role="form" method="get">' +
+            '   <div class="form-group">' +
+            '       <label for="username" class="col-md-2 control-label">账号</label>' +
+            '       <div class="col-md-7">' +
+            '           <input type="text" class="form-control" id="username" placeholder="用户名/邮箱/电话" required="required" name="username">' +
+            '       </div>' +
+            '   </div>' +
+            '   <div class="form-group">' +
+            '        <label for="password" class="col-md-2 control-label">密码</label>' +
+            '        <div class="col-md-7">' +
+            '            <input type="password" class="form-control" id="password" placeholder="密码" required="required" name="password">' +
+            '        </div>' +
+            '   </div>' +
+            '   <div class="form-group">' +
+            '       <div class="col-sm-3"></div>' +
+            '       <div class="col-sm-2">' +
+            '           <input type="reset" value="重置" class="btn btn-primary form-control">' +
+            '       </div>' +
+            '       <div class="col-sm-2">' +
+            '           <input type="submit" value="登录" class="btn btn-warning form-control">' +
+            '       </div>' +
+            '       <div class="col-sm-2" id="forget_psw">' +
+            '           <a href="#" class="btn btn-link">忘记密码?</a></div>' +
+            '       </div>' +
+            '   </form>' +
+            '<hr>' +
+            '<div>' +
+            '   <h5>使用第三方账号进行登录</h5>' +
+            '   <div class="row">' +
+            '       <div class="col-md-1"></div>' +
+            '       <div class="col-md-10">' +
+            '          <button type="button" class="fa fa-renren btn btn-primary btn-lg col-md-3">&nbsp;人人网登录</button>' +
+            '           <button type="button" class="fa fa-qq btn btn-success btn-lg col-md-3">&nbsp;qq登录</button>' +
+            '           <button type="button" class="fa fa-weibo btn btn-lg btn-info col-md-3">&nbsp;微博登录</button>' +
+            '          <button type="button" class="fa fa-weixin btn btn-lg btn-danger col-md-3">&nbsp;微信登录</button>' +
+            '       </div>' +
+            '   </div>' +
+            '</div>';
+        $("#login").empty().append(str);
+        $("#login").addClass('in active').removeClass('fade');
+    });
+
+
+    /*判断登录与否*/
+    $("input:submit[value='登录']").click(function () {
+        var str = $("#login").html();
+        var flag = false;
+        $("#login").empty().append('<h1 align="center">登录中...</h1>' +
+            '<p align="center"><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></p>')
+        setTimeout(function () {
+            if(flag ==true){
+                var idList=['#basic_info','#book_management','#book_sale_history','#book_bought_history','login_history','#book_else'];
+                var list = $(".main_head ul li:not(:first-child)");
+                $.each(list,function (info) {
+                    $(this).removeClass('disabled');
+                    $(this).find('a').attr('href',idList[info]);
+                });
+                $("#login_btn").html('我').next('ul').removeClass('fade');
+                $("#login").empty().append('<h1 align="center">登录成功</h1>');
+
+                $(".main_head ul li:nth-child(2)").addClass('active');
+                $("#basic_info").addClass('in active').removeClass('fade');
+                $("#login").addClass('fade').removeClass('in active');
+                $(".main_head ul li:first-child").removeClass('active').addClass('disabled').find('a').attr('href','#');
+            }else if(flag ==false){
+                $("#login").empty().append('<h1 align="center">登录失败</h1>' +
+                    '<hr>' +
+                    '<p align="center">正在返回登录界面<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></p>');
+                setTimeout(function () {
+                    $("#login").empty().append(str);
+                },2000);
+            }
+        },2000);
+
+       /*
+       * 后台判断登录与否
+       * */
+
+
+
+    });
+
 });
