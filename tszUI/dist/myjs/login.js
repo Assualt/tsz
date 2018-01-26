@@ -8,20 +8,60 @@ function school_clicked(a) {
     $(".a_school").text('[  '+obj.attr('name') +'  ]');
     $(".show_school").hide(100);
 }
-
 $(document).ready(function () {
     window.JSONPATH="../dist/res/json/";
+
+
     /*define the json for area_university*/
     $.getJSON(window.JSONPATH+"area_university.json",function (content) {
-        window.area_university=content;
-        $.each(window.area_university,function (info,data) {
+        var str = "";
+        window.area_university =content;
+        $.each(content,function (info,data) {
             if(data.city === "北京") {//select the selected city
                 $.each(data.university , function (index,content) {
                     $(".show_school_body_3").append("<p class='fl'><a href='javascript:void(0);' onclick='school_clicked(this)' name='"+content.name+"'>"+content.name+"</a></p>")
                 });
-            }
+            }else{}
+            str +="<option value='"+data.city+"'>"+data.city+"</option>";
+        });
+        /*init the province select*/
+        $("#province").append(str);
+    });
+    $("#province").change(function () {
+        var pro = $(this).val();
+        $.each(window.area_university,function (info,data) {
+           if(data.city == pro){
+               var str ="";
+               $.each(data.university,function (info,data) {
+                   if(info>=1) {
+                       str += "<option value='" + data.name + "'>" + data.name + "</option>";
+                   }
+               });
+               $("#school").empty().append(str);
+           }else if(pro =="选择省"){
+               $("#school").empty().append('<option value="请选择学校">请选择学校</option>')
+               $("input[name='myuniversity']").val('');
+           }
         });
     });
+    $("#school").change(function () {
+        var pro =$("#province").val();
+        if(pro =="重庆" || pro =="天津" || pro =="北京" ||pro =="上海"){
+            pro+="市";
+        }else if(pro=="广西"){
+            pro+="壮族自治区";
+        }else if(pro=="新疆"){
+            pro+="维吾尔自治区";
+        }else if(pro=="宁夏"){
+            pro+="回族自治区";
+        }else if(pro=="西藏"){
+            pro+="藏族自治区";
+        }else{
+            pro+="省";
+        }
+        $("input[name='myuniversity']").val(pro+" "+$(this).val());
+    });
+
     $(".a_school").click(function () {
         $(".show_school").show();
     });
@@ -51,6 +91,12 @@ $(document).ready(function () {
         });
     });
 
+    $("#basic_info_1_btn button:first-child").click(function () {
+       // // alert($(this).html());
+       // $(this).parents('.col-md-9').find('.form-group:not(:last-child) div input').attr('disabled',false);
+       //  $(this).parents('.col-md-9').find('.form-group:nth-child(5) div div select').attr('disabled',false);
+       // $(this).next('button').next('button').attr('disabled',true);
+    });
     /*helper*/
 
     $(".helper-item:eq(0)").mouseenter(function () {
@@ -149,7 +195,13 @@ $(document).ready(function () {
     /*判断登录与否*/
     $("input:submit[value='登录']").click(function () {
         var str = $("#login").html();
-        var flag = false;
+        var flag = true;
+
+        /*
+        *flag 为标志位
+        * 后台判断登录与否
+        **/
+
         $("#login").empty().append('<h1 align="center">登录中...</h1>' +
             '<p align="center"><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></p>')
         setTimeout(function () {
@@ -176,13 +228,8 @@ $(document).ready(function () {
                 },2000);
             }
         },2000);
-
-       /*
-       * 后台判断登录与否
-       * */
-
-
-
     });
+
+
 
 });
