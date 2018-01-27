@@ -7,6 +7,8 @@
         <!--bootstrap js-->
         <script type="text/javascript" src="../dist/js/jquery-3.1.1.min.js"></script>
         <script type="text/javascript" src="../dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../dist/js/distpicker.data.js"></script>
+        <script type="text/javascript" src="../dist/js/distpicker.js"></script>
         <!--<script type="text/javascript" src="./dist/js/npm.js"></script>-->
         <!--bootstrap css -->
         <link rel="stylesheet" href="../dist/css/bootstrap-theme.min.css">
@@ -79,7 +81,7 @@
                                 <a role="menuitem" tabindex="-1" href="#">我的主页</a>
                             </li>
                             <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="#">我的购物车</a>
+                                <a role="menuitem" tabindex="-1" href="./cart.html">我的购物车</a>
                             </li>
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">我的收藏</a>
@@ -113,17 +115,18 @@
             <div class="main_right fl">
                 <div class="main_head">
                     <ul class="nav nav-tabs nav-tabs-justified">
-                        <li class=""><a href="#login" data-toggle="tab">登录</a></li>
-                        <li class="disabled active"><a href="#" data-toggle="tab">基本资料</a></li>
+                        <li class="active"><a href="#login" data-toggle="tab">登录</a></li>
+                        <li class="disabled"><a href="#" data-toggle="tab">基本资料</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书管理</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书售卖记录</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书买入</a></li>
-                        <li class="disabled"><a href="#" data-toggle="tab">登录记录</a></li>
+                        <li class="disabled"><a href="#" data-toggle="tab">日志记录</a></li>
+                        <li class="disabled"><a href="#" data-toggle="tab">收益评估</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">其他</a></li>
                     </ul>
                 </div>
                 <div class="tab-content main_body">
-                    <div class="tab-pane fade" id="login">
+                    <div class="tab-pane fade in active" id="login">
                         <h1>登录淘书斋</h1>
                         <hr>
                         <form action="" class="form-horizontal" role="form" method="get">
@@ -166,9 +169,9 @@
                         </div>
                         </div>
                     </div>
-                    <div class="tab-pane in active" id="basic_info">
+                    <div class="tab-pane fade" id="basic_info">
                         <div class="container-fluid">
-                            <form class="form-horizontal" role="form" name="basic_info_1">
+                            <form class="form-horizontal" role="form" id="basic_info_1">
                                 <fieldset>
                                     <legend>基本账户信息</legend>
                                     <div class="col-md-9">
@@ -244,7 +247,7 @@
                                     </div>
                                 </fieldset>
                             </form>
-                            <form class="form-horizontal" role="form" name="basic_info_2">
+                            <form class="form-horizontal" role="form" id="basic_info_2">
                                 <fieldset>
                                     <legend>管理收货地址</legend>
                                     <div class="list-group">
@@ -252,12 +255,37 @@
                                             <div class="panel panel-primary">
                                                 <div class="panel-heading">
                                                     <h4 class="panel-title">
-                                                        <a data-toggle="collapse" data-parent="#addr1" href="#addr11">地址1:重庆市黔江区**街道**路</a>
+                                                        <a data-toggle="collapse" data-parent="#addr1" href="#addr11">地址1:重庆市黔江区**街道**路
+                                                            <span class="badge fr">默认地址</span>
+                                                        </a>
                                                     </h4>
                                                 </div>
                                                 <div id="addr11" class="panel-collapse collapse in">
                                                     <div class="panel-body">
-                                                        重庆市黔江区**街道**路
+                                                        <div class="col-md-10">
+                                                            <div>
+                                                                <div class="col-md-6">
+                                                                    <strong class="fl">收件人姓名:&nbsp;&nbsp;</strong>
+                                                                    <h4 class="fl list-group-item-heading">侯鑫</h4>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <strong class="fl">联系电话:&nbsp;&nbsp;</strong>
+                                                                    <h4 class="list-group-item-heading fl">13912345678</h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <strong class="fl">详细地址:&nbsp;&nbsp;</strong>
+                                                                <h4 class="list-group-item-heading fl">重庆市黔江区**街道**路</h4>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <strong class="fl">邮政编码:&nbsp;&nbsp;</strong>
+                                                                <h4 class="list-group-item-heading fl" title="邮政编码默认为000000">400000</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button class="btn btn-link" value="edit_add" type="button">修改地址</button>
+                                                            <button class="btn btn-link" value="del_add" type="button">删除地址</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -271,12 +299,94 @@
                                                 </div>
                                                 <div id="addr21" class="panel-collapse collapse in">
                                                     <div class="panel-body">
-                                                        重庆市黔江区**街道**路
+                                                        <div class="col-md-10">
+                                                            <div>
+                                                                <div class="col-md-6">
+                                                                    <strong class="fl">收件人姓名:&nbsp;&nbsp;</strong>
+                                                                    <h4 class="fl list-group-item-heading">侯鑫</h4>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <strong class="fl">联系电话:&nbsp;&nbsp;</strong>
+                                                                    <h4 class="list-group-item-heading fl">13912345678</h4>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <strong class="fl">详细地址:&nbsp;&nbsp;</strong>
+                                                                <h4 class="list-group-item-heading fl">重庆市黔江区**街道**路</h4>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <strong class="fl">邮政编码:&nbsp;&nbsp;</strong>
+                                                                <h4 class="list-group-item-heading fl" title="邮政编码默认为000000">400000</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button type="button" class="btn btn-link text-warning" value="edit_add">修改地址</button>
+                                                            <button type="button" class="btn btn-link text-danger" value="del_add">删除地址</button>
+                                                            <button type="button" class="btn btn-link text-danger" value="set_def">设置默认</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div>
+                                        <button class="btn btn-danger col-md-4" type="button" data-toggle="modal" data-target="#address_add_modal">
+                                            <span class="fa-stack fa-lg">
+                                                <i class="fa fa-circle-o fa-stack-2x"></i>
+                                                <i class="fa fa-plus fa-stack-1x"></i>
+                                            </span>添加新的收货地址
+                                        </button>
+                                        <div class="modal fade" id="address_add_modal" tabindex="0" role="dialog" aria-labelledby="address_title" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" >&times;</button>
+                                                        <h4 class="modal-title" id="address_title">添加收货地址</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form class="form-inline">
+                                                            <div data-toggle="distpicker">
+                                                                <div class="form-group col-md-4">
+                                                                    <label class="sr-only" for="province2">Province</label>
+                                                                    <select class="form-control" id="province2" data-province="---- 选择省 ----" required></select>
+                                                                </div>
+                                                                <div class="form-group col-md-4">
+                                                                    <label class="sr-only" for="city2">City</label>
+                                                                    <select class="form-control" id="city2" data-city="---- 选择市 ----" required></select>
+                                                                </div>
+                                                                <div class="form-group col-md-4">
+                                                                    <label class="sr-only" for="district2">District</label>
+                                                                    <select class="form-control" id="district2" data-district="---- 选择区 ----" required></select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="input-group add-more">
+                                                                <span class="fl">联系电话</span>
+                                                                <input type="tel" style="width: 136px" placeholder="联系电话" required>
+                                                            </div>
+                                                            <div class="input-group add-more">
+                                                                <span class="fl">姓名</span>
+                                                                <input type="text" placeholder="姓名" required>
+                                                            </div>
+                                                            <div class="input-group add-more">
+                                                                <span class="fl">具体地址</span>
+                                                                <input type="text" placeholder="详细地址" required>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                                        <button type="submit" class="btn btn-primary" id="add_ok" >添加</button>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                            <form action="" role="form">
+                                <fieldset>
+                                    <legend>个人简介</legend>
 
                                 </fieldset>
                             </form>
@@ -286,7 +396,45 @@
                     <div class="tab-pane fade" id="book_sale_history">book_sale_history</div>
                     <div class="tab-pane fade" id="book_bought_history">book_bought_history</div>
                     <div class="tab-pane fade" id="login_history">login_history</div>
-                    <div class="tab-pane fade" id="book_else">book_else</div>
+                    <div class="tab-pane fade" id="account_evaluate">收益评估</div>
+                    <div class="tab-pane fade" id="book_else">
+                        <div class="container-fluid">
+                            <form class="form-horizontal" role="form" id="book_else_1">
+                                <fieldset>
+                                    <legend>修改密码</legend>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">账号</label>
+                                        <div class="col-md-7">
+                                            <input type="text" value="123132141" class="form-control" readonly name="account">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">原密码</label>
+                                        <div class="col-md-7">
+                                            <input type="password" class="form-control" name="psw_old">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">新密码</label>
+                                        <div class="col-md-7">
+                                            <input type="password" class="form-control" name="psw_new">
+                                        </div>
+                                        <div class="col-md-3">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">再次输入</label>
+                                        <div class="col-md-7">
+                                            <input type="password" class="form-control">
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

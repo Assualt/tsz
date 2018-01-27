@@ -8,6 +8,21 @@ function school_clicked(a) {
     $(".a_school").text('[  '+obj.attr('name') +'  ]');
     $(".show_school").hide(100);
 }
+function address_refresh() {
+    var address_list =$("#basic_info_2").find('div.panel-group');
+    if(address_list.length == 0){
+        $("#basic_info_2").find('div.list-group').append('<h3 align="center" style="opacity: 0.7;">没有收货地址请添加</h3><br>')
+    }else{
+        $.each(address_list,function (info) {
+            var str = $(this).find('h4.panel-title').html();
+            info++;
+            str = str.substring(0,str.indexOf(':')-1)+info+str.substring(str.indexOf(':'),str.length);
+            $(this).find('h4.panel-title').html(str);
+        });
+    }
+    return false;
+}
+
 $(document).ready(function () {
     window.JSONPATH="../dist/res/json/";
 
@@ -97,7 +112,7 @@ $(document).ready(function () {
        //  $(this).parents('.col-md-9').find('.form-group:nth-child(5) div div select').attr('disabled',false);
        // $(this).next('button').next('button').attr('disabled',true);
     });
-    /*helper*/
+
 
     $(".helper-item:eq(0)").mouseenter(function () {
         $(this).html("帮助中心");
@@ -196,21 +211,19 @@ $(document).ready(function () {
     $("input:submit[value='登录']").click(function () {
         var str = $("#login").html();
         var flag = true;
-
         /*
         *flag 为标志位
         * 后台判断登录与否
         **/
-
         $("#login").empty().append('<h1 align="center">登录中...</h1>' +
             '<p align="center"><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></p>')
         setTimeout(function () {
             if(flag ==true){
-                var idList=['#basic_info','#book_management','#book_sale_history','#book_bought_history','login_history','#book_else'];
+                var idList=['basic_info','book_management','book_sale_history','book_bought_history','login_history','account_evaluate','book_else'];
                 var list = $(".main_head ul li:not(:first-child)");
                 $.each(list,function (info) {
                     $(this).removeClass('disabled');
-                    $(this).find('a').attr('href',idList[info]);
+                    $(this).find('a').attr('href','#'+idList[info]);
                 });
                 $("#login_btn").html('我').next('ul').removeClass('fade');
                 $("#login").empty().append('<h1 align="center">登录成功</h1>');
@@ -230,6 +243,31 @@ $(document).ready(function () {
         },2000);
     });
 
-
+   /*设置默认地址*/
+   $("#basic_info_2").on("click",'button',function () {
+       var value =$(this).val();
+      if(value == "edit_add"){
+          alert("edit_add clicked");
+      }else if(value =="set_def"){
+          var def_panel = $(this).parents('div.list-group').find('div.panel.panel-primary');
+          if(def_panel.length == 1){
+              def_panel.removeClass('panel-primary').addClass('panel-default');
+              def_panel.find('div.panel-heading h4 a span').remove();
+              var append_str = "<button class='btn btn-link' type='button' value='set_def'>设置默认</button>";
+              def_panel.find('button').parent().append(append_str);
+          }
+          var panel = $(this).parents('div.panel');
+          panel.addClass('panel-primary').removeClass('panel-default');
+          var str = panel.find('h4.panel-title a').html()+"<span class='fr badge'>默认地址</span>";
+          panel.find('h4.panel-title a').html(str);
+          $(this).remove();
+      }else if(value == "del_add") {
+          var flag = confirm("确定删除本条收货地址么");
+          if (flag == true) {
+              $(this).parents('.panel-group').remove();
+              address_refresh();
+          }
+      }
+   });
 
 });
