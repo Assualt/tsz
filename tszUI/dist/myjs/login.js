@@ -26,7 +26,6 @@ function address_refresh() {
 $(document).ready(function () {
     window.JSONPATH="../dist/res/json/";
 
-
     /*define the json for area_university*/
     $.getJSON(window.JSONPATH+"area_university.json",function (content) {
         var str = "";
@@ -79,13 +78,14 @@ $(document).ready(function () {
 
     $(".a_school").click(function () {
         $(".show_school").show();
+        // $("*").not($(".show_school")).css('opacity',0.5);
     });
     /*show_school close button*/
     $("#show_school_btn_cls").click(function () {
         $(".show_school").hide();
         $("#body").css("background-color","white");
     });
-    $(".show_school_body_2 a").click(function () {
+    $(".show_school_body_2").find('a').click(function () {
         var city=$(this).text();//get the city
         $(this).css({
             "background-color":"rgb(0,168,155)",
@@ -106,7 +106,7 @@ $(document).ready(function () {
         });
     });
 
-    $("#basic_info_1_btn button:first-child").click(function () {
+    $("#basic_info_1_btn").find("button:first-child").click(function () {
        // // alert($(this).html());
        // $(this).parents('.col-md-9').find('.form-group:not(:last-child) div input').attr('disabled',false);
        //  $(this).parents('.col-md-9').find('.form-group:nth-child(5) div div select').attr('disabled',false);
@@ -247,7 +247,7 @@ $(document).ready(function () {
    $("#basic_info_2").on("click",'button',function () {
        var value =$(this).val();
       if(value == "edit_add"){
-          alert("edit_add clicked");
+          swal("edit_add clicked");
       }else if(value =="set_def"){
           var def_panel = $(this).parents('div.list-group').find('div.panel.panel-primary');
           if(def_panel.length == 1){
@@ -262,12 +262,84 @@ $(document).ready(function () {
           panel.find('h4.panel-title a').html(str);
           $(this).remove();
       }else if(value == "del_add") {
-          var flag = confirm("确定删除本条收货地址么");
-          if (flag == true) {
-              $(this).parents('.panel-group').remove();
-              address_refresh();
-          }
+          var obj = $(this).parents('.panel-group');
+          swal({
+              title:'淘书斋提醒',
+              text:'确定删除本条收货地址么？',
+              type:'warning',
+              showCancelButton: true,
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+          }).then(function (isconfirm) {
+              if(isconfirm == true){
+                  swal('淘书斋提醒','删除成功','success');
+                  obj.remove();
+                  address_refresh();
+              }else if(isconfirm == false){
+                  swal('淘书斋提醒','删除失败','error');
+              }
+          });
       }
    });
 
+   /*添加收货地址 btn click*/
+   $("#add_ok").click(event,function () {
+       //得到地址
+       var localaddress = $("#province2").val() +"&nbsp;"+ $("#city2").val() +"&nbsp;"+ $("#district2").val()
+           +"&nbsp;"+$(".add-more input[type='text']:eq(1)").val();
+       var localusername = $(".add-more input[type=text]:eq(0)").val();
+       var localusertel =$(".add-more input[type='tel']").val();
+       var add_list = $("#basic_info_2").find('div.list-group div.panel-group');
+       var local_add_index =0;
+       if(add_list.length ==0){
+           local_add_index =1;
+       }else{
+            local_add_index = add_list.length+1;
+       }
+       var str =
+           "<div class='panel-group' id='add"+local_add_index+"'>" +
+           "    <div class='panel panel-default'>" +
+           "        <div class='panel-heading'>" +
+           "            <h4 class='panel-title'>" +
+           "                <a data-toggle='collapse' data-parent='#add"+local_add_index+"' href='#addr"+local_add_index+"1'>地址"+local_add_index+":"+localaddress.substring(0,20)+"...</a>"+
+           "            </h4>" +
+           "        </div>" +
+           "        <div id='addr"+local_add_index+"1' class='panel-collapse collapse in'>" +
+           "            <div class='panel-body'>" +
+           "                <div class='col-md-10'>" +
+           "                    <div class='col-md-6'>   " +
+           "                        <strong class='fl'>收件人姓名:&nbsp;&nbsp;</strong>" +
+           "                        <h4 class='fl list-group-item-heading'>"+localusername+"</h4> " +
+           "                    </div>" +
+           "                    <div class='col-md-6'>   " +
+           "                        <strong class='fl'>联系电话:&nbsp;&nbsp;</strong>" +
+           "                        <h4 class='fl list-group-item-heading'>"+localusertel+"</h4> " +
+           "                    </div>" +
+           "                    <div class='col-md-12'>   " +
+           "                        <strong class='fl'>详细地址:&nbsp;&nbsp;</strong>" +
+           "                        <h4 class='fl list-group-item-heading'>"+localaddress+"</h4> " +
+           "                    </div>" +
+           "                    <div class='col-md-12'>   " +
+           "                        <strong class='fl'>邮政编码:&nbsp;&nbsp;</strong>" +
+           "                        <h4 class='fl list-group-item-heading' title='邮政编码默认为000000'>4000000</h4> " +
+           "                    </div>" +
+           "                </div> " +
+           "                <div class='col-md-2'> " +
+           "                    <button type='button' class='btn btn-link' value='edit_add'>修改地址</button>" +
+           "                    <button type='button' class='btn btn-link' value='del_add'>删除地址</button> " +
+           "                    <button type='button' class='btn btn-link' value='set_def'>设置默认</button>  " +
+           "                </div> " +
+           "            </div>" +
+           "        </div>" +
+           "    </div>" +
+           "</div>";
+       $("#address_add_modal").modal('hide');//隐藏
+       $("#basic_info_2").find('div.list-group').append(str);//添加地址
+       swal('添加地址','成功','success');
+       $("#basic_info_2").find('div.list-group h3').remove();
+       $("#basic_info_2").find('div.list-group br').remove();
+   });
+
+
+    // swal('Oops...', 'Something went wrong!', 'success');
 });
