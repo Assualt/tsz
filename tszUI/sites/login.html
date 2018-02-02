@@ -117,8 +117,8 @@
             <div class="main_right fl">
                 <div class="main_head">
                     <ul class="nav nav-tabs nav-tabs-justified">
-                        <li class="disabled"><a href="#login" data-toggle="tab">登录</a></li>
-                        <li class="disabled active"><a href="#" data-toggle="tab">基本资料</a></li>
+                        <li class="disabled active"><a href="#login" data-toggle="tab">登录</a></li>
+                        <li class="disabled"><a href="#" data-toggle="tab">基本资料</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书管理</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书售卖记录</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书买入</a></li>
@@ -128,7 +128,7 @@
                     </ul>
                 </div>
                 <div class="tab-content main_body">
-                    <div class="tab-pane fade" id="login">
+                    <div class="tab-pane fade in active" id="login">
                         <h1>登录淘书斋</h1>
                         <hr>
                         <form action="" class="form-horizontal" role="form" method="get">
@@ -171,11 +171,11 @@
                         </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade in active" id="basic_info">
+                    <div class="tab-pane fade" id="basic_info">
                         <div class="container-fluid">
-                            <form class="form-horizontal" role="form" id="basic_info_1" disabled="">
+                            <form class="form-horizontal" role="form" id="basic_info_1">
                                 <fieldset>
-                                    <legend>基本账户信息</legend>
+                                    <legend><h3>基本账户信息</h3></legend>
                                     <div class="col-md-9">
                                         <div class="form-group">
                                             <label class="control-label col-md-2">账号</label>
@@ -186,22 +186,22 @@
                                         <div class="form-group">
                                             <label class="control-label col-md-2">昵称</label>
                                             <div class="col-md-7">
-                                                <input type="text" class="form-control" value="受伤的小袋鼠" name="nicheng">
+                                                <input type="text" class="form-control" value="受伤的小袋鼠" name="nicheng" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-2">性别</label>
                                             <div class="col-md-7">
                                                 <div class="col-md-4">
-                                                    <input type="radio" name="sex" value="male">
+                                                    <input type="radio" name="sex" value="male" disabled>
                                                     <label class="control-label">男</label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input type="radio" name="sex" value="female">
+                                                    <input type="radio" name="sex" value="female" disabled>
                                                     <label class="control-label">女</label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input type="radio" name="sex" value="secret" checked>
+                                                    <input type="radio" name="sex" value="secret" checked disabled>
                                                     <label class="control-label">保密</label>
                                                 </div>
                                             </div>
@@ -209,19 +209,19 @@
                                         <div class="form-group">
                                             <label class="control-label col-md-2">头像</label>
                                             <div class="col-md-7">
-                                                <input type="file" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" name="pic_file">
+                                                <input type="file" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" name="pic_file" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-2">学校</label>
                                             <div class="col-md-10 form-group">
                                                 <div class="col-md-5">
-                                                    <select id="province" class="form-control" >
+                                                    <select id="province" class="form-control" disabled>
                                                         <option value="选择省">选择省</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-7">
-                                                    <select class="form-control" id="school">
+                                                    <select class="form-control" id="school" disabled>
                                                         <option value="选择学校">选择学校</option>
                                                     </select>
                                                 </div>
@@ -235,12 +235,13 @@
                                         <div class="form-group">
                                             <label class="control-label col-md-2">描述</label>
                                             <div class="col-md-10">
-                                                <textarea name="des"></textarea>
+                                                <textarea name="des" disabled placeholder="请输入描述性语言(150字以内)" maxlength="150"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group" id="basic_info_1_btn">
-                                            <button class="btn btn-primary" type="reset">放弃修改</button>
-                                            <button class="btn btn-warning" type="submit">提交</button>
+                                            <button class="btn btn-link" type="button">修改资料</button>
+                                            <button class="btn btn-primary" type="reset" disabled>放弃修改</button>
+                                            <button class="btn btn-danger" type="submit" disabled>提交</button>
                                         </div>
                                     </div>
                                     <div class="col-md-3" align="center">
@@ -285,42 +286,6 @@
                                                         <div class="col-md-2">
                                                             <button class="btn btn-link" value="edit_add" type="button">修改地址</button>
                                                             <button class="btn btn-link" value="del_add" type="button">删除地址</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="panel-group" id="addr2">
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading">
-                                                    <h4 class="panel-title">
-                                                        <a data-toggle="collapse" data-parent="#addr2" href="#addr21">地址2:重庆市黔江区**街道**路</a>
-                                                    </h4>
-                                                </div>
-                                                <div id="addr21" class="panel-collapse collapse">
-                                                     <div class="panel-body">
-                                                        <div class="col-md-10">
-                                                            <div class="col-md-6">
-                                                                    <strong class="fl">收件人姓名:&nbsp;&nbsp;</strong>
-                                                                    <h4 class="fl list-group-item-heading">侯鑫</h4>
-                                                                </div>
-                                                            <div class="col-md-6">
-                                                                    <strong class="fl">联系电话:&nbsp;&nbsp;</strong>
-                                                                    <h4 class="list-group-item-heading fl">13912345678</h4>
-                                                                </div>
-                                                            <div class="col-md-12">
-                                                                <strong class="fl">详细地址:&nbsp;&nbsp;</strong>
-                                                                <h4 class="list-group-item-heading fl">重庆市黔江区**街道**路</h4>
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <strong class="fl">邮政编码:&nbsp;&nbsp;</strong>
-                                                                <h4 class="list-group-item-heading fl" title="邮政编码默认为000000">400000</h4>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <button type="button" class="btn btn-link " value="edit_add">修改地址</button>
-                                                            <button type="button" class="btn btn-link " value="del_add">删除地址</button>
-                                                            <button type="button" class="btn btn-link " value="set_def">设置默认</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -381,15 +346,205 @@
                                     </div>
                                 </fieldset>
                             </form>
-                            <form action="" role="form">
-                                <fieldset>
-                                    <legend>个人简介</legend>
-
-                                </fieldset>
-                            </form>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="book_management">book_management</div>
+                    <div class="tab-pane fade" id="book_management">
+                        <form action="" id="book_management_1">
+                            <fieldset>
+                                <legend>
+                                    <h1 class="fa fa-book">&nbsp;图书管理</h1>
+                                    <ul class="fr nav nav-pills nav-tabs-justified">
+                                        <li class="fl"><a href="#show_in_table" class="fa fa-table" data-toggle="tab" title="表格形式"></a></li>
+                                        <li class="fl"><a href="#show_in_list" class="fa fa-list-alt" data-toggle="tab" title="列表模式"></a></li>
+                                    </ul>
+                                </legend>
+                                <div class="form-group">
+                                    <label for="sel_num_show">每页显示</label>
+                                    <select id="sel_num_show">
+                                        <option value="5">5</option>
+                                        <option value="5">10</option>
+                                        <option value="5">15</option>
+                                    </select>
+                                    <label for="sel_num_show">条</label>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane in active" id="show_in_table">
+                                        <table role="table" border="-1" class="table table-striped table-hover table-responsive">
+                                            <thead align="center">
+                                                <tr>
+                                                    <th>编号</th>
+                                                    <th>书店ID</th>
+                                                    <th>店名</th>
+                                                    <th>书名</th>
+                                                    <th>图片</th>
+                                                    <th>广告词</th>
+                                                    <th>作者</th>
+                                                    <th>出版社</th>
+                                                    <th>版次</th>
+                                                    <th>单价/原价</th>
+                                                    <th>库存</th>
+                                                    <th>操作</th>
+                                                    <th>其他</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>10001</td>
+                                                    <td>1234561</td>
+                                                    <td>我的书店</td>
+                                                    <td>三生三世十里桃花</td>
+                                                    <td>
+                                                        <img src="../dist/res/book_img/虚无的十字架.jpg" alt="" width="64" height="80">
+                                                    </td>
+                                                    <td>大卖特卖卖到无法或</td>
+                                                    <td>奥斯特洛夫斯基</td>
+                                                    <td>人民教育出版社</td>
+                                                    <td>第一版</td>
+                                                    <td>
+                                                        <strong>&yen;15</strong>
+                                                        <del>&yen;28</del>
+                                                    </td>
+                                                    <td>15</td>
+                                                    <td>
+                                                        <a href="javascript:void(0)" type="button" class="btn btn-link">删除</a>
+                                                        <a href="javascript:void(0)" type="button" class="btn btn-link">修改</a>
+
+                                                    </td>
+                                                    <td>-</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade in" id="show_in_list">
+                                        <ul>
+                                            <li>
+                                                <div class="book_list_info">
+                                                    sadsa
+                                                </div>
+                                            </li>
+                                            <li>
+
+                                            </li>
+                                            <li>
+
+                                            </li>
+                                            <li>
+
+                                            </li>
+                                            <li>
+
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <ul class="pager fr">
+                                    <li class="previous"><a href="javascript:void(0)">&larr;Prev</a></li>
+                                    <li><a href="javascript:void(0)">1</a></li>
+                                    <li><a href="javascript:void(0)">2</a></li>
+                                    <li><a href="javascript:void(0)">3</a></li>
+                                    <li class="next"><a href="javascript:void(0)">&rarr;Next</a></li>
+                                </ul>
+                            </fieldset>
+                        </form>
+                        <form action="" id="book_management_2">
+                            <fieldset>
+                                <legend>
+                                    <h3>增添图书</h3>
+                                </legend>
+                                <div class="form-horizontal">
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <label for="book_id" class="control-label col-md-2">图书编号</label>
+                                            <div class="col-md-7">
+                                                <input type="text" id="book_id" class="form-control" value="10010" readonly>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="book_store_id" class="control-label col-md-2">书店ID</label>
+                                            <div class="col-md-7">
+                                                <input type="text" id="book_store_id" value="1234561" class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="book_store_name" class="control-label col-md-2">书店名称</label>
+                                            <div class="col-md-7">
+                                                <input type="text" id="book_store_name" value="xxx书店" class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="book_seller_school" class="control-label col-md-2">学校地址</label>
+                                            <div class="col-md-7">
+                                                <input type="text" id="book_seller_school" value="xxx大学" class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="book_name" class="control-label col-md-2">图书名称</label>
+                                            <div class="col-md-7">
+                                                <input type="text" id="book_name" placeholder="图书名称" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="book_pic" class="control-label col-md-2">图书图片</label>
+                                            <div class="col-md-7">
+                                                <input type="file" id="book_pic" placeholder="图书图片" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="book_ad" class="control-label col-md-2">广告词</label>
+                                            <div class="col-md-7">
+                                                <input type="text" id="book_ad" placeholder="广告词" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="book_author" class="control-label col-md-2">图书作者</label>
+                                            <div class="col-md-7">
+                                                <input type="text" id="book_author" placeholder="图书作者" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="book_editon" class="control-label col-md-2">图书版次</label>
+                                            <div class="col-md-7">
+                                                <select name="" id="book_editon" class="form-control">
+                                                    <option value="1" selected>第一版</option>
+                                                    <option value="2">第二版</option>
+                                                    <option value="3">第三版</option>
+                                                    <option value="4">第四版</option>
+                                                    <option value="else">其他版次</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="book_sale" class="control-label col-md-2">图书售价</label>
+                                            <div class="col-md-7">
+                                                <input type="text" id="book_sale" placeholder="&yen;&nbsp;图书售价" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="book_left_num" class="control-label col-md-2">图书库存</label>
+                                            <div class="col-md-7">
+                                                <input type="number" id="book_left_num" placeholder="图书库存(0~9999)" class="form-control" min="0" max="9999">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="book_des" class="control-label col-md-2">图书描述</label>
+                                            <div class="col-md-10">
+                                                <textArea class="form-control" id="book_des" placeholder="描述书本内容 500字以内" maxlength="500" style="width: 135%;height: 200px;resize: none;"></textArea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="reset" class="btn btn-warning">重置</button>
+                                            <button type="submit" class="btn btn-danger">添加图书</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <img src="" alt="图书图片" width="100" height="100" class="img-thumbnail">
+                                        <label class="control-label">书名:xxx图书</label>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
                     <div class="tab-pane fade" id="book_sale_history">book_sale_history</div>
                     <div class="tab-pane fade" id="book_bought_history">book_bought_history</div>
                     <div class="tab-pane fade" id="login_history">login_history</div>

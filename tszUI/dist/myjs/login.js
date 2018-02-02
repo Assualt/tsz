@@ -341,5 +341,35 @@ $(document).ready(function () {
    });
 
 
+   /*#basic_info_1_btn 3个button*/
+   $("#basic_info_1_btn").find('button').click(function () {
+        var value =$(this).html();
+        switch (value){
+            case "修改资料":
+                var input_all = $(this).parent().prevAll('.form-group:not(:first-child)').find('input');
+                input_all.attr('disabled',false);
+                $("#province,#school").attr('disabled',false);
+                $("textArea").attr('disabled',false);
+                $(this).nextAll('button').attr('disabled',false);
+                break;
+            case "放弃修改":
+                var input_all = $(this).parent().prevAll('.form-group:not(:first-child)').find('input');
+                input_all.attr('disabled',true);
+                $("#province,#school").attr('disabled',true);
+                $("textArea").attr('disabled',true);
+                $(this).attr('disabled',true);
+                $(this).next('button').attr('disabled',true);
+                break;
+            case "提交":
+                break;
+            default:
+                break;
+        }
+
+
+   });
+
+
+
     // swal('Oops...', 'Something went wrong!', 'success');
 });
