@@ -10,6 +10,7 @@
         <script type="text/javascript" src="../dist/js/distpicker.data.js"></script>
         <script type="text/javascript" src="../dist/js/distpicker.js"></script>
         <script type="text/javascript" src="../dist/js/sweetalert2.min.js"></script>
+        <script type="text/javascript" src="../dist/js/echarts.js" ></script>
         <!--<script type="text/javascript" src="./dist/js/npm.js"></script>-->
         <!--bootstrap css -->
         <link rel="stylesheet" href="../dist/css/bootstrap-theme.min.css">
@@ -75,7 +76,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="header_login fr">
+                <ul class="header_login fr">
                     <li class="fl dropdown">
                         <a href="#" id="login_btn" data-toggle="dropdown">登录</a>&nbsp;|
                         <ul class="dropdown-menu fade" role="menu" aria-labelledby="login_btn">
@@ -99,7 +100,7 @@
                     <li class="fl"><a href="./sold.html" target="_blank">出售</a>&nbsp;|</li>
                     <li class="fl"><a href="./register.html" style="color: orange" target="_blank">立即注册</a>&nbsp;|</li>
                     <li class="fl"><a href="./downloadApp.html" class="fa fa-mobile-phone fa-1x" target="_blank">下载APP</a></li>
-                </div>
+                </ul>
             </div>
         </header>
         <div class="main fl">
@@ -117,10 +118,10 @@
             <div class="main_right fl">
                 <div class="main_head">
                     <ul class="nav nav-tabs nav-tabs-justified">
-                        <li class="disabled active"><a href="#login" data-toggle="tab">登录</a></li>
+                        <li class="disabled"><a href="#login" data-toggle="tab">登录</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">基本资料</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书管理</a></li>
-                        <li class="disabled"><a href="#" data-toggle="tab">图书售卖记录</a></li>
+                        <li class="disabled active"><a href="#" data-toggle="tab">图书售卖记录</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书买入</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">日志记录</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">收益评估</a></li>
@@ -128,7 +129,7 @@
                     </ul>
                 </div>
                 <div class="tab-content main_body">
-                    <div class="tab-pane fade in active" id="login">
+                    <div class="tab-pane fade" id="login">
                         <h1>登录淘书斋</h1>
                         <hr>
                         <form action="" class="form-horizontal" role="form" method="get">
@@ -178,9 +179,9 @@
                                     <legend><h3>基本账户信息</h3></legend>
                                     <div class="col-md-9">
                                         <div class="form-group">
-                                            <label class="control-label col-md-2">账号</label>
+                                            <label class="control-label col-md-2" for="account">账号</label>
                                             <div class="col-md-7">
-                                                <input type="text" value="123132141" class="form-control" readonly name="account">
+                                                <input type="text" value="123132141" class="form-control" readonly name="account" id="account">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -348,17 +349,11 @@
                             </form>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="book_management">
+                    <div class="tab-pane fade in active" id="book_management">
                         <form action="" id="book_management_1">
                             <fieldset>
-                                <legend>
-                                    <h1 class="fa fa-book">&nbsp;图书管理</h1>
-                                    <ul class="fr nav nav-pills nav-tabs-justified">
-                                        <li class="fl"><a href="#show_in_table" class="fa fa-table" data-toggle="tab" title="表格形式"></a></li>
-                                        <li class="fl"><a href="#show_in_list" class="fa fa-list-alt" data-toggle="tab" title="列表模式"></a></li>
-                                    </ul>
-                                </legend>
-                                <div class="form-group">
+                                <legend><i class="fa fa-book"></i>&nbsp;图书管理</legend>
+                                <div class="form-group col-md-10">
                                     <label for="sel_num_show">每页显示</label>
                                     <select id="sel_num_show">
                                         <option value="5">5</option>
@@ -367,7 +362,11 @@
                                     </select>
                                     <label for="sel_num_show">条</label>
                                 </div>
-                                <div class="tab-content">
+                                <ul class="fr nav nav-pills nav-tabs-justified col-md-2">
+                                    <li class="fl"><a href="#show_in_table" class="fa fa-table" data-toggle="tab" title="表格形式"></a></li>
+                                    <li class="fl"><a href="#show_in_list" class="fa fa-list-alt" data-toggle="tab" title="列表模式"></a></li>
+                                </ul>
+                                <div class="tab-content fl">
                                     <div class="tab-pane in active" id="show_in_table">
                                         <table role="table" border="-1" class="table table-striped table-hover table-responsive">
                                             <thead align="center">
@@ -545,7 +544,39 @@
                             </fieldset>
                         </form>
                     </div>
-                    <div class="tab-pane fade" id="book_sale_history">book_sale_history</div>
+                    <div class="tab-pane fade" id="book_sale_history">
+                        <div class="container-fluid">
+                            <legend>销售历史<label class="fr" id="local_time"></label></legend>
+                            <div class="form-group fl">
+                                <label for="book_sale_history_list_items" class="control-label">分类</label>
+                                <select name="" id="book_sale_history_list_items">
+                                    <option value="1" selected>月销售统计</option>
+                                    <option value="2">销售种类统计</option>
+                                    <option value="3">所有</option>
+                                </select>
+                            </div>
+                            <div class="form-group fl"style="margin-left: 20px">
+                                <label for="book_sale_history_time_list" class="control-label">最近</label>
+                                <select name="" id="book_sale_history_time_list">
+                                    <option value="1">3</option>
+                                    <option value="2">6</option>
+                                    <option value="3" selected>12</option>
+                                    <option value="4">所有</option>
+                                </select>
+                                <label for="book_sale_history_time_list" class="control-label">月</label>
+                            </div>
+                            <ul class="nav nav-pills nav-tabs-justified fr">
+                                <li class="active"><a href="#sale_his_line" class="fa fa-line-chart" data-toggle="tab">折线</a></li>
+                                <li class=""><a href="#sale_his_bar" class="fa fa-bar-chart" data-toggle="tab">条形图</a></li>
+                                <li class=""><a href="#sale_his_pie" class="fa fa-pie-chart" data-toggle="tab">饼状图</a></li>
+                            </ul>
+                            <div class="tab-content fl" id="sale_hist_chart">
+                                <div class="tab-pane fade in active" id="sale_his_line"></div>
+                                <div class="tab-pane fade" id="sale_his_bar"></div>
+                                <div class="tab-pane fade" id="sale_his_pie"></div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="tab-pane fade" id="book_bought_history">book_bought_history</div>
                     <div class="tab-pane fade" id="login_history">login_history</div>
                     <div class="tab-pane fade" id="account_evaluate">收益评估</div>
@@ -555,21 +586,21 @@
                                 <fieldset>
                                     <legend>修改密码</legend>
                                     <div class="form-group">
-                                        <label class="control-label col-md-2">账号</label>
+                                        <label class="control-label col-md-2" for="account_static">账号</label>
                                         <div class="col-md-7">
-                                            <input type="text" value="123132141" class="form-control" readonly name="account">
+                                            <input type="text" value="123132141" class="form-control" readonly name="account" id="account_static">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label col-md-2">原密码</label>
+                                        <label class="control-label col-md-2" for="psw_old">原密码</label>
                                         <div class="col-md-7">
-                                            <input type="password" class="form-control" name="psw_old">
+                                            <input type="password" class="form-control" name="psw_old" id="psw_old">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label col-md-2">新密码</label>
+                                        <label class="control-label col-md-2" for="psw_new">新密码</label>
                                         <div class="col-md-7">
-                                            <input type="password" class="form-control" name="psw_new">
+                                            <input type="password" class="form-control" name="psw_new" id="psw_new">
                                         </div>
                                         <div class="col-md-3">
 
@@ -577,9 +608,9 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-2">再次输入</label>
+                                        <label class="control-label col-md-2" for="psw_again">再次输入</label>
                                         <div class="col-md-7">
-                                            <input type="password" class="form-control">
+                                            <input type="password" class="form-control" id="psw_again">
                                         </div>
                                     </div>
                                 </fieldset>
@@ -622,5 +653,6 @@
                 <i class="fa fa-phone-square fa-2x"></i>
             </div>
         </div>
+
     </body>
 </html>

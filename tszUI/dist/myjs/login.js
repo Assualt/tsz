@@ -22,6 +22,17 @@ function address_refresh() {
     }
     return false;
 }
+function time_toString() {
+    var Mydate = new Date();
+    var year = Mydate.getFullYear();
+    var month = Mydate.getMonth()+1;
+    var date = Mydate.getDate();
+    var hour =Mydate.getHours();
+    var min = Mydate.getMinutes();
+    var sec = Mydate.getSeconds();
+    var time = "当前时间:"+year+"/"+month+"/"+date+"  "+hour+":"+min+":"+sec;
+    $("#book_sale_history").find('div.container-fluid legend label').html(time);
+}
 
 $(document).ready(function () {
     window.JSONPATH="../dist/res/json/";
@@ -159,6 +170,8 @@ $(document).ready(function () {
         });
         $(".main_head ul li:first-child").removeClass('disabled').addClass('active');
         /*header login state*/
+
+        /*我按钮变成登录字样 然后去除下列ul*/
         $("#login_btn").html('登录');
         $("#login_btn").next('ul').addClass('fade');
         var str =
@@ -203,7 +216,16 @@ $(document).ready(function () {
             '   </div>' +
             '</div>';
         $("#login").empty().append(str);
-        $("#login").addClass('in active').removeClass('fade');
+        var all_div = $(".main_body").find('div.tab-pane');
+        $.each(all_div,function (info) {
+            if(info == 0){
+                $(this).addClass('in active').removeClass('fade');
+            }else{
+                $(this).addClass('fade').removeClass('in active');
+            }
+        });
+
+
     });
 
 
@@ -369,7 +391,29 @@ $(document).ready(function () {
 
    });
 
+   // swal('Oops...', 'Something went wrong!', 'success');//echarts 绘图
+    $.getJSON(window.JSONPATH+"book_his_chart.json",function (content) {
+        var sale_his_line = echarts.init($("#sale_his_line")[0]);
+        var sale_his_bar =echarts.init($("#sale_his_bar")[0]);
+        var sale_his_pie =echarts.init($("#sale_his_pie")[0]);
+        $.each(content,function (info,psr) {
+            if(psr.name == 1){
+                var data = psr.charts;
+                $.each(data,function (info,eachType) {
+                    if(eachType.types=="line"){
+                        sale_his_line.setOption(eachType.options);
+                    }
+                    if(eachType.types=="bar"){
+                        sale_his_bar.setOption(eachType.options);
+                    }
+                    if(eachType.types=="pie"){
+                        sale_his_pie.setOption(eachType.options);
+                    }
+                });
+            }
+        });
 
+    });
+    window.setInterval(time_toString,1000);
 
-    // swal('Oops...', 'Something went wrong!', 'success');
 });
