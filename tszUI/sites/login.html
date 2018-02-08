@@ -118,10 +118,10 @@
             <div class="main_right fl">
                 <div class="main_head">
                     <ul class="nav nav-tabs nav-tabs-justified">
-                        <li class="disabled"><a href="#login" data-toggle="tab">登录</a></li>
+                        <li class="disabled active"><a href="#login" data-toggle="tab">登录</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">基本资料</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书管理</a></li>
-                        <li class="disabled active"><a href="#" data-toggle="tab">图书售卖记录</a></li>
+                        <li class="disabled"><a href="#" data-toggle="tab">图书售卖记录</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书买入</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">日志记录</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">收益评估</a></li>
@@ -129,7 +129,7 @@
                     </ul>
                 </div>
                 <div class="tab-content main_body">
-                    <div class="tab-pane fade" id="login">
+                    <div class="tab-pane fade in active" id="login">
                         <h1>登录淘书斋</h1>
                         <hr>
                         <form action="" class="form-horizontal" role="form" method="get">
@@ -349,7 +349,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="tab-pane fade in active" id="book_management">
+                    <div class="tab-pane fade" id="book_management">
                         <form action="" id="book_management_1">
                             <fieldset>
                                 <legend><i class="fa fa-book"></i>&nbsp;图书管理</legend>
@@ -363,7 +363,7 @@
                                     <label for="sel_num_show">条</label>
                                 </div>
                                 <ul class="fr nav nav-pills nav-tabs-justified col-md-2">
-                                    <li class="fl"><a href="#show_in_table" class="fa fa-table" data-toggle="tab" title="表格形式"></a></li>
+                                    <li class="fl active"><a href="#show_in_table" class="fa fa-table" data-toggle="tab" title="表格形式"></a></li>
                                     <li class="fl"><a href="#show_in_list" class="fa fa-list-alt" data-toggle="tab" title="列表模式"></a></li>
                                 </ul>
                                 <div class="tab-content fl">
@@ -594,24 +594,48 @@
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="psw_old">原密码</label>
                                         <div class="col-md-7">
-                                            <input type="password" class="form-control" name="psw_old" id="psw_old">
+                                            <input type="password" class="form-control" name="psw_old" id="psw_old" MAXLENGTH="18">
+                                            <i class="fa fa-spinner fa-spin"></i>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="psw_new">新密码</label>
                                         <div class="col-md-7">
-                                            <input type="password" class="form-control" name="psw_new" id="psw_new">
+                                            <input type="password" class="form-control" name="psw_new" id="psw_new" MAXLENGTH="18">
+                                            <a class="fa fa-eye" name="eye"></a>
                                         </div>
-                                        <div class="col-md-3">
-
+                                        <p class="col-md-3 control-label">必须大于6位小于18位</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="psw_strength_check" class="col-md-2"></label>
+                                        <div class="col-md-7">
+                                            <div title="弱" class="col-md-12" id="psw_strength_check">
+                                                <div class="col-md-4">弱</div>
+                                                <div class="col-md-4">中</div>
+                                                <div class="col-md-4">强</div>
+                                            </div>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="psw_again">再次输入</label>
                                         <div class="col-md-7">
                                             <input type="password" class="form-control" id="psw_again">
+                                            <a class="fa fa-close"></a>
                                         </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="yzm" class="col-md-2 control-label">验证码</label>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control" maxlength="4" id="yzm" size="4">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <canvas class="yzm" title="看不清,点击重新换一张"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-danger" type="button">确认修改</button>
+                                        <button class="btn btn-warning" type="reset">撤销修改</button>
                                     </div>
                                 </fieldset>
 

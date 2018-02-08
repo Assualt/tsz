@@ -283,8 +283,8 @@ fieldset{
 #show_in_table table{
     width: 100%;
     overflow-x: scroll;
+    height: auto;
 }
-
 #show_in_list ul {
     width: 100%;
     padding: 0;
@@ -312,6 +312,60 @@ fieldset{
     padding-top: 10px;
     font-weight: normal;
     font-size: 0.5em;
+}
+
+#psw_strength_check{
+    padding: 0;
+    height: 20px;
+    border-radius: 5px;
+    text-align: center;
+    background: white;
+}
+#psw_strength_check div{
+    background: white;
+    border: 1px solid #ddd;
+}
+#psw_old+i{
+    /*display: none;*/
+    position: absolute;
+    top: 7px;
+    font-size: 20px;
+    left: 90%;
+    color: #333;
+}
+
+#psw_new+a{
+    position: absolute;
+    top: 7px;
+    font-size: 20px;
+    left: 90%;
+    color: #aaa;
+    cursor: pointer;
+}
+#psw_again+a{
+    color: red;
+    font-size: 1.25em;
+    position: absolute;
+    top: 7px;
+    left: 90%;
+    cursor: pointer;
+    display: none;
+}
+#yzm+i{
+    position: absolute;
+    top: 7px;
+    font-size: 20px;
+    left: 63%;
+    color: green;
+    display: none;
+
+}
+canvas.yzm{
+    border: 1px solid #ddd;
+    width: 120px;
+    height: 40px;
+    cursor: pointer;
+    text-align: center;
 }
 
 /*helper*/

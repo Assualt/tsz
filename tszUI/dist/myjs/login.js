@@ -33,8 +33,154 @@ function time_toString() {
     var time = "当前时间:"+year+"/"+month+"/"+date+"  "+hour+":"+min+":"+sec;
     $("#book_sale_history").find('div.container-fluid legend label').html(time);
 }
-
+function psw_strength_check(psw_new) {
+    /*
+    *密码强度:
+    * 全数字 :1
+    * 全字母 :a-z A-Z  2
+    * 大小写混:4
+    * 特殊字符:8
+    * 0-4 弱
+    * 4-8 中
+    * 8-12 强
+    */
+    var str_num = psw_new.length;
+    var Num_char_num = (psw_new.match(/[0-9]/ig)==null )? 0 :(psw_new.match(/[0-9]/ig)).length ;
+    var Small_char_num = (psw_new.match(/[a-z]/g)==null) ? 0 :(psw_new.match(/[a-z]/g)).length;
+    var Big_char_num = (psw_new.match(/[A-Z]/g)==null) ? 0: (psw_new.match(/[A-Z]/g)).length;
+    var Esp_char_num =psw_new.length -Num_char_num-Small_char_num-Big_char_num;
+    var strength =0;
+    if(str_num===Num_char_num){//全数字
+        strength+=1;
+    }else if(str_num===Big_char_num || str_num===Small_char_num){//全字母 全大/小写
+        strength+=2;
+    }else if((str_num===Big_char_num+Small_char_num && Big_char_num*Small_char_num>0)||
+             (str_num===Big_char_num+Num_char_num && Big_char_num*Num_char_num>0)||
+             (str_num===Small_char_num+ Num_char_num && Small_char_num*Num_char_num>0)){
+        //为大写混合 或者大/小写字母和数字混合
+        strength+=4;
+    }else if((str_num===Num_char_num+Big_char_num+ Small_char_num) && (Num_char_num * Small_char_num * Big_char_num>0)){//大小写和字母混合
+        var num_rate =parseFloat(Num_char_num)/parseFloat(str_num);
+        var big_rate =parseFloat(Big_char_num)/parseFloat(str_num);
+        var small_rate =parseFloat(Small_char_num)/parseFloat(str_num);
+        var abs =Math.abs(num_rate-small_rate)+Math.abs(big_rate-num_rate)+Math.abs(small_rate-big_rate);
+        if(abs>=0 && abs <=0.1){//三者出现频率相当
+            strength+=10;
+        }else if(abs>0.1&&abs<=0.3){
+            strength+=9;
+        }else if(abs>0.3 && abs<=0.5){//三
+            strength+=8;
+        }else{//
+            strength+=7;
+        }
+    }else if(Esp_char_num>0){
+        strength=4;
+        var rest_num =str_num-Esp_char_num;
+        if(rest_num===Big_char_num||rest_num===Small_char_num||rest_num===Num_char_num){//有特殊字符和 大/小写/数字其一组合
+            strength+=2;
+        }else if((rest_num===Big_char_num+Num_char_num && Big_char_num* Num_char_num>0)||
+                 (rest_num===Big_char_num+Small_char_num && Big_char_num* Small_char_num>0)||
+                 (rest_num===Num_char_num+Small_char_num && Num_char_num* Small_char_num>0)){
+            //有特殊字符和 大/小写/数字其二组合
+            strength+=4;
+        }else if(rest_num===Big_char_num+Num_char_num+Small_char_num &&Big_char_num*Small_char_num* Num_char_num > 0 ){
+            strength+=6;
+        }
+    }
+    return strength;
+}
+function Set_psw_strength(val) {
+    var obj;
+    if(val >=0 &&  val <4){
+        obj = $("#psw_strength_check").find('div:first-child');
+        obj.css('background','rgba(255,0,0,0.7)');
+        $("#psw_strength_check").find('div').not(obj).css('background','white');
+    }else if(val>=4 && val<8){
+        obj = $("#psw_strength_check").find('div:nth-child(2)');
+        obj.css('background','rgba(255,128,0,0.7)');
+        $("#psw_strength_check").find('div').not(obj).css('background','white');
+    }else if(val>=8){
+        obj = $("#psw_strength_check").find('div:last-child');
+        obj.css('background','rgba(0,128,0,0.7)');
+        $("#psw_strength_check").find('div').not(obj).css('background','white');
+    }
+    return false;
+}
+function RandNum(min,max) {
+    return Math.floor(Math.random()*(max-min)+min).toFixed(0);
+}
+function Rand_rgb(min,max) {
+    var r =RandNum(min,max);
+    var g =RandNum(min,max);
+    var b =RandNum(min,max);
+    return "rgb("+r+","+g+","+b+")";
+}
+function Draw_yzm_pic(str) {
+    var canvas =$(".yzm")[0];
+    var width =canvas.width;
+    var height =canvas.height;
+    var ctx = canvas.getContext('2d');
+    ctx.textBaseline ='bottom';
+    /**绘制背景色**/
+    ctx.fillStyle = Rand_rgb(180,240);
+    ctx.fillRect(0,0,width,height);
+    /**绘制文字**/
+    for(var i=0;i<4;i++){
+        var txt =str[i];
+        ctx.fillStyle = Rand_rgb(50,160);//随机生成字体颜色
+        ctx.font = RandNum(70,100)+'px SimHei'; //随机生成字体大小
+        var x = (i+1)*50;
+        var y = RandNum(60,120);
+        var deg = RandNum(-45,45);
+        ctx.translate(x,y);
+        ctx.rotate(deg*Math.PI/180);
+        ctx.fillText(txt, 0,0);
+        //恢复坐标原点和旋转角度
+        ctx.rotate(-deg*Math.PI/180);
+        ctx.translate(-x,-y);
+    }
+    /**绘制干扰线**/
+    for(var i=0; i<8; i++){
+        ctx.strokeStyle = Rand_rgb(40,180);
+        ctx.beginPath();
+        ctx.moveTo( RandNum(0,width), RandNum(0,height) );
+        ctx.lineTo( RandNum(0,width), RandNum(0,height) );
+        ctx.stroke();
+    }
+    /**绘制干扰点**/
+    for(var i=0; i<100; i++){
+        ctx.fillStyle = Rand_rgb(0,255);
+        ctx.beginPath();
+        ctx.arc(RandNum(0,width),RandNum(0,height), 1, 0, 2*Math.PI);
+        ctx.fill();
+    }
+    return false;
+}
 $(document).ready(function () {
+
+    Draw_yzm_pic("1234");
+    $(".yzm").click(function () {
+        var str = 'ABCEFGHJKLMNPQRSTWXY1234567890abcdefghijklmnopqrstuvwxyz';
+        var txt="";
+        for(var i=0;i<4;i++)
+             txt +=str[RandNum(0,str.length)];
+        Draw_yzm_pic(txt);
+
+    });
+
+    $("#yzm").on('input propertychange',function () {
+       var val = $(this).val().trim();
+       $(this).val(val);
+       if(val==="1234"){
+           $(this).next('i').show();
+       }else{
+           $(this).next('i').hide();
+       }
+
+    });
+
+
+
     window.JSONPATH="../dist/res/json/";
 
     /*define the json for area_university*/
@@ -160,7 +306,6 @@ $(document).ready(function () {
         $(this).css("padding","16px");
         $(this).html("<i class='fa fa-phone-square fa-2x'></i>");
     });
-
     /*退出*/
     $("#login_btn").next('ul').find('li:last-child').click(function () {
         var list = $(".main_head ul li:not(:first-child)");
@@ -227,8 +372,6 @@ $(document).ready(function () {
 
 
     });
-
-
     /*判断登录与否*/
     $("input:submit[value='登录']").click(function () {
         var str = $("#login").html();
@@ -249,7 +392,6 @@ $(document).ready(function () {
                 });
                 $("#login_btn").html('我').next('ul').removeClass('fade');
                 $("#login").empty().append('<h1 align="center">登录成功</h1>');
-
                 $(".main_head ul li:nth-child(2)").addClass('active');
                 $("#basic_info").addClass('in active').removeClass('fade');
                 $("#login").addClass('fade').removeClass('in active');
@@ -264,9 +406,8 @@ $(document).ready(function () {
             }
         },2000);
     });
-
-   /*设置默认地址*/
-   $("#basic_info_2").on("click",'button',function () {
+    /*设置默认地址*/
+    $("#basic_info_2").on("click",'button',function () {
        var value =$(this).val();
       if(value == "edit_add"){
           swal("edit_add clicked");
@@ -303,14 +444,13 @@ $(document).ready(function () {
           });
       }
    });
-
-   /*添加收货地址 btn click*/
-   $("#add_ok").click(event,function () {
+    /*添加收货地址 btn click*/
+    $("#add_ok").click(function () {
        //得到地址
        var localaddress = $("#province2").val() +"&nbsp;"+ $("#city2").val() +"&nbsp;"+ $("#district2").val()
-           +"&nbsp;"+$(".add-more input[type='text']:eq(1)").val();
-       var localusername = $(".add-more input[type=text]:eq(0)").val();
-       var localusertel =$(".add-more input[type='tel']").val();
+           +"&nbsp;"+$(".add-more").find("input[type='text']:eq(1)").val();
+       var localusername = $(".add-more").find("input[type=text]:eq(0)").val();
+       var localusertel =$(".add-more").find("input[type='tel']").val();
        var add_list = $("#basic_info_2").find('div.list-group div.panel-group');
        var local_add_index =0;
        if(add_list.length ==0){
@@ -361,10 +501,8 @@ $(document).ready(function () {
        $("#basic_info_2").find('div.list-group h3').remove();
        $("#basic_info_2").find('div.list-group br').remove();
    });
-
-
-   /*#basic_info_1_btn 3个button*/
-   $("#basic_info_1_btn").find('button').click(function () {
+    /*#basic_info_1_btn 3个button*/
+    $("#basic_info_1_btn").find('button').click(function () {
         var value =$(this).html();
         switch (value){
             case "修改资料":
@@ -390,8 +528,7 @@ $(document).ready(function () {
 
 
    });
-
-   // swal('Oops...', 'Something went wrong!', 'success');//echarts 绘图
+    // swal('Oops...', 'Something went wrong!', 'success');//echarts 绘图
     $.getJSON(window.JSONPATH+"book_his_chart.json",function (content) {
         var sale_his_line = echarts.init($("#sale_his_line")[0]);
         var sale_his_bar =echarts.init($("#sale_his_bar")[0]);
@@ -412,8 +549,82 @@ $(document).ready(function () {
                 });
             }
         });
-
     });
+
     window.setInterval(time_toString,1000);
+
+    /*显示历史售卖条数选择*/
+    $("#book_sale_history_time_list").click(function () {
+       alert($(this).find('option:selected').text());
+    });
+
+    $("#psw_new").on('input propertychange',function () {
+       var psw_new = $(this).val();
+       $(this).val(psw_new.trim());
+       if(psw_new.length<6 && psw_new.length>0){
+           $("#psw_strength_check").html('当前密码太弱');
+       }else if(psw_new.length>18){
+           $("#psw_strength_check").html('当前密码过长操出限制');
+       }else{
+           var strength = psw_strength_check(psw_new);
+           var str =
+               '<div class="col-md-4">弱</div>'+
+               '<div class="col-md-4">中</div>'+
+               '<div class="col-md-4">强</div>';
+           $("#psw_strength_check").empty().html(str);
+           Set_psw_strength(strength);
+       }
+    });
+
+    $("#psw_again").on('input propertychange',function () {
+       var psw_new = $("#psw_new").val().trim();
+       if(psw_new===""){
+           $(this).next('a').hide();
+           return false;
+       }else{
+           var psw_again =$(this).val().trim();
+           $(this).val(psw_again);
+           if(psw_again===""){
+               $(this).next('a').hide();
+           }else{
+               $(this).next('a').show();
+               if (psw_again === psw_new) {
+                   $(this).next('a').removeClass('fa-close').addClass('fa-check').css({
+                       color: "green"
+                   });
+               } else {
+                   $(this).next('a').removeClass('fa-check').addClass('fa-close').css({
+                       color: "red"
+                   });
+               }
+           }
+       }
+       return false;
+    });
+    $("#psw_again").next('a.fa-close').click(function () {
+       $("#psw_again").val("");
+       $(this).hide();
+       return false;
+    });
+
+    /*密码可显示*/
+    $("#psw_new").next('a').click(function () {
+        var type1 = $(this).prev('input').attr('type');
+        var type = type1=='password' ? 'text':'password';
+        $(this).prev('input').attr('type',type);
+        var flag = $(this).hasClass('fa-eye');
+        if(flag ==true) {
+            $(this).removeClass('fa-eye').addClass('fa-eye-slash').css({
+                color: "black"
+            });
+        }
+        else {
+            $(this).addClass('fa-eye').removeClass('fa-eye-slash').css({
+                color: "#aaa"
+            });
+        }
+    });
+
+
 
 });
