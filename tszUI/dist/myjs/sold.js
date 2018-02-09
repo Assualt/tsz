@@ -9,7 +9,7 @@ function school_clicked(a) {
     $(".show_school").hide(100);
 }
 function page_refresh(flag) {
-    var page_tools =$("#page_tools li:not(:first-child,:last-child)");
+    var page_tools =$("#page_tools ").find("li:not(:first-child,:last-child)");
     $.each(page_tools,function () {
         // alert($(this).find(a).html());
         $(this).find('a').html(parseInt($(this).find('a').html())+flag);
@@ -43,14 +43,16 @@ function Set_page_active(value) {
     return false;
 }
 function page_tools_action(flag,value) {
-    var LocalMaxPage = $("#page_tools li:last-child").prev('li').find('a').html();
-    var LocalMinPage = $("#page_tools li:first-child").next('li').find('a').html();
+    var page_tools =$("#page_tools");
+    var val;
+    var LocalMaxPage = page_tools.find("li:last-child").prev('li').find('a').html();
+    var LocalMinPage = page_tools.find("li:first-child").next('li').find('a').html();
     // alert(LocalMaxPage+" "+LocalMinPage);
     if(flag ===1){//page_tools clicked
         Set_page_active(value);
     }else if(flag === 2){//page_tools_1 clicked
         if(value === "prev"){
-            var val = parseInt($("#page_tools li.active a").html());
+            val = parseInt(page_tools.find("li.active a").html());
             if(val <= 1){
                 alert("已经在首页,无法向前翻页");
             }else{
@@ -65,7 +67,7 @@ function page_tools_action(flag,value) {
             }
 
         }else if(value === "next"){
-            var val = parseInt($("#page_tools li.active a").html());
+            val = parseInt(page_tools.find("li.active a").html());
             var Max_page =Get_Page_Max_Num();
             // alert("Max_page"+Max_page);
             if(val >= Max_page){
@@ -87,10 +89,11 @@ function page_tools_action(flag,value) {
 function helper_display() {
     var this_scroll_y = $(this).scrollTop();
     // alert(screen_y);
+    var helper=$(".helper");
     if(this_scroll_y  > 1000){
-        $(".helper").show(500);
+        helper.show(500);
     }else{
-        $(".helper").hide(500);
+        helper.hide(500);
     }
     return false;
 }
@@ -98,7 +101,8 @@ function Page_content_refresh(pageNum) {
     var page_content_start = (parseInt(pageNum)-1) * 12;
     var page_content_end = page_content_start+12;
     var str = "";
-    $(".content_list").empty();
+    var content_list=$(".content_list");
+    content_list.empty();
     $.each(window.all_book,function (info,data) {
         if(data) {
             if (info >= page_content_start && info <page_content_end) {
@@ -159,19 +163,16 @@ function Page_content_refresh(pageNum) {
             }
         }
     });
-    $(".content_list").append(str);
-
-    return false;
+    content_list.append(str);
 }
 function Get_Page_Max_Num() {
     var len =window.all_book.length;
-    var Max_page =(len%12)==0 ? (len/12) : (len/12+1).toFixed(0);
-    $(".page_total p:last-child").html('&nbsp;共&nbsp;'+Max_page+'页');
+    var Max_page =(len%12)===0 ? (len/12) : (len/12+1).toFixed(0);
+    $(".page_total").find("p:last-child").html('&nbsp;共&nbsp;'+Max_page+'页');
     return Max_page;
 }
 function Get_Page_Sel_Num() {
-    var val = $("#page_tools li:not(:first-child,:last-child).active").find('a').html();
-    return val;
+    return $("#page_tools").find("li:not(:first-child,:last-child).active").find('a').html();
 }
 
 $(document).ready(function () {
@@ -198,22 +199,22 @@ $(document).ready(function () {
         $("#body").css("background-color","white");
         return false;
     });
-    $(".show_school_body_2 a").click(function () {
+    $(".show_school_body_2").find('a').click(function () {
         var city=$(this).text();//get the city
         $(this).css({
             "background-color":"rgb(0,168,155)",
             "color":"white"
         });
-        $(".show_school_body_2 a").not(this).css({
+        var show_school_body_3 = $(".show_school_body_3");
+        $(".show_school_body_2").find('a').not(this).css({
             "background-color":"white",
             "color":"rgb(0,168,155)"
         });
-        $(".show_school_body_3").empty();
+        show_school_body_3.empty();
         $.each( window.area_university,function (info,data) {
             if(data.city === city) {//select the selected city
                 $.each(data.university , function (index,content) {
-                    var name=content.name;
-                    $(".show_school_body_3").append("<p class='fl'><a href='javascript:void(0);' onclick='school_clicked(this)' name='"+content.name+"'>"+content.name+"</a></p>")
+                    show_school_body_3.append("<p class='fl'><a href='javascript:void(0);' onclick='school_clicked(this)' name='"+content.name+"'>"+content.name+"</a></p>")
                 });
             }
         });
@@ -337,13 +338,13 @@ $(document).ready(function () {
 
     /*search tag */
     $(".search_keyword li a").click(function () {
-       $(this).addClass('selected');
-       $(".search_keyword li a").not(this).removeClass('selected');
-       return false;
+        $(this).addClass('selected');
+        $(".search_keyword li a").not(this).removeClass('selected');
+        return false;
     });
 
     /*display order*/
-    $(".list_order li ").on('click','a',function () {
+    $(".list_order").on('click','li a',function () {
         var flag = $(this).parent('li').html().indexOf('<i');
         if(flag === -1){/*has no i*/
             var li = $(this).parents('ul').find('li:not(:first-child) i');
@@ -359,50 +360,49 @@ $(document).ready(function () {
     });
 
     /*pagination tools*/
-    $("#page_tools li:not(:first-child,:last-child) a").click(function () {
+    $("#page_tools,#page_tools_1").find(" li:not(:first-child,:last-child) a").click(function () {
         // alert($(this).html());
         page_tools_action(1,$(this).html());
         return false;
     });
-    $("#page_tools_1 li:not(:first-child,:last-child) a").click(function () {
-        page_tools_action(1,$(this).html());
-        return false;
-    });
-    $("#page_tools li:first-child a,#page_tools_1 li:first-child a").click(function () {
+
+    $("#page_tools,#page_tools_1").find("li:first-child a").click(function () {
         page_tools_action(2,"prev");
         return false;
     });
-    $("#page_tools li:last-child a,#page_tools_1 li:last-child a").click(function () {
+    $("#page_tools,#page_tools_1").find("li:last-child a").click(function () {
         page_tools_action(2,"next");
         return false;
     });
 
     $("#page_tools_2").click(function () {
-       var val = $(this).prev('input').val();
-       if(val !=""){
-          if(parseInt(val)>Get_Page_Max_Num()){
-              alert('输入页数大于总页数');
-              $(this).prev('input').val(Get_Page_Sel_Num());
-          }
-          else{
-              var Local_Min_Page_Num = $("#page_tools li:first-child").next('li').find('a').html();
-              var Local_Max_Page_Num = $("#page_tools li:last-child").prev('li').find('a').html();
-              if(val>=Local_Min_Page_Num && val <= Local_Max_Page_Num){
-                  Set_page_active(val);
-              }else {
-                  if(val <= 5 && val >=1){
-                      page_refresh(val-Local_Min_Page_Num);
-                      Set_page_active(val);
-                  }else if(val>5 && val<=Get_Page_Max_Num()){
-                      page_refresh(val - Local_Max_Page_Num);
-                      Set_page_active(val);
-                  }else{
-                      alert("输入页数操出索引范围!");
-                      $(this).prev('input').val(Get_Page_Sel_Num());
-                  }
-              }
-          }
-       }
+        var val = $(this).prev('input').val();
+        if(val ===""){}
+        else{
+            if(parseInt(val)>Get_Page_Max_Num()){
+                alert('输入页数大于总页数');
+                $(this).prev('input').val(Get_Page_Sel_Num());
+            }
+            else{
+                var page_tools = $("#page_tools");
+                var Local_Min_Page_Num = page_tools.find("li:first-child").next('li').find('a').html();
+                var Local_Max_Page_Num = page_tools.find("li:last-child").prev('li').find('a').html();
+                if(val>=Local_Min_Page_Num && val <= Local_Max_Page_Num){
+                    Set_page_active(val);
+                }else {
+                    if(val <= 5 && val >=1){
+                        page_refresh(val-Local_Min_Page_Num);
+                        Set_page_active(val);
+                    }else if(val>5 && val<=Get_Page_Max_Num()){
+                        page_refresh(val - Local_Max_Page_Num);
+                        Set_page_active(val);
+                    }else{
+                        alert("输入页数操出索引范围!");
+                        $(this).prev('input').val(Get_Page_Sel_Num());
+                    }
+                }
+            }
+        }
         return false;
     });
 

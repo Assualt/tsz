@@ -3,10 +3,10 @@
 * create 2018.1.3 by T_T
 *
 */
-
 function Gen_goods_list() {
     var arry = $("input:checkbox[value='goods_item']:checked");
-    $(".table tbody").empty();
+    var table_tbody = $(".table").find('tbody');
+    table_tbody.empty();
     $.each(arry,function () {
         var book_name = $(this).nextAll('.body_info_img').find('a img').attr('title');
         var str = $(this).nextAll('.body_info_type').find('p:last-child').html();
@@ -14,7 +14,7 @@ function Gen_goods_list() {
         var book_price = $(this).parents('.body_info').nextAll('.body_price').find('p strong').html();
         var book_num = $(this).parents('.body_info').nextAll('.body_num').find('span input').val();
         var book_all_price = $(this).parents('.body_info').nextAll('.body_all_price').find('p ').html();
-        var str =
+        str =
             "<tr>" +
             "   <td>"+book_name+"</td>" +
             "   <td>"+book_author+"</td>" +
@@ -22,7 +22,7 @@ function Gen_goods_list() {
             "   <td>"+book_num+"</td>" +
             "   <td>"+book_all_price+"</td>" +
             "</tr>";
-        $(".table tbody").append(str);
+        table_tbody.append(str);
         // alert(book_author +book_name + singer_price +num + all_price);
     });
     var total_price = $(".total p:eq(1)").html();
@@ -35,34 +35,35 @@ function Gen_goods_list() {
         "   <td>"+total_num+"</td>" +
         "   <td>"+total_price+"</td>" +
         "</tr>";
-    $(".table tbody").append(str);
-
+    table_tbody.append(str);
 }
 function Set_All_Num_Price(flag) {
+    var all_total_right =$(".all_total_right");
+    var total=$(".total");
     if(flag === true) {
         var arry = $("input:text[name='goods_num']");
-        var All_num = parseInt(0);
-        var All_price = parseFloat(0);
+        var All_num = 0;
+        var All_price = 0.0;
         $.each(arry, function () {
             if($(this).parents('.body_num').prevAll('.body_info').find('input').is(':checked') === true){
                 All_num += parseInt($(this).val());
             }
         });
-        $(".all_total_right strong").html("&nbsp;" + All_num + "&nbsp;");
-        arry = $(".body_all_price p");
+        all_total_right.find("strong").html("&nbsp;" + All_num + "&nbsp;");
+        arry = $(".body_all_price").find('p');
         $.each(arry, function () {
             // alert($(this).html());
             if($(this).parents('.body_all_price').prevAll('.body_info').find('input').is(':checked') === true){
                 All_price += parseFloat($(this).html());
             }
         });
-        $(".all_total_right p:last-child").html("&nbsp;" + All_price.toFixed(2));
-        $(".total p:nth-child(2)").html(All_price.toFixed(2));
+        all_total_right.find("p:last-child").html("&nbsp;" + All_price.toFixed(2));
+        total.find("p:nth-child(2)").html(All_price.toFixed(2));
         // alert(All_num+"  "+All_price);
     }else{
-        $(".all_total_right strong").html("&nbsp;" + 0 + "&nbsp;");
-        $(".all_total_right p:last-child").html("&nbsp; 0.00  &nbsp;");
-        $(".total p:nth-child(2)").html("0.00");
+        all_total_right.find("strong").html("&nbsp;" + 0 + "&nbsp;");
+        all_total_right.find("p:last-child").html("&nbsp; 0.00  &nbsp;");
+        total.find("p:nth-child(2)").html("0.00");
     }
     $("input:button[value='结算']").attr('disabled',!flag);
 }
@@ -74,11 +75,11 @@ function Set_All_Goods_mum() {
     $(".shop-header li:eq(2) a strong").html(goods_length);
 }
 function Set_Address(Address) {
-   var str = $(".step-two ul li input:checked").next('p').html();
-   var i = str.indexOf('<strong');
-   str = Address + str.substring(i,str.length);
-   $(".step-two ul li input:checked").next('p').html(str);
-
+    var obj=$(".step-two").find("ul li input:checked");
+    var str = obj.next('p').html();
+    var i = str.indexOf('<strong');
+    str = Address + str.substring(i,str.length);
+    obj.next('p').html(str);
 }
 function school_clicked(a) {
     var obj= $(a);
@@ -87,32 +88,38 @@ function school_clicked(a) {
 }
 function checkbox_submit() {
     var all = $("input:checkbox:checked");
-    if(all.length != 0){
-        $("input:button[value='结算']").attr('disabled',false);
-    }else if(all.length ==0){
-        $("input:button[value='结算']").attr('disabled',true);
+    var input=$("input:button[value='结算']");
+    if(all.length===0){
+        input.attr('disabled',true);
+    }else{
+        input.attr('disabled',false);
     }
+    return false;
 }
 function Check_shop_num() {
-    var len =$(".shop_list").find('li').length;
+    var shop_list =$(".shop_list");
+    var len =shop_list.find('li').length;
     if(len === 0){
-        $(".shop_list").append("<h1 align='center' style='opacity: 0.5;'>抱歉 购物车为空！</h1>");
+        shop_list.append("<h1 align='center' style='opacity: 0.5;'>抱歉 购物车为空！</h1>");
     }
 }
 function Set_daily_recommend_block(flag){
+    var daily_hot =$("#daily_hot");
+    var daily_history =$("#daily_history");
+    var guess_like=$("#guess_like");
     if(flag === 1){
-        $("#daily_hot").css('display','block');
-        $("#daily_history").css('display','none');
-        $("#guess_like").css('display','none');
+        daily_hot.css('display','block');
+        daily_history.css('display','none');
+        guess_like.css('display','none');
     }else if(flag === 2){
-        $("#daily_hot").css('display','none');
-        $("#daily_history").css('display','block');
-        $("#guess_like").css('display','none');
+        daily_hot.css('display','none');
+        daily_history.css('display','block');
+        guess_like.css('display','none');
     }else if(flag === 3){
-        $("#daily_hot").css('display','none');
-        $("#daily_history").css('display','none');
-        $("#guess_like").css('display','block');
-    }else{}
+        daily_hot.css('display','none');
+        daily_history.css('display','none');
+        guess_like.css('display','block');
+    }
 }
 
 $(document).ready(function () {
@@ -121,10 +128,11 @@ $(document).ready(function () {
     document.title = name+ '的购物车';
     $.getJSON(window.JSONPATH+'cart.json',function (content) {
         window.cartlist = content;
-        $(".shop_list").empty();
+        var shop_list =$(".shop_list");
+        shop_list.empty();
         var append_str="";
         $.each(content,function (info,person_cart) {/*person cart*/
-            if(person_cart.id =="1".trim()){/*verify the customer*/
+            if(person_cart.id==="1".trim()){/*verify the customer*/
                 var person_goods = person_cart.goods;
                 $.each(person_goods,function (info,book_store) {/*customer book store*/
                    append_str +=
@@ -207,8 +215,6 @@ $(document).ready(function () {
                                         "   <a href='#'>删除</a>" +
                                         "</div>" +
                                         "</li>";
-
-
                                 });
                         });
                         append_str+="</ul></li>";
@@ -216,7 +222,7 @@ $(document).ready(function () {
             }
         });
         // alert(append_str);
-        $(".shop_list").append(append_str);
+        shop_list.append(append_str);
         Set_All_Goods_mum();
     });
     /*define the json for area_university*/
@@ -239,22 +245,23 @@ $(document).ready(function () {
         $(".show_school").hide();
         $("#body").css("background-color","white");
     });
-    $(".show_school_body_2 a").click(function () {
+    $(".show_school_body_2").find('a').click(function () {
         var city=$(this).text();//get the city
         $(this).css({
             "background-color":"rgb(0,168,155)",
             "color":"white"
         });
-        $(".show_school_body_2 a").not(this).css({
+        var all_a=$(".show_school_body_2").find('a');
+        var show_school_body_3=$(".show_school_body_3");
+        all_a.not(this).css({
             "background-color":"white",
             "color":"rgb(0,168,155)"
         });
-        $(".show_school_body_3").empty();
+        show_school_body_3.empty();
         $.each( window.area_university,function (info,data) {
             if(data.city === city) {//select the selected city
                 $.each(data.university , function (index,content) {
-                    var name=content.name;
-                    $(".show_school_body_3").append("<p class='fl'><a href='javascript:void(0);' onclick='school_clicked(this)' name='"+content.name+"'>"+content.name+"</a></p>")
+                    show_school_body_3.append("<p class='fl'><a href='javascript:void(0);' onclick='school_clicked(this)' name='"+content.name+"'>"+content.name+"</a></p>")
                 });
             }
         });
@@ -264,11 +271,13 @@ $(document).ready(function () {
     $.getJSON(window.JSONPATH+'daily_interest.json',function (content) {
        $.each(content,function (info,data) {
            var string =" ";
-          if(data.name === "daily_hot"){
-              string +="<ul class='item active daily_list'>"
-              var cont = data.item;
-              $("#daily_hot div.carousel-inner").empty();
-              $.each(cont,function (info,item) {
+           var cont;
+           if(data.name === "daily_hot"){
+               var daily_hot_carousel_inner=$("#daily_hot").find("div.carousel-inner");
+               string +="<ul class='item active daily_list'>";
+               cont = data.item;
+               daily_hot_carousel_inner.empty();
+               $.each(cont,function (info,item) {
                   string +=
                       "<li>" +
                       "     <div class='daily_hot_list-head'>" +
@@ -289,16 +298,17 @@ $(document).ready(function () {
                       "         </div>"+
                       "       </div>" +
                       "</li>";
-                  if(info %5 ==0 && info !=0) {
+                  if(info %5 ===0 && info >0) {
                       string+="</ul><ul class='item daily_list'>";
                   }
               });
-              $("#daily_hot div.carousel-inner").append(string);
-              $("#daily_hot div.carousel-inner").find('ul:last-child').remove();
-          }
-          if(data.name === "daily_history"){
-              var cont = data.item ;
-              $("#daily_history div.carousel-inner").find('ul').empty();
+               daily_hot_carousel_inner.append(string);
+               daily_hot_carousel_inner.find('ul:last-child').remove();
+            }
+            if(data.name === "daily_history"){
+              cont = data.item ;
+              var daily_history_carousel_inner =$("#daily_history").find("div.carousel-inner");
+              daily_history_carousel_inner.find('ul').empty();
               $.each(cont,function (info,item) {
                   string +=
                       "<li>" +
@@ -321,13 +331,14 @@ $(document).ready(function () {
                       "       </div>" +
                       "</li>";
               });
-              $("#daily_history div.carousel-inner").find('ul').append(string);
+              daily_history_carousel_inner.find('ul').append(string);
           }
-          if(data.name === "guess_like"){
-              string +="<ul class='item active daily_list'>"
-              var cont = data.item;
-              $("#guess_like div.carousel-inner").empty();
-              $.each(cont,function (info,item) {
+            if(data.name === "guess_like"){
+               var guess_like_carousel_inner =$("#guess_like").find("div.carousel-inner");
+               string +="<ul class='item active daily_list'>";
+               cont = data.item;
+               guess_like_carousel_inner.empty();
+               $.each(cont,function (info,item) {
                   string +=
                       "<li>" +
                       "     <div class='daily_hot_list-head'>" +
@@ -348,13 +359,13 @@ $(document).ready(function () {
                       "         </div>"+
                       "       </div>" +
                       "</li>";
-                  if(info %5 ==0 && info !=0){
+                  if(info %5 ===0 && info >0){
                       string+="</ul><ul class='item daily_list'>";
                   }
 
               });
-              $("#guess_like div.carousel-inner").append(string);
-              $("#guess_like div.carousel-inner").find('ul:last-child').remove();
+               guess_like_carousel_inner.append(string);
+               guess_like_carousel_inner.find('ul:last-child').remove();
 
           }
        });
@@ -368,23 +379,21 @@ $(document).ready(function () {
     $("input:checkbox[value='all_sel']").on("click",function () {
         var flag=$(this).is(':checked');
         $("input:checkbox[value='all_sel']").prop("checked",flag);
-        $("input:checkbox[value='shop_name'],input:checkbox[value='goods_item']").prop("checked",flag);
+        $("input:checkbox[value='shop_name']").prop("checked",flag);
+        $("input:checkbox[value='goods_item']").prop("checked",flag);
         Set_All_Num_Price(flag);
     });
     /*shop select*/
+
     $(".shop_list").on("click","input:checkbox[value='shop_name']",function () {
         var flag=$(this).is(":checked");
        $(this).parents('.shop_list_head').next('.shop_list_item').find('.shop_list_body .body_info input').prop('checked',flag);
         Set_All_Num_Price(true);
-    });
-    /*goods select*/
-    $(".shop_list").on("click","input:checkbox[value='goods_item']",function () {
+    }).on("click","input:checkbox[value='goods_item']",function () {/*goods select*/
         var flag=$(this).is(":checked");
             $(this).parents(".shop_list_item").prev('.shop_list_head').find('input').prop('checked',flag);
         Set_All_Num_Price(true);
-    });
-    /*goods num */
-    $(".shop_list").on("input propertychange","input:text[name='goods_num']",function () {
+    }).on("input propertychange","input:text[name='goods_num']",function () {/*goods num */
         var uprice = parseFloat($(this).parents('.body_num').prev('.body_price').find('p strong').html());
         var num= parseInt($(this).val());
         if(num === 0 || num === 1) {
@@ -401,13 +410,10 @@ $(document).ready(function () {
             $(this).prev('button').attr('disabled',false);
             $(this).next('button').attr('disabled',false);
         }
-
         var allpri= uprice * num;
         $(this).parents('.body_num').next('.body_all_price').find('p').html(allpri.toFixed(2));
         Set_All_Num_Price(true);
-    });
-
-    $(".shop_list").on("click","button[value='sub']",function () {
+    }).on("click","button[value='sub']",function () {
        var goods_num= parseFloat($(this).next('input').val());
        $(this).nextAll('button').attr('disabled',false);
        if(goods_num === 1){
@@ -425,14 +431,13 @@ $(document).ready(function () {
        $(this).parents('.body_num').next('.body_all_price').find('p').html(allpri.toFixed(2));
        Set_All_Num_Price(true);
 
-    });
-    $(".shop_list").on("click","button[value='plus']",function () {
+    }).on("click","button[value='plus']",function () {
        var goods_num = parseFloat($(this).prev('input').val());
        $(this).prevAll('button').attr('disabled',false);
        if(goods_num > 20) {
            alert('商品数量超过库存');
            $(this).attr('disabled',true);
-           $(this).prev('input').val(20)
+           $(this).prev('input').val(20);
            goods_num=20;
        }else{
            goods_num++;
@@ -442,10 +447,7 @@ $(document).ready(function () {
         var allpri = (goods_num * uprice).toFixed(2);
         $(this).parents('.body_num').next('.body_all_price').find('p').html(allpri);
         Set_All_Num_Price(true);
-    });
-
-    /*body_op*/
-    $(".shop_list").on("click",".body_op a:last-child",function () {
+    }).on("click",".body_op a:last-child",function () {    /*body_op*/
         var flag = confirm("确认删除次本书?");
         if(flag === true){
             var all_del = $(this).parents('.shop_list_item').find('.shop_list_body').length-1;
@@ -459,13 +461,14 @@ $(document).ready(function () {
             Set_All_Goods_mum();
         }
     });
+
     /*delete*/
     $("#delete").click(function () {
        var all= $("input:checkbox[value='all_sel']").is(":checked");
        // alert(all);
-       if(all == true){
+       if(all ===true){
            if(confirm("确认删除所有图书？")===true) {
-               $(".shop_list li").remove();
+               $(".shop_list").find("li").remove();
            }
        }else{
            if(confirm("确认删除所选图书吗?")===true) {
@@ -478,7 +481,7 @@ $(document).ready(function () {
                            if ($(this).is(":checked") === false)
                                flag = false;
                        });
-                       if (flag == true)
+                       if (flag === true)
                            $(this).parents('li').remove();
                        else {
                            $.each(delete_goods, function () {
@@ -497,7 +500,7 @@ $(document).ready(function () {
     });
 
     /*Address sel*/
-    $(".step-two ul").on("click","li input",function () {
+    $(".step-two").on("click","ul li input",function () {
         var all_address = $(this).parents('li').siblings().find('p');
         var Sel_Address = $(this).next('p').html();
         var i = Sel_Address.indexOf("<a");
@@ -508,16 +511,13 @@ $(document).ready(function () {
         }else{}
         $.each(all_address,function () {
             i= $(this).html().indexOf('<strong');
-            if(i != -1){
-               var html = $(this).html().substring(0,i)+ "<a href='#' >&nbsp;&nbsp;设置为默认地址</a>" ;
-               $(this).html(html);
-
-            }else{}
+            if(i===-1){}else{
+                var html = $(this).html().substring(0,i)+ "<a href='#' >&nbsp;&nbsp;设置为默认地址</a>" ;
+                $(this).html(html);
+            }
             $(this).parents('li').css("border","none");
         });
-    });
-
-    $(".step-two ul").on("click","li p a",function () {
+    }).on("click","ul li p a",function () {
         var checked = $(this).parents('li').find('input');
         $.each(checked,function () {
            if($(this).is(":checked") === true){//修改默认地址
@@ -531,11 +531,11 @@ $(document).ready(function () {
                var all_address = $(this).parents('li').siblings().find('p').not(this);
                $.each(all_address,function () {
                    i= $(this).html().indexOf('<strong');
-                   if(i != -1){
+                   if(i === -1){}else{
                        $(this).prev('input').prop('checked',false);
                        var html = $(this).html().substring(0,i)+ "<a href='javascript:void(0)'>&nbsp;&nbsp;设置为默认地址</a>" ;
                        $(this).html(html);
-                   }else{}
+                   }
                    $(this).parents('li').css("border","none");
                });
 
@@ -564,7 +564,8 @@ $(document).ready(function () {
     /*js btn*/
     $("input:button[value='结算']").click(function () {
         var append_str = "";
-        $(".step-two ul").empty();
+        var setp_two_ul =$(".step-two").find("ul");
+        setp_two_ul.empty();
         $.each(window.cartlist,function (info,item) {//
             if(item.id === "1".trim()){//verify the customer
                 var cart_add = item.address;
@@ -598,53 +599,69 @@ $(document).ready(function () {
             }
         });
         Gen_goods_list();
-        $(".step-two ul").append(append_str);
+        setp_two_ul.append(append_str);
     });
 
     /*step_prev step_next step_submit*/
     $("#step_prev").click(function () {
-        var flag1=$(".step-one").css('display') == 'block';
-        var flag2=$(".step-two").css('display') == 'block';
-        var flag3=$(".step-three").css('display') =='block';
+        var step_one =$(".step-one");
+        var step_two =$(".step-two");
+        var step_three =$(".step-three");
+        var step_prev =$("#step_prev");
+        var step_next =$("#step_next");
+        var step_submit=$("#step_submit");
+        var modal_body_head =$(".modal-body-head");
+        // var flag1=step_one.css('display') === 'block';
+        var flag2=step_two.css('display') === 'block';
+        var flag3=step_three.css('display') === 'block';
         // alert(flag1 +" "+flag2 +"  " +flag3);
         if(flag2 === true){
-            $(".step-one").css('display','block');
-            $(".step-two").css('display','none');
-            $(".step-three").css('display','none');
-            $(".modal-body-head p:last-child").remove();
-            $("#step_prev").attr('disabled',true);
+            step_one.css('display','block');
+            step_two.css('display','none');
+            step_three.css('display','none');
+            modal_body_head.find("p:last-child").remove();
+            step_prev.attr('disabled',true);
         }else if(flag3 === true){
-            $(".step-one").css('display','none');
-            $(".step-two").css('display','block');
-            $(".step-three").css('display','none');
-            $(".modal-body-head p:last-child").remove();
-            $("#step_next").attr('disabled',false);
-        }else{}
-        $("#step_submit").attr('disabled',true);
+            step_one.css('display','none');
+            step_two.css('display','block');
+            step_three.css('display','none');
+            modal_body_head.find("p:last-child").remove();
+            step_next.attr('disabled',false);
+        }
+        step_submit.attr('disabled',true);
 
     });
     $("#step_next").click(function () {
-        var flag1=$(".step-one").css('display') == 'block';
-        var flag2=$(".step-two").css('display') == 'block';
-        var flag3=$(".step-three").css('display') =='block';
-        // alert( flag3 + " "+ flag2 +" "+flag1);
-        $("#step_prev").attr('disabled',false);
-        if(flag1 === true){
-            $(".step-one").css('display','none');
-            $(".step-two").css('display','block');
-            $(".step-three").css('display','none');
-            var str = "<p class='fl'><a>&nbsp;STEP 2 &nbsp;</a><i class='fa fa-angle-right'></i></p>";
-            $(".modal-body-head").append(str);
-        }else if(flag2 === true){
-            $(".step-one").css('display','none');
-            $(".step-two").css('display','none');
-            $(".step-three").css('display','block');
-            var str = "<p class='fl'><a>&nbsp;STEP 3 &nbsp;</a></p>";
-            $(".modal-body-head").append(str);
-            $("#step_next").attr('disabled',true);
-        }else{}
 
-        $("#step_submit").attr('disabled',!$("#step_next").attr('disabled'));
+        var step_one =$(".step-one");
+        var step_two =$(".step-two");
+        var step_three =$(".step-three");
+        var step_prev =$("#step_prev");
+        var step_next =$("#step_next");
+        var step_submit=$("#step_submit");
+        var modal_body_head =$(".modal-body-head");
+        var flag1=step_one.css('display') === 'block';
+        var flag2=step_two.css('display') === 'block';
+        // var flag3=step_three.css('display') ==='block';
+        // alert( flag3 + " "+ flag2 +" "+flag1);
+        step_prev.attr('disabled',false);
+        var str;
+        if(flag1 === true){
+            step_one.css('display','none');
+            step_two.css('display','block');
+            step_three.css('display','none');
+            str = "<p class='fl'><a>&nbsp;STEP 2 &nbsp;</a><i class='fa fa-angle-right'></i></p>";
+            modal_body_head.append(str);
+        }else if(flag2 === true){
+            step_one.css('display','none');
+            step_two.css('display','none');
+            step_three.css('display','block');
+            str = "<p class='fl'><a>&nbsp;STEP 3 &nbsp;</a></p>";
+            modal_body_head.append(str);
+            step_next.attr('disabled',true);
+        }
+
+        step_submit.attr('disabled',!step_next.attr('disabled'));
 
     });
     $("#step_submit").click(function () {
@@ -690,7 +707,7 @@ $(document).ready(function () {
     });
 
     /*daily_recommend*/
-    $(".recommend_daily_head ul li:nth-child(odd)").mouseenter(function () {
+    $(".recommend_daily_head").find("ul li:nth-child(odd)").mouseenter(function () {
        var val = $(this).val();
        Set_daily_recommend_block(val);
        $(this).parents('.list-group').find('li:nth-child(odd)').not(this).css('border-bottom','none');

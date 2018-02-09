@@ -9,9 +9,11 @@ function school_clicked(a) {
     $(".show_school").hide(100);
 }
 function address_refresh() {
-    var address_list =$("#basic_info_2").find('div.panel-group');
-    if(address_list.length == 0){
-        $("#basic_info_2").find('div.list-group').append('<h3 align="center" style="opacity: 0.7;">没有收货地址请添加</h3><br>')
+    var basic_info_2 =$("#basic_info_2");
+    var address_list =basic_info_2.find('div.panel-group');
+    var length =address_list.length;
+    if(length===0){
+        basic_info_2.find('div.list-group').append('<h3 align="center" style="opacity: 0.7;">没有收货地址请添加</h3><br>');
     }else{
         $.each(address_list,function (info) {
             var str = $(this).find('h4.panel-title').html();
@@ -33,7 +35,7 @@ function time_toString() {
     var time = "当前时间:"+year+"/"+month+"/"+date+"  "+hour+":"+min+":"+sec;
     $("#book_sale_history").find('div.container-fluid legend label').html(time);
 }
-function psw_strength_check(psw_new) {
+function Psw_Strength_Check(psw_new) {
     /*
     *密码强度:
     * 全数字 :1
@@ -60,9 +62,9 @@ function psw_strength_check(psw_new) {
         //为大写混合 或者大/小写字母和数字混合
         strength+=4;
     }else if((str_num===Num_char_num+Big_char_num+ Small_char_num) && (Num_char_num * Small_char_num * Big_char_num>0)){//大小写和字母混合
-        var num_rate =parseFloat(Num_char_num)/parseFloat(str_num);
-        var big_rate =parseFloat(Big_char_num)/parseFloat(str_num);
-        var small_rate =parseFloat(Small_char_num)/parseFloat(str_num);
+        var num_rate =Num_char_num/parseFloat(str_num);
+        var big_rate =Big_char_num/parseFloat(str_num);
+        var small_rate =Small_char_num/parseFloat(str_num);
         var abs =Math.abs(num_rate-small_rate)+Math.abs(big_rate-num_rate)+Math.abs(small_rate-big_rate);
         if(abs>=0 && abs <=0.1){//三者出现频率相当
             strength+=10;
@@ -90,24 +92,24 @@ function psw_strength_check(psw_new) {
     return strength;
 }
 function Set_psw_strength(val) {
+    var obj1=$("#psw_strength_check");
     var obj;
     if(val >=0 &&  val <4){
-        obj = $("#psw_strength_check").find('div:first-child');
+        obj = obj1.find('div:first-child');
         obj.css('background','rgba(255,0,0,0.7)');
-        $("#psw_strength_check").find('div').not(obj).css('background','white');
+        obj1.find('div').not(obj).css('background','white');
     }else if(val>=4 && val<8){
-        obj = $("#psw_strength_check").find('div:nth-child(2)');
+        obj = obj1.find('div:nth-child(2)');
         obj.css('background','rgba(255,128,0,0.7)');
-        $("#psw_strength_check").find('div').not(obj).css('background','white');
+        obj1.find('div').not(obj).css('background','white');
     }else if(val>=8){
-        obj = $("#psw_strength_check").find('div:last-child');
+        obj = obj1.find('div:last-child');
         obj.css('background','rgba(0,128,0,0.7)');
-        $("#psw_strength_check").find('div').not(obj).css('background','white');
+        obj1.find('div').not(obj).css('background','white');
     }
-    return false;
 }
 function RandNum(min,max) {
-    return Math.floor(Math.random()*(max-min)+min).toFixed(0);
+    return  Math.floor(Math.random()*(max-min)+min);
 }
 function Rand_rgb(min,max) {
     var r =RandNum(min,max);
@@ -116,6 +118,7 @@ function Rand_rgb(min,max) {
     return "rgb("+r+","+g+","+b+")";
 }
 function Draw_yzm_pic(str) {
+    var i;
     var canvas =$(".yzm")[0];
     var width =canvas.width;
     var height =canvas.height;
@@ -125,7 +128,7 @@ function Draw_yzm_pic(str) {
     ctx.fillStyle = Rand_rgb(180,240);
     ctx.fillRect(0,0,width,height);
     /**绘制文字**/
-    for(var i=0;i<4;i++){
+    for(i=0;i<4;i++){
         var txt =str[i];
         ctx.fillStyle = Rand_rgb(50,160);//随机生成字体颜色
         ctx.font = RandNum(70,100)+'px SimHei'; //随机生成字体大小
@@ -140,7 +143,7 @@ function Draw_yzm_pic(str) {
         ctx.translate(-x,-y);
     }
     /**绘制干扰线**/
-    for(var i=0; i<8; i++){
+    for(i=0; i<8; i++){
         ctx.strokeStyle = Rand_rgb(40,180);
         ctx.beginPath();
         ctx.moveTo( RandNum(0,width), RandNum(0,height) );
@@ -148,13 +151,12 @@ function Draw_yzm_pic(str) {
         ctx.stroke();
     }
     /**绘制干扰点**/
-    for(var i=0; i<100; i++){
+    for(i=0; i<100; i++){
         ctx.fillStyle = Rand_rgb(0,255);
         ctx.beginPath();
         ctx.arc(RandNum(0,width),RandNum(0,height), 1, 0, 2*Math.PI);
         ctx.fill();
     }
-    return false;
 }
 $(document).ready(function () {
 
@@ -179,8 +181,6 @@ $(document).ready(function () {
 
     });
 
-
-
     window.JSONPATH="../dist/res/json/";
 
     /*define the json for area_university*/
@@ -200,42 +200,44 @@ $(document).ready(function () {
     });
     $("#province").change(function () {
         var pro = $(this).val();
+        var school =$("#school");
         $.each(window.area_university,function (info,data) {
-           if(data.city == pro){
+           if(data.city===pro){
                var str ="";
                $.each(data.university,function (info,data) {
                    if(info>=1) {
                        str += "<option value='" + data.name + "'>" + data.name + "</option>";
                    }
                });
-               $("#school").empty().append(str);
-           }else if(pro =="选择省"){
-               $("#school").empty().append('<option value="请选择学校">请选择学校</option>')
-               $("input[name='myuniversity']").val('');
+               school.empty().append(str);
+           }else if(pro ==="选择省"){
+               school.empty().append('<option value="请选择学校">请选择学校</option>');
+               var input_university = $("input[name='myuniversity']");
+               input_university.val('');
            }
         });
     });
     $("#school").change(function () {
         var pro =$("#province").val();
-        if(pro =="重庆" || pro =="天津" || pro =="北京" ||pro =="上海"){
+        var input_university = $("input[name='myuniversity']");
+        if(pro ==="重庆" || pro ==="天津" || pro ==="北京" ||pro ==="上海"){
             pro+="市";
-        }else if(pro=="广西"){
+        }else if(pro==="广西"){
             pro+="壮族自治区";
-        }else if(pro=="新疆"){
+        }else if(pro==="新疆"){
             pro+="维吾尔自治区";
-        }else if(pro=="宁夏"){
+        }else if(pro==="宁夏"){
             pro+="回族自治区";
-        }else if(pro=="西藏"){
+        }else if(pro==="西藏"){
             pro+="藏族自治区";
         }else{
             pro+="省";
         }
-        $("input[name='myuniversity']").val(pro+" "+$(this).val());
+        input_university.val(pro+" "+$(this).val());
     });
 
     $(".a_school").click(function () {
         $(".show_school").show();
-        // $("*").not($(".show_school")).css('opacity',0.5);
     });
     /*show_school close button*/
     $("#show_school_btn_cls").click(function () {
@@ -256,18 +258,39 @@ $(document).ready(function () {
         $.each( window.area_university,function (info,data) {
             if(data.city === city) {//select the selected city
                 $.each(data.university , function (index,content) {
-                    var name=content.name;
                     $(".show_school_body_3").append("<p class='fl'><a href='javascript:void(0);' onclick='school_clicked(this)' name='"+content.name+"'>"+content.name+"</a></p>")
                 });
             }
         });
     });
 
-    $("#basic_info_1_btn").find("button:first-child").click(function () {
-       // // alert($(this).html());
-       // $(this).parents('.col-md-9').find('.form-group:not(:last-child) div input').attr('disabled',false);
-       //  $(this).parents('.col-md-9').find('.form-group:nth-child(5) div div select').attr('disabled',false);
-       // $(this).next('button').next('button').attr('disabled',true);
+    /*#basic_info_1_btn 3个button*/
+    $("#basic_info_1_btn").find('button').click(function () {
+        var value =$(this).html();
+        var input_all = $(this).parent().prevAll('.form-group:not(:first-child)').find('input');
+        switch (value){
+            case "修改资料":
+                input_all.attr('disabled',false);
+                $("#province").attr('disabled',false);
+                $("#school").attr('disabled',false);
+                $("textArea[name='des']").attr('disabled',false);
+                $(this).nextAll('button').attr('disabled',false);
+                $(this).parents('.col-md-9').find('.form-group:not(:last-child) div input').attr('disabled',false);
+                $(this).parents('.col-md-9').find('.form-group:nth-child(5) div div select').attr('disabled',false);
+                $(this).next('button').next('button').attr('disabled',true);
+                break;
+            case "放弃修改":
+                input_all.attr('disabled',true);
+                $("#province,#school").attr('disabled',true);
+                $("textArea").attr('disabled',true);
+                $(this).attr('disabled',true);
+                $(this).next('button').attr('disabled',true);
+                break;
+            case "提交":
+                break;
+            default:
+                break;
+        }
     });
 
 
@@ -317,8 +340,9 @@ $(document).ready(function () {
         /*header login state*/
 
         /*我按钮变成登录字样 然后去除下列ul*/
-        $("#login_btn").html('登录');
-        $("#login_btn").next('ul').addClass('fade');
+        var login_btn =$("#login_btn");
+        login_btn.html('登录');
+        login_btn.next('ul').addClass('fade');
         var str =
             '<h1>登录淘书斋</h1>' +
             '<hr>' +
@@ -363,27 +387,26 @@ $(document).ready(function () {
         $("#login").empty().append(str);
         var all_div = $(".main_body").find('div.tab-pane');
         $.each(all_div,function (info) {
-            if(info == 0){
+            if(info===0){
                 $(this).addClass('in active').removeClass('fade');
             }else{
                 $(this).addClass('fade').removeClass('in active');
             }
         });
-
-
     });
     /*判断登录与否*/
     $("input:submit[value='登录']").click(function () {
-        var str = $("#login").html();
+        var login = $("#login");
+        var str = login.html();
         var flag = true;
         /*
         *flag 为标志位
         * 后台判断登录与否
         **/
-        $("#login").empty().append('<h1 align="center">登录中...</h1>' +
-            '<p align="center"><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></p>')
+        login.empty().append('<h1 align="center">登录中...</h1>' +
+            '<p align="center"><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></p>');
         setTimeout(function () {
-            if(flag ==true){
+            if(flag===true){
                 var idList=['basic_info','book_management','book_sale_history','book_bought_history','login_history','account_evaluate','book_else'];
                 var list = $(".main_head ul li:not(:first-child)");
                 $.each(list,function (info) {
@@ -394,9 +417,9 @@ $(document).ready(function () {
                 $("#login").empty().append('<h1 align="center">登录成功</h1>');
                 $(".main_head ul li:nth-child(2)").addClass('active');
                 $("#basic_info").addClass('in active').removeClass('fade');
-                $("#login").addClass('fade').removeClass('in active');
+                login.addClass('fade').removeClass('in active');
                 $(".main_head ul li:first-child").removeClass('active').addClass('disabled').find('a').attr('href','#');
-            }else if(flag ==false){
+            }else if(flag===false){
                 $("#login").empty().append('<h1 align="center">登录失败</h1>' +
                     '<hr>' +
                     '<p align="center">正在返回登录界面<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></p>');
@@ -409,11 +432,11 @@ $(document).ready(function () {
     /*设置默认地址*/
     $("#basic_info_2").on("click",'button',function () {
        var value =$(this).val();
-      if(value == "edit_add"){
+      if(value === "edit_add"){
           swal("edit_add clicked");
-      }else if(value =="set_def"){
+      }else if(value === "set_def"){
           var def_panel = $(this).parents('div.list-group').find('div.panel.panel-primary');
-          if(def_panel.length == 1){
+          if(def_panel.length===1){
               def_panel.removeClass('panel-primary').addClass('panel-default');
               def_panel.find('div.panel-heading h4 a span').remove();
               var append_str = "<button class='btn btn-link' type='button' value='set_def'>设置默认</button>";
@@ -424,7 +447,7 @@ $(document).ready(function () {
           var str = panel.find('h4.panel-title a').html()+"<span class='fr badge'>默认地址</span>";
           panel.find('h4.panel-title a').html(str);
           $(this).remove();
-      }else if(value == "del_add") {
+      }else if(value==="del_add") {
           var obj = $(this).parents('.panel-group');
           swal({
               title:'淘书斋提醒',
@@ -432,13 +455,13 @@ $(document).ready(function () {
               type:'warning',
               showCancelButton: true,
               confirmButtonText: '确定',
-              cancelButtonText: '取消',
+              cancelButtonText: '取消'
           }).then(function (isconfirm) {
-              if(isconfirm == true){
+              if(isconfirm===true){
                   swal('淘书斋提醒','删除成功','success');
                   obj.remove();
                   address_refresh();
-              }else if(isconfirm == false){
+              }else if(isconfirm===false){
                   swal('淘书斋提醒','删除失败','error');
               }
           });
@@ -447,18 +470,23 @@ $(document).ready(function () {
     /*添加收货地址 btn click*/
     $("#add_ok").click(function () {
        //得到地址
-       var localaddress = $("#province2").val() +"&nbsp;"+ $("#city2").val() +"&nbsp;"+ $("#district2").val()
-           +"&nbsp;"+$(".add-more").find("input[type='text']:eq(1)").val();
-       var localusername = $(".add-more").find("input[type=text]:eq(0)").val();
-       var localusertel =$(".add-more").find("input[type='tel']").val();
-       var add_list = $("#basic_info_2").find('div.list-group div.panel-group');
-       var local_add_index =0;
-       if(add_list.length ==0){
+        var province2= $("#province2");
+        var city2=$("#city2");
+        var district2=$("#district2");
+        var add_more=$(".add-more");
+        var basic_info_2=$("#basic_info_2");
+        var localaddress = province2.val() +"&nbsp;"+ city2.val() +"&nbsp;"+ district2.val()
+           +"&nbsp;"+ add_more.find("input[type='text']:eq(1)").val();
+        var localusername =add_more.find("input[type=text]:eq(0)").val();
+        var localusertel =add_more.find("input[type='tel']").val();
+        var add_list = basic_info_2.find('div.list-group div.panel-group');
+        var local_add_index =0;
+        if(add_list.length ===0){
            local_add_index =1;
        }else{
             local_add_index = add_list.length+1;
        }
-       var str =
+        var str =
            "<div class='panel-group' id='add"+local_add_index+"'>" +
            "    <div class='panel panel-default'>" +
            "        <div class='panel-heading'>" +
@@ -495,55 +523,30 @@ $(document).ready(function () {
            "        </div>" +
            "    </div>" +
            "</div>";
-       $("#address_add_modal").modal('hide');//隐藏
-       $("#basic_info_2").find('div.list-group').append(str);//添加地址
-       swal('添加地址','成功','success');
-       $("#basic_info_2").find('div.list-group h3').remove();
-       $("#basic_info_2").find('div.list-group br').remove();
+        $("#address_add_modal").modal('hide');//隐藏
+        basic_info_2.find('div.list-group').append(str);//添加地址
+        swal('添加地址','成功','success');
+        basic_info_2.find('div.list-group h3').remove();
+        basic_info_2.find('div.list-group br').remove();
    });
-    /*#basic_info_1_btn 3个button*/
-    $("#basic_info_1_btn").find('button').click(function () {
-        var value =$(this).html();
-        switch (value){
-            case "修改资料":
-                var input_all = $(this).parent().prevAll('.form-group:not(:first-child)').find('input');
-                input_all.attr('disabled',false);
-                $("#province,#school").attr('disabled',false);
-                $("textArea").attr('disabled',false);
-                $(this).nextAll('button').attr('disabled',false);
-                break;
-            case "放弃修改":
-                var input_all = $(this).parent().prevAll('.form-group:not(:first-child)').find('input');
-                input_all.attr('disabled',true);
-                $("#province,#school").attr('disabled',true);
-                $("textArea").attr('disabled',true);
-                $(this).attr('disabled',true);
-                $(this).next('button').attr('disabled',true);
-                break;
-            case "提交":
-                break;
-            default:
-                break;
-        }
 
 
-   });
     // swal('Oops...', 'Something went wrong!', 'success');//echarts 绘图
     $.getJSON(window.JSONPATH+"book_his_chart.json",function (content) {
         var sale_his_line = echarts.init($("#sale_his_line")[0]);
         var sale_his_bar =echarts.init($("#sale_his_bar")[0]);
         var sale_his_pie =echarts.init($("#sale_his_pie")[0]);
         $.each(content,function (info,psr) {
-            if(psr.name == 1){
+            if(psr.name === "1"){
                 var data = psr.charts;
                 $.each(data,function (info,eachType) {
-                    if(eachType.types=="line"){
+                    if(eachType.types==="line"){
                         sale_his_line.setOption(eachType.options);
                     }
-                    if(eachType.types=="bar"){
+                    if(eachType.types==="bar"){
                         sale_his_bar.setOption(eachType.options);
                     }
-                    if(eachType.types=="pie"){
+                    if(eachType.types==="pie"){
                         sale_his_pie.setOption(eachType.options);
                     }
                 });
@@ -558,23 +561,7 @@ $(document).ready(function () {
        alert($(this).find('option:selected').text());
     });
 
-    $("#psw_new").on('input propertychange',function () {
-       var psw_new = $(this).val();
-       $(this).val(psw_new.trim());
-       if(psw_new.length<6 && psw_new.length>0){
-           $("#psw_strength_check").html('当前密码太弱');
-       }else if(psw_new.length>18){
-           $("#psw_strength_check").html('当前密码过长操出限制');
-       }else{
-           var strength = psw_strength_check(psw_new);
-           var str =
-               '<div class="col-md-4">弱</div>'+
-               '<div class="col-md-4">中</div>'+
-               '<div class="col-md-4">强</div>';
-           $("#psw_strength_check").empty().html(str);
-           Set_psw_strength(strength);
-       }
-    });
+
 
     $("#psw_again").on('input propertychange',function () {
        var psw_new = $("#psw_new").val().trim();
@@ -600,20 +587,36 @@ $(document).ready(function () {
            }
        }
        return false;
-    });
-    $("#psw_again").next('a.fa-close').click(function () {
-       $("#psw_again").val("");
+    }).next('a.fa-close').click(function () {
+       $(this).val("");
        $(this).hide();
        return false;
     });
 
-    /*密码可显示*/
-    $("#psw_new").next('a').click(function () {
+
+    $("#psw_new").on('input propertychange',function () {
+        var psw_new = $(this).val();
+        var psw_strength_check =$("#psw_strength_check");
+        $(this).val(psw_new.trim());
+        if(psw_new.length<6 && psw_new.length>0){
+            psw_strength_check.html('当前密码太弱');
+        }else if(psw_new.length>18){
+            psw_strength_check.html('当前密码过长操出限制');
+        }else{
+            var strength = Psw_Strength_Check(psw_new);
+            var str =
+                '<div class="col-md-4">弱</div>'+
+                '<div class="col-md-4">中</div>'+
+                '<div class="col-md-4">强</div>';
+            psw_strength_check.empty().html(str);
+            Set_psw_strength(strength);
+        }
+    }).next('a').click(function () {    /*密码可显示*/
         var type1 = $(this).prev('input').attr('type');
-        var type = type1=='password' ? 'text':'password';
+        var type = (type1==="password") ? "text":"password";
         $(this).prev('input').attr('type',type);
         var flag = $(this).hasClass('fa-eye');
-        if(flag ==true) {
+        if(flag ===true) {
             $(this).removeClass('fa-eye').addClass('fa-eye-slash').css({
                 color: "black"
             });
@@ -624,7 +627,5 @@ $(document).ready(function () {
             });
         }
     });
-
-
 
 });
