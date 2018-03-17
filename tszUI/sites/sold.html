@@ -24,10 +24,10 @@
 </head>
 <body>
     <header>
-    <div class="header-school">
-        <i class="fa fa-location-arrow fa-lg" aria-hidden="true"></i>
-        <a href="javascript:void(0)" class="a_school" >&nbsp;[&nbsp;所有学校&nbsp;]</a>
-        <div class="show_school"  >
+        <div class="header-school">
+            <i class="fa fa-location-arrow fa-lg" aria-hidden="true"></i>
+            <a href="javascript:void(0)" class="a_school" >&nbsp;[&nbsp;所有学校&nbsp;]</a>
+            <div class="show_school">
             <div class="show_school_head">
                 <p class="fl">请选择学校</p>
                 <button class="btn btn-sm fa fa-close fr" id="show_school_btn_cls"></button>
@@ -74,18 +74,37 @@
                 </div>
             </div>
         </div>
-        <div class="header_login fr">
-            <li class="fl"><a href="sites/login.html"  >登录</a>&nbsp;|</li>
-            <li class="fl"><a href="sites/sold.html" target="_blank">出售</a>&nbsp;|</li>
-            <li class="fl"><a href="sites/register.html" style="color: orange" target="_blank">立即注册</a>&nbsp;|</li>
-            <li class="fl"><a href="sites/downloadApp.html" class="fa fa-mobile-phone fa-1x" target="_blank">下载APP</a></li>
+            <div class="header_login fr">
+            <li class="fl dropdown">
+                <a href="login.html" id="login_btn" data-toggle="dropdown">登录</a>&nbsp;|
+                <ul class="dropdown-menu fade" role="menu" aria-labelledby="login_btn">
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="#">我的主页</a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="./cart.html">我的购物车</a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="#">我的收藏</a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="#">修改密码</a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="#">退出</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="fl"><a href="./sold.html" target="_blank">出售</a>&nbsp;|</li>
+            <li class="fl"><a href="./register.html" style="color: orange" target="_blank">立即注册</a>&nbsp;|</li>
+            <li class="fl"><a href="./downloadApp.html" class="fa fa-mobile-phone fa-1x" target="_blank">下载APP</a></li>
         </div>
-    </div>
-</header>
+        </div>
+    </header>
     <div class="main">
         <div class="top fl">
             <div class="scanner_view_logo fl">
-                <a href="../../index.html">
+                <a href="../index.html">
                     <img src="../dist/res/logo.png" alt="未能正确加载图片" width="180" height="64">
                 </a>
             </div>

@@ -75,7 +75,26 @@
                     </div>
                 </div>
                 <div class="header_login fr">
-                    <li class="fl"><a href="sites/login.html"  >登录</a>&nbsp;|</li>
+                    <li class="fl dropdown">
+                        <a href="./sites/login.html" id="login_btn" data-toggle="dropdown">登录</a>&nbsp;|
+                        <ul class="dropdown-menu fade" role="menu" aria-labelledby="login_btn">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">我的主页</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="./cart.html">我的购物车</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">我的收藏</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">修改密码</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">退出</a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="fl"><a href="sites/sold.html" target="_blank">出售</a>&nbsp;|</li>
                     <li class="fl"><a href="sites/register.html" style="color: orange" target="_blank">立即注册</a>&nbsp;|</li>
                     <li class="fl"><a href="sites/downloadApp.html" class="fa fa-mobile-phone fa-1x" target="_blank">下载APP</a></li>
@@ -177,16 +196,16 @@
                 <div class="book-list-right fl">
                     <div class="fl book-recommend">
                         <div class="book-recommend-head fl">
-                            <p class="fl">好书推荐&nbsp;<i class="fa fa-bookmark"></i></p>
-                            <a href="javascript:void(0)" class="fr">更多<i class="fa fa-angle-right"></i></a>
+                            <p class="fl" name="好书推荐">好书推荐&nbsp;<i class="fa fa-bookmark"></i></p>
+                            <a href="javascript:void(0)" class="fr" name="click_more">更多<i class="fa fa-angle-right"></i></a>
                         </div>
                         <div class="book-recommend-body fl">
                         </div>
                     </div>
                     <div class="fl book-discount">
                         <div class="fl book-discount-head">
-                            <p class="fl">特惠图书&nbsp;<i class="fa fa-book" style="color: lightseagreen;"></i></p>
-                            <a href="javascript:void(0)" class="fr">更多<i class="fa fa-angle-right"></i></a>
+                            <p class="fl" name="特惠图书">特惠图书&nbsp;<i class="fa fa-book" style="color: lightseagreen;"></i></p>
+                            <a href="javascript:void(0)" class="fr" name="click_more">更多<i class="fa fa-angle-right"></i></a>
                         </div>
                         <div class="fl book-discount-body">
                             <ul class="fl book-discount-body-list"></ul>
@@ -194,8 +213,8 @@
                     </div>
                     <div class="fl book-new-comment">
                         <div class="book-new-comment-head fl">
-                            <p class="fl">最新评论&nbsp;<i class="fa fa-comment"></i></p>
-                            <a href="javascript:void(0)" class="fr">更多<i class="fa fa-angle-right"></i></a>
+                            <p class="fl" name="最新评论">最新评论&nbsp;<i class="fa fa-comment"></i></p>
+                            <a href="javascript:void(0)" class="fr" name="click_more">更多<i class="fa fa-angle-right"></i></a>
                         </div>
                         <div class="book-new-comment-body fl">
                             <ul class="fl book-new-comment-body-list"></ul>
@@ -203,8 +222,8 @@
                     </div>
                     <div class="fl book-popular">
                         <div class="book-popular-head">
-                            <p class="fl">最受欢迎&nbsp;<i class="fa fa-renren"></i></p>
-                            <a href="javascript:void(0)" class="fr">更多<i class="fa fa-angle-right"></i></a>
+                            <p class="fl" name="最受欢迎">最受欢迎&nbsp;<i class="fa fa-renren"></i></p>
+                            <a href="javascript:void(0)" class="fr" name="click_more">更多<i class="fa fa-angle-right"></i></a>
                         </div>
                         <div class="book-popular-body fl">
                             <ul class="book-popular-body-list"></ul>
@@ -245,6 +264,5 @@
                 <i class="fa fa-phone-square fa-2x"></i>
             </div>
         </div>
-        <div class="txt">asdas</div>
     </body>
  </html>

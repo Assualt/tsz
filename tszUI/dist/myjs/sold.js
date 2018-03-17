@@ -174,8 +174,21 @@ function Get_Page_Max_Num() {
 function Get_Page_Sel_Num() {
     return $("#page_tools").find("li:not(:first-child,:last-child).active").find('a').html();
 }
+function Init() {
+    var login_status=sessionStorage['Login_ok'];
+    var status =sessionStorage['status'];
+    if(login_status ==='true' && status ==='success'){
+        var login_btn = $("#login_btn")
+        login_btn.html('我');
+        login_btn.next('ul').removeClass('fade');
+    }else if(login_status ==='false'){
+        alert(2);
+    }
 
+}
 $(document).ready(function () {
+    Init();
+
     window.JSONPATH="../dist/res/json/";
     /*define the json for area_university*/
     $.getJSON(window.JSONPATH+"area_university.json",function (content) {
@@ -370,7 +383,7 @@ $(document).ready(function () {
         page_tools_action(2,"prev");
         return false;
     });
-    $("#page_tools,#page_tools_1").find("li:last-child a").click(function () {
+    $("#page_tools,#page_tools_1").find("li :last-child a").click(function () {
         page_tools_action(2,"next");
         return false;
     });
@@ -407,5 +420,16 @@ $(document).ready(function () {
     });
 
     window.setInterval(helper_display,1000);
+    /*退出*/
+    $("#login_btn").click(function () {
+        var text = $(this).html();
+        if(text === '登录'){
+            window.location.href='login.html';
+        }
+    }).next('ul').find('li:last-child a').click(function () {
+        sessionStorage['Login_ok']='';
+        $("#login_btn").html('登录');
+        $(this).parents('ul.dropdown-menu').addClass('fade');
+    });
 
 });

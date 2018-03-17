@@ -3,8 +3,9 @@
  **/
 /*slide left or right*/
 function slide(a) {
-    var path = $("#slide_img")[0].src;
-    var index = $("#slide_img").attr('value');
+    var slide_img = $("#slide_img");
+    var path = slide_img[0].src;
+    var index = slide_img.attr('value');
     if (a === "right") {//right
         if (index === '2') {
             path = path.substring(0, path.indexOf('_') + 1) + '0' + ".jpg";
@@ -26,17 +27,18 @@ function slide(a) {
     }else{
         path = path.substring(0,path.indexOf('_')+1)+a+".jpg";
     }
-    $("#slide_img").attr('src',path);
-    $("#slide_img").attr('value',index);
+    slide_img.attr('src',path);
+    slide_img.attr('value',index);
+    var slider_sel_btn =$(".slider_sel_btn");
     if(index===0) {
-        $(".slider_sel_btn span:not(0)").css("opacity",1);
-        $(".slider_sel_btn span:eq(0)").css("opacity",0.4);
+        slider_sel_btn.find("span:not(0)").css("opacity",1);
+        slider_sel_btn.find("span:eq(0)").css("opacity",0.4);
     }else if(index===1){
-        $(".slider_sel_btn span:not(1)").css("opacity",1);
-        $(".slider_sel_btn span:eq(1)").css("opacity",0.4);
+        slider_sel_btn.find("span:not(1)").css("opacity",1);
+        slider_sel_btn.find("span:eq(1)").css("opacity",0.4);
     }else if(index===2){
-        $(".slider_sel_btn span:not(2)").css("opacity",1);
-        $(".slider_sel_btn span:eq(2)").css("opacity",0.4);
+        slider_sel_btn.find("span:not(2)").css("opacity",1);
+        slider_sel_btn.find("span:eq(2)").css("opacity",0.4);
     }
 
 }
@@ -46,10 +48,21 @@ function school_clicked(a) {
     $(".a_school").text('[  '+obj.attr('name') +'  ]');
     $(".show_school").hide(100);
 }
-
+function Init() {
+    var login_status=sessionStorage['Login_ok'];
+    if(login_status ==='true'){
+        var login_btn = $("#login_btn")
+        login_btn.html('我');
+        login_btn.next('ul').removeClass('fade');
+    }else if(login_status ==='false'){
+        alert(2);
+    }
+}
 
 
 $(document).ready(function () {
+    Init();
+
     window.JSONPATH="dist/res/json/";
     /*define the json for area_university*/
     $.getJSON(window.JSONPATH+"area_university.json",function (content) {
@@ -88,10 +101,11 @@ $(document).ready(function () {
               });
           }
           if(data.name ==="hot-person"){/*define the json for hot-person*/
-              Pcolor=['rgb(245,69,69)','rgb(255,133,71)','rgb(255,172,56)'];
-              $(".hot-person-list").empty();
+              var Pcolor=['rgb(245,69,69)','rgb(255,133,71)','rgb(255,172,56)'];
+              var hot_person_list = $(".hot-person-list");
+              hot_person_list.empty();
               $.each(data.value,function (info,cont) {
-                  var a=parseInt(info)+1;
+                  // var a=parseInt(info)+1;
                   var string =
                       "<li>" +
                       "  <span>" +
@@ -107,11 +121,12 @@ $(document).ready(function () {
                   else
                       string+="<span class='badge fr' style='background:rgb(142,185,245);margin-right: 10px;'>&nbsp;"+cont.count+"&nbsp;</span></li>";
                  // alert(string);
-                  $(".hot-person-list").append(string);
+                  hot_person_list.append(string);
               });
           }
           if(data.name ==="most-focus"){/*define the json for most -focus*/
-              $(".most-focus-list").empty();
+              var most_focus_list = $(".most-focus-list");
+              most_focus_list.empty();
               $.each(data.value,function (info,cont) {
                  var string=
                      "<li class='hvr-grow'>" +
@@ -120,11 +135,12 @@ $(document).ready(function () {
                      "  </a>" +
                      "</li>";
                  // alert(string);
-                  $(".most-focus-list").append(string);
+                  most_focus_list.append(string);
               });
           }
           if(data.name ==="new-register"){
-              $(".new-register-list").empty();
+              var new_register_list = $(".new-register-list");
+              new_register_list.empty();
               $.each(data.value,function (info,cont) {
                   var string =
                       "<li class='hvr-grow'>" +
@@ -133,7 +149,7 @@ $(document).ready(function () {
                       "  </a>" +
                       "</li>";
                   // alert(string);
-                  $(".new-register-list").append(string);
+                  new_register_list.append(string);
               });
           }
        });
@@ -157,7 +173,7 @@ $(document).ready(function () {
               "             <del class='fa fa-yen'>" +data.price_before+ "</del>"+
               "         </p>"+
               "     </div>"+
-              "</div>"
+              "</div>";
            // alert(string);
            $(".book-recommend-body").append(string);
        });
@@ -165,7 +181,8 @@ $(document).ready(function () {
     /*define the json for discount book*/
     $.getJSON(window.JSONPATH+"book-discount.json",function (content) {
         window.book_discout=content;
-        $(".book-discount-body-list").empty();
+        var book_discount_body_list = $(".book-discount-body-list");
+        book_discount_body_list.empty();
         var string ="";
         $.each(content,function (info,data) {
             string +=
@@ -184,12 +201,13 @@ $(document).ready(function () {
                 "     </div>"+
                 "</li>";
         });
-        $(".book-discount-body-list").append(string);
+        book_discount_body_list.append(string);
     });
     /*define the json for new comment book*/
     $.getJSON(window.JSONPATH+"book-new-comment.json",function (content) {
        window.book_new_comment = content;
-       $(".book-new-comment-body-list").empty();
+       var book_new_comment_body_list =$(".book-new-comment-body-list");
+       book_new_comment_body_list.empty();
        var string ="";
        $.each(content,function (info,data) {
            string +=
@@ -208,13 +226,14 @@ $(document).ready(function () {
                "     </div>"+
                "</li>";
        });
-       $(".book-new-comment-body-list").append(string);
+       book_new_comment_body_list.append(string);
     });
 
     /*define the json for new comment book*/
     $.getJSON(window.JSONPATH+"book-popular.json",function (content) {
         window.book_new_comment = content;
-        $(".book-popular-body-list").empty();
+        var book_popular_body_list = $(".book-popular-body-list");
+        book_popular_body_list.empty();
         var string ="";
         $.each(content,function (info,data) {
             string +=
@@ -233,13 +252,13 @@ $(document).ready(function () {
                 "     </div>"+
                 "</li>";
         });
-        $(".book-popular-body-list").append(string);
+        book_popular_body_list.append(string);
     });
 
     /*hover click*/
-    $(".slider_sel_btn span").on("click mouseover",function () {
+    $(".slider_sel_btn").find("span").on("click mouseover",function () {
         $(this).css("opacity",0.4);
-        $(".slider_sel_btn span").not(this).css("opacity",1);
+        $(".slider_sel_btn").find("span").not(this).css("opacity",1);
         slide($(this).attr("value"));
     });
     /*show the school*/
@@ -251,22 +270,22 @@ $(document).ready(function () {
         $(".show_school").hide();
         $("#body").css("background-color","white");
     });
-    $(".show_school_body_2 a").click(function () {
+    $(".show_school_body_2").find("a").click(function () {
         var city=$(this).text();//get the city
         $(this).css({
             "background-color":"rgb(0,168,155)",
             "color":"white"
         });
-        $(".show_school_body_2 a").not(this).css({
+        $(".show_school_body_2").find("a").not(this).css({
             "background-color":"white",
             "color":"rgb(0,168,155)"
         });
-        $(".show_school_body_3").empty();
+        var show_school_body_3 = $(".show_school_body_3");
+        show_school_body_3.empty();
         $.each( window.area_university,function (info,data) {
             if(data.city === city) {//select the selected city
                 $.each(data.university , function (index,content) {
-                    var name=content.name;
-                    $(".show_school_body_3").append("<p class='fl'><a href='javascript:void(0);' onclick='school_clicked(this)' name='"+content.name+"'>"+content.name+"</a></p>")
+                    show_school_body_3.append("<p class='fl'><a href='javascript:void(0);' onclick='school_clicked(this)' name='"+content.name+"'>"+content.name+"</a></p>");
                 });
             }
         });
@@ -280,25 +299,40 @@ $(document).ready(function () {
        slide("right")
     });
     /*time task*/
-    window.setInterval ("slide('right')", 5000 );
+    window.setInterval (slide('right'), 5000 );
     /*click to join us*/
     $("#joinus").click(function () {
         window.location.href="sites/login.html";
     });
 
-    $(".show_school_body_3 p").click(function () {
+    $(".show_school_body_3").find("p").click(function () {
        alert($(this).attr('name'));
     });
 
-    $(".header_login li:first-child a").click(function () {
+    $(".header_login").find("li:first-child a").click(function () {
         var storage =  window.localStorage;
         storage['username']= '侯鑫';
     });
 
     /*more books btn click*/
-    $(".book-recommend-head a").click(function () {
-       alert(1);
+    $("a[name='click_more']").click(function () {
 
+       var book_title_name = $(this).prev('p');
+       var keyword = book_title_name.attr('name');
+       $.ajax({
+           url:"./sites/login.html",
+           success:function (data,status) {
+               sessionStorage['Login_ok']='true';
+               sessionStorage['status']=status;
+               window.location.href = "./sites/sold.html?"+"keyword="+keyword;
+           },
+           error:function (data,status) {
+               sessionStorage['status']=status;
+               window.location.href="./sites/error.html";
+           }
+       });
+
+        alert(keyword);
     });
 
     $(".helper-item:eq(0)").mouseenter(function () {
@@ -337,4 +371,15 @@ $(document).ready(function () {
         $(this).html("<i class='fa fa-phone-square fa-2x'></i>");
     });
 
+    $("#login_btn").click(function () {
+        var text = $(this).html();
+        var href= $(this).attr('href');
+        if(text === '登录'){
+            window.location.href= href;
+        }
+    }).next('ul').find('li:last-child a').click(function () {
+        sessionStorage['Login_ok']='';
+        $("#login_btn").html('登录');
+        $(this).parents('ul.dropdown-menu').addClass('fade');
+    });;
 });

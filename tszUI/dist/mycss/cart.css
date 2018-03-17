@@ -133,7 +133,7 @@ header{
     /*float: left;*/
     width: 33%;
     height: 30px;
-    padding: 0px 0 5px 5px;
+    padding: 0 0 5px 5px;
 }
 .show_school_body_3 p a{
     padding: 2px 4px 2px 4px;
@@ -248,7 +248,7 @@ ul.dropdown-menu li a {
 }
 .total{
     width: 20%;
-    padding: 15px 0 0 0px;
+    padding: 15px 0 0 0;
     text-align: center;
     margin-top: 2px;
     margin-left: 65%;
@@ -749,7 +749,7 @@ a.carousel-control:last-child{
 .helper-item{
     width: 100%;
     height: 24%;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     text-align: center;
     padding: 12px;
     font-size: 14px;
