@@ -279,8 +279,67 @@ function Exit() {
         });
     }
 }
+//显示图书管理 当前的本书选择
+function book_management_show_tools(){
+    var book_show_number = $("#sel_num_show").val();
+    var str=
+        '<thead align="center">'+
+        '<tr>'+
+        '   <th>编号</th>'+
+        '   <th>书店ID</th>'+
+        '   <th>店名</th>'+
+        '   <th>书名</th>'+
+        '   <th>图片</th>'+
+        '   <th>广告词</th>'+
+        '   <th>作者</th>'+
+        '   <th>出版社</th>'+
+        '   <th>版次</th>'+
+        '   <th>单价/原价</th>'+
+        '   <th>库存</th>'+
+        '   <th>操作</th>'+
+        '   <th>其他</th>'+
+        '</tr>'+
+        '</thead>';
+    str +="<tbody><tr>";
+
+    $.each(window.user_book,function (info,data) {
+        if(data.name === "sunshine" && data.name_id === "1234561"){
+            var books = data.books;
+            $.each(books,function (info,book) {
+                if(info < book_show_number || !data) {
+                      str +=
+                          "<td>" + book.book_id + "</td>" +
+                          "<td>" + book.book_store_id + "</td>" +
+                          "<td>" + book.book_store_name + "</td>" +
+                          "<td>" + book.book_name + "</td>" +
+                          "<td>" +
+                          "<img src='" + book.book_img_url + "' alt='未能加载正常图片' width='64' height='80'>" +
+                          "</td>" +
+                          "<td>" + book.book_ads + "</td>" +
+                          "<td>" + book.book_author + "</td>" +
+                          "<td>" + book.book_publish + "</td>" +
+                          "<td>" + book.book_edition + "</td>" +
+                          "<td>" +
+                          "  <strong>&yen;" + book.book_price_now + "</strong><br><br>" +
+                          "  <del>&yen;" + book.book_price_before + "</del>" +
+                          "</td>" +
+                          "<td><br>" + book.book_left + "</td>" +
+                          "<td>" +
+                          "  <a href='javascript:void(0)' type='button' class='btn btn-link'>删除</a>" +
+                          "  <a href='javascript:void(0)' type='button' class='btn btn-link'>修改</a>" +
+                          "</td>" +
+                          "<td>" + book.book_else + "</td>" +
+                          "</tr>";
+                  }
+            });
+        }
+        str+="<tbody>";
+        $("#show_in_table").find('table').empty().append(str);
+    });
+}
 
 $(document).ready(function () {
+
 
     Draw_yzm_pic("1234");
     $(".yzm").click(function () {
@@ -304,6 +363,12 @@ $(document).ready(function () {
     });
 
     window.JSONPATH="../dist/res/json/";
+
+    //book-management books show
+    $.getJSON(window.JSONPATH+"user-book.json",function (content) {
+        window.user_book = content;
+        book_management_show_tools();
+    });
 
     /*define the json for area_university*/
     $.getJSON(window.JSONPATH+"area_university.json",function (content) {
@@ -700,4 +765,13 @@ $(document).ready(function () {
           }
        });
     });
+
+
+    //book_mangement 选择本书显示
+    $("#sel_num_show").change(function () {
+        book_management_show_tools();
+    });
+
 });
+
+

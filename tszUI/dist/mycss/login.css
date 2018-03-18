@@ -250,7 +250,7 @@ ul.dropdown-menu li a{
     height: 100%;
     /*border: 1px solid red ;*/
     max-height: 900px;
-    overflow: auto;
+    overflow-y: scroll;
     background: white;
 }
 .main_head{
@@ -344,19 +344,50 @@ fieldset{
     width: 100%;
     height:auto;
 }
-#show_in_table table{
+#show_in_table{
     width: 100%;
-    overflow-x: scroll;
+}
+#show_in_table table{
+    width: 1000px;
     height: auto;
 }
+
+thead{
+    flex: 0;
+}
+thead tr th{
+    width: 10%;
+    text-align: center;
+}
+tbody tr td{
+    width: 10%;
+    height: 30px;
+    text-align: center;
+}
+
 #show_in_list ul {
     width: 100%;
     padding: 0;
 }
 #show_in_list ul li{
     width: 100%;
- /**/   height: 150px;
+    height: 140px;
+    border: 1px solid #dedede;
     /*border: 1px solid red;*/
+    background: rgb(245,245,245);
+    margin-top: 5px;
+}
+.book_list_info div{
+    padding-top: 10px;
+    text-align: center;
+}
+
+#book_management_2{
+    width: 100%;
+    overflow: visible;
+}
+#book_management_2 fieldset{
+    width: 100%;
 }
 
 #book_sale_history{
