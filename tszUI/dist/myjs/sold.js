@@ -168,7 +168,9 @@ function Page_content_refresh(pageNum) {
 function Get_Page_Max_Num() {
     var len =window.all_book.length;
     var Max_page =(len%12)===0 ? (len/12) : (len/12+1).toFixed(0);
+    Max_page = Max_page- 1;
     $(".page_total").find("p:last-child").html('&nbsp;共&nbsp;'+Max_page+'页');
+    // alert(Max_page);
     return Max_page;
 }
 function Get_Page_Sel_Num() {
@@ -184,7 +186,6 @@ function Init() {
     }else if(login_status ==='false'){
         alert(2);
     }
-
 }
 $(document).ready(function () {
     Init();
@@ -233,8 +234,11 @@ $(document).ready(function () {
         });
         return false;
     });
-    /*show list*/
-    $.getJSON(window.JSONPATH +"all_book.json",function (content) {
+    $.getJSON(window.JSONPATH+"test.json",function (content) {
+
+    });
+    // /*show list    all_book */
+    $.getJSON(window.JSONPATH +"test.json",function (content) {
         window.all_book = content;
         // var str = "";
         Page_content_refresh(1);
@@ -383,7 +387,7 @@ $(document).ready(function () {
         page_tools_action(2,"prev");
         return false;
     });
-    $("#page_tools,#page_tools_1").find("li :last-child a").click(function () {
+    $("#page_tools,#page_tools_1").find("li:last-child a").click(function () {
         page_tools_action(2,"next");
         return false;
     });
@@ -431,5 +435,4 @@ $(document).ready(function () {
         $("#login_btn").html('登录');
         $(this).parents('ul.dropdown-menu').addClass('fade');
     });
-
 });
