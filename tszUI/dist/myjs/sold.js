@@ -21,15 +21,15 @@ function page_refresh(flag) {
     return false;
 }
 function Set_page_active(value) {
-    var page_tools =$("#page_tools li:not(:first-child,:last-child)");
+    var page_tools =$("#page_tools").find("li:not(:first-child,:last-child)");
     $.each(page_tools,function () {
-        if($(this).find('a').html() ==value){
+        if($(this).find('a').html() == value){
             $(this).addClass('active');
         }else{
             $(this).removeClass('active');
         }
     });
-    var page_tools_1 =$("#page_tools_1 li:not(:first-child,:last-child)");
+    var page_tools_1 =$("#page_tools_1").find("li:not(:first-child,:last-child)");
     $.each(page_tools_1,function () {
         if($(this).find('a').html() ==value){
             $(this).addClass('active');
@@ -40,14 +40,14 @@ function Set_page_active(value) {
     Page_content_refresh(value);
     $(".page_total p:first-child").html('当前第'+value+'页');
     // alert(page_tools.length+" "+page_tools_1.length);
-    return false;
 }
 function page_tools_action(flag,value) {
     var page_tools =$("#page_tools");
     var val;
     var LocalMaxPage = page_tools.find("li:last-child").prev('li').find('a').html();
     var LocalMinPage = page_tools.find("li:first-child").next('li').find('a').html();
-    // alert(LocalMaxPage+" "+LocalMinPage);
+    var Max_page = Get_Page_Max_Num();
+    $(".page_total").find("p:last-child").html('&nbsp;共&nbsp;'+Max_page+'页');
     if(flag ===1){//page_tools clicked
         Set_page_active(value);
     }else if(flag === 2){//page_tools_1 clicked
@@ -58,24 +58,19 @@ function page_tools_action(flag,value) {
             }else{
                 val--;
                 if(val<LocalMinPage){
-                    // alert(val+" "+LocalMinPage);
                     page_refresh(-1);
                     Set_page_active(val);
                 }else {
                     Set_page_active(val);
                 }
             }
-
         }else if(value === "next"){
             val = parseInt(page_tools.find("li.active a").html());
-            var Max_page =Get_Page_Max_Num();
-            // alert("Max_page"+Max_page);
             if(val >= Max_page){
                 alert("最大页数,无法向后翻页");
             }else{
                 val++;
                 if(val >LocalMaxPage){
-                    // alert(val+" "+LocalMaxPage);
                     page_refresh(1);
                     Set_page_active(val);
                 }else {
@@ -168,9 +163,7 @@ function Page_content_refresh(pageNum) {
 function Get_Page_Max_Num() {
     var len =window.all_book.length;
     var Max_page =(len%12)===0 ? (len/12) : (len/12+1).toFixed(0);
-    Max_page = Max_page- 1;
     $(".page_total").find("p:last-child").html('&nbsp;共&nbsp;'+Max_page+'页');
-    // alert(Max_page);
     return Max_page;
 }
 function Get_Page_Sel_Num() {
@@ -180,7 +173,7 @@ function Init() {
     var login_status=sessionStorage['Login_ok'];
     var status =sessionStorage['status'];
     if(login_status ==='true' && status ==='success'){
-        var login_btn = $("#login_btn")
+        var login_btn = $("#login_btn");
         login_btn.html('我');
         login_btn.next('ul').removeClass('fade');
     }else if(login_status ==='false'){
@@ -234,11 +227,8 @@ $(document).ready(function () {
         });
         return false;
     });
-    $.getJSON(window.JSONPATH+"test.json",function (content) {
-
-    });
     // /*show list    all_book */
-    $.getJSON(window.JSONPATH +"test.json",function (content) {
+    $.getJSON(window.JSONPATH +"all_book.json",function (content) {
         window.all_book = content;
         // var str = "";
         Page_content_refresh(1);

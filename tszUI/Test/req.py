@@ -3,7 +3,7 @@ import re
 
 myurl = 'http://www.jiushujie.com'
 pattern = '"http://*.*' + '.jpg" '
-def download_pictue(url,pattern,path):   
+def download_pictue(url, pattern, path):
     try:
         res = requests.get(myurl)
         html = res.text.encode('utf-8')
@@ -15,11 +15,11 @@ def download_pictue(url,pattern,path):
                 res = requests.get(imgurl.strip())
                 with open(imgname, 'wb+') as file:
                     file.write(res.content)
-                print('the ',imgname,' download successfully')
+                print('the ', imgname, ' download successfully')
             except:
-                print('the ',imgname,' failed ')
+                print('the ', imgname, ' failed ')
     except:
-        print("can't ",'get resource')
+        print("can't ", 'get resource')
 
 
 download_pictue(myurl, pattern, 'F:/MyFile/TaoShuZhai/dist/res')

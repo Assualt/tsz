@@ -301,12 +301,17 @@ function book_management_show_tools(){
         '</tr>'+
         '</thead>';
     str +="<tbody><tr>";
-
+    var book_store_name ='';
+    var book_store_id ='';
+    var str1 = '';
+    var str2 = '';
     $.each(window.user_book,function (info,data) {
         if(data.name === "sunshine" && data.name_id === "1234561"){
             var books = data.books;
             $.each(books,function (info,book) {
                 if(info < book_show_number || !data) {
+
+                    var discout = (parseFloat(book.book_price_now) / parseFloat(book.book_price_before)).toFixed(2) * 10;
                       str +=
                           "<td>" + book.book_id + "</td>" +
                           "<td>" + book.book_store_id + "</td>" +
@@ -330,13 +335,68 @@ function book_management_show_tools(){
                           "</td>" +
                           "<td>" + book.book_else + "</td>" +
                           "</tr>";
+                      book_store_name = book.book_store_name;
+                      book_store_id = book.book_store_id;
+
+                      str1 +=
+                          '<li>' +
+                          ' <div class="book_list_info">' +
+                          '     <div class="fl book_list_info_left">' +
+                          '         <img src="'+book.book_img_url+' "alt="未能加载正常图片" width="120" height="140" class="img-rounded">' +
+                          '     </div>' +
+                          '     <div class="fl book_list_info_right">' +
+                          '         <div class="list_info_1">' +
+                          '             <a href="#" title="'+book.book_ads+'">'+book.book_ads+'</a>' +
+                          '         </div>' +
+                          '         <div class="list_info_2">' +
+                          '             <h4 class="fl">&thetav;</h4>' +
+                          '             <div class="badge fl"><a href>励志</a></div>' +
+                          '             <div class="badge fl"><a href>青春</a></div>' +
+                          '             <div class="badge fl"><a href>励志</a></div>' +
+                          '             <p class="fl info_price">' +
+                          '                 <strong>&yen;&nbsp;'+book.book_price_now+'</strong>' +
+                          '             </p>' +
+                          '             <del class="fl info_price_before">&yen;&nbsp;'+book.book_price_before +'</del>' +
+                          '             <p class="fl info_price_dis">'+discout+'折</p>' +
+                          '             <br>' +
+                          '         </div>' +
+                          '         <div class="list_info_3">' +
+                          '             &nbsp;&nbsp;[中]' +
+                          '             &sol; 作者:<a href="#">'+book.book_author+'<a>' +
+                          '             &sol; 上架时间:2018.3.14' +
+                          '             &sol; '+ book.book_publish +
+                          '             &sol; '+book.book_edition +
+                          '         </div>' +
+                          '         <div class="list_info_4">' +
+                          '             &nbsp;&nbsp;图书编号:'+ book.book_id +
+                          '             &sol; 余量('+book.book_left+')' +
+                          '             &sol; 描述 '+book.book_else.substring(0,10)+"……" +
+                          '         </div>' +
+                          '         <div class="list_info_5">' +
+                          '             <a href="#" class="btn btn-warning">删除</a>' +
+                          '             <a href="#" class="btn btn-danger">修改</a>' +
+                          '         </div>' +
+                          '     </div>' +
+                          ' </div>' +
+                          '</li>';
                   }
+
             });
         }
+        str2 =
+            '<h4 class="fl col-md-2">店&nbsp;名&nbsp;</h4>'+
+            '<h4 class="fl col-md-10">' +
+            '<p class="fl">' + '&rarrlp;&nbsp;'+
+            '<a href="#">' + book_store_name +'(ID:'+ book_store_id +') </a>' +
+            '&nbsp;&larrlp; </p></h4><ul>' + str1  + '</ul>';
         str+="<tbody>";
         $("#show_in_table").find('table').empty().append(str);
+        $("#show_in_list").empty().append(str2);
+
     });
 }
+
+
 
 $(document).ready(function () {
 
@@ -348,7 +408,6 @@ $(document).ready(function () {
         for(var i=0;i<4;i++)
              txt +=str[RandNum(0,str.length)];
         Draw_yzm_pic(txt);
-
     });
 
     $("#yzm").on('input propertychange',function () {
@@ -765,7 +824,6 @@ $(document).ready(function () {
           }
        });
     });
-
 
     //book_mangement 选择本书显示
     $("#sel_num_show").change(function () {
