@@ -196,14 +196,15 @@ function LoginIN() {
         }
     },2000);
 
-    var items = $(".more_list").find('li:not(:last-child)');
+    var more_list = $(".more_list");
+    var items = more_list.find('li:not(:last-child)');
 
     $.each(items,function (info) {
         if(info!=items.length) {
             $(this).find('a').attr('href', '#' + idList[info]);
         }
     });
-    $(".more_list").find('li:first-child').css({
+    more_list.find('li:first-child').css({
         'background-color':'rgb(245,245,245)'
     });
 }
@@ -279,9 +280,34 @@ function Exit() {
         });
     }
 }
-//显示图书管理 当前的本书选择
-function book_management_show_tools(){
-    var book_show_number = $("#sel_num_show").val();
+
+
+//更新pager 标签
+function book_management_update_pagers(flag){
+    var book_pager = $("#book_management_pager");
+    var min = book_pager.find('li:eq(1)').attr('value');
+    var max = book_pager.find('li:eq(3)').attr('value');
+    alert(min+" " + max);
+}
+// 显示图书管理 当前的本书选择
+// page_num 为当前页数 start 为当开始索引数  end 为索引终点
+function book_management_show_tools(page_index){
+    book_management_update_pagers("f");
+
+    var book_show_number = parseInt($("#sel_num_show").val());
+    var start;
+    var ends;
+    if(page_index === "prev"){
+        // alert(1);
+        start = 0;
+    }else if(page_index === "next"){
+        // alert(2);
+        start = 0;
+    }else {
+        start = book_show_number * parseInt(page_index - 1);
+    }
+    ends =start + book_show_number -1;
+    // alert("start"+ start +"  "+"ends"+ends);
     var str=
         '<thead align="center">'+
         '<tr>'+
@@ -309,7 +335,7 @@ function book_management_show_tools(){
         if(data.name === "sunshine" && data.name_id === "1234561"){
             var books = data.books;
             $.each(books,function (info,book) {
-                if(info < book_show_number || !data) {
+                if( info >= start && (info <= ends || !data)) {
 
                     var discout = (parseFloat(book.book_price_now) / parseFloat(book.book_price_before)).toFixed(2) * 10;
                       str +=
@@ -342,7 +368,7 @@ function book_management_show_tools(){
                           '<li>' +
                           ' <div class="book_list_info">' +
                           '     <div class="fl book_list_info_left">' +
-                          '         <img src="'+book.book_img_url+' "alt="未能加载正常图片" width="120" height="140" class="img-rounded">' +
+                          '         <img src="'+book.book_img_url+' " alt="未能加载正常图片" width="120" height="140" class="img-rounded">' +
                           '     </div>' +
                           '     <div class="fl book_list_info_right">' +
                           '         <div class="list_info_1">' +
@@ -394,9 +420,8 @@ function book_management_show_tools(){
         $("#show_in_list").empty().append(str2);
 
     });
+
 }
-
-
 
 $(document).ready(function () {
 
@@ -426,7 +451,7 @@ $(document).ready(function () {
     //book-management books show
     $.getJSON(window.JSONPATH+"user-book.json",function (content) {
         window.user_book = content;
-        book_management_show_tools();
+        book_management_show_tools(1);
     });
 
     /*define the json for area_university*/
@@ -827,9 +852,24 @@ $(document).ready(function () {
 
     //book_mangement 选择本书显示
     $("#sel_num_show").change(function () {
-        book_management_show_tools();
+        book_management_show_tools(1);
     });
 
+
+    $("#book_management_pager").find('li a').click(function () {
+        var val = $(this).parent('li').attr('value');
+        if(val === "prev") {
+            alert("prev");
+            book_management_show_tools('prev');
+        }else if(val === "next"){
+            alert("next");
+            book_management_show_tools('next');
+        }else{
+            val = parseInt(val);
+            book_management_show_tools(val);
+        }
+
+    });
 });
 
 
