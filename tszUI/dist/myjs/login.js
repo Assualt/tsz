@@ -3,6 +3,11 @@
 **/
 
 /*school clicked*/
+
+
+
+
+
 function school_clicked(a) {
     var obj= $(a);
     $(".a_school").text('[  '+obj.attr('name') +'  ]');
@@ -160,8 +165,15 @@ function Draw_yzm_pic(str) {
 }
 function LoginIN() {
     var login = $("#login");
+    var login_btn = $("#login_btn");
     var str = login.html();
 
+    var strUsername = $("#username").val();
+    var strPassword = $("#password").val();
+    if(strUsername==="" || strPassword === ""){
+        alert("当前输入的用户或者密码为空!!!");
+        return ;
+    }
     //登录 flag 标志位
     var flag = true;
     //登录 flag 标志位
@@ -169,29 +181,30 @@ function LoginIN() {
     /*
     *flag 为标志位
     * 后台判断登录与否
-    **/
+    */
     var idList=['basic_info','book_management','book_sale_history','book_bought_history','login_history','account_evaluate','book_else'];
     login.empty().append('<h1 align="center">登录中...</h1>' +
         '<p align="center"><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></p>');
     setTimeout(function () {
+        var main_head = $(".main_head");
         if(flag===true){
-            var list = $(".main_head ul li:not(:first-child)");
+            var list = main_head.find("ul li:not(:first-child)");
             $.each(list,function (info) {
                 $(this).removeClass('disabled');
                 $(this).find('a').attr('href','#'+idList[info]);
             });
-            $("#login_btn").html('我').next('ul').removeClass('fade');
-            $("#login").empty().append('<h1 align="center">登录成功</h1>');
-            $(".main_head ul li:nth-child(2)").addClass('active');
+            login_btn.html('我').next('ul').removeClass('fade');
+            login.empty().append('<h1 align="center">登录成功</h1>');
+            main_head.find("ul li:nth-child(2)").addClass('active');
             $("#basic_info").addClass('in active').removeClass('fade');
             login.addClass('fade').removeClass('in active');
-            $(".main_head ul li:first-child").removeClass('active').addClass('disabled').find('a').attr('href','#');
+            main_head.find("ul li:first-child").removeClass('active').addClass('disabled').find('a').attr('href','#');
         }else if(flag===false){
-            $("#login").empty().append('<h1 align="center">登录失败</h1>' +
+            login.empty().append('<h1 align="center">登录失败</h1>' +
                 '<hr>' +
                 '<p align="center">正在返回登录界面<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></p>');
             setTimeout(function () {
-                $("#login").empty().append(str);
+                login.empty().append(str);
             },2000);
         }
     },2000);
@@ -282,32 +295,152 @@ function Exit() {
 }
 
 
+
+function  Init() {
+    console.log('Init function do.....');
+    window.JSONPATH="../dist/res/json/";
+    //book-management books show  init
+    $.getJSON(window.JSONPATH+"user-book.json",function (content) {
+        window.user_book = content;
+        book_management_show_tools("1");
+    });
+    /*define the json for area_university*/
+    $.getJSON(window.JSONPATH+"area_university.json",function (content) {
+        var str = "";
+        window.area_university =content;
+        $.each(content,function (info,data) {
+            if(data.city === "北京") {//select the selected city
+                $.each(data.university , function (index,content) {
+                    $(".show_school_body_3").append("<p class='fl'><a href='javascript:void(0);' onclick='school_clicked(this)' name='"+content.name+"'>"+content.name+"</a></p>")
+                });
+            }else{}
+            str +="<option value='"+data.city+"'>"+data.city+"</option>";
+        });
+        /*init the province select*/
+        $("#province").append(str);
+    });
+    // swal('Oops...', 'Something went wrong!', 'success');//echarts 绘图
+    $.getJSON(window.JSONPATH+"book_his_chart.json",function (content) {
+        var sale_his_line = echarts.init($("#sale_his_line")[0]);
+        var sale_his_bar =echarts.init($("#sale_his_bar")[0]);
+        var sale_his_pie =echarts.init($("#sale_his_pie")[0]);
+        $.each(content,function (info,psr) {
+            if(psr.name === "1"){
+                var data = psr.charts;
+                $.each(data,function (info,eachType) {
+                    if(eachType.types==="line"){
+                        sale_his_line.setOption(eachType.options);
+                    }
+                    if(eachType.types==="bar"){
+                        sale_his_bar.setOption(eachType.options);
+                    }
+                    if(eachType.types==="pie"){
+                        sale_his_pie.setOption(eachType.options);
+                    }
+                });
+            }
+        });
+    });
+    //book_else 初始化
+    Draw_yzm_pic("1234");
+    //时间  打印实时时间
+    window.setInterval(time_toString,1000);
+}
+
+//function 修改JSON 数据
+function book_management_do_json_update(Id,Name){
+    var filePath = '../res/json/user-book.json';
+    var content ;
+    $.each(window.user_book,function (info,data) {
+       if(data.name === 'sunshine' && data.name_id === '1234561'){
+           var books = data.books ;
+           $.each(books,function (info,book) {
+               if(book !=undefined) {//判断对象是否为undefined
+                   if ("book_id" in book) {//判断对象是否有这个是属性
+                       var bookId = book.book_id;
+                       if (bookId === Id) {
+                           books.splice(info, 1);
+                       }
+                   }
+               }
+           });
+       }
+    });
+    book_management_show_tools(1);
+}
+
 //更新pager 标签
-function book_management_update_pagers(flag){
+function book_management_update_pagers(page_index){
     var book_pager = $("#book_management_pager");
-    var min = book_pager.find('li:eq(1)').attr('value');
-    var max = book_pager.find('li:eq(3)').attr('value');
-    alert(min+" " + max);
+    var min = book_pager.find('li:eq(1) a');
+    var mid = book_pager.find('li:eq(2) a');
+    var las = book_pager.find('li:eq(3) a');
+    var length = 0 ;
+    var start ;
+    var book_show_number =parseInt($("#sel_num_show").val());
+    $.each(window.user_book,function (info,data) {
+        if(data.name === "sunshine" && data.name_id === "1234561"){
+            length = data.books.length;
+        }
+    });
+    var pager_max = parseInt( Math.ceil(length / book_show_number ));
+    var mid_num = parseInt(mid.html().trim());
+
+    if(page_index === 'Prev') {
+        if(mid_num >2 ){
+            min.html(mid_num-2);
+            mid.html(mid_num-1);
+            las.html(mid_num);
+        }else{
+            min.html(1);
+            mid.html(2);
+            las.html(3);
+        }
+        mid_num = parseInt( mid.html() ) ;
+        start = book_show_number * parseInt(mid_num-1);
+    }else if(page_index === 'Next'){
+        if(mid_num <= pager_max -2 ){
+            min.html(mid_num);
+            mid.html(mid_num+1);
+            las.html(mid_num+2);
+            flag = mid_num + 1;
+        }else{
+            min.html(pager_max-2);
+            mid.html(pager_max-1);
+            las.html(pager_max);
+        }
+        mid_num = parseInt( mid.html() ) ;
+        start = book_show_number * parseInt(mid_num-1);
+    }else{
+        if(page_index <= pager_max -2 && page_index > 2){
+            min.html(parseInt(page_index)-1);
+            mid.html(parseInt(page_index));
+            las.html(parseInt(page_index)+1)
+        }else if(page_index <=2){
+            min.html(1);
+            mid.html(2);
+            las.html(3);
+        }else if(page_index > pager_max -2 && page_index <= pager_max){
+            min.html(pager_max -2 );
+            mid.html(pager_max -1 );
+            las.html(pager_max);
+        }
+        start = book_show_number * parseInt(page_index - 1);
+    }
+
+    return start;
+    // alert('books ' +length + ' lem' + pager_max);
 }
 // 显示图书管理 当前的本书选择
 // page_num 为当前页数 start 为当开始索引数  end 为索引终点
 function book_management_show_tools(page_index){
-    book_management_update_pagers("f");
 
     var book_show_number = parseInt($("#sel_num_show").val());
-    var start;
-    var ends;
-    if(page_index === "prev"){
-        // alert(1);
-        start = 0;
-    }else if(page_index === "next"){
-        // alert(2);
-        start = 0;
-    }else {
-        start = book_show_number * parseInt(page_index - 1);
-    }
-    ends =start + book_show_number -1;
-    // alert("start"+ start +"  "+"ends"+ends);
+    var start = 0,ends;
+    //var mid_num = parseInt($("#book_management_pager").find('li:eq(2) a').html());
+    start = book_management_update_pagers(page_index);
+    ends = start + book_show_number -1;
+    // alert("start " +typeof start+ " "+ start + "  "+"ends"+ends+ " " + typeof ends);
     var str=
         '<thead align="center">'+
         '<tr>'+
@@ -406,7 +539,6 @@ function book_management_show_tools(page_index){
                           ' </div>' +
                           '</li>';
                   }
-
             });
         }
         str2 =
@@ -420,13 +552,77 @@ function book_management_show_tools(page_index){
         $("#show_in_list").empty().append(str2);
 
     });
+}
+//function 图书表格/图书列表 中的删除和 修改按钮 点击事件
+function book_management_do_Edit_Or_Delete(content,flag,obj) {
+    flag = parseInt(flag);
+    obj = $(obj);
+    var temp;
+    if(flag === 1){//show_in_table do
+        temp = obj.parents('tr');//获得一行图书信息 table
+        if(content === "删除"){//删除
+            var bookName = temp.find('td:eq(3)').html();
+            var bookAuthor = temp.find('td:eq(6)').html();
+            var bookPublish = temp.find('td:eq(7)').html();
+            var bookEdition = temp.find('td:eq(8)').html();
+            var bookId = temp.find('td:eq(0)').html();
+            // console.log('delete book Name'+bookName);
+            var Message =
+                '确定删除 ' +'\n'+
+                '           书名:      '+bookName    +'\n'+
+                '           作者:      '+bookAuthor  +'\n'+
+                '           出版社:    '+bookPublish +'\n'+
+                '           版次:      '+bookEdition +'\n'+
+                '                               的图书吗?';
+            var ok = confirm(Message);
+            if(ok === true){
+                temp.empty();
+                book_management_do_json_update(bookId,bookName);
+                console.log('删除书本 ok ');
+            }else if(ok === false){
+                console.log('删除书本 failed ');
+            }else{
+                console.log("Can\'t do such operation(book Edit Or Delete)");
+            }
+        }else if(content === "修改"){//修改
+
+        }else{
+            console.log("Can't do such operation(book Edit Or Delete)");
+        }
+    }else if(flag ===2 ){//show_in_list do
+        if(content === "删除"){//删除
+
+        }else if(content === "修改"){//修改
+
+        }else{
+            console.log("Can't do such operation(book Edit Or Delete)");
+        }
+    }else{
+        console.log("can't do such operation(book Edit Or Delete) ");
+    }
+
 
 }
 
+
+
 $(document).ready(function () {
 
+    Init();
 
-    Draw_yzm_pic("1234");
+
+    //book_mamagement 图书表格/图书列表 中的删除和 修改按钮 点击事件
+    $("#show_in_table").on('click','tbody tr td a',function () {
+       console.log($(this).html());
+       book_management_do_Edit_Or_Delete($(this).html(),1,this);
+    });
+    $("#show_in_list").on('click','ul li div.list_info_5 a',function () {
+        console.log($(this).html());
+        book_management_do_Edit_Or_Delete($(this).html(),2,this);
+    });
+
+
+
     $(".yzm").click(function () {
         var str = 'ABCEFGHJKLMNPQRSTWXY1234567890abcdefghijklmnopqrstuvwxyz';
         var txt="";
@@ -446,29 +642,6 @@ $(document).ready(function () {
 
     });
 
-    window.JSONPATH="../dist/res/json/";
-
-    //book-management books show
-    $.getJSON(window.JSONPATH+"user-book.json",function (content) {
-        window.user_book = content;
-        book_management_show_tools(1);
-    });
-
-    /*define the json for area_university*/
-    $.getJSON(window.JSONPATH+"area_university.json",function (content) {
-        var str = "";
-        window.area_university =content;
-        $.each(content,function (info,data) {
-            if(data.city === "北京") {//select the selected city
-                $.each(data.university , function (index,content) {
-                    $(".show_school_body_3").append("<p class='fl'><a href='javascript:void(0);' onclick='school_clicked(this)' name='"+content.name+"'>"+content.name+"</a></p>")
-                });
-            }else{}
-            str +="<option value='"+data.city+"'>"+data.city+"</option>";
-        });
-        /*init the province select*/
-        $("#province").append(str);
-    });
     $("#province").change(function () {
         var pro = $(this).val();
         var school =$("#school");
@@ -564,6 +737,18 @@ $(document).ready(function () {
         }
     });
 
+    /*upload logo img*/
+    $("#upload_logo").on('change',function (e) {
+        //1.先去 上传 个人图片logo
+        //2.存入 数据库
+        //3.然后 在线显示
+    });
+    /*upload books pic*/
+    $("#book_pic").on('change',function () {
+        //1.先去 上传 个人图片logo
+        //2.存入 数据库
+        //3.然后 在线显示
+    });
 
     $(".helper-item:eq(0)").mouseenter(function () {
         $(this).html("帮助中心");
@@ -606,7 +791,7 @@ $(document).ready(function () {
     });
     /*判断登录与否*/
     $("input:submit[value='登录']").click(function () {
-       LoginIN();
+        LoginIN();
     });
     /*设置默认地址*/
     $("#basic_info_2").on("click",'button',function () {
@@ -709,31 +894,6 @@ $(document).ready(function () {
         basic_info_2.find('div.list-group br').remove();
    });
 
-
-    // swal('Oops...', 'Something went wrong!', 'success');//echarts 绘图
-    $.getJSON(window.JSONPATH+"book_his_chart.json",function (content) {
-        var sale_his_line = echarts.init($("#sale_his_line")[0]);
-        var sale_his_bar =echarts.init($("#sale_his_bar")[0]);
-        var sale_his_pie =echarts.init($("#sale_his_pie")[0]);
-        $.each(content,function (info,psr) {
-            if(psr.name === "1"){
-                var data = psr.charts;
-                $.each(data,function (info,eachType) {
-                    if(eachType.types==="line"){
-                        sale_his_line.setOption(eachType.options);
-                    }
-                    if(eachType.types==="bar"){
-                        sale_his_bar.setOption(eachType.options);
-                    }
-                    if(eachType.types==="pie"){
-                        sale_his_pie.setOption(eachType.options);
-                    }
-                });
-            }
-        });
-    });
-
-    window.setInterval(time_toString,1000);
 
     /*显示历史售卖条数选择*/
     $("#book_sale_history_time_list").click(function () {
@@ -852,23 +1012,12 @@ $(document).ready(function () {
 
     //book_mangement 选择本书显示
     $("#sel_num_show").change(function () {
-        book_management_show_tools(1);
+        book_management_show_tools("1");
     });
 
-
     $("#book_management_pager").find('li a').click(function () {
-        var val = $(this).parent('li').attr('value');
-        if(val === "prev") {
-            alert("prev");
-            book_management_show_tools('prev');
-        }else if(val === "next"){
-            alert("next");
-            book_management_show_tools('next');
-        }else{
-            val = parseInt(val);
-            book_management_show_tools(val);
-        }
-
+        var val = $(this).html().trim();
+        book_management_show_tools(val);
     });
 });
 

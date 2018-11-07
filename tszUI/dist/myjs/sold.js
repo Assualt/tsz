@@ -14,7 +14,7 @@ function page_refresh(flag) {
         // alert($(this).find(a).html());
         $(this).find('a').html(parseInt($(this).find('a').html())+flag);
     });
-    var page_tools1 = $("#page_tools_1 li:not(:first-child,:last-child)");
+    var page_tools1 = $("#page_tools_1").find("li:not(:first-child,:last-child)");
     $.each(page_tools1,function () {
         $(this).find('a').html(parseInt($(this).find('a').html())+flag);
     });

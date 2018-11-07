@@ -113,7 +113,7 @@
                     </div>
                     <div class="person_img_common fl">
                         <label for="Niki_sex" class="fl col-md-4">sex:</label>
-                        <p class="fl" id="Niki_sex">&male;</p>
+                        <p class="fl" id="Niki_sex">&male; </p>
                     </div>
                     <div class="person_img_common fl">
                         <label for="Niki_school" class="fl col-md-4">University:</label>
@@ -157,9 +157,9 @@
             <div class="main_right fl">
                 <div class="main_head">
                     <ul class="nav nav-tabs nav-tabs-justified">
-                        <li class="disabled"><a href="#login" data-toggle="tab">登录</a></li>
+                        <li class="disabled active"><a href="#login" data-toggle="tab">登录</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">基本资料</a></li>
-                        <li class="disabled active"><a href="#" data-toggle="tab">图书管理</a></li>
+                        <li class="disabled"><a href="#" data-toggle="tab">图书管理</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书售卖记录</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书买入</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">日志记录</a></li>
@@ -168,7 +168,7 @@
                     </ul>
                 </div>
                 <div class="tab-content main_body">
-                    <div class="tab-pane fade" id="login" >
+                    <div class="tab-pane fade in active" id="login" >
                         <h1>登录淘书斋</h1>
                         <hr>
                         <form action="" class="form-horizontal" role="form" method="get">
@@ -249,7 +249,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-md-2">头像</label>
                                             <div class="col-md-7">
-                                                <input type="file" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" name="pic_file" disabled>
+                                                <input type="file" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" name="pic_file" disabled id="upload_logo">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -266,9 +266,9 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2"></div>
+                                            <div class="col-md-2">地址</div>
                                             <div class="col-md-10">
-                                                <input type="text" class="form-control" name="myuniversity" readonly>
+                                                <input type="text" class="form-control" name="myaddress" disabled>
                                             </div>
 
                                         </div>
@@ -388,7 +388,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="tab-pane fade in active" id="book_management">
+                    <div class="tab-pane fade" id="book_management">
                         <form action="" id="book_management_1">
                             <fieldset>
                                 <legend><i class="fa fa-book"></i>&nbsp;图书管理</legend>
@@ -404,23 +404,22 @@
                                     <label for="sel_num_show">条</label>
                                 </div>
                                 <ul class="fr nav nav-pills nav-tabs-justified col-md-2">
-                                    <li class="fl"><a href="#show_in_table" class="fa fa-table" data-toggle="tab" title="表格形式"></a></li>
-                                    <li class="fl active"><a href="#show_in_list" class="fa fa-list-alt" data-toggle="tab" title="列表模式"></a></li>
+                                    <li class="fl active"><a href="#show_in_table" class="fa fa-table" data-toggle="tab" title="表格形式"></a></li>
+                                    <li class="fl"><a href="#show_in_list" class="fa fa-list-alt" data-toggle="tab" title="列表模式"></a></li>
                                 </ul>
                                 <div class="tab-content fl">
-                                    <div class="tab-pane fade" id="show_in_table">
+                                    <div class="tab-pane fade in active" id="show_in_table">
                                         <table role="table" border="-1" class="table table-striped table-hover" width="1000">
                                         </table>
                                     </div>
-                                    <div class="tab-pane fade in active" id="show_in_list">
-                                    </div>
+                                    <div class="tab-pane fade " id="show_in_list"></div>
                                 </div>
                                 <ul class="pager fr" id="book_management_pager">
-                                    <li class="previous" value="prev"><a href="javascript:void(0)">&larr;Prev</a></li>
-                                    <li value="1"><a href="javascript:void(0)">1</a></li>
-                                    <li value="2"><a href="javascript:void(0)">2</a></li>
-                                    <li value="3"><a href="javascript:void(0)">3</a></li>
-                                    <li class="next" value="next"><a href="javascript:void(0)">&rarr;Next</a></li>
+                                    <li class="previous" value="prev"><a href="javascript:void(0)">Prev</a></li>
+                                    <li><a href="javascript:void(0)">1</a></li>
+                                    <li><a href="javascript:void(0)">2</a></li>
+                                    <li><a href="javascript:void(0)">3</a></li>
+                                    <li class="next" value="next"><a href="javascript:void(0)">Next </a></li>
                                 </ul>
                             </fieldset>
                         </form>
@@ -657,4 +656,5 @@
             </div>
         </div>
     </body>
+
 </html>

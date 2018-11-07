@@ -182,6 +182,51 @@
         "book_price_now":"15",
         "book_left":"123",
         "book_else":"-"
+      },
+      {
+        "book_id":"10013",
+        "book_store_id":"1234561",
+        "book_store_name":"我的书店",
+        "book_name":"兄弟",
+        "book_img_url":"../dist/res/book_img/兄弟.jpg",
+        "book_ads":"大卖特卖卖到无法或",
+        "book_publish":"人民教育出版社",
+        "book_author":"奥斯特洛夫斯基",
+        "book_edition":"第一版",
+        "book_price_before":"28",
+        "book_price_now":"15",
+        "book_left":"123",
+        "book_else":"-"
+      },
+      {
+        "book_id":"10014",
+        "book_store_id":"1234561",
+        "book_store_name":"我的书店",
+        "book_name":"兄弟",
+        "book_img_url":"../dist/res/book_img/兄弟.jpg",
+        "book_ads":"大卖特卖卖到无法或",
+        "book_publish":"人民教育出版社",
+        "book_author":"奥斯特洛夫斯基",
+        "book_edition":"第一版",
+        "book_price_before":"28",
+        "book_price_now":"15",
+        "book_left":"123",
+        "book_else":"-"
+      },
+      {
+        "book_id":"10015",
+        "book_store_id":"1234561",
+        "book_store_name":"我的书店",
+        "book_name":"兄弟",
+        "book_img_url":"../dist/res/book_img/兄弟.jpg",
+        "book_ads":"大卖特卖卖到无法或",
+        "book_publish":"人民教育出版社",
+        "book_author":"奥斯特洛夫斯基",
+        "book_edition":"第一版",
+        "book_price_before":"28",
+        "book_price_now":"15",
+        "book_left":"123",
+        "book_else":"-"
       }
 
 

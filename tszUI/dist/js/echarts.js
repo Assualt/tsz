@@ -25473,7 +25473,6 @@ function init(dom, theme$$1, opts) {
             )
         ) {
             console.warn('Can\'t get dom width or height');
-
         }
     }
 
