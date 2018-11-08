@@ -442,21 +442,21 @@ function book_management_show_tools(page_index){
     ends = start + book_show_number -1;
     // alert("start " +typeof start+ " "+ start + "  "+"ends"+ends+ " " + typeof ends);
     var str=
-        '<thead align="center">'+
+        '<thead align="center" class="black white-text">'+
         '<tr>'+
-        '   <th>编号</th>'+
-        '   <th>书店ID</th>'+
-        '   <th>店名</th>'+
-        '   <th>书名</th>'+
-        '   <th>图片</th>'+
-        '   <th>广告词</th>'+
-        '   <th>作者</th>'+
-        '   <th>出版社</th>'+
-        '   <th>版次</th>'+
-        '   <th>单价/原价</th>'+
-        '   <th>库存</th>'+
-        '   <th>操作</th>'+
-        '   <th>其他</th>'+
+        '   <th scope="col"><i class="fa fa-leaf mr-2 blue-text" aria-hidden="true"></i>编号</th>'+
+        '   <th scope="col">书店ID</th>'+
+        '   <th scope="col">店名</th>'+
+        '   <th scope="col">书名</th>'+
+        '   <th scope="col">图片</th>'+
+        '   <th scope="col">广告词</th>'+
+        '   <th scope="col">作者</th>'+
+        '   <th scope="col">出版社</th>'+
+        '   <th scope="col">版次</th>'+
+        '   <th scope="col">单价/原价</th>'+
+        '   <th scope="col">库存</th>'+
+        '   <th scope="col">操作</th>'+
+        '   <th scope="col">其他</th>'+
         '</tr>'+
         '</thead>';
     str +="<tbody><tr>";
@@ -472,7 +472,7 @@ function book_management_show_tools(page_index){
 
                     var discout = (parseFloat(book.book_price_now) / parseFloat(book.book_price_before)).toFixed(2) * 10;
                       str +=
-                          "<td>" + book.book_id + "</td>" +
+                          "<th scope='row'>" + book.book_id + "</th>" +
                           "<td>" + book.book_store_id + "</td>" +
                           "<td>" + book.book_store_name + "</td>" +
                           "<td>" + book.book_name + "</td>" +
@@ -489,8 +489,9 @@ function book_management_show_tools(page_index){
                           "</td>" +
                           "<td><br>" + book.book_left + "</td>" +
                           "<td>" +
-                          "  <a href='javascript:void(0)' type='button' class='btn btn-link'>删除</a>" +
-                          "  <a href='javascript:void(0)' type='button' class='btn btn-link'>修改</a>" +
+                          "  <button type='button' class='btn btn-indigo btn-sm m-0'>删除</button>" +
+                          "  <hr style='margin:0;'>"+
+                          "  <button type='button' class='btn btn-indigo btn-sm m-0'>修改</button>" +
                           "</td>" +
                           "<td>" + book.book_else + "</td>" +
                           "</tr>";
@@ -561,10 +562,10 @@ function book_management_do_Edit_Or_Delete(content,flag,obj) {
     if(flag === 1){//show_in_table do
         temp = obj.parents('tr');//获得一行图书信息 table
         if(content === "删除"){//删除
-            var bookName = temp.find('td:eq(3)').html();
-            var bookAuthor = temp.find('td:eq(6)').html();
-            var bookPublish = temp.find('td:eq(7)').html();
-            var bookEdition = temp.find('td:eq(8)').html();
+            var bookName = temp.find('td:eq(2)').html();
+            var bookAuthor = temp.find('td:eq(5)').html();
+            var bookPublish = temp.find('td:eq(6)').html();
+            var bookEdition = temp.find('td:eq(7)').html();
             var bookId = temp.find('td:eq(0)').html();
             // console.log('delete book Name'+bookName);
             var Message =
@@ -585,6 +586,7 @@ function book_management_do_Edit_Or_Delete(content,flag,obj) {
                 console.log("Can\'t do such operation(book Edit Or Delete)");
             }
         }else if(content === "修改"){//修改
+
 
         }else{
             console.log("Can't do such operation(book Edit Or Delete)");
@@ -612,7 +614,7 @@ $(document).ready(function () {
 
 
     //book_mamagement 图书表格/图书列表 中的删除和 修改按钮 点击事件
-    $("#show_in_table").on('click','tbody tr td a',function () {
+    $("#show_in_table").on('click','tbody tr td button',function () {
        console.log($(this).html());
        book_management_do_Edit_Or_Delete($(this).html(),1,this);
     });
@@ -620,8 +622,6 @@ $(document).ready(function () {
         console.log($(this).html());
         book_management_do_Edit_Or_Delete($(this).html(),2,this);
     });
-
-
 
     $(".yzm").click(function () {
         var str = 'ABCEFGHJKLMNPQRSTWXY1234567890abcdefghijklmnopqrstuvwxyz';
