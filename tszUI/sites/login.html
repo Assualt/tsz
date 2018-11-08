@@ -109,7 +109,7 @@
                     <img src="../dist/res/user_info.jpg" width="80%" class="img-thumbnail" alt="未能加载正常图片">
                     <div class="person_img_common fl">
                         <label for="Niki_name" class="fl col-md-4">name:</label>
-                        <p class="fl" id="Niki_name"><a href="#">幸运的皮卡丘</a></p>
+                        <p class="fl" id="Niki_name"><a href="#">个人姓名</a></p>
                     </div>
                     <div class="person_img_common fl">
                         <label for="Niki_sex" class="fl col-md-4">sex:</label>
@@ -117,10 +117,10 @@
                     </div>
                     <div class="person_img_common fl">
                         <label for="Niki_school" class="fl col-md-4">University:</label>
-                        <p class="fl" id="Niki_school">重庆交通大学</p>
+                        <p class="fl" id="Niki_school">xxx大学</p>
                     </div>
                     <div class="person_img_common fl">
-                        <label for="Niki_contact" class="fl col-md-4">contact:</label>
+                        <label for="Niki_contact" class="fl col-md-4">Contact:</label>
                         <ul class="fl col-md-8" id="Niki_contact">
                             <li class="fl">
                                 <button href="#" class="fa fa-info btn btn-primary btn-sm"><a href="#"></a></button>
@@ -133,11 +133,10 @@
                             </li>
                         </ul>
                     </div>
-
                 </div>
                 <div class="person_basic">
                     <h4>个人简介</h4>
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;本人毕业于<a href="http://www.cqjtu.edu.cn">重庆交通大学</a>,本人性格热情开朗，待人友好，为人诚实谦虚。阿萨德回家滑动即可哈哈大家暗示健康的卡的驱蚊器无阿萨德
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;这里<a href="http://www.cqjtu.edu.cn">xxx大学</a>简短介绍
                         <a href="#">...了解更多</a></p>
                 </div>
                 <div class="person_details">
@@ -157,7 +156,7 @@
             <div class="main_right fl">
                 <div class="main_head">
                     <ul class="nav nav-tabs nav-tabs-justified">
-                        <li class="disabled active"><a href="#login" data-toggle="tab">登录</a></li>
+                        <li class=" active"><a href="#login" data-toggle="tab">登录</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">基本资料</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书管理</a></li>
                         <li class="disabled"><a href="#" data-toggle="tab">图书售卖记录</a></li>
@@ -199,16 +198,15 @@
                         <hr>
                         <div>
                             <h5>使用第三方账号进行登录</h5>
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-10">
-                                    <button type="button" class="fa fa-renren btn btn-primary btn-lg col-md-3">&nbsp;人人网登录</button>
-                                    <button type="button" class="fa fa-qq btn btn-success btn-lg col-md-3">&nbsp;qq登录</button>
-                                    <button type="button" class="fa fa-weibo btn btn-lg btn-info col-md-3">&nbsp;微博登录</button>
-                                    <button type="button" class="fa fa-weixin btn btn-lg btn-danger col-md-3">&nbsp;微信登录</button>
-                            </div>
+                            <button type="button" class="fa fa-renren btn btn-primary btn-lg col-md-5">&nbsp;人人网登录</button>
+                            <div class="col-md-2"></div>
+                            <button type="button" class="fa fa-qq btn btn-success btn-lg col-md-5">&nbsp;qq登录</button>
+                            <br>
+                            <br>
+                            <button type="button" class="fa fa-weibo btn btn-lg btn-info col-md-5">&nbsp;微博登录</button>
+                            <div class="col-md-2"></div>
+                            <button type="button" class="fa fa-weixin btn btn-lg btn-danger col-md-5">&nbsp;微信登录</button>
 
-                        </div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="basic_info">
@@ -409,7 +407,8 @@
                                 </ul>
                                 <div class="tab-content fl">
                                     <div class="tab-pane fade in active" id="show_in_table">
-                                        <table role="table" border="-1" class="table table-striped table-hover" width="1000">
+                                        <table class="table table-striped table-bordered table-hover text-nowrap table-responsive-md btn-table">
+                                            <caption>图书列表</caption>
                                         </table>
                                     </div>
                                     <div class="tab-pane fade " id="show_in_list"></div>
@@ -435,7 +434,6 @@
                                             <div class="col-md-7">
                                                 <input type="text" id="book_id" class="form-control" value="10010" readonly>
                                             </div>
-
                                         </div>
                                         <div class="form-group">
                                             <label for="book_store_id" class="control-label col-md-2">书店ID</label>
@@ -556,7 +554,48 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="book_bought_history">book_bought_history</div>
-                    <div class="tab-pane fade" id="login_history">login_history</div>
+                    <div class="tab-pane fade" id="login_history">
+                        <table class="table table-striped table-responsive-md btn-table">
+                            <caption>登录列表</caption>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>登录时间</th>
+                                    <th>登录地点</th>
+                                    <th>详细说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>2018/1/21 12:31:12</td>
+                                    <td>中国重庆黔江</td>
+                                    <td>=====</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr>
+                        <table class="table table-striped table-responsive-md btn-table" width="200px">
+                            <caption>登录列表</caption>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>登录时间</th>
+                                <th>登录地点</th>
+                                <th>详细说明</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>2018/1/21 12:31:12</td>
+                                <td>中国重庆黔江</td>
+                                <td>=====</td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
                     <div class="tab-pane fade" id="account_evaluate">收益评估</div>
                     <div class="tab-pane fade" id="book_else">
                         <div class="container-fluid">

@@ -76,33 +76,33 @@
 
 - @ id: 购买人ID
 - @ id_name: 购买人姓名
-- @ address: 
-    [
--      "add_province":"重庆市",
-       "add_district":"南岸区",
-       "add_more_detail":"重庆交通大学南岸校区学府大道66号知园小区1栋3单元",
-       "add_contact_phone":"13752913198",
-       "add_contact_name":"侯鑫",
-       "add_default":true
-       ]
+- @ address:  
+    [  {     购买人收件地址
+-      "add_province":"重庆市",    收件地址省份
+       "add_district":"南岸区",    收件地址区
+       "add_more_detail":"重庆交通大学南岸校区学府大道66号知园小区1栋3单元", 收件地址详细地址
+       "add_contact_phone":"13752913198",   收件人电话
+       "add_contact_name":"侯鑫",           收件人姓名
+       "add_default":true                   默认地址
+       }]
       
 - @ goods :[] 商品信息
 
-        "goods_store_id":"123456",
-        "goods_store_name":"兴文图书", 
-        "goods_info":[
-            "book_name": "何以笙箫默",
-            "book_img": "../dist/res/book_img/何以笙箫默.jpg",
-            "book_ad":"这是个广告"
-            "book_des": [
-                "num":"1",
-                "size":"110*200*10（mm)",
-                "publisher":"人民出版社",
-                "author":"王多多",
-                "edition":"第二版",
-                "old_price":"25.98",
-                "dis_price":"12.98"
-        ]
+        "goods_store_id":"123456",          图书书店ID
+        "goods_store_name":"兴文图书",       图书书店店名
+        "goods_info":[{                     图书信息
+            "book_name": "何以笙箫默",       图书书名
+            "book_img": "../dist/res/book_img/何以笙箫默.jpg", 图书图片
+            "book_ad":"这是个广告"           图书广告词
+            "book_des": [                   图书详细信息
+                "num":"1"                   图书余量
+                "size":"110*200*10（mm)"    图书规格
+                "publisher":"人民出版社"     图书出版社
+                "author":"王多多"            图书作者
+                "edition":"第二版"           图书版次
+                "old_price":"25.98",        图书原价
+                "dis_price":"12.98"         图书打折价格
+        }]
 
 # daily_interest.json -- 每日推荐
 - @ "name": "daily_hot",
