@@ -602,6 +602,18 @@ $(document).ready(function () {
         setp_two_ul.append(append_str);
     });
 
+    /*modal hide*/
+    $("#myModal").on('hide.bs.modal',function () {
+        var bexit = confirm('确认取消本次结算?');
+        console.log(bexit);
+        if(bexit === true){
+            $("#myModal").modal('hide');
+        } else{
+            $("#myModal").modal('show');
+        }
+    });
+
+
     /*step_prev step_next step_submit*/
     $("#step_prev").click(function () {
         var step_one =$(".step-one");

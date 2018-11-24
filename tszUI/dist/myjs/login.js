@@ -612,7 +612,6 @@ $(document).ready(function () {
 
     Init();
 
-
     //book_mamagement 图书表格/图书列表 中的删除和 修改按钮 点击事件
     $("#show_in_table").on('click','tbody tr td button',function () {
        console.log($(this).html());
