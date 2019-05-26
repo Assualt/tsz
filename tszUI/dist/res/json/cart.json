@@ -32,14 +32,16 @@
       {
         "goods_store_id":"123456",
         "goods_store_name":"兴文图书",
+        "isChecked":false,
         "goods_info":[
           {
             "book_name": "何以笙箫默",
             "book_img": "../dist/res/book_img/何以笙箫默.jpg",
             "book_ad":"这是个广告",
-              "book_des": [
+            "isChecked":false,
+            "book_des": [
               {
-                "num":"1",
+                "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
                 "author":"王多多",
@@ -53,15 +55,16 @@
             "book_name": "一千零二夜",
             "book_img": "../dist/res/book_img/一千零一夜.jpg",
             "book_ad":"这是个广告",
+            "isChecked":false,
             "book_des": [
               {
-                "num":"1",
+                "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
                 "author":"王多多",
                 "edition":"第二版",
                 "old_price":"24.98",
-                "dis_price":"12.98"
+                "dis_price":"112.98"
               }
             ]
           }
@@ -70,14 +73,16 @@
       {
         "goods_store_id":"123456",
         "goods_store_name":"兴大爱图书",
+        "isChecked":false,
         "goods_info":[
           {
             "book_name": "三栖人",
             "book_img": "../dist/res/book_img/三栖人.jpg",
             "book_ad":"这是个广告",
+            "isChecked":false,
             "book_des": [
               {
-                "num":"1",
+                "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
                 "author":"王多多",
@@ -91,15 +96,16 @@
             "book_name": "亲爱的安德烈",
             "book_img": "../dist/res/book_img/亲爱的安德烈.jpg",
             "book_ad":"亲爱的安德烈",
+            "isChecked":false,
             "book_des": [
               {
-                "num":"1",
+                "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
                 "author":"王多多",
                 "edition":"第二版",
                 "old_price":"29.98",
-                "dis_price":"15.98"
+                "dis_price":"155.98"
               }
             ]
           }
@@ -108,14 +114,16 @@
       {
         "goods_store_id":"123456",
         "goods_store_name":"兴文图书",
+        "isChecked":false,
         "goods_info":[
           {
             "book_name": "何以笙箫默",
             "book_img": "../dist/res/book_img/何以笙箫默.jpg",
             "book_ad":"这是个广告",
+            "isChecked":false,
             "book_des": [
               {
-                "num":"1",
+                "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
                 "author":"王多多",
@@ -129,9 +137,10 @@
             "book_name": "一千零二夜",
             "book_img": "../dist/res/book_img/一千零一夜.jpg",
             "book_ad":"这是个广告",
+            "isChecked":false,
             "book_des": [
               {
-                "num":"1",
+                "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
                 "author":"王多多",
@@ -146,14 +155,16 @@
       {
         "goods_store_id":"123456",
         "goods_store_name":"兴大爱图书",
+        "isChecked":false,
         "goods_info":[
           {
             "book_name": "三栖人",
             "book_img": "../dist/res/book_img/三栖人.jpg",
             "book_ad":"这是个广告",
+            "isChecked":false,
             "book_des": [
               {
-                "num":"1",
+                "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
                 "author":"王多多",
@@ -167,9 +178,10 @@
             "book_name": "亲爱的安德烈",
             "book_img": "../dist/res/book_img/亲爱的安德烈.jpg",
             "book_ad":"亲爱的安德烈",
+            "isChecked":false,
             "book_des": [
               {
-                "num":"1",
+                "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
                 "author":"王多多",
@@ -182,11 +194,5 @@
         ]
       }
     ]
-
-  },
-  {
-
   }
-
-
 ]

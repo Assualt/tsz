@@ -270,9 +270,9 @@ $(document).ready(function () {
     /*define the json for daily_recommend*/
     $.getJSON(window.JSONPATH+'daily_interest.json',function (content) {
        $.each(content,function (info,data) {
-           var string =" ";
-           var cont;
-           if(data.name === "daily_hot"){
+            var string =" ";
+            var cont;
+            if(data.name === "daily_hot"){
                var daily_hot_carousel_inner=$("#daily_hot").find("div.carousel-inner");
                string +="<ul class='item active daily_list'>";
                cont = data.item;

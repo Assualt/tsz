@@ -9,80 +9,49 @@
         <script type="text/javascript" src="../dist/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="../dist/js/distpicker.data.js"></script>
         <script type="text/javascript" src="../dist/js/distpicker.js"></script>
-
+        <script type="text/javascript" src="../dist/js/sweetalert2.min.js"></script>
         <!--<script type="text/javascript" src="./dist/js/npm.js"></script>-->
         <!--bootstrap css -->
         <link rel="stylesheet" href="../dist/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="../dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="../dist/font-awesome/css/font-awesome.min.css">
+
         <!--hover css-->
         <link rel="stylesheet" href="../dist/css/hover-min.css">
         <!--cart css-->
         <link rel="stylesheet" href="../dist/mycss/cart.css">
         <!--cart js-->
-        <script type="text/javascript" src="../dist/myjs/cart.js"></script>
+        <!--<script type="text/javascript" src="../dist/myjs/cart.js"></script>-->
     </head>
     <body>
-        <header>
-            <div class="header-school">
+        <header id="header">
+        <div class="header-school">
             <i class="fa fa-location-arrow fa-lg" aria-hidden="true"></i>
-            <a href="javascript:void(0)" class="a_school" >&nbsp;[&nbsp;所有学校&nbsp;]</a>
-            <div class="show_school"  >
+            <a href="javascript:void(0)" class="a_school" @click="showAllSchool()" >&nbsp;[&nbsp;{{targetSchool}}&nbsp;]</a>
+            <div :class="{show_school:true,display_show:bShow,display_hide:!bShow}">
                 <div class="show_school_head">
                     <p class="fl">请选择学校</p>
-                    <button class="btn btn-sm fa fa-close fr" id="show_school_btn_cls"></button>
+                    <button class="btn btn-sm fa fa-close fr" id="show_school_btn_cls" @click="closeAllSchool()"></button>
                 </div>
                 <div class="show_school_body">
-                    <p class="fl">快捷方式:<a href="#" style="color: rgb(0,168,155);">　所有学校</a>
-                    </p>
+                    <p class="fl">快捷方式:<a href="#" style="color: rgb(0,168,155);" @click="showAllUniversitys('所有学校',0)">　所有学校</a></p>
                     <div class="show_school_body_2 fl" >
-                        <a href="#" class="fl">北京</a>
-                        <a href="#" class="fl">上海</a>
-                        <a href="#" class="fl">黑龙江</a>
-                        <a href="#" class="fl">吉林</a>
-                        <a href="#" class="fl">辽宁</a>
-                        <a href="#" class="fl">天津</a>
-                        <a href="#" class="fl">安徽</a>
-                        <a href="#" class="fl">江苏</a>
-                        <a href="#" class="fl">浙江</a>
-                        <a href="#" class="fl">陕西</a>
-                        <a href="#" class="fl">湖北</a>
-                        <a href="#" class="fl">广东</a>
-                        <a href="#" class="fl">湖南</a>
-                        <a href="#" class="fl">甘肃</a>
-                        <a href="#" class="fl">四川</a>
-                        <a href="#" class="fl">山东</a>
-                        <a href="#" class="fl">福建</a>
-                        <a href="#" class="fl">河南</a>
-                        <a href="#" class="fl">重庆</a>
-                        <a href="#" class="fl">云南</a>
-                        <a href="#" class="fl">河北</a>
-                        <a href="#" class="fl">江西</a>
-                        <a href="#" class="fl">山西</a>
-                        <a href="#" class="fl">贵州</a>
-                        <a href="#" class="fl">广西</a>
-                        <a href="#" class="fl">内蒙古</a>
-                        <a href="#" class="fl">宁夏</a>
-                        <a href="#" class="fl">青海</a>
-                        <a href="#" class="fl">西藏</a>
-                        <a href="#" class="fl">香港</a>
-                        <a href="#" class="fl">澳门</a>
-                        <a href="#" class="fl">台湾</a>
+                        <a href="#" class ="fl" v-for="(item,index) in AllProvinces" :key="index" @click="showAllUniversitys(item,index)">{{item}}</a>
                     </div>
                     <div class="show_school_body_3 fl">
-                        <!--<p><a href="#">asdasd</a></p>  Just a Test -->
+                        <p v-for="(item,index) in CurrentCityUniversity" :key="index" class="fl"><a href="#" @click="selectSchool(item)">{{item}}</a></p>
                     </div>
                 </div>
             </div>
             <div class="header_login fr">
                 <li class="fl dropdown">
-                    <a href="#" id="login_btn" data-toggle="dropdown">我</a>&nbsp;|
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="login_btn">
+                    <a href="sites/login.html" id="login_btn" data-toggle="dropdown">登录</a>&nbsp;|
+                    <ul class="dropdown-menu fade" role="menu" aria-labelledby="login_btn">
                         <li role="presentation">
                             <a role="menuitem" tabindex="-1" href="#">我的主页</a>
                         </li>
                         <li role="presentation">
-                            <a role="menuitem" tabindex="-1" href="#">我的购物车</a>
+                            <a role="menuitem" tabindex="-1" href="sites/cart.html">我的购物车</a>
                         </li>
                         <li role="presentation">
                             <a role="menuitem" tabindex="-1" href="#">我的收藏</a>
@@ -95,12 +64,12 @@
                         </li>
                     </ul>
                 </li>
-                <li class="fl"><a href="sold.html" target="_blank">出售</a>&nbsp;|</li>
-                <li class="fl"><a href="register.html" style="color: orange" target="_blank">立即注册</a>&nbsp;|</li>
-                <li class="fl"><a href="downloadApp.html" class="fa fa-mobile-phone fa-1x" target="_blank">下载APP</a></li>
+                <li class="fl"><a href="sites/sold.html" target="_blank">出售</a>&nbsp;|</li>
+                <li class="fl"><a href="sites/register.html" style="color: orange" target="_blank">立即注册</a>&nbsp;|</li>
+                <li class="fl"><a href="sites/downloadApp.html" class="fa fa-mobile-phone fa-1x" target="_blank">下载APP</a></li>
             </div>
         </div>
-        </header>
+    </header>
         <div class="header-tools">
             <div class="header-tools-left fl">
                 <a href="#">
@@ -116,8 +85,8 @@
                             <option value="店铺">店铺</option>
                         </select>
                     </div>
-                    <div class="form-group fl">
-                        <input type="text" class="form-control" placeholder="搜&nbsp;索" name="search">
+                    <div class="form-group fl" >
+                        <input type="text" class="form-control" placeholder="搜&nbsp;索" name="search" size="30">
                     </div>
                     <div class="form-group fl">
                         <input type="submit" class="form-control btn btn-warning" value="搜&nbsp;索">
@@ -128,21 +97,21 @@
         </div>
         <div class="container shop">
             <ul class="shop-header fl">
-                <li class="fl"><a href="#">全部商品&nbsp;<strong>5</strong></a></li>
+                <li class="fl"><a href="#">全部商品&nbsp;<strong>{{cartGoodsNum}}</strong></a></li>
                 <div class="jg fl">|</div>
                 <li class="fl"><a href="#">降价商品&nbsp;<strong>4</strong></a></li>
                 <div class="jg fl">|</div>
                 <li class="fl"><a href="#">库存紧张&nbsp;<strong>4</strong></a></li>
                 <div class="fr total">
                     <p class="fl">已选商品:(不含运费)</p>
-                    <p class="fa fa-yen fl">0.00</p>
-                    <input type="button" value="结算" class="btn btn-warning hvr-grow fr"  disabled id="btn_js1" data-toggle="modal" data-target="#myModal" >
+                    <p class="fa fa-yen fl">{{allTotalMoney}}</p>
+                    <input type="button" value="结算" class="btn btn-warning hvr-grow fr" disabled id="btn_js1" @click="submitCheck()">
                 </div>
             </ul>
             <div class="shop_all fl">
                 <div class="fl shop_all_body">
                     <div class="shop_all_head fl">
-                        <input type="checkbox" class="fl" value="all_sel" name="1">&nbsp;全选&nbsp;
+                        <input type="checkbox" class="fl" value="all_sel" name="1" @click="handleAllCnt(0,cartGoodsShops,false)" v-model="isAllSelected" >&nbsp;全选&nbsp;
                     </div>
                     <div class="shop_all_head fl">商品信息</div>
                     <div class="shop_all_head fl">单价</div>
@@ -151,10 +120,84 @@
                     <div class="shop_all_head fl">操作</div>
 
                 </div>
-                <ul class="shop_list fl"></ul>
+                <ul class="shop_list fl">
+                    <li class="fl" v-for="(item,index) in cartGoodsShops" :style="{height:(Object.keys(item).length-2)*135+'px'}" >
+                        <div class="shop_list_head fl">
+                            <input type="checkbox" class="fl" value="shop_name" @click="handleAllCnt(1,item,false)" v-model="item.isChecked">
+                            <p class="fl">&nbsp;店铺&nbsp;{{item.goods_store_name}}</p>
+                            <a href="#" class="fl hvr-float-shadow">
+                                <img src="../dist/res/contact.jpeg" alt="未能正确加载图片" width="15" height="15">
+                            </a>
+                            <div class="fl discount">
+                                <a href="#" >&nbsp;&nbsp;&nbsp;优惠券&nbsp;
+                                    <i class='fa fa-angle-down'></i>&nbsp;
+                                </a>
+                            </div>
+                            <ul class="shop_list_item fl">
+                                <li class="shop_list_body fl" v-for="(itt,inn) in item.goods_info">
+                                    <div class="body_info fl">
+                                        <input type="checkbox" value="goods_item" class="fl" style="width: 5%;" @click="handleAllCnt(2,itt,false)" v-model="itt.isChecked">
+                                        <div class="fl body_info_img">
+                                            <a href="#" class="hvr-grow-shadow">
+                                                <img :src="itt.book_img" alt="未能正确加载图片" width="70" height="90" :title="itt.book_name">
+                                            </a>
+                                        </div>
+                                        <div class="fl body_info_des">
+                                            <div class="body_info_des_top">
+                                                <a href="#" class="body_info_des_top_fnt">{{itt.book_ad}}</a>
+                                            </div>
+                                            <div class="body_info_des_top">
+                                                <a href="#" title="信用卡支付">
+                                                    <img src="../dist/res/pay_icon/xcard.png" alt="">
+                                                </a>
+                                                <a href="#" title="0首付，慢慢还，拥有所爱，无需等待！">
+                                                    <img src="../dist/res/pay_icon/fenqi.png" alt="">
+                                                </a>
+                                                <a href="#" title="消费者保障服务，卖家承诺商品如实描述">
+                                                    <img src="../dist/res/pay_icon/Customer%20guarantee.png" alt="">
+                                                </a>
+                                                <a href="#" title="订单险">
+                                                    <img src="../dist/res/pay_icon/book%20guarantee.png" alt="">
+                                                </a>
+                                                <a href="#" title="满足7天无理由退货申请的前提下，包邮商品需要买家承担退货邮费，非包邮商品需要买家承担发货和退货邮费。">
+                                                    <img src="../dist/res/pay_icon/7day.jpg" alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="fl body_info_type">
+                                            <p>出版社&nbsp;{{itt.book_des[0].publisher}}</p>
+                                            <p>规格&nbsp;{{itt.book_des[0].size}}</p>
+                                            <p>版次&nbsp;{{itt.book_des[0].edition}}</p>
+                                            <p>作者&nbsp;{{itt.book_des[0].author}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="body_else fl body_price">
+                                        <del><i class="fa fa-yen"></i>{{itt.book_des[0].old_price}}</del>
+                                        <br>
+                                        <p class="fa fa-yen"><strong>{{itt.book_des[0].dis_price}}</strong></p>
+                                    </div>
+                                    <div class="body_else fl body_num">
+                                        <span>
+                                            <button type="button" class="fl" value="sub" @click="DecreaseCnt(itt)">-</button>
+                                            <input type="text" v-model="itt.book_des[0].num" class="fl" name="goods_num" ng-pattern="/[^a-zA-Z]" @change="InputChange(itt)">
+                                            <button type="button" class="fl" value="plus" @click="IncreaseCnt(itt)">+</button>
+                                        </span>
+                                    </div>
+                                    <div class="body_else fl body_all_price"> 
+                                        <p class="fa fa-yen">{{ (itt.book_des[0].num * itt.book_des[0].dis_price).toFixed(2)  }}</p>
+                                    </div>
+                                    <div class="body_else fl body_op">
+                                        <a href="#" @click="moveIntoLocale(itt)">移入收藏夹</a><br>
+                                        <a href="#" @click="removeItem(itt)">删除</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
                 <div class="all_total fl">
                     <div class="all_total_left fl">
-                        <input type="checkbox" class="fl" value="all_sel" name="2">&nbsp;全选&nbsp;
+                        <input type="checkbox" class="fl" value="all_sel" name="2"  @click="handleAllCnt(0,cartGoodsShops,false)" v-model="isAllSelected">&nbsp;全选&nbsp;
                         <a href="javascript:void(0)" id="delete" >删除</a>
                         <a href="#" id="clear">清除失效宝贝</a>
                         <a href="#" id="join">移入收藏夹</a>
@@ -162,34 +205,39 @@
                     </div>
                     <div class="all_total_right fl">
                         <p class="fl">共选商品</p>
-                        <strong class="fl">&nbsp;0&nbsp;</strong>
+                        <strong class="fl">&nbsp;{{allCount}}&nbsp;</strong>
                         <p class="fl">件&nbsp;&nbsp;&nbsp;</p>
                         <p class="fl">合计(不含运费):&nbsp;&nbsp;&nbsp;</p>
-                        <p class="fl fa fa-yen" name="total">&nbsp;0.00</p>
+                        <p class="fl fa fa-yen" name="total">&nbsp;{{allTotalMoney}}</p>
                     </div>
                 </div>
-                <input type="button" class="fl btn btn-danger" value="结算" id="btn_js2" disabled data-toggle="modal" data-target="#myModal">
+                <button type="button" class="fl btn btn-danger" value="结算" id="btn_js2" @click="submitCheck()"  disabled>结算</button>
+
             </div>
         </div>
-        <div class="modal " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <div id="myModal" tabindex="-1" role="dialog"  :class="[isSubmit? 'display_show':'display_hide' ]">
+            <div>
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <button type="button" class="close" @click="closeSubmit()">×</button>
                         <h4 class="modal-title" id="myModalLabel">结算清单</h4>
                     </div>
                     <div class="modal-body">
                         <div class="modal-body-head">
                             <p class="fl"><a>STEP 1&nbsp;</a><i class="fa fa-angle-right"></i></p>
                             <!--<p class="fl">STEP 2</p>-->
+                            <p class="fl" :class="[currentStep >=2 ?'display_show':'display_hide']"><a>&nbsp;STEP 2&nbsp;</a><i class="fa fa-angle-right"></i></p>
+                            <p class="fl" :class="[currentStep >=3 ?'display_show':'display_hide']"><a>&nbsp;STEP 3&nbsp;</a><i class="fa fa-angle-right"></i></p>
+                            <p class="fl" :class="[currentStep >=4 ?'display_show':'display_hide']"><a>&nbsp;STEP 4&nbsp;</a><i class="fa fa-angle-right"></i></p>
                         </div>
                         <br>
                         <div class="modal-body-body">
-                            <div class="step-one ">
+                            <div :class="['step-one', currentStep == 1 ? 'display_show' : 'display_hide']">
                                 <h4>确认购书清单</h4>
                                 <table class="table" border="-1">
                                     <thead>
                                         <tr>
+                                            <th>订单号</th>
                                             <th>书名</th>
                                             <th>作者</th>
                                             <th>单价</th>
@@ -198,18 +246,38 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-bordered">
+                                        <tr v-for="(item,index) in SelectedAllShops">
+                                            <td>{{item.ID}}</td>
+                                            <td>{{item.bookName}}</td>
+                                            <td>{{item.bookAuthor}}</td>
+                                            <td>{{item.bookPrice}}</td>
+                                            <td>{{item.bookCnt}}</td>
+                                            <td>{{item.bookTotal}}</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="step-two ">
+                            <div :class="['step-two', currentStep == 2 ? 'display_show' : 'display_hide']">
                                 <h4>确认收货地址</h4>
-                                <ul></ul>
+                                <ul>
+                                    <li v-for="(item,index) in cartAddress">
+                                        <input type="radio" name="address" class="fl" v-if="item.add_default == true" checked v-model="item.add_default">
+                                        <input type="radio" name="address" class="fl" v-else v-model="item.add_default">
+                                        <p v-if="item.add_default == true">&nbsp;{{item.add_province}}&nbsp;{{item.add_district}}&nbsp;{{item.add_more_detail}}&nbsp;(&nbsp;{{item.add_contact_name}}收&nbsp;){{item.add_contact_phone}}&nbsp;
+                                            <strong style="color:#888888;">默认地址</strong>
+                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#edit_add">&nbsp;&nbsp;修改默认地址</a>
+                                        </p>
+                                        <p v-else>&nbsp;{{item.add_province}}&nbsp;{{item.add_district}}&nbsp;{{item.add_more_detail}}&nbsp;(&nbsp;{{item.add_contact_name}}收&nbsp;){{item.add_contact_phone}}&nbsp;
+                                            <a href="javascript:void(0)" @click="setDefaultAddress(item)">&nbsp;&nbsp;设置为默认地址</a>
+                                        </p>
+                                    </li>
+                                </ul>
                                 <!-- 模态框（Modal） -->
-                                <div class="modal fade" id="edit_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                <div class="modal fade" id="edit_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true" >
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <button type="button" class="close" aria-hidden="true" id="close_edit_add">&times;</button>
+                                                <button type="button" class="close" aria-hidden="true" id="close_edit_add" @click="closeEditAddress()">&times;</button>
                                                 <h4 class="modal-title">修改地址</h4>
                                             </div>
                                             <div class="modal-body">
@@ -230,27 +298,27 @@
                                                     </div>
                                                     <div class="input-group add-more">
                                                         <span class="fl">联系电话</span>
-                                                        <input type="tel" style="width: 136px" placeholder="联系电话">
+                                                        <input type="tel" style="width: 136px" placeholder="联系电话" id="tel2">
                                                     </div>
                                                     <div class="input-group add-more">
                                                         <span class="fl">姓名</span>
-                                                        <input type="text" placeholder="姓名" >
+                                                        <input type="text" placeholder="姓名" id="contact_name2">
                                                     </div>
                                                     <div class="input-group add-more">
                                                         <span class="fl">具体地址</span>
-                                                        <input type="text" placeholder="详细地址" >
+                                                        <input type="text" placeholder="详细地址" id="more_address_2">
                                                     </div>
                                                 </form>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" id="edit_address_cancel">取消更改</button>
-                                                <button type="submit" class="btn btn-primary" id="edit_address_ok" >提交更改</button>
+                                                <button type="button" class="btn btn-default" id="edit_address_cancel" @click="cancelEdit()">取消更改</button>
+                                                <button type="submit" class="btn btn-primary" id="edit_address_ok" @click="SubmitEdit()">提交更改</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="step-three">
+                            <div :class="['step-three',currentStep == 3 ? 'display_show' : 'display_hide']">
                                 <h4>支付选择</h4>
                                 <ul>
                                     <li class="fl">
@@ -279,12 +347,15 @@
                                     <textarea type="text" placeholder="请输入联系方式 并备注解决方案" maxlength="30"></textarea>
                                 </div>
                             </div>
+                            <div :class="[currentStep == 4 ? 'display_show' : 'display_hide']">
+                                <h4>确认提交订单吗？</h4>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer ">
-                        <button type="button" class="btn btn-default" disabled id="step_prev">上一步</button>
-                        <button type="button" class="btn btn-default" id="step_next">下一步</button>
-                        <button type="button" class="btn btn-primary" disabled id="step_submit">提交</button>
+                        <button type="button" class="btn btn-default" disabled id="step_prev" @click="PrevStep()">上一步</button>
+                        <button type="button" class="btn btn-default" id="step_next" @click="NextStep()">下一步</button>
+                        <button type="button" class="btn btn-primary" disabled id="step_submit" @click="SubmitOK()">提交</button>
                     </div>
                 </div>
             </div>
@@ -292,51 +363,110 @@
         <div class="recommend_daily">
             <div class="recommend_daily_head">
                 <ul class="list-group">
-                    <li class="list-group-item fl" value="1">掌柜热卖</li>
+                    <li :class="[ recommendIndex == 1 ? ShowClassLine : HideClassLine ]" value="1" @mouseenter="showDiv(1)">掌柜热卖</li>
                     <li class="fl list-group-item">|</li>
-                    <li class="list-group-item fl" value="2">最近浏览</li>
+                    <li :class="[ recommendIndex == 2 ? ShowClassLine : HideClassLine ]" value="2" @mouseenter="showDiv(2)">最近浏览</li>
                     <li class="fl list-group-item">|</li>
-                    <li class="list-group-item fl" value="3">猜你喜欢</li>
+                    <li :class="[ recommendIndex == 3 ? ShowClassLine : HideClassLine ]" value="3" @mouseenter="showDiv(3)">猜你喜欢</li>
                 </ul>
             </div>
-            <div class="recommend_daily_body carousel slide" id="daily_hot">
+            <div :class="[ recommendIndex == 1 ? ShowClass : HideClass ]" id="daily_hot">
                 <ol class="fl carousel-indicators">
-                    <li data-target="#daily_hot" data-slide-to="0" class="active"></li>
-                    <li data-target="#daily_hot" data-slide-to="1"></li>
-                    <li data-target="#daily_hot" data-slide-to="2"></li>
-                    <li data-target="#daily_hot" data-slide-to="3"></li>
-                    <li data-target="#daily_hot" data-slide-to="4"></li>
+                    <li value="0" @mouseenter="showDailyHot(0)" :class="[dailyHotCurrentIndex == 0 ? 'active' : '' ]"></li>
+                    <li value="1" @mouseenter="showDailyHot(1)" :class="[dailyHotCurrentIndex == 1 ? 'active' : '' ]"></li>
+                    <li value="2" @mouseenter="showDailyHot(2)" :class="[dailyHotCurrentIndex == 2 ? 'active' : '' ]"></li>
+                    <li value="3" @mouseenter="showDailyHot(3)" :class="[dailyHotCurrentIndex == 3 ? 'active' : '' ]"></li>
+                    <li value="4" @mouseenter="showDailyHot(4)" :class="[dailyHotCurrentIndex == 4 ? 'active' : '' ]"></li>
                 </ol>
-                <div class="carousel-inner"></div>
+                <div class="carousel-inner">
+                    <ul class="item active daily_list">
+                        <li v-for="(item,index) in dailyHot">
+                            <div class="daily_hot_list-head">
+                                <img :src="item.book_img_url" alt="未能正确加载图片" :title="item.book_name" width="160" height="180">
+                            </div>
+                            <div class="daily_hot_list_body">
+                                <div class="daily_hot_list_body_item">
+                                    <p class="fa fa-yen fl"><strong>{{item.book_price_now}}</strong></p>
+                                    <del class="fa fa-yen fl">&nbsp;{{item.book_price_before}}</del>
+                                    <a class="fr"><img src="../dist/res/postfree.png" alt='' title="包邮"></a>
+                                </div>
+                                <div class="daily_hot_list_body_item">
+                                    <p>{{item.book_title}}</p>
+                                </div>
+                                <div class="daily_hot_list_body_item">
+                                    <p class="fl">销量:&nbsp;{{item.book_sell_num}}</p>
+                                    <a class="fr">{{item.book_else_des}}</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
                 <div class="carousel_btn">
-                    <a class="carousel-control fl" href="#daily_hot"
-                       data-slide="prev" type="button">&lsaquo;</a>
-                    <a class="carousel-control fl" href="#daily_hot"
-                       data-slide="next">&rsaquo;</a>
+                    <a class="carousel-control fl" type="button" @click="prev('daily-hot')">&lsaquo;</a>
+                    <a class="carousel-control fl" type="button" @click="next('daily-hot')">&rsaquo;</a>
                 </div>
             </div>
-            <div class="recommend_daily_body carousel slide" id="daily_history">
+            <div :class="[ recommendIndex == 2 ? ShowClass : HideClass ]" id="daily_history">
                 <ol class="fl carousel-indicators"></ol>
                 <div class="carousel-inner">
-                    <ul class="item active daily_list"></ul>
+                    <ul class="item active daily_list">
+                        <li v-for="(item,index) in dailyHistory">
+                          <div class="daily_hot_list-head">
+                              <img :src="item.book_img_url" alt="未能正确加载图片" :title="item.book_name" width="160" height="180">
+                                </div>
+                              <div class="daily_hot_list_body">
+                                  <div class="daily_hot_list_body_item">
+                                      <p class="fa fa-yen fl"><strong>{{item.book_price_now}}</strong></p>
+                                      <del class="fa fa-yen fl">&nbsp;{{item.book_price_before}}</del>
+                                      <a class="fr"><img src="../dist/res/postfree.png" alt='' title="包邮"></a>
+                                  </div>
+                                  <div class="daily_hot_list_body_item">
+                                      <p>{{item.book_title}}</p>
+                                  </div>
+                                  <div class="daily_hot_list_body_item">
+                                      <p class="fl">浏览时间:&nbsp;</p>
+                                      <a class="fr">{{item.book_else_des}}</a>
+                                  </div>
+                              </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div class="recommend_daily_body carousel slide" id="guess_like">
+            <div :class="[ recommendIndex == 3 ? ShowClass : HideClass ]" id="guess_like">
                 <ol class="fl carousel-indicators">
-                    <li data-target="#guess_like" data-slide-to="0" class="active"></li>
-                    <li data-target="#guess_like" data-slide-to="1"></li>
-                    <li data-target="#guess_like" data-slide-to="2"></li>
-                    <li data-target="#guess_like" data-slide-to="3"></li>
-                    <li data-target="#guess_like" data-slide-to="4"></li>
+                    <li value="0" @mouseenter="showGuessLike(0)" :class="[guessLikeCurrentIndex == 0 ? 'active' : '' ]"></li>
+                    <li value="1" @mouseenter="showGuessLike(1)" :class="[guessLikeCurrentIndex == 1 ? 'active' : '' ]"></li>
+                    <li value="2" @mouseenter="showGuessLike(2)" :class="[guessLikeCurrentIndex == 2 ? 'active' : '' ]"></li>
+                    <li value="3" @mouseenter="showGuessLike(3)" :class="[guessLikeCurrentIndex == 3 ? 'active' : '' ]"></li>
+                    <li value="4" @mouseenter="showGuessLike(4)" :class="[guessLikeCurrentIndex == 4 ? 'active' : '' ]"></li>
                 </ol>
-                <div class="carousel-inner"></div>
-                <div class="carousel_btn">
-                    <a class="carousel-control fl" href="#guess_like"
-                       data-slide="prev" type="button">&lsaquo;</a>
-                    <a class="carousel-control fl" href="#guess_like"
-                       data-slide="next">&rsaquo;</a>
+                <div class="carousel-inner">
+                    <ul class='item active daily_list'>
+                        <li v-for="(item,index) in guessLike">
+                            <div class='daily_hot_list-head'>
+                                <img :src="item.book_img_url" alt='未能正确加载图片' :title="item.book_name"  width='160' height='180'>
+                            </div>
+                            <div class='daily_hot_list_body'>
+                                <div class='daily_hot_list_body_item'>
+                                    <p class='fa fa-yen fl'><strong>{{item.book_price_now}}</strong></p>
+                                    <del class='fa fa-yen fl'>&nbsp;{{item.book_price_before}}</del>
+                                    <a class='fr'><img src='../dist/res/postfree.png' alt='' title='包邮'></a>
+                                </div>
+                                <div class='daily_hot_list_body_item'>
+                                    <p>{{item.book_title}}</p>
+                                </div>
+                                <div class='daily_hot_list_body_item'>
+                                    <p class='fl'>销量:&nbsp;{{item.book_sell_num}}</p>
+                                    <a class='fr'>{{item.book_else_des}}</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-
+                <div class="carousel_btn">
+                    <a class="carousel-control fl" type="button" @click="prev('guess-like')">&lsaquo;</a>
+                    <a class="carousel-control fl" type="button" @click="next('guess-like')">&rsaquo;</a>
+                </div>
             </div>
         </div>
         <div class="footer fl">
@@ -371,5 +501,9 @@
                 <i class="fa fa-phone-square fa-2x"></i>
             </div>
         </div>
+        <!--vue.js-->
+        <script type="text/javascript" src="../dist/js/vue.js"></script>
+        <script type="text/javascript" src="../dist/js/vue-resource.min.js"></script>
+        <script type="text/javascript" src="../dist/myjs/vue-cart.js"></script>
     </body>
 </html>

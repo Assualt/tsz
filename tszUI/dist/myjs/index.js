@@ -59,10 +59,8 @@ function Init() {
     }
 }
 
-
 $(document).ready(function () {
     Init();
-
     window.JSONPATH="dist/res/json/";
     /*define the json for area_university*/
     $.getJSON(window.JSONPATH+"area_university.json",function (content) {
