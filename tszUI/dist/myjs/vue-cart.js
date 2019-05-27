@@ -16,13 +16,13 @@ var header= new Vue({
     filters:{  //过滤器
     },
     methods:{
-        showAllSchool () {
+        showAllSchool:function() {
             this.bShow = 1;
         },
-        closeAllSchool () {
+        closeAllSchool:function() {
             this.bShow = 0;
         },
-        showAllUniversitys(City,index){
+        showAllUniversitys:function(City,index){
             var _this = this;
             this.$http.get('../dist/res/json/area_university.json',[]).then((res)=>{
                 let allCityData = res.body;
@@ -49,7 +49,7 @@ var header= new Vue({
             });
 
         },
-        selectSchool(schoolName){
+        selectSchool:function(schoolName){
             this.targetSchool = schoolName;
             this.closeAllSchool();
         }
@@ -62,10 +62,11 @@ var Model = new Vue({
         isSubmit:false,
         SelectedAllShops:[],
         cartAddress:[],
-        currentStep:1
+        currentStep:1,
+        showOverlay:true
     },
     methods:{
-        PrevStep(){
+        PrevStep:function(){
             if(this.currentStep == 1){
                 this.currentStep = 1;
                 $("#step_submit").attr("disabled",true);
@@ -82,7 +83,7 @@ var Model = new Vue({
                 }
             }
         },
-        NextStep(){
+        NextStep:function(){
             if(this.currentStep == 4){
                 this.currentStep = 4;
                 $("#step_submit").attr("disabled",false);
@@ -99,18 +100,20 @@ var Model = new Vue({
                 }
             }
         },
-        SubmitOK(){
+        SubmitOK:function(){
             this.closeSubmit();
+            this.showOverlay = false;
             swal('淘书斋提醒','删除成功','success');
         },
-        closeSubmit(){
+        closeSubmit:function(){
             this.isSubmit = false;
+            this.showOverlay = false;
             console.log(this.isSubmit);
         },
-        cancelEdit(){//取消修改地址
+        cancelEdi:function(){//取消修改地址
             this.closeEditAddress();
         },
-        SubmitEdit(){//修改地址
+        SubmitEdit:function(){//修改地址
             this.cartAddress.forEach((res)=>{
                if(res.add_default == true) {
                    res.add_province = $("#province2").val();
@@ -123,10 +126,10 @@ var Model = new Vue({
                }
             });
         },
-        closeEditAddress(){//关闭
+        closeEditAddress:function(){//关闭
             $("#edit_add").removeClass('in');
         },
-        setDefaultAddress(item){
+        setDefaultAddress:function(item){
             this.cartAddress.forEach((res)=>{
                 if(res.add_default == true){
                     res.add_default = false;
@@ -146,7 +149,7 @@ var cartMain = new Vue({
         allTotalMoney:0.00
     },
     methods: {
-        Init() {
+        Init:function() {
             var _this = this;
             this.$http.get('../dist/res/json/cart.json', []).then((res) => {
                 res.body.forEach((data) => {
@@ -161,7 +164,7 @@ var cartMain = new Vue({
                 });
             });
         },
-        IncreaseCnt(Item) {
+        IncreaseCnt:function(Item) {
             if (Item.book_des[0].num > 19) {
                 alert("当前商品库存20件，最大选择20件");
                 Item.book_des[0].num = 20;
@@ -171,7 +174,7 @@ var cartMain = new Vue({
             this.handleAllCnt(2,Item,true);
             // console.log("Increase Cnt" + Item.book_des[0].num);
         },
-        DecreaseCnt(Item) {
+        DecreaseCnt:function(Item) {
             if (Item.book_des[0].num === 1) {
                 alert("当前至少选择一件商品");
             } else {
@@ -180,7 +183,7 @@ var cartMain = new Vue({
             this.handleAllCnt(2,Item,true);
             // console.log("Decrease Cnt" + Item.book_des[0].num);
         },
-        InputChange(Item) {
+        InputChange:function(Item) {
             if (isNaN(Item.book_des[0].num)) {
                 alert("你输入的不是一个有效的整数,请重新输入");
                 Item.book_des[0].num = 1;
@@ -193,13 +196,13 @@ var cartMain = new Vue({
             }
             this.handleAllCnt(2,Item,true);
         },
-        moveIntoLocale(Item) {//移入收藏夹
+        moveIntoLocale:function(Item) {//移入收藏夹
 
         },
-        removeItem(Item) {//删除商品
+        removeItem:function(Item) {//删除商品
 
         },
-        handleAllCnt(Index, Item, bSkip) {
+        handleAllCnt:function(Index, Item, bSkip) {
             if(!bSkip) {
                 if (Index === 0) {//全选
                     var flag = !this.isAllSelected;
@@ -278,7 +281,7 @@ var cartMain = new Vue({
                 _this.allTotalMoney = _this.allTotalMoney.toFixed(2);
             });
         },
-        randomWord(randomFlag, min, max) {
+        randomWord:function(randomFlag, min, max) {
             var str = "",
                 range = min,
                 arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -292,8 +295,9 @@ var cartMain = new Vue({
             }
             return str;
         },
-        submitCheck(){
+        submitCheck:function(){
             Model.isSubmit = true;
+            overlay.showOverlay = true;
         }
     },
     mounted: function () {
@@ -301,8 +305,6 @@ var cartMain = new Vue({
     },
 
 });
-
-
 
 var recommend_daily = new Vue({
     el:".recommend_daily",
@@ -324,10 +326,12 @@ var recommend_daily = new Vue({
         guessLikeCurrentIndex:0
     },
     mounted:function () {
-        this.Init()
+        this.$nextTick(function () {
+            this.Init();
+        });
     },
     methods:{
-        Init(){
+        Init:function(){
             var _this = this;
             this.$http.get('../dist/res/json/daily_interest.json',[]).then((res)=>{
                let allData = res.body;
@@ -355,14 +359,14 @@ var recommend_daily = new Vue({
                });
             });
         },
-        lubbo(){
+        lubbo:function(){
             $("#daily_hot").carousel( {interval:5000});
             $('#guess_like').carousel({interval:5000});
         },
-        showDiv(Index){
+        showDiv:function(Index){
             this.recommendIndex = Index;
         },
-        showDailyHot(Index){
+        showDailyHot:function(Index){
             this.dailyHotCurrentIndex = Index;
             var tStart = this.dailyHotCurrentIndex * 5;
             var tEnd = tStart + 5 > this.dailyHotAll.length ? this.dailyHotAll.length : tStart + 5;
@@ -371,7 +375,7 @@ var recommend_daily = new Vue({
                 this.dailyHot.push(this.dailyHotAll[i]);
             }
         },
-        showGuessLike(Index){
+        showGuessLike:function(Index){
             this.guessLikeCurrentIndex = Index;
             var tStart = this.guessLikeCurrentIndex * 5;
             var tEnd = tStart + 5 > this.guessLikeAll.length ? this.guessLikeAll.length : tStart + 5;
@@ -380,7 +384,7 @@ var recommend_daily = new Vue({
                 this.guessLike.push(this.guessLikeAll[i]);
             }
         },
-        next(options){
+        next:function(options){
             if(options === "daily-hot"){
                 this.dailyHotCurrentIndex = (this.dailyHotCurrentIndex + 1) % 5;
                 this.showDailyHot(this.dailyHotCurrentIndex);
@@ -389,7 +393,7 @@ var recommend_daily = new Vue({
                 this.showGuessLike(this.guessLikeCurrentIndex);
             }
         },
-        prev(options){
+        prev:function(options){
             if(options === "daily-hot"){
                 if(this.dailyHotCurrentIndex == 0)
                     this.dailyHotCurrentIndex = 4;

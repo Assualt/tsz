@@ -16,13 +16,13 @@ var header= new Vue({
     filters:{  //过滤器
     },
     methods:{
-        showAllSchool () {
+        showAllSchool:function () {
             this.bShow = 1;
         },
-        closeAllSchool () {
+        closeAllSchool:function () {
             this.bShow = 0;
         },
-        showAllUniversitys(City,index){
+        showAllUniversitys:function(City,index){
             var _this = this;
             this.$http.get('dist/res/json/area_university.json',[]).then((res)=>{
                 let allCityData = res.body;
@@ -49,7 +49,7 @@ var header= new Vue({
             });
 
         },
-        selectSchool(schoolName){
+        selectSchool:function(schoolName){
             this.targetSchool = schoolName;
             this.closeAllSchool();
         }
@@ -79,25 +79,25 @@ var main = new Vue({
 
     },
     methods:{
-        imgFormat(value){
+        imgFormat:function(value){
             return 'dist/res/focus_' + value +'.jpg';
         },
-        prev(){
+        prev:function(){
             if(this.currentSlide == 0)
                 this.currentSlide = 2;
             else
                 this.currentSlide = (this.currentSlide-1) % this.AllSlideCnt;
             this.currentSlideImgPath = this.imgFormat(this.currentSlide);
         },
-        next(){
+        next:function(){
             this.currentSlide = (this.currentSlide+1) % this.AllSlideCnt;
             this.currentSlideImgPath = this.imgFormat(this.currentSlide);
         },
-        setSlide (index){
+        setSlide:function(index){
             this.currentSlide = index;
             this.currentSlideImgPath = this.imgFormat(index);
         },
-        Init(){
+        Init:function(){
             var _this = this;
             this.$http.get('dist/res/json/hot-topic.json',[]).then((res)=>{
                 let allData = res.body;
@@ -133,7 +133,9 @@ var main = new Vue({
 
     },
     mounted:function () {//加载完成的时候需要加载的东西
-        this.Init();
+        this.$nextTick(function () {
+            this.Init();
+        });
     }
 });
 
@@ -149,7 +151,7 @@ var helper = new Vue({
         helper3:"<i class='fa fa-phone-square fa-2x'></i>"
     },
     methods:{
-        hide(index){
+        hide:function(index){
             if(index === 0){
                 this.helper0 = "<i class='fa fa-question-circle-o fa-2x\'></i>";
             }else if(index === 1){
@@ -158,7 +160,7 @@ var helper = new Vue({
                 this.helper3 = "<i class='fa fa-phone-square fa-2x'></i>";
             }
         },
-        show(value,index){
+        show:function(value,index){
             if(index === 0){
                 this.helper0 = value;
             }else if(index=== 1){
@@ -167,10 +169,9 @@ var helper = new Vue({
                 this.helper3 = value;
             }
         },
-        scrollTop(){
+        scrollTop:function(){
             $(window).scrollTop();
             $('body,html').animate({scrollTop:0},500);
         }
     }
-
 });

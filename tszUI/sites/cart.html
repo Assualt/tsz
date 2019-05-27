@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
     <head>
         <title>我的购物车</title>
         <meta charset="UTF-8">
@@ -232,7 +232,7 @@
                         </div>
                         <br>
                         <div class="modal-body-body">
-                            <div :class="['step-one', currentStep == 1 ? 'display_show' : 'display_hide']">
+                            <div class="step-one" v-bind:class="[currentStep == 1 ? 'display_show' : 'display_hide']">
                                 <h4>确认购书清单</h4>
                                 <table class="table" border="-1">
                                     <thead>
@@ -257,7 +257,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div :class="['step-two', currentStep == 2 ? 'display_show' : 'display_hide']">
+                            <div class="step-two" v-bind:class="[currentStep == 2 ? 'display_show' : 'display_hide']">
                                 <h4>确认收货地址</h4>
                                 <ul>
                                     <li v-for="(item,index) in cartAddress">
@@ -318,7 +318,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div :class="['step-three',currentStep == 3 ? 'display_show' : 'display_hide']">
+                            <div class="step-three" v-bind:class="[currentStep == 3 ? 'display_show' : 'display_hide']">
                                 <h4>支付选择</h4>
                                 <ul>
                                     <li class="fl">
@@ -359,6 +359,7 @@
                     </div>
                 </div>
             </div>
+            <div v-bind:class="[showOverlay ? 'overlay' : '']" id="overlay"></div>
         </div>
         <div class="recommend_daily">
             <div class="recommend_daily_head">
@@ -501,6 +502,7 @@
                 <i class="fa fa-phone-square fa-2x"></i>
             </div>
         </div>
+
         <!--vue.js-->
         <script type="text/javascript" src="../dist/js/vue.js"></script>
         <script type="text/javascript" src="../dist/js/vue-resource.min.js"></script>
