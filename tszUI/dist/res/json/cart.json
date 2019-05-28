@@ -47,7 +47,7 @@
     "goods":[
       {
         "goods_store_id":"123456",
-        "goods_store_name":"兴文图书",
+        "goods_store_name":"兴文图书1",
         "isChecked":false,
         "goods_info":[
           {
@@ -57,6 +57,7 @@
             "isChecked":false,
             "book_des": [
               {
+                "ID":1001,
                 "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
@@ -74,6 +75,7 @@
             "isChecked":false,
             "book_des": [
               {
+                "ID":1002,
                 "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
@@ -88,7 +90,7 @@
       },
       {
         "goods_store_id":"123456",
-        "goods_store_name":"兴大爱图书",
+        "goods_store_name":"兴大爱图书1",
         "isChecked":false,
         "goods_info":[
           {
@@ -98,6 +100,7 @@
             "isChecked":false,
             "book_des": [
               {
+                "ID":1003,
                 "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
@@ -115,6 +118,7 @@
             "isChecked":false,
             "book_des": [
               {
+                "ID":1004,
                 "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
@@ -129,7 +133,7 @@
       },
       {
         "goods_store_id":"123456",
-        "goods_store_name":"兴文图书",
+        "goods_store_name":"兴文图书2",
         "isChecked":false,
         "goods_info":[
           {
@@ -139,6 +143,7 @@
             "isChecked":false,
             "book_des": [
               {
+                "ID":1005,
                 "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
@@ -156,6 +161,7 @@
             "isChecked":false,
             "book_des": [
               {
+                "ID":1006,
                 "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
@@ -170,7 +176,7 @@
       },
       {
         "goods_store_id":"123456",
-        "goods_store_name":"兴大爱图书",
+        "goods_store_name":"兴大爱图书2",
         "isChecked":false,
         "goods_info":[
           {
@@ -180,6 +186,7 @@
             "isChecked":false,
             "book_des": [
               {
+                "ID":1007,
                 "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",
@@ -197,6 +204,7 @@
             "isChecked":false,
             "book_des": [
               {
+                "ID":1008,
                 "num":1,
                 "size":"110*200*10（mm)",
                 "publisher":"人民出版社",

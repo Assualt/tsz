@@ -94,7 +94,8 @@ var main =new Vue({
     data:{
         currentStep:1,
         AllAddress:[],
-        showCount:3
+        showCount:3,
+        selectedAddress:{}
     },
     methods: {
         Init: function () {
@@ -109,6 +110,9 @@ var main =new Vue({
         },
         addNewAddress:function () {
             alert("添加新地址")
+        },
+        chooseAddress:function (Address) {
+            this.selectedAddress = Address;
         }
     },
     mounted: function () {

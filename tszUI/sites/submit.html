@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
-    <title>我的购物车</title>
+    <title>提交订单</title>
     <meta charset="UTF-8">
     <link rel="shortcut icon" type="image/x-icon" href="../dist/res/favicon.ico" media="screen" />
     <!--bootstrap js-->
@@ -100,7 +100,7 @@
             </h4>
         </div>
         <ul class="Address_list" :style="{height: (showCount+1) % 4 == 0 ? (showCount+1)/4 * 180 +'px' : Math.ceil((showCount+1)/4) * 180 +'px'  }">
-            <li class="address" v-for="(item,index) in getAllAddressList">
+            <li class="address" v-for="(item,index) in getAllAddressList" @click="chooseAddress(item)" v-bind:class="[item == selectedAddress ? 'border-active':'']">
                 <div class="fl address_left">
                     <p>{{item.add_contact_name}}</p>
                     <p>{{item.add_province + item.add_district}}</p>
@@ -157,6 +157,7 @@
     <!--vue.js-->
     <script type="text/javascript" src="../dist/js/vue.js"></script>
     <script type="text/javascript" src="../dist/js/vue-resource.min.js"></script>
+    <script type="text/javascript" src="../dist/js/vue-sweetalert2.js"></script>
     <script type="text/javascript" src="../dist/myjs/vue-submit.js"></script>
 </body>
 </html>

@@ -349,3 +349,6 @@ header{
     color: #f78123;
     text-decoration: none;
 }
+.border-active{
+    border: 1px solid #f78123;
+}

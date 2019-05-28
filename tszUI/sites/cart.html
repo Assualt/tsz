@@ -121,7 +121,7 @@
 
                 </div>
                 <ul class="shop_list fl">
-                    <li class="fl" v-for="(item,index) in cartGoodsShops" :style="{height:(Object.keys(item).length-2)*135+'px'}" >
+                    <li class="fl" v-for="(item,index) in cartGoodsShops" :style="{height: getHeight(item) + 'px'}">
                         <div class="shop_list_head fl">
                             <input type="checkbox" class="fl" value="shop_name" @click="handleAllCnt(1,item,false)" v-model="item.isChecked">
                             <p class="fl">&nbsp;店铺&nbsp;{{item.goods_store_name}}</p>
@@ -198,9 +198,9 @@
                 <div class="all_total fl">
                     <div class="all_total_left fl">
                         <input type="checkbox" class="fl" value="all_sel" name="2"  @click="handleAllCnt(0,cartGoodsShops,false)" v-model="isAllSelected">&nbsp;全选&nbsp;
-                        <a href="javascript:void(0)" id="delete" >删除</a>
+                        <a href="javascript:void(0)" id="delete" @click="removeSeleted" >删除</a>
                         <a href="#" id="clear">清除失效宝贝</a>
-                        <a href="#" id="join">移入收藏夹</a>
+                        <a href="#" id="join" @click="">移入收藏夹</a>
                         <a href="#" >分享</a>
                     </div>
                     <div class="all_total_right fl">

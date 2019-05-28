@@ -1,3 +1,4 @@
+
 var header= new Vue({
     el:"#header",
     data: {
@@ -55,7 +56,6 @@ var header= new Vue({
         }
     }
 });
-
 var Model = new Vue({
     el:"#myModal",
     data:{
@@ -183,24 +183,71 @@ var cartMain = new Vue({
             this.handleAllCnt(2,Item,true);
             // console.log("Decrease Cnt" + Item.book_des[0].num);
         },
-        InputChange:function(Item) {
+        InputChange:function(Inputval) {
             if (isNaN(Item.book_des[0].num)) {
                 alert("你输入的不是一个有效的整数,请重新输入");
-                Item.book_des[0].num = 1;
+                Inputval.book_des[0].num = 1;
             } else if (Item.book_des[0].num < 0) {
                 alert("当前至少选择一件商品");
-                Item.book_des[0].num = 1;
+                Inputval.book_des[0].num = 1;
             } else if (Item.book_des[0].num > 20) {
                 alert("当前商品库存20件，最大选择20件");
-                Item.book_des[0].num = 20;
+                Inputval.book_des[0].num = 20;
             }
             this.handleAllCnt(2,Item,true);
         },
-        moveIntoLocale:function(Item) {//移入收藏夹
-
+        moveIntoLocale:function(good) {//移入收藏夹
+            console.log(Model.SelectedAllShops.length);
         },
-        removeItem:function(Item) {//删除商品
-
+        moveSeletedtoLocale:function () {//移入选中到收藏夹
+            console.log(Model.SelectedAllShops.length);
+        },
+        removeItem:function(good) {//删除商品
+            var bOK= confirm(
+                "图书名:" + good.book_name + "\n" +
+                "作  者:" + good.book_des[0].author + "\n" +
+                "确认删除这本书？\n"
+            );
+            if(bOK){
+                var bookName = good.book_name;
+                var author = good.book_des[0].author;
+                var bookPrice = good.book_des[0].dis_price;
+                var edition = good.book_des[0].edition;
+                var bookNum = good.book_des[0].num;
+                var bookID = good.book_des[0].ID;
+                var _this = this;
+                this.cartGoodsShops.forEach((data,pIndex)=>{
+                   data.goods_info.forEach((res,index)=>{
+                      if(res.book_name == bookName && res.book_des[0].author == author &&
+                         res.book_des[0].dis_price == bookPrice && res.book_des[0].edition == edition &&
+                         res.book_des[0].num == bookNum && res.book_des[0].ID == bookID
+                      ){
+                          this.cartGoodsNum --;
+                          if(data.goods_info.length == 1){
+                              _this.cartGoodsShops.splice(pIndex,1);
+                          }else{
+                              data.goods_info.splice(index,1);
+                          }
+                      }
+                   });
+                });
+                _this.allTotalMoney = 0;
+                _this.allCount = 0;
+                Model.SelectedAllShops.forEach((data,index)=>{
+                    if(data.bookID == bookID ){
+                        Model.SelectedAllShops.splice(index,1);
+                    }else {
+                        _this.allCount += data.bookCnt;
+                        _this.allTotalMoney = parseFloat(_this.allTotalMoney) + parseFloat(data.bookTotal);
+                        _this.allTotalMoney = _this.allTotalMoney.toFixed(2);
+                    }
+                });
+            }else{
+                alert("删除失败");
+            }
+        },
+        removeSeleted:function () {
+            console.log(Model.SelectedAllShops.length);
         },
         handleAllCnt:function(Index, Item, bSkip) {
             if(!bSkip) {
@@ -232,6 +279,7 @@ var cartMain = new Vue({
                         Model.SelectedAllShops.push({
                             ID:this.randomWord(false,20),
                             bookName:data.book_name,
+                            bookID:data.book_des[0].ID,
                             bookAuthor:data.book_des[0].author,
                             bookPrice:data.book_des[0].dis_price,
                             bookCnt:data.book_des[0].num,
@@ -246,6 +294,7 @@ var cartMain = new Vue({
                            Model.SelectedAllShops.push({
                                ID:this.randomWord(false,20),
                                bookName:data.book_name,
+                               bookID:data.book_des[0].ID,
                                bookAuthor:data.book_des[0].author,
                                bookPrice:data.book_des[0].dis_price,
                                bookCnt:data.book_des[0].num,
@@ -258,6 +307,7 @@ var cartMain = new Vue({
                                 Model.SelectedAllShops.push({
                                     ID:this.randomWord(false,20),
                                     bookName:data.book_name,
+                                    bookID:data.book_des[0].ID,
                                     bookAuthor:data.book_des[0].author,
                                     bookPrice:data.book_des[0].dis_price,
                                     bookCnt:data.book_des[0].num,
@@ -298,12 +348,14 @@ var cartMain = new Vue({
         submitCheck:function(){
             Model.isSubmit = true;
             overlay.showOverlay = true;
+        },
+        getHeight:function (Item) {
+            return Item.goods_info.length  * 145;
         }
     },
     mounted: function () {
         this.Init()
-    },
-
+    }
 });
 
 var recommend_daily = new Vue({
