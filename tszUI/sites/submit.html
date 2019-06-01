@@ -7,8 +7,10 @@
     <!--bootstrap js-->
     <script type="text/javascript" src="../dist/js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="../dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../dist/js/md5.js"></script>
     <script type="text/javascript" src="../dist/js/distpicker.data.js"></script>
     <script type="text/javascript" src="../dist/js/distpicker.js"></script>
+    <script type="text/javascript" src="../dist/js/qrcode.min.js"></script>
     <script type="text/javascript" src="../dist/js/sweetalert2.min.js"></script>
     <!--<script type="text/javascript" src="./dist/js/npm.js"></script>-->
     <!--bootstrap css -->
@@ -88,40 +90,239 @@
                 <i class="fa fa-circle" v-bind:class="[currentStep >= 3 ? 'active':'deactive']"></i>
             </li>
             <li>
-                <p>查看订单</p>
+                <p>查看状态</p>
                 <div class="liner-bottom" v-bind:class="[currentStep >= 4 ? 'active_line':'deactive']"></div>
                 <i class="fa fa-circle" v-bind:class="[currentStep >= 4 ? 'active':'deactive']"></i>
             </li>
         </ul>
-        <div>
-            <h4 align="center">配送地址
-                <a href="javascript:void(0)" v-if="showCount == AllAddress.length" @click="showCount=3" class="hideOptions">隐藏全部地址</a>
-                <a href="javascript:void(0)" v-else @click="showCount = AllAddress.length" class="hideOptions">显示全部地址</a>
-            </h4>
+        <div v-bind:class="[currentStep==1?'display_show':'display_hide']">
+            <div>
+                <h4 align="center">配送地址
+                    <a href="javascript:void(0)" v-if="showCount == AllAddress.length" @click="showCount=3" class="hideOptions">隐藏全部地址</a>
+                    <a href="javascript:void(0)" v-else @click="showCount = AllAddress.length" class="hideOptions">显示全部地址</a>
+                </h4>
+            </div>
+            <ul class="Address_list" :style="{height: (showCount+1) % 4 == 0 ? (showCount+1)/4 * 180 +'px' : Math.ceil((showCount+1)/4) * 180 +'px'}">
+                <li class="address" v-for="(item,index) in getAllAddressList" @click="chooseAddress(item)" v-bind:class="[item == selectedAddress ? 'border-active':'']">
+                    <div class="fl address_left">
+                        <p>{{item.add_contact_name}}</p>
+                        <p>{{item.add_province + item.add_city + item.add_district}}</p>
+                        <p>{{item.add_more_detail}}</p>
+                        <p>{{item.add_contact_phone}}</p>
+                        <a class="btn btn-link" v-if="item.add_default">默认地址</a>
+                        <a class="btn btn-link" v-else @click="setDefaultAdddress(item)">设置为默认地址</a>
+                    </div>
+                    <div class="Address_toobox fr">
+                        <a href="#" class="btn btn-link" data-toggle="modal" data-target="#EditAddressModal"
+                            @click="EditAddress=item">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <br><br><br><br><br>
+                        <a href="#" @click="deleteAddress(item)"><i class="fa fa-trash"></i></a>
+                    </div>
+                </li>
+                <li class="address">
+                    <button class="btn btn-link btn-block addAddress" data-toggle="modal" data-target="#AddressModal">+</button>
+                    <h4 align="center">添加新地址</h4>
+                </li>
+            </ul>
+            <div class="modal fade" id="AddressModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"><i class="fa fa-home"></i>&nbsp;添加新地址</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div data-toggle="distpicker" class="form-inline">
+                                <div class="form-group">
+                                    <label class="sr-only" for="province2">Province</label>
+                                    <select class="form-control" id="province2" data-province="---- 选择省 ----" required v-model="NewAddressProvince"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="city2">City</label>
+                                    <select class="form-control" id="city2" data-city="---- 选择市 ----" required v-model="NewAddressCity"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="district2">District</label>
+                                    <select class="form-control" id="district2" data-district="---- 选择区 ----" required v-model="NewAddressDistrict"></select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i>&nbsp;联系人姓名</span>
+                                <input type="tel" placeholder="联系人姓名" class="form-control" required v-model="NewAddressContactName">
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-mobile-phone"></i>&nbsp;联系电话</span>
+                                <input type="tel" placeholder="联系电话" class="form-control" required v-model="NewAddressTel">
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-home"></i>&nbsp;详细地址</span>
+                                <input type="text" placeholder="详细地址" class="form-control" required v-model="NewAddressMore">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" @click="addNewAddress">提交更改</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <ul class="Address_list" :style="{height: (showCount+1) % 4 == 0 ? (showCount+1)/4 * 180 +'px' : Math.ceil((showCount+1)/4) * 180 +'px'  }">
-            <li class="address" v-for="(item,index) in getAllAddressList" @click="chooseAddress(item)" v-bind:class="[item == selectedAddress ? 'border-active':'']">
-                <div class="fl address_left">
-                    <p>{{item.add_contact_name}}</p>
-                    <p>{{item.add_province + item.add_district}}</p>
-                    <p>{{item.add_more_detail}}</p>
-                    <p>{{item.add_contact_phone}}</p>
-                    <a class="btn btn-link" v-if="item.add_default">默认地址</a>
-                    <a class="btn btn-link" v-else>设置为默认地址</a>
+            <div class="modal fade" id="EditAddressModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"><i class="fa fa-home"></i>&nbsp;修改地址</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div data-toggle="distpicker" class="form-inline">
+                                <div class="form-group">
+                                    <label class="sr-only" for="province">Province</label>
+                                    <select class="form-control" id="province" data-province="---- 选择省 ----" required v-model="EditAddress.add_province"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="city">City</label>
+                                    <select class="form-control" id="city" data-city="---- 选择市 ----" required v-model="EditAddress.add_city"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="district">District</label>
+                                    <select class="form-control" id="district" data-district="---- 选择区 ----" required v-model="EditAddress.add_district"></select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i>&nbsp;联系人姓名</span>
+                                <input type="tel" placeholder="联系人姓名" class="form-control" required v-model="EditAddress.add_contact_name">
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-mobile-phone"></i>&nbsp;联系电话</span>
+                                <input type="tel" class="form-control" placeholder="联系电话" v-model="EditAddress.add_contact_phone" required>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-home"></i>&nbsp;详细地址</span>
+                                <input type="text" placeholder="详细地址" class="form-control" required v-model="EditAddress.add_more_detail">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" @click="editAddress">提交更改</button>
+                    </div>
                 </div>
-                <div class="Address_toobox fr">
-                    <a href="javascript:void(0)"><i class="fa fa-pencil"></i></a>
-                    <br><br><br><br><br>
-                    <a href="javascript:void(0)"><i class="fa fa-trash"></i></a>
+            </div>
+        </div>
+        </div>
+        <div v-bind:class="[currentStep==2?'display_show':'display_hide']" class="table-responsive col-md-10 col-md-offset-1">
+            <table role="table" class="table table-striped table-bordered">
+                <caption>订单详情</caption>
+                <thead>
+                    <tr class="text-center">
+                        <th>编号</th>
+                        <th>订单号</th>
+                        <th>书店ID</th>
+                        <th>书店名</th>
+                        <th>图书ID</th>
+                        <th>图书书名</th>
+                        <th>数量/单价</th>
+                        <th>总价</th>
+                        <th>其他</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,index) in getAllShops">
+                        <td>{{index+1}}</td>
+                        <td>{{item.ID}}</td>
+                        <td>{{item.bookStoreID}}</td>
+                        <td>{{item.bookStoreName}}</td>
+                        <td>{{item.bookID}}</td>
+                        <td>{{item.bookName}}</td>
+                        <td>{{item.bookCnt}}/{{item.bookPrice}}</td>
+                        <td>{{item.bookTotal}}</td>
+                        <td></td>
+                        <td>未发货</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div v-bind:class="[currentStep==3?'display_show':'display_hide']">
+            <h4 align="center">支付选择</h4>
+            <div class="payWays">
+                <ul class="col-md-12">
+                    <li class="col-md-3">
+                        <a href="#">
+                            <img src="../dist/res/pay_icon/Alipay.jpg" width="128" height="64" data-toggle="modal" data-target="#QRCodeModal">
+                        </a>
+                    </li>
+                    <li class="col-md-3">
+                        <a href="#">
+                            <img src="../dist/res/pay_icon/Unionpay.jpg" width="128" height="64" data-toggle="modal" data-target="#QRCodeModal">
+                        </a>
+                    </li>
+                    <li class="col-md-3">
+                        <a href="#">
+                            <img src="../dist/res/pay_icon/VISA.jpg" width="128" height="64" data-toggle="modal" data-target="#QRCodeModal">
+                        </a>
+                    </li>
+                    <li class="col-md-3">
+                        <a href="#">
+                            <img src="../dist/res/pay_icon/Wechatpay.jpg" width="128" height="64" data-toggle="modal" data-target="#QRCodeModal">
+                        </a>
+                    </li>
+                </ul>
+                <div class="input-group">
+                    <span class="input-group-addon">其他方式</span>
+                    <input type="text" placeholder="请输入联系方式 并备注解决方案" class="form-control col-md-8">
+                    <div class="btn btn-primary input-group-addon ">发送申请</div>
                 </div>
-            </li>
-            <li class="address">
-                <button class="btn btn-link btn-block addAddress" @click="addNewAddress">+</button>
-                <h4 align="center">添加新地址</h4>
-            </li>
-        </ul>
+            </div>
+            <div class="modal fade" id="QRCodeModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title"><i class="fa fa-home"></i>&nbsp;支付选择--扫描二维码</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="payOff" class="text-center">
+                                <div>
+                                    <span>支付状态：</span>
+                                    <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary">提交更改</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-bind:class="[currentStep==4?'display_show':'display_hide']">
+            <h1>Setp Four</h1>
+        </div>
+        <hr>
+        <div style="height: 60px">
+            <div class="col-md-2"></div>
+            <button class="btn btn-default col-md-3" @click="PrevStep()" v-bind:class="[currentStep==1?'disabled':'']">&larr; 上一步</button>
+            <div class="col-md-2"></div>
+            <button class="btn btn-default col-md-3" @click="NextStep()" v-bind:class="[currentStep==4?'disabled':'']">下一步 &rarr;</button>
+            <div class="col-md-2"></div>
+        </div>
     </div>
-
+    <hr>
     <div class="footer fl">
         <ul class="footer-head fl">
             <li class="fl"><a href="#" class="hvr-grow">关于我们</a></li>
@@ -157,7 +358,9 @@
     <!--vue.js-->
     <script type="text/javascript" src="../dist/js/vue.js"></script>
     <script type="text/javascript" src="../dist/js/vue-resource.min.js"></script>
-    <script type="text/javascript" src="../dist/js/vue-sweetalert2.js"></script>
+    <script type="text/javascript" src="../dist/js/distpicker.data.js"></script>
+    <script type="text/javascript" src="../dist/js/distpicker.js"></script>
+    <!--<script type="text/javascript" src="../dist/js/vue-sweetalert2.js"></script>-->
     <script type="text/javascript" src="../dist/myjs/vue-submit.js"></script>
 </body>
 </html>

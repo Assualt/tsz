@@ -55,7 +55,6 @@ var header= new Vue({
         }
     }
 });
-
 var helper = new Vue({
     el:'.helper',
     data:{
@@ -88,14 +87,23 @@ var helper = new Vue({
         }
     }
 });
-
 var main =new Vue({
     el:'#main',
     data:{
         currentStep:1,
         AllAddress:[],
         showCount:3,
-        selectedAddress:{}
+        selectedAddress:{},
+        NewAddressProvince:'',
+        NewAddressCity:'',
+        NewAddressDistrict:'',
+        NewAddressMore:'',
+        NewAddressContactName:'',
+        NewAddressTel:'',
+        currentEditIndex:0,
+        EditAddress:{},
+        SelectedAllShops:[],
+        payWays:0,
     },
     methods: {
         Init: function () {
@@ -107,12 +115,80 @@ var main =new Vue({
                     }
                 });
             });
+            var qrCode = new QRCode(document.getElementById('payOff'),{
+                width:100,height:100
+            });
+            var text = "https://www.baidu.com/";
+            qrCode.makeCode(text);
         },
         addNewAddress:function () {
-            alert("添加新地址")
+            if( this.NewAddressProvince == '' || this.NewAddressCity == '' || this.NewAddressDistrict == '' ||
+                this.NewAddressContactName == '' || this.NewAddressTel == '' || this.NewAddressMore == ''){
+                alert("当前你还有未输出的选项,请选择完整后方能提交");
+            }else{
+                this.AllAddress.push({
+                    add_province:this.NewAddressProvince,
+                    add_city:this.NewAddressCity,
+                    add_district:this.NewAddressDistrict,
+                    add_more_detail:this.NewAddressMore,
+                    add_contact_phone:this.NewAddressTel,
+                    add_contact_name:this.NewAddressContactName,
+                    add_default:false
+                });
+                this.NewAddressTel = this.NewAddressContactName = this.NewAddressMore = this.NewAddressDistrict
+                = this.NewAddressContactName = this.NewAddressProvince = '';
+                alert("添加地址OK");
+                $("#AddressModal").modal("hide");
+                $('.modal-backdrop').remove();
+            }
         },
         chooseAddress:function (Address) {
             this.selectedAddress = Address;
+        },
+        deleteAddress:function (Address) {
+            var pos = this.AllAddress.indexOf(Address);
+            if(pos!= -1){
+                var ok = confirm("确认删除本条地址");
+                if(ok) {
+                    this.AllAddress.splice(pos, 1);
+                    alert("删除地址成功");
+                }else{
+                    alert("删除地址失败");
+                }
+            }
+        },
+        editAddress:function () {
+            alert("修改成功");
+            $("#EditAddressModal").modal("hide");
+            $('.modal-backdrop').remove();
+        },
+        setDefaultAdddress:function (Address) {
+            this.AllAddress.forEach((data)=>{
+                data.add_default = false;
+            });
+            Address.add_default = true;
+        },
+        PrevStep:function (){
+            if(this.currentStep == 1){
+            }else{
+                this.currentStep--;
+            }
+        },
+        NextStep:function (){
+            if(this.currentStep == 1){
+                if(JSON.stringify(this.selectedAddress) == "{}"){
+                    alert("你必须选择一个收货地址才能进行下一步");
+                }else{
+                    this.currentStep ++;
+                    console.log("Next step");
+                }
+            }else if(this.currentStep == 2){
+                this.currentStep++;
+            }
+        },
+        payWay:function (way) {
+            this.payWays = way;
+            console.log(way);
         }
     },
     mounted: function () {
@@ -123,6 +199,31 @@ var main =new Vue({
     computed: {
         getAllAddressList(){
             return this.AllAddress.slice(0,this.showCount);
+        },
+        getAllShops(){
+            var UserID = localStorage.getItem('userID');
+            console.info(UserID);
+            if(UserID == ''){
+                alert("当前未登陆,无需结算");
+            }else {
+                var userData = localStorage.getItem(UserID);
+                if(userData== ''){
+                    alert("当前未选择任何商品,无需结算");
+                }else{
+                    console.log(userData);
+                    if(hex_md5(userData) != UserID){
+                        alert("当前商品有人非法篡改,不能结算");
+                    }else{
+                        this.SelectedAllShops = JSON.parse(userData).data;
+                        console.log(this.SelectedAllShops);
+                    }
+                }
+            }
+            if(this.SelectedAllShops == null){
+                return [];
+            }else{
+                return this.SelectedAllShops;
+            }
         }
     }
 });

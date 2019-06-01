@@ -162,6 +162,8 @@ header{
     background: rgb(63,63,63);
     width: 100%;
     height: 150px;
+    position: fixed;
+    bottom: 0;
 }
 .footer-head{
     width : 100%;
@@ -283,7 +285,7 @@ header{
 .address{
     margin: 5px 5px 5px 5px;
     width: 23%;
-    height: 150px;
+    height: 170px;
     border: 1px solid #efefef;
     padding: 7px 25px;
 }
@@ -293,7 +295,7 @@ header{
 }
 .address p{
     margin:0;
-    width: 90%;
+    width: 100%;
 }
 .address_left{
     width: 80%;
@@ -351,4 +353,27 @@ header{
 }
 .border-active{
     border: 1px solid #f78123;
+}
+.textOverflow {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.payWays{
+    width: 100%;
+    height: 82px;
+    padding: 0 6%;
+}
+.payWays li:hover{
+    border:1px solid pink;
+}
+#payOff img{
+    padding-left: 40%;
+}
+
+#main{
+    margin-bottom: 150px;
+    height: 500px;
+    overflow-y: scroll;
 }

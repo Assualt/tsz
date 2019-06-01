@@ -1,4 +1,3 @@
-
 var header= new Vue({
     el:"#header",
     data: {
@@ -56,89 +55,7 @@ var header= new Vue({
         }
     }
 });
-var Model = new Vue({
-    el:"#myModal",
-    data:{
-        isSubmit:false,
-        SelectedAllShops:[],
-        cartAddress:[],
-        currentStep:1,
-        showOverlay:true
-    },
-    methods:{
-        PrevStep:function(){
-            if(this.currentStep == 1){
-                this.currentStep = 1;
-                $("#step_submit").attr("disabled",true);
-                $("#step_prev").attr("disabled",true);
-                $("#step_next").attr("disabled",false)
-            }else{
-                this.currentStep --;
-                $("#step_submit").attr("disabled",true);
-                $("#step_next").attr("disabled",false);
-                if(this.currentStep == 1){
-                    $("#step_prev").attr("disabled",true);
-                }else{
-                    $("#step_next").attr("disabled",false)
-                }
-            }
-        },
-        NextStep:function(){
-            if(this.currentStep == 4){
-                this.currentStep = 4;
-                $("#step_submit").attr("disabled",false);
-                $("#step_prev").attr("disabled",false);
-                $("#step_next").attr("disabled",true);
-            }else{
-                this.currentStep ++;
-                $("#step_prev").attr("disabled",false);
-                if(this.currentStep == 4){
-                    $("#step_submit").attr("disabled",false);
-                    $("#step_next").attr("disabled",true);
-                }else{
-                    $("#step_next").attr("disabled",false);
-                }
-            }
-        },
-        SubmitOK:function(){
-            this.closeSubmit();
-            this.showOverlay = false;
-            swal('淘书斋提醒','删除成功','success');
-        },
-        closeSubmit:function(){
-            this.isSubmit = false;
-            this.showOverlay = false;
-            console.log(this.isSubmit);
-        },
-        cancelEdi:function(){//取消修改地址
-            this.closeEditAddress();
-        },
-        SubmitEdit:function(){//修改地址
-            this.cartAddress.forEach((res)=>{
-               if(res.add_default == true) {
-                   res.add_province = $("#province2").val();
-                   res.add_district =  $("#city2").val() + $("#district2").val();
-                   res.add_contact_phone = $("#tel2").val();
-                   res.add_contact_name =$("#contact_name2").val();
-                   res.add_more_detail =$("#more_address_2").val();
-                   this.closeEditAddress();
-                   alert("修改地址成功");
-               }
-            });
-        },
-        closeEditAddress:function(){//关闭
-            $("#edit_add").removeClass('in');
-        },
-        setDefaultAddress:function(item){
-            this.cartAddress.forEach((res)=>{
-                if(res.add_default == true){
-                    res.add_default = false;
-                }
-            });
-            item.add_default = true;
-        }
-    }
-});
+
 var cartMain = new Vue({
     el:'.shop',
     data:{
@@ -146,7 +63,8 @@ var cartMain = new Vue({
         cartGoodsNum:0,
         isAllSelected:false,
         allCount:0,
-        allTotalMoney:0.00
+        allTotalMoney:0.00,
+        SelectedAllShops:[]
     },
     methods: {
         Init:function() {
@@ -155,7 +73,6 @@ var cartMain = new Vue({
                 res.body.forEach((data) => {
                     if (data.id == "1") {
                         _this.cartGoodsShops = data.goods;
-                        Model.cartAddress = data.address;
                         _this.cartGoodsShops.forEach((data) => {
                             var goods = data.goods_info;
                             _this.cartGoodsNum += Object.keys(goods).length;
@@ -197,10 +114,10 @@ var cartMain = new Vue({
             this.handleAllCnt(2,Item,true);
         },
         moveIntoLocale:function(good) {//移入收藏夹
-            console.log(Model.SelectedAllShops.length);
+            // console.log(Model.SelectedAllShops.length);
         },
         moveSeletedtoLocale:function () {//移入选中到收藏夹
-            console.log(Model.SelectedAllShops.length);
+            // console.log(Model.SelectedAllShops.length);
         },
         removeItem:function(good) {//删除商品
             var bOK= confirm(
@@ -233,9 +150,9 @@ var cartMain = new Vue({
                 });
                 _this.allTotalMoney = 0;
                 _this.allCount = 0;
-                Model.SelectedAllShops.forEach((data,index)=>{
+                _this.SelectedAllShops.forEach((data,index)=>{
                     if(data.bookID == bookID ){
-                        Model.SelectedAllShops.splice(index,1);
+                        _this.SelectedAllShops.splice(index,1);
                     }else {
                         _this.allCount += data.bookCnt;
                         _this.allTotalMoney = parseFloat(_this.allTotalMoney) + parseFloat(data.bookTotal);
@@ -247,7 +164,7 @@ var cartMain = new Vue({
             }
         },
         removeSeleted:function () {
-            console.log(Model.SelectedAllShops.length);
+            console.log(this.SelectedAllShops.length);
         },
         handleAllCnt:function(Index, Item, bSkip) {
             if(!bSkip) {
@@ -271,13 +188,17 @@ var cartMain = new Vue({
                     Item.isChecked = flag;
                 }
             }
-            Model.SelectedAllShops = [];
+            this.SelectedAllShops = [];
             var _this = this;
             if (this.isAllSelected) {
                 this.cartGoodsShops.forEach((res) => {
+                    var bookStoreID = res.goods_store_id;
+                    var bookStoreName = res.goods_store_name;
                     res.goods_info.forEach((data) => {
-                        Model.SelectedAllShops.push({
+                        _this.SelectedAllShops.push({
                             ID:this.randomWord(false,20),
+                            bookStoreID:bookStoreID,
+                            bookStoreName:bookStoreName,
                             bookName:data.book_name,
                             bookID:data.book_des[0].ID,
                             bookAuthor:data.book_des[0].author,
@@ -289,10 +210,14 @@ var cartMain = new Vue({
                 });
             }else{
                 this.cartGoodsShops.forEach((res)=>{
+                   var bookStoreID = res.goods_store_id;
+                   var bookStoreName =res.goods_store_name;
                    if(res.isChecked === true){//这个商店被全部选中
                        res.goods_info.forEach((data)=>{
-                           Model.SelectedAllShops.push({
+                           _this.SelectedAllShops.push({
                                ID:this.randomWord(false,20),
+                               bookStoreID:bookStoreID,
+                               bookStoreName:bookStoreName,
                                bookName:data.book_name,
                                bookID:data.book_des[0].ID,
                                bookAuthor:data.book_des[0].author,
@@ -304,8 +229,10 @@ var cartMain = new Vue({
                    }else{
                        res.goods_info.forEach((data)=>{
                             if(data.isChecked === true){
-                                Model.SelectedAllShops.push({
+                                _this.SelectedAllShops.push({
                                     ID:this.randomWord(false,20),
+                                    bookStoreName:bookStoreName,
+                                    bookStoreID:bookStoreID,
                                     bookName:data.book_name,
                                     bookID:data.book_des[0].ID,
                                     bookAuthor:data.book_des[0].author,
@@ -318,14 +245,14 @@ var cartMain = new Vue({
                    }
                 });
             }
-            var EnableSubmit = Model.SelectedAllShops.length == 0 ? true : false;
+            var EnableSubmit = this.SelectedAllShops.length == 0 ? true : false;
             $("#btn_js1").attr("disabled",EnableSubmit);
             $("#btn_js2").attr("disabled",EnableSubmit);
-            console.log(JSON.stringify(Model.SelectedAllShops));
+            console.log(JSON.stringify(this.SelectedAllShops));
             var _this =this;
             _this.allCount = 0;
             _this.allTotalMoney = 0;
-            Model.SelectedAllShops.forEach((res)=>{
+            _this.SelectedAllShops.forEach((res)=>{
                 _this.allCount += res.bookCnt;
                 _this.allTotalMoney = parseFloat(_this.allTotalMoney) + parseFloat(res.bookTotal);
                 _this.allTotalMoney = _this.allTotalMoney.toFixed(2);
@@ -345,12 +272,20 @@ var cartMain = new Vue({
             }
             return str;
         },
-        submitCheck:function(){
-            Model.isSubmit = true;
-            overlay.showOverlay = true;
-        },
         getHeight:function (Item) {
             return Item.goods_info.length  * 145;
+        },
+        submitCheck:function(){
+            console.log("提交订单");
+            var allSelectedData ={
+                userID:123456,
+                userName:'houxin',
+                data:this.SelectedAllShops
+            };
+            var md5CheckSum = hex_md5(JSON.stringify(allSelectedData));
+            localStorage.setItem("userID",md5CheckSum);
+            localStorage.setItem(md5CheckSum,JSON.stringify(allSelectedData));
+            window.location.href='submit.html';
         }
     },
     mounted: function () {
