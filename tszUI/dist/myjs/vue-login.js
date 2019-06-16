@@ -142,16 +142,16 @@ var main = new Vue({
         },
         Address:[{
                 id:"addr1",
-                name:'侯鑫',
-                tel:'13752913198',
+                name:'xxx',
+                tel:'1375xxx198',
                 detail:'重庆市黔江区**街道**路',
                 postcode:'400000',
                 bdefault:true
             },
             {
                 id:"addr2",
-                name:'侯鑫',
-                tel:'13752913198',
+                name:'dddx',
+                tel:'13xx291xx8',
                 detail:'重庆市黔江区**街道**路',
                 postcode:'400000',
                 bdefault:false
