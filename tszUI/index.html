@@ -19,7 +19,7 @@
         <!--my js-->
         <!--<script type="text/javascript" src="./dist/myjs/index.js"></script>-->
     </head>
-    <body id="body">
+    <body>
         <header id="header">
             <div class="header-school">
                 <i class="fa fa-location-arrow fa-lg" aria-hidden="true"></i>
@@ -103,7 +103,6 @@
                 <div class="hot-topic-body">
                     <div class="hot-topic-body-left fl">
                         <p id="hot-topic" class="fl">热搜:</p>
-                        <!--<a href="#">英语</a>-->
                         <a href="#" v-for="(item,index) in hotTopicWord" :key="index" class="fl">{{item}}</a>
                     </div>
                 </div>
@@ -314,6 +313,9 @@
             </div>
             <div class="jg"></div>
             <div class="helper-item" @mouseenter="show('联系我们',3)" @mouseleave="hide(3)" v-html="helper3" ></div>
+        </div>
+        <div class="swal2-container" id="overlay">
+            <div class="overlay" tabindex="-1" :class="[ bOverLay ? 'display_show' : 'display_hide']"></div>
         </div>
         <!--vue.js-->
         <script type="text/javascript" src="./dist/js/vue.js"></script>

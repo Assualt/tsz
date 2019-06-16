@@ -9,7 +9,8 @@
         <script type="text/javascript" src="../dist/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="../dist/js/distpicker.data.js"></script>
         <script type="text/javascript" src="../dist/js/distpicker.js"></script>
-        <script type="text/javascript" src="../dist/js/sweetalert2.min.js"></script>
+<!--        <script type="text/javascript" src="../dist/js/sweetalert2.min.js"></script>-->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <script type="text/javascript" src="../dist/js/echarts.js" ></script>
         <!--<script type="text/javascript" src="./dist/js/npm.js"></script>-->
         <!--bootstrap css -->
@@ -22,69 +23,37 @@
         <!--cart css-->
         <link rel="stylesheet" href="../dist/mycss/login.css">
         <!--cart js-->
-        <script type="text/javascript" src="../dist/myjs/login.js"></script>
+        <!--<script type="text/javascript" src="../dist/myjs/login.js"></script>-->
     </head>
     <body>
-        <header>
+        <header id="header">
             <div class="header-school">
                 <i class="fa fa-location-arrow fa-lg" aria-hidden="true"></i>
-                <a href="javascript:void(0)" class="a_school" >&nbsp;[&nbsp;所有学校&nbsp;]</a>
-                <div class="show_school"  >
+                <a href="javascript:void(0)" class="a_school" @click="showAllSchool()" >&nbsp;[&nbsp;{{targetSchool}}&nbsp;]</a>
+                <div :class="{show_school:true,display_show:bShow,display_hide:!bShow}">
                     <div class="show_school_head">
                         <p class="fl">请选择学校</p>
-                        <button class="btn btn-sm fa fa-close fr" id="show_school_btn_cls"></button>
+                        <button class="btn btn-sm fa fa-close fr" id="show_school_btn_cls" @click="closeAllSchool()"></button>
                     </div>
                     <div class="show_school_body">
-                        <p class="fl">快捷方式:<a href="#" style="color: rgb(0,168,155);">　所有学校</a>
-                        </p>
+                        <p class="fl">快捷方式:<a href="#" style="color: rgb(0,168,155);" @click="showAllUniversitys('所有学校',0)">　所有学校</a></p>
                         <div class="show_school_body_2 fl" >
-                            <a href="#" class="fl">北京</a>
-                            <a href="#" class="fl">上海</a>
-                            <a href="#" class="fl">黑龙江</a>
-                            <a href="#" class="fl">吉林</a>
-                            <a href="#" class="fl">辽宁</a>
-                            <a href="#" class="fl">天津</a>
-                            <a href="#" class="fl">安徽</a>
-                            <a href="#" class="fl">江苏</a>
-                            <a href="#" class="fl">浙江</a>
-                            <a href="#" class="fl">陕西</a>
-                            <a href="#" class="fl">湖北</a>
-                            <a href="#" class="fl">广东</a>
-                            <a href="#" class="fl">湖南</a>
-                            <a href="#" class="fl">甘肃</a>
-                            <a href="#" class="fl">四川</a>
-                            <a href="#" class="fl">山东</a>
-                            <a href="#" class="fl">福建</a>
-                            <a href="#" class="fl">河南</a>
-                            <a href="#" class="fl">重庆</a>
-                            <a href="#" class="fl">云南</a>
-                            <a href="#" class="fl">河北</a>
-                            <a href="#" class="fl">江西</a>
-                            <a href="#" class="fl">山西</a>
-                            <a href="#" class="fl">贵州</a>
-                            <a href="#" class="fl">广西</a>
-                            <a href="#" class="fl">内蒙古</a>
-                            <a href="#" class="fl">宁夏</a>
-                            <a href="#" class="fl">青海</a>
-                            <a href="#" class="fl">西藏</a>
-                            <a href="#" class="fl">香港</a>
-                            <a href="#" class="fl">澳门</a>
-                            <a href="#" class="fl">台湾</a>
+                            <a href="#" class ="fl" v-for="(item,index) in AllProvinces" :key="index" @click="showAllUniversitys(item,index)">{{item}}</a>
                         </div>
                         <div class="show_school_body_3 fl">
-                            <!--<p><a href="#">asdasd</a></p>  Just a Test -->
+                            <p v-for="(item,index) in CurrentCityUniversity" :key="index" class="fl"><a href="#" @click="selectSchool(item)">{{item}}</a></p>
                         </div>
                     </div>
                 </div>
-                <ul class="header_login fr">
+                <div class="header_login fr">
                     <li class="fl dropdown">
-                        <a href="#" id="login_btn" data-toggle="dropdown">登录</a>&nbsp;|
-                        <ul class="dropdown-menu fade" role="menu" aria-labelledby="login_btn">
+                        <a href="../login.html" id="login_btn" data-toggle="dropdown">{{userInfoStatus.name}}</a>&nbsp;|
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="login_btn" :class="[!userInfoStatus.bExpand ? 'fade':'']">
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">我的主页</a>
                             </li>
                             <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="./cart.html">我的购物车</a>
+                                <a role="menuitem" tabindex="-1" href="cart.html">我的购物车</a>
                             </li>
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">我的收藏</a>
@@ -93,45 +62,31 @@
                                 <a role="menuitem" tabindex="-1" href="#">修改密码</a>
                             </li>
                             <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="#">退出</a>
+                                <a role="menuitem" tabindex="-1" href="#" @click="exitLogin()">退出</a>
                             </li>
                         </ul>
                     </li>
-                    <li class="fl"><a href="./sold.html" target="_blank">出售</a>&nbsp;|</li>
-                    <li class="fl"><a href="./register.html" style="color: orange" target="_blank">立即注册</a>&nbsp;|</li>
-                    <li class="fl"><a href="./downloadApp.html" class="fa fa-mobile-phone fa-1x" target="_blank">下载APP</a></li>
-                </ul>
+                    <li class="fl"><a href="sites/sold.html" target="_blank">出售</a>&nbsp;|</li>
+                    <li class="fl"><a href="#" style="color: orange" @click="register">立即注册</a>&nbsp;|</li>
+                    <li class="fl"><a href="sites/downloadApp.html" class="fa fa-mobile-phone fa-1x" target="_blank">下载APP</a></li>
+                </div>
             </div>
         </header>
-        <div class="main fl">
-            <div class="main_left fl">
+        <div class="main" id="main">
+            <div class="main_left">
                 <div class="person_img">
                     <img src="../dist/res/user_info.jpg" width="80%" class="img-thumbnail" alt="未能加载正常图片">
-                    <div class="person_img_common fl">
-                        <label for="Niki_name" class="fl col-md-4">name:</label>
-                        <p class="fl" id="Niki_name"><a href="#">个人姓名</a></p>
+                    <div class="person_img_common">
+                        <label for="Niki_name" >姓名:</label>
+                        <p id="Niki_name"  ><a href="#">个人姓名</a></p>
                     </div>
-                    <div class="person_img_common fl">
-                        <label for="Niki_sex" class="fl col-md-4">sex:</label>
-                        <p class="fl" id="Niki_sex">&male; </p>
+                    <div class="person_img_common">
+                        <label for="Niki_school">大学:</label>
+                        <p id="Niki_school"  >xxx大学</p>
                     </div>
-                    <div class="person_img_common fl">
-                        <label for="Niki_school" class="fl col-md-4">University:</label>
-                        <p class="fl" id="Niki_school">xxx大学</p>
-                    </div>
-                    <div class="person_img_common fl">
-                        <label for="Niki_contact" class="fl col-md-4">Contact:</label>
-                        <ul class="fl col-md-8" id="Niki_contact">
-                            <li class="fl">
-                                <button href="#" class="fa fa-info btn btn-primary btn-sm"><a href="#"></a></button>
-                            </li>
-                            <li class="fl">
-                                <button href="#" class="fa fa-mobile-phone btn btn-warning btn-sm"><a href="#"></a></button>
-                            </li>
-                            <li class="fl">
-                                <button href="#" class="fa fa-facebook btn btn-danger btn-sm"><a href="#"></a></button>
-                            </li>
-                        </ul>
+                    <div class="person_img_common">
+                        <label>联系:</label>
+                        <p>www.baidu.com</p>
                     </div>
                 </div>
                 <div class="person_basic">
@@ -142,74 +97,88 @@
                 <div class="person_details">
                     <h4>功能列表</h4>
                     <ul class="fl more_list">
-                        <li class="fl" value="1"><a class="hvr-grow" href>基本资料</a></li>
-                        <li class="fl" value="2"><a class="hvr-grow" href>图书管理</a></li>
-                        <li class="fl" value="3"><a class="hvr-grow" href>图书售卖记录</a></li>
-                        <li class="fl" value="4"><a class="hvr-grow" href>图书买入</a></li>
-                        <li class="fl" value="5"><a class="hvr-grow" href>日志记录</a></li>
-                        <li class="fl" value="6"><a class="hvr-grow" href>收益评估</a></li>
-                        <li class="fl" value="7"><a class="hvr-grow" href>修改密码</a></li>
-                        <li class="fl" value="8"><a href="#">退出登录</a></li>
+                        <li :class="[currentState == 1 ? 'more_list_li_active':'disabled']"><a class="hvr-grow" @click="clickTo(1)">基本资料</a></li>
+                        <li :class="[currentState == 2 ? 'more_list_li_active':'disabled']"><a class="hvr-grow" @click="clickTo(2)">图书管理</a></li>
+                        <li :class="[currentState == 3 ? 'more_list_li_active':'disabled']"><a class="hvr-grow" @click="clickTo(3)">图书售卖记录</a></li>
+                        <li :class="[currentState == 4 ? 'more_list_li_active':'disabled']"><a class="hvr-grow" @click="clickTo(4)">图书买入</a></li>
+                        <li :class="[currentState == 5 ? 'more_list_li_active':'disabled']"><a class="hvr-grow" @click="clickTo(5)">日志记录</a></li>
+                        <li :class="[currentState == 6 ? 'more_list_li_active':'disabled']"><a class="hvr-grow" @click="clickTo(6)">收益评估</a></li>
+                        <li :class="[currentState == 7 ? 'more_list_li_active':'disabled']"><a class="hvr-grow" @click="clickTo(7)">修改密码</a></li>
+                        <li><a href="#" @click="ExitStatusInfo(false)">退出登录</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="main_right fl">
+            <div class="main_right">
                 <div class="main_head">
                     <ul class="nav nav-tabs nav-tabs-justified">
-                        <li class=" active"><a href="#login" data-toggle="tab">登录</a></li>
-                        <li class="disabled"><a href="#" data-toggle="tab">基本资料</a></li>
-                        <li class="disabled"><a href="#" data-toggle="tab">图书管理</a></li>
-                        <li class="disabled"><a href="#" data-toggle="tab">图书售卖记录</a></li>
-                        <li class="disabled"><a href="#" data-toggle="tab">图书买入</a></li>
-                        <li class="disabled"><a href="#" data-toggle="tab">日志记录</a></li>
-                        <li class="disabled"><a href="#" data-toggle="tab">收益评估</a></li>
-                        <li class="disabled"><a href="#" data-toggle="tab">其他</a></li>
+                        <li :class="checkCurrent(0)"><a href="#" @click="clickTo(0)">登录</a></li>
+                        <li :class="checkCurrent(1)"><a href="#" @click="clickTo(1)">基本资料</a></li>
+                        <li :class="checkCurrent(2)"><a href="#" @click="clickTo(2)">图书管理</a></li>
+                        <li :class="checkCurrent(3)"><a href="#" @click="clickTo(3)">售卖记录</a></li>
+                        <li :class="checkCurrent(4)"><a href="#" @click="clickTo(4)">买入</a></li>
+                        <li :class="checkCurrent(5)"><a href="#" @click="clickTo(5)">登录日志</a></li>
+                        <li :class="checkCurrent(6)"><a href="#" @click="clickTo(6)">评估</a></li>
+                        <li :class="checkCurrent(7)"><a href="#" @click="clickTo(7)">其他</a></li>
                     </ul>
                 </div>
                 <div class="tab-content main_body">
-                    <div class="tab-pane fade in active" id="login" >
-                        <h1>登录淘书斋</h1>
+                    <div class="tab-pane fade " id="login" :class="[currentState == 0 ? 'in active':'']">
+                        <h1>{{title}}</h1>
                         <hr>
                         <form action="" class="form-horizontal" role="form" method="get">
                             <div class="form-group">
-                                <label for="username" class="col-md-2 control-label">账号</label>
+                                <label for="username" class="col-md-3 control-label"><i class="fa fa-user text-danger"></i></label>
                                 <div class="col-md-7">
-                                    <input type="text" class="form-control" id="username" placeholder="用户名/邮箱/电话" required="required" name="username">
-
+                                    <input type="text" class="form-control" id="username" placeholder="用户名/邮箱/电话" required="required" v-model="submitData.username">
                                 </div>
+
                             </div>
                             <div class="form-group">
-                                <label for="password" class="col-md-2 control-label">密码</label>
+                                <label for="password" class="col-md-3 control-label"><i class="fa fa-lock" aria-hidden="true"></i></label>
                                 <div class="col-md-7">
-                                    <input type="password" class="form-control" id="password" placeholder="密码" required="required" name="password">
+                                    <input type="password" class="form-control" id="password" placeholder="密码" required="required" v-model="submitData.password">
+                                </div>
+                            </div>
+                            <div class="form-group" v-if="Mode==1">
+                                <label for="password1" class="col-md-3 control-label"><i class="fa fa-lock text-success" aria-hidden="true"></i></label>
+                                <div class="col-md-7">
+                                    <input type="password" class="form-control" id="password1" placeholder="再次键入密码" required="required" v-model="submitData.againpsw" @blur="checkPasswprd">
+                                </div>
+                            </div>
+                            <div class="form-group" v-if="Mode==1">
+                                <label for="cofrimNumber" class="col-md-3 control-label"><i class="fa fa-check-circle" aria-hidden="true"></i></label>
+                                <div class="col-md-7" style="display:flex;  ">
+                                    <input type="password" class="form-control" id="cofrimNumber" placeholder="输入验证码" required="required" v-model="submitData.confirmp" size="6" required>
+                                    <a class="btn btn-link" @click="getConfirmNum" :disabled="confirmData.show" :title="confirmData.title">获取验证码</a>
+                                    <div class="ConfrimNumtooltips" v-if="confirmData.show">{{confirmData.confirSeconds}}s 后重新获取验证码</div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-2">
-                                    <input type="reset" value="重置" class="btn btn-primary form-control">
+                                    <input value="重置" class="btn btn-primary form-control">
                                 </div>
                                 <div class="col-sm-2">
-                                    <input type="submit" value="登录" class="btn btn-warning form-control">
+                                    <input :value="[ Mode== 0 ? '登录' : '注册' ]" class="btn btn-warning form-control" @click="onSubmit">
                                 </div>
-                                <div class="col-sm-2" id="forget_psw"><a href="#" class="btn btn-link">忘记密码?</a></div>
+                                <div class="col-sm-2" id="forget_psw"><a href="#" class="btn btn-link" @click="forgetPassword">忘记密码?</a></div>
                             </div>
                         </form>
                         <hr>
                         <div>
                             <h5>使用第三方账号进行登录</h5>
-                            <button type="button" class="fa fa-renren btn btn-primary btn-lg col-md-5">&nbsp;人人网登录</button>
-                            <div class="col-md-2"></div>
-                            <button type="button" class="fa fa-qq btn btn-success btn-lg col-md-5">&nbsp;qq登录</button>
-                            <br>
-                            <br>
-                            <button type="button" class="fa fa-weibo btn btn-lg btn-info col-md-5">&nbsp;微博登录</button>
-                            <div class="col-md-2"></div>
-                            <button type="button" class="fa fa-weixin btn btn-lg btn-danger col-md-5">&nbsp;微信登录</button>
-
+                            <div class="loginOtherWays">
+                                <button type="button" class="fa fa-renren btn btn-primary btn-lg">&nbsp;人人网登录</button>
+                                <div class="col-md-1"></div>
+                                <button type="button" class="fa fa-qq btn btn-success btn-lg">&nbsp;qq登录</button>
+                                <div class="col-md-1"></div>
+                                <button type="button" class="fa fa-weibo btn btn-lg btn-info">&nbsp;微博登录</button>
+                                <div class="col-md-1"></div>
+                                <button type="button" class="fa fa-weixin btn btn-lg btn-danger">&nbsp;微信登录</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="basic_info">
+                    <div class="tab-pane fade" id="basic_info" :class="[currentState == 1 ? 'in active':'']">
                         <div class="container-fluid">
                             <form class="form-horizontal" role="form" id="basic_info_1">
                                 <fieldset>
@@ -218,28 +187,28 @@
                                         <div class="form-group">
                                             <label class="control-label col-md-2" for="account">账号</label>
                                             <div class="col-md-7">
-                                                <input type="text" value="123132141" class="form-control" readonly name="account" id="account">
+                                                <input type="text" v-model="userInfo.account" class="form-control" readonly name="account" id="account">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-2">昵称</label>
                                             <div class="col-md-7">
-                                                <input type="text" class="form-control" value="受伤的小袋鼠" name="nicheng" disabled>
+                                                <input type="text" class="form-control" v-model="userInfo.nickName" name="nicheng" :disabled="!bEdit">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-2">性别</label>
                                             <div class="col-md-7">
                                                 <div class="col-md-4">
-                                                    <input type="radio" name="sex" value="male" disabled>
+                                                    <input type="radio" name="sex" value=1 @click="checkOptions(1)" :checked="userInfo.gender.male"  :disabled="!bEdit">
                                                     <label class="control-label">男</label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input type="radio" name="sex" value="female" disabled>
+                                                    <input type="radio" name="sex" value=2 @click="checkOptions(2)" :checked="userInfo.gender.female" :disabled="!bEdit">
                                                     <label class="control-label">女</label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input type="radio" name="sex" value="secret" checked disabled>
+                                                    <input type="radio" name="sex" value=3 @click="checkOptions(3)" :checked="userInfo.gender.secret" :disabled="!bEdit">
                                                     <label class="control-label">保密</label>
                                                 </div>
                                             </div>
@@ -247,38 +216,39 @@
                                         <div class="form-group">
                                             <label class="control-label col-md-2">头像</label>
                                             <div class="col-md-7">
-                                                <input type="file" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" name="pic_file" disabled id="upload_logo">
+                                                <input type="file" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" :disabled="!bEdit" @change="uploadFile($event)">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-2">学校</label>
                                             <div class="col-md-10 form-group">
                                                 <div class="col-md-5">
-                                                    <select id="province" class="form-control" disabled>
-                                                        <option value="选择省">选择省</option>
+                                                        <select id="province" class="form-control" :disabled="!bEdit" v-model="selectProvince">
+                                                        <option  v-for="(item,index) in AllProvinces" :value="item" :key="index">{{item}}</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-7">
-                                                    <select class="form-control" id="school" disabled>
-                                                        <option value="选择学校">选择学校</option>
+                                                    <select class="form-control" id="school" :disabled="!bEdit" >
+                                                        <option v-for="(item,index) in getUniversityMap()" :value="item" :key="index" @click="userInfo.university=item">{{item}}</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">地址</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label">地址</label>
                                             <div class="col-md-10">
-                                                <input type="text" class="form-control" name="myaddress" disabled>
+                                                <input type="text" class="form-control" v-model="userInfo.address" :disabled="!bEdit">
                                             </div>
-
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-2">描述</label>
                                             <div class="col-md-10">
-                                                <textarea name="des" disabled placeholder="请输入描述性语言(150字以内)" maxlength="150" ></textarea>
+                                                <textarea name="des" :disabled="!bEdit" placeholder="请输入描述性语言(150字以内)" maxlength="150" v-model="userInfo.description"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group" id="basic_info_1_btn">
-                                            <button class="btn btn-link" type="button">修改资料</button>
-                                            <button class="btn btn-primary" type="reset" disabled>放弃修改</button>
+                                            <button class="btn btn-link" type="button" @click="bEdit=true">修改资料</button>
+                                            <button class="btn btn-primary" type="reset" :disabled="!bEdit">放弃修改</button>
                                             <button class="btn btn-danger" type="submit" disabled>提交</button>
                                         </div>
                                     </div>
@@ -292,38 +262,39 @@
                                 <fieldset>
                                     <legend>管理收货地址</legend>
                                     <div class="list-group">
-                                        <div class="panel-group" id="addr1">
-                                            <div class="panel panel-primary">
+                                        <div class="panel-group" id="addr1" v-for="(item,index) in Address">
+                                            <div class="panel" :class="[item.bdefault ? 'panel-primary':'panel-default']">
                                                 <div class="panel-heading">
                                                     <h4 class="panel-title">
-                                                        <a data-toggle="collapse" data-parent="#addr1" href="#addr11">地址1:重庆市黔江区**街道**路
-                                                            <span class="badge fr">默认地址</span>
+                                                        <a data-toggle="collapse" :data-parent="item.id | idFilter " :href="item.id | idChildFileter">{{item.detail}}
+                                                            <span class="badge fr" v-if="item.bdefault">默认地址</span>
                                                         </a>
                                                     </h4>
                                                 </div>
-                                                <div id="addr11" class="panel-collapse collapse">
+                                                <div :id="item.id | idChild " class="panel-collapse collapse">
                                                     <div class="panel-body">
                                                         <div class="col-md-10">
                                                             <div class="col-md-6">
                                                                     <strong class="fl">收件人姓名:&nbsp;&nbsp;</strong>
-                                                                    <h4 class="fl list-group-item-heading">侯鑫</h4>
+                                                                    <h4 class="fl list-group-item-heading">{{item.name}}</h4>
                                                                 </div>
                                                             <div class="col-md-6">
                                                                     <strong class="fl">联系电话:&nbsp;&nbsp;</strong>
-                                                                    <h4 class="list-group-item-heading fl">13912345678</h4>
+                                                                    <h4 class="list-group-item-heading fl">{{item.tel}}</h4>
                                                                 </div>
                                                             <div class="col-md-12">
                                                                 <strong class="fl">详细地址:&nbsp;&nbsp;</strong>
-                                                                <h4 class="list-group-item-heading fl">重庆市黔江区**街道**路</h4>
+                                                                <h4 class="list-group-item-heading fl">{{item.detail}}</h4>
                                                             </div>
                                                             <div class="col-md-12">
                                                                 <strong class="fl">邮政编码:&nbsp;&nbsp;</strong>
-                                                                <h4 class="list-group-item-heading fl" title="邮政编码默认为000000">400000</h4>
+                                                                <h4 class="list-group-item-heading fl" title="邮政编码默认为000000">{{item.postcode}}</h4>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
+                                                            <button class="btn btn-link" value="edit_add" type="button" v-if="!item.bdefault" @click="setDefaultAddress(item)">设置为默认地址</button>
                                                             <button class="btn btn-link" value="edit_add" type="button">修改地址</button>
-                                                            <button class="btn btn-link" value="del_add" type="button">删除地址</button>
+                                                            <button class="btn btn-link" value="del_add" type="button" @click="deleteAddress(item)">删除地址</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -362,21 +333,21 @@
                                                             </div>
                                                             <div class="input-group add-more">
                                                                 <span class="fl">联系电话</span>
-                                                                <input type="tel" maxlength="20" placeholder="联系电话" required>
+                                                                <input type="tel" maxlength="20" placeholder="联系电话" required v-model="NewAddress.tel">
                                                             </div>
                                                             <div class="input-group add-more">
                                                                 <span class="fl">姓名</span>
-                                                                <input type="text" placeholder="姓名" required>
+                                                                <input type="text" placeholder="姓名" required v-model="NewAddress.name">
                                                             </div>
                                                             <div class="input-group add-more">
                                                                 <span class="fl">具体地址</span>
-                                                                <input type="text" placeholder="详细地址" required>
+                                                                <input type="text" placeholder="详细地址" required v-model="NewAddress.detail">
                                                             </div>
                                                         </form>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                                                        <button type="button" class="btn btn-primary" id="add_ok" >添加</button>
+                                                        <button type="button" class="btn btn-primary" @click="addAddress" >添加</button>
                                                 </div>
                                                 </div>
                                             </div>
@@ -386,18 +357,18 @@
                             </form>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="book_management">
+                    <div class="tab-pane fade" id="book_management" :class="[currentState == 2 ? 'in active':'']">
                         <form action="" id="book_management_1">
                             <fieldset>
                                 <legend><i class="fa fa-book"></i>&nbsp;图书管理</legend>
                                 <div class="form-group col-md-10">
                                     <label for="sel_num_show">每页显示</label>
-                                    <select id="sel_num_show">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="5">5</option>
-                                        <option value="10">10</option>
-                                        <option value="15">15</option>
+                                    <select id="sel_num_show" v-model="bookManger.chooseShow">
+                                        <option value=1>1</option>
+                                        <option value=2>2</option>
+                                        <option value=5>5</option>
+                                        <option value=10>10</option>
+                                        <option value=15>15</option>
                                     </select>
                                     <label for="sel_num_show">条</label>
                                 </div>
@@ -407,18 +378,101 @@
                                 </ul>
                                 <div class="tab-content fl">
                                     <div class="tab-pane fade in active" id="show_in_table">
-                                        <table class="table table-striped table-bordered table-hover text-nowrap table-responsive-md btn-table">
+                                        <table class="table-striped table-bordered table-condensed table-hover">
                                             <caption>图书列表</caption>
+                                            <thead align="center" class="black white-text">
+                                                <tr>
+                                                   <th scope="col"><i class="fa fa-leaf mr-2 blue-text" aria-hidden="true"></i>编号</th>
+                                                   <th scope="col">书店ID</th>
+                                                   <th scope="col">店名</th>
+                                                   <th scope="col">书名</th>
+                                                   <th scope="col">图片</th>
+                                                   <th scope="col">广告词</th>
+                                                   <th scope="col">作者</th>
+                                                   <th scope="col">出版社</th>
+                                                   <th scope="col">版次</th>
+                                                   <th scope="col">单价</th>
+                                                   <th scope="col">库存</th>
+                                                   <th scope="col">操作</th>
+                                                   <th scope="col">其他</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(item,index) in doShowCurrent()">
+                                                    <td>{{item.book_id}}</td>
+                                                    <td>{{item.book_store_id}}</td>
+                                                    <td>{{item.book_store_name}}</td>
+                                                    <td>{{item.book_name}}</td>
+                                                    <td>
+                                                        <img :src='item.book_img_url' alt='未能加载正常图片' width='64' height='80'>
+                                                    </td>
+                                                    <td align="center">{{item.book_ads}}</td>
+                                                    <td>{{item.book_author}}</td>
+                                                    <td>{{item.book_publish}}</td>
+                                                    <td>{{item.book_edition}}</td>
+                                                    <td>{{item.book_price_now | showPrice}}</td>
+                                                    <td>{{item.book_left}}</td>
+                                                    <td>
+                                                        <a class="btn btn-link">删除</a>
+                                                        <a class="btn btn-link">修改</a>
+                                                    </td>
+                                                    <td>{{item.book_else}}</td>
+                                                </tr>
+                                            </tbody>
                                         </table>
                                     </div>
-                                    <div class="tab-pane fade " id="show_in_list"></div>
+                                    <div class="tab-pane fade " id="show_in_list">
+                                        <ul>
+                                            <li  v-for="(item,index) in doShowCurrent()">
+                                                <div class="book_list_info">
+                                                    <div class="fl book_list_info_left">
+                                                        <img :src="item.book_img_url " alt="未能加载正常图片" width="120" height="140" class="img-rounded">
+                                                    </div>
+                                                    <div class="fl book_list_info_right">
+                                                        <div class="list_info_1">
+                                                            <a href="#" :title="item.book_ads">{{item.book_ads}}</a>
+                                                        </div>
+                                                        <div class="list_info_2">
+                                                            <h4 class="fl">&thetav;</h4>
+                                                            <div class="badge fl"><a href>励志</a></div>
+                                                            <div class="badge fl"><a href>青春</a></div>
+                                                            <div class="badge fl"><a href>励志</a></div>
+                                                            <p class="fl info_price">
+                                                                <strong>&yen;&nbsp;{{item.book_price_now}}</strong>
+                                                            </p>
+                                                            <del class="fl info_price_before">&yen;&nbsp;{{item.book_price_before}} </del>
+                                                            <p class="fl info_price_dis">{{ item.book_price_now / item.book_price_before | toFixed }}  折</p>
+                                                            <br>
+                                                        </div>
+                                                        <div class="list_info_3">
+                                                            &nbsp;&nbsp;[中]
+                                                            &sol; 作者:<a href="#">{{item.book_author}}<a>
+                                                            &sol; 上架时间:2018.3.14
+                                                            &sol;  {{item.book_publish}}
+                                                            &sol; {{item.book_edition}}
+                                                        </div>
+                                                        <div class="list_info_4">
+                                                            &nbsp;&nbsp;图书编号: {{item.book_id}}
+                                                            &sol; 余量({{item.book_left}})
+                                                            &sol; 描述 {{item.book_else}}"
+                                                        </div>
+                                                        <div class="list_info_5">
+                                                            <a href="#" class="btn btn-warning">删除</a>
+                                                            <a href="#" class="btn btn-danger">修改</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 <ul class="pager fr" id="book_management_pager">
-                                    <li class="previous" value="prev"><a href="javascript:void(0)">Prev</a></li>
-                                    <li><a href="javascript:void(0)">1</a></li>
-                                    <li><a href="javascript:void(0)">2</a></li>
-                                    <li><a href="javascript:void(0)">3</a></li>
-                                    <li class="next" value="next"><a href="javascript:void(0)">Next </a></li>
+                                    <li class="previous"><a href="javascript:void(0)" @click="TurnTo(-1)">Prev</a></li>
+                                    <li><a href="javascript:void(0)" @click="TurnTo(1)">{{bookManger.showPages[0]}}</a></li>
+                                    <li><a href="javascript:void(0)" @click="TurnTo(2)">{{bookManger.showPages[1]}}</a></li>
+                                    <li><a href="javascript:void(0)" @click="TurnTo(3)">{{bookManger.showPages[2]}}</a></li>
+                                    <li class="next"><a href="javascript:void(0)" @click="TurnTo(0)">Next </a></li>
                                 </ul>
                             </fieldset>
                         </form>
@@ -520,7 +574,7 @@
                             </fieldset>
                         </form>
                     </div>
-                    <div class="tab-pane fade" id="book_sale_history">
+                    <div class="tab-pane fade" id="book_sale_history" :class="[currentState == 3 ? 'in active':'']">
                         <div class="container-fluid">
                             <legend>销售历史<label class="fr" id="local_time"></label></legend>
                             <div class="form-group fl">
@@ -553,8 +607,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="book_bought_history">book_bought_history</div>
-                    <div class="tab-pane fade" id="login_history">
+                    <div class="tab-pane fade" id="book_bought_history" :class="[currentState == 4 ? 'in active':'']">book_bought_history</div>
+                    <div class="tab-pane fade" id="login_history" :class="[currentState == 5 ? 'in active':'']">
                         <table class="table table-striped table-responsive-md btn-table">
                             <caption>登录列表</caption>
                             <thead>
@@ -596,8 +650,8 @@
 
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="account_evaluate">收益评估</div>
-                    <div class="tab-pane fade" id="book_else">
+                    <div class="tab-pane fade" id="account_evaluate" :class="[currentState == 6 ? 'in active':'']">收益评估</div>
+                    <div class="tab-pane fade" id="book_else" :class="[currentState == 7 ? 'in active':'']">
                         <div class="container-fluid">
                             <form class="form-horizontal" role="form" id="book_else_1">
                                 <fieldset>
@@ -661,6 +715,10 @@
                     </div>
                 </div>
             </div>
+            <div class="alert alert-dismissible toolTip" :class="[toolTipData.display? 'display_show' : 'display_hide', toolTipData.class]" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>{{toolTipData.strongtext}}</strong>{{toolTipData.text}}
+            </div>
         </div>
         <div class="footer fl">
             <ul class="footer-head fl">
@@ -694,6 +752,16 @@
                 <i class="fa fa-phone-square fa-2x"></i>
             </div>
         </div>
+        <div class="swal2-container" id="overlay">
+            <div class="overlay" tabindex="-1" :class="[ bOverLay ? 'display_show' : 'display_hide']"></div>
+        </div>
+        <!--vue.js-->
+        <script type="text/javascript" src="../dist/js/vue.js"></script>
+        <script type="text/javascript" src="../dist/js/vue-resource.min.js"></script>
+        <!--vue-index.js-->
+
+        <script type="text/javascript" src="../dist/myjs/vue-login.js"></script>
+
     </body>
 
 </html>

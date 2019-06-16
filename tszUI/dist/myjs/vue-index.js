@@ -18,9 +18,11 @@ var header= new Vue({
     methods:{
         showAllSchool:function () {
             this.bShow = 1;
+            overlay.setOverlay();
         },
         closeAllSchool:function () {
             this.bShow = 0;
+            overlay.unsetOverlay();
         },
         showAllUniversitys:function(City,index){
             var _this = this;
@@ -52,6 +54,7 @@ var header= new Vue({
         selectSchool:function(schoolName){
             this.targetSchool = schoolName;
             this.closeAllSchool();
+            overlay.unsetOverlay();
         }
     }
 });
@@ -173,5 +176,23 @@ var helper = new Vue({
             $(window).scrollTop();
             $('body,html').animate({scrollTop:0},500);
         }
+    }
+});
+
+var overlay = new Vue({
+    el:"#overlay",
+    data:{
+        bOverLay : false
+    },
+    methods:{
+        setOverlay:function(){
+            this.bOverLay = true
+        },
+        unsetOverlay:function(){
+            this.bOverLay = false
+        }
+    },
+    mounted:function(){
+        this.bOverLay = false
     }
 });

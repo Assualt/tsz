@@ -50,7 +50,13 @@ CREATE TABLE `tsz_user_address`
 CREATE TABLE `tsz_user_pswd`
 (
   `user_id` 			INT AUTO_INCREMENT NOT NULL PRIMARY KEY comment '用户ID',
-  `user_pass`			VARCHAR(64) NOT NULL					comment '用户密码MD5(64)',
+  `user_encrypt_pass`	VARCHAR(64) NOT NULL					comment '用户密码'
+  
+)ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tsz_user_stat`
+(
+  `user_id`  		    INT NOT NULL PRIMARY KEY                comment '用户ID', 
   `user_token`			VARCHAR(32) DEFAULT NULL 				comment '用户登录Token下发',
   `login_stat`          ENUM('Online','Offline','Other') DEFAULT 'Offline' comment '用户登录状态'
 )ENGINE=MyISAM DEFAULT CHARSET=utf8;

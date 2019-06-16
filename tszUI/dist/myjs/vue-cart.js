@@ -18,9 +18,11 @@ var header= new Vue({
     methods:{
         showAllSchool:function() {
             this.bShow = 1;
+            overlay.setOverlay();
         },
         closeAllSchool:function() {
             this.bShow = 0;
+            overlay.unsetOverlay();
         },
         showAllUniversitys:function(City,index){
             var _this = this;
@@ -52,6 +54,7 @@ var header= new Vue({
         selectSchool:function(schoolName){
             this.targetSchool = schoolName;
             this.closeAllSchool();
+            overlay.unsetOverlay();
         }
     }
 });
@@ -83,7 +86,7 @@ var cartMain = new Vue({
         },
         IncreaseCnt:function(Item) {
             if (Item.book_des[0].num > 19) {
-                alert("当前商品库存20件，最大选择20件");
+                swal('淘书斋提醒','当前商品库存20件，最大选择20件','info');
                 Item.book_des[0].num = 20;
             } else {
                 Item.book_des[0].num++;
@@ -93,23 +96,23 @@ var cartMain = new Vue({
         },
         DecreaseCnt:function(Item) {
             if (Item.book_des[0].num === 1) {
-                alert("当前至少选择一件商品");
+                swal('淘书斋提醒',"当前至少选择一件商品",'info');
             } else {
                 Item.book_des[0].num--;
             }
             this.handleAllCnt(2,Item,true);
             // console.log("Decrease Cnt" + Item.book_des[0].num);
         },
-        InputChange:function(Inputval) {
+        InputChange:function(Item) {
             if (isNaN(Item.book_des[0].num)) {
-                alert("你输入的不是一个有效的整数,请重新输入");
-                Inputval.book_des[0].num = 1;
+                swal('淘书斋提醒',"你输入的不是一个有效的整数,请重新输入",'info');
+                Item.book_des[0].num = 1;
             } else if (Item.book_des[0].num < 0) {
-                alert("当前至少选择一件商品");
-                Inputval.book_des[0].num = 1;
+                swal('淘书斋提醒',"当前至少选择一件商品",'info');
+                Item.book_des[0].num = 1;
             } else if (Item.book_des[0].num > 20) {
-                alert("当前商品库存20件，最大选择20件");
-                Inputval.book_des[0].num = 20;
+                swal('淘书斋提醒','当前商品库存20件，最大选择20件','info');
+                Item.book_des[0].num = 20;
             }
             this.handleAllCnt(2,Item,true);
         },
@@ -120,48 +123,53 @@ var cartMain = new Vue({
             // console.log(Model.SelectedAllShops.length);
         },
         removeItem:function(good) {//删除商品
-            var bOK= confirm(
-                "图书名:" + good.book_name + "\n" +
-                "作  者:" + good.book_des[0].author + "\n" +
-                "确认删除这本书？\n"
-            );
-            if(bOK){
-                var bookName = good.book_name;
-                var author = good.book_des[0].author;
-                var bookPrice = good.book_des[0].dis_price;
-                var edition = good.book_des[0].edition;
-                var bookNum = good.book_des[0].num;
-                var bookID = good.book_des[0].ID;
-                var _this = this;
-                this.cartGoodsShops.forEach((data,pIndex)=>{
-                   data.goods_info.forEach((res,index)=>{
-                      if(res.book_name == bookName && res.book_des[0].author == author &&
-                         res.book_des[0].dis_price == bookPrice && res.book_des[0].edition == edition &&
-                         res.book_des[0].num == bookNum && res.book_des[0].ID == bookID
-                      ){
-                          this.cartGoodsNum --;
-                          if(data.goods_info.length == 1){
-                              _this.cartGoodsShops.splice(pIndex,1);
-                          }else{
-                              data.goods_info.splice(index,1);
-                          }
-                      }
-                   });
-                });
-                _this.allTotalMoney = 0;
-                _this.allCount = 0;
-                _this.SelectedAllShops.forEach((data,index)=>{
-                    if(data.bookID == bookID ){
-                        _this.SelectedAllShops.splice(index,1);
-                    }else {
-                        _this.allCount += data.bookCnt;
-                        _this.allTotalMoney = parseFloat(_this.allTotalMoney) + parseFloat(data.bookTotal);
-                        _this.allTotalMoney = _this.allTotalMoney.toFixed(2);
-                    }
-                });
-            }else{
-                alert("删除失败");
-            }
+            var _this = this;
+            swal({
+                title:'淘书斋提醒',
+                text:"图书名:" + good.book_name + "\n" +
+                     "作  者:" + good.book_des[0].author + "\n" +
+                     "确认删除这本书？\n",
+                icon:'warning',
+                buttons:["取消","确定"]
+            }).then(function (isconfirm) {
+                if(isconfirm == true){
+                     var bookName = good.book_name;
+                     var author = good.book_des[0].author;
+                     var bookPrice = good.book_des[0].dis_price;
+                     var edition = good.book_des[0].edition;
+                     var bookNum = good.book_des[0].num;
+                     var bookID = good.book_des[0].ID;
+                     _this.cartGoodsShops.forEach((data,pIndex)=>{
+                        data.goods_info.forEach((res,index)=>{
+                           if(res.book_name == bookName && res.book_des[0].author == author &&
+                              res.book_des[0].dis_price == bookPrice && res.book_des[0].edition == edition &&
+                              res.book_des[0].num == bookNum && res.book_des[0].ID == bookID
+                           ){
+                               this.cartGoodsNum --;
+                               if(data.goods_info.length == 1){
+                                   _this.cartGoodsShops.splice(pIndex,1);
+                               }else{
+                                   data.goods_info.splice(index,1);
+                               }
+                           }
+                        });
+                     });
+                     _this.allTotalMoney = 0;
+                     _this.allCount = 0;
+                     _this.SelectedAllShops.forEach((data,index)=>{
+                         if(data.bookID == bookID ){
+                             _this.SelectedAllShops.splice(index,1);
+                         }else {
+                             _this.allCount += data.bookCnt;
+                             _this.allTotalMoney = parseFloat(_this.allTotalMoney) + parseFloat(data.bookTotal);
+                             _this.allTotalMoney = _this.allTotalMoney.toFixed(2);
+                         }
+                     });
+                     swal('淘书斋提醒',"删除图书成功",'success');
+                }else if(isconfirm===false){
+                    swal('淘书斋提醒',"删除图书失败",'error');
+                }
+            });
         },
         removeSeleted:function () {
             console.log(this.SelectedAllShops.length);
@@ -404,3 +412,21 @@ const timer = setInterval(()=>{
 const timer1 = setInterval(()=>{
     recommend_daily.next("guess-like");
 },6000);
+
+var overlay = new Vue({
+    el:"#overlay",
+    data:{
+        bOverLay : false
+    },
+    methods:{
+        setOverlay:function(){
+            this.bOverLay = true
+        },
+        unsetOverlay:function(){
+            this.bOverLay = false
+        }
+    },
+    mounted:function(){
+        this.bOverLay = false
+    }
+});

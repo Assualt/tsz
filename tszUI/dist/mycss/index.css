@@ -27,6 +27,9 @@ p:hover{
 .opacity_04{
     opacity: 0.4;
 }
+body{
+    min-width:1200px;
+}
 /*header*/
 header{
     width:100%;
@@ -59,12 +62,13 @@ header{
     position: absolute;
     z-index:1024;
     background-color: #ffffff;
-    width: 623px;
+    width: 700px;
     height: 400px;
-    top:20%;
-    left: 20%;
+    top:50%;
+    left: 50%;
+    margin-left:-350px;
+    margin-top:-200px;
     border-radius: 2%;
-    border: 1px solid #e1e1e1;
     box-shadow: 10px 10px 10px #888888;
 }
 .show_school_head{
@@ -198,7 +202,7 @@ header{
     background: #f5f5f5;
     padding: 20px 14%;
     margin: 15px 0 1% 0;
-    height: 280px;
+    height: 320px;
 }
 .slider_view_btn{
     width: 100%;
@@ -794,3 +798,15 @@ header{
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+/*overlay*/
+.overlay{
+    background-color: rgba(0,0,0,.4);
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    position:fixed;
+}
+/*end of overlay*/

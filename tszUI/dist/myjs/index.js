@@ -74,7 +74,7 @@ $(document).ready(function () {
         });
     });
     /*define the json for hot-topic*/
-    $.getJSON(window.JSONPATH+"hot-topic.json",function (content) {
+    $.getJSON(window.JSONPATH+"hot_topic.json",function (content) {
        window.hottopic=content;
        $.each(content,function (info,data) {
           if(data.name === "hot-topic"){/*define the json for hot-topic-words*/
@@ -153,7 +153,7 @@ $(document).ready(function () {
        });
     });
     /*define the json for recommended book */
-    $.getJSON(window.JSONPATH+"book-recommend.json",function (content) {
+    $.getJSON(window.JSONPATH+"book_recommend.json",function (content) {
        window.book_recommend = content;
        $(".book-recommend-body").empty();
        $.each(content,function (info ,data) {
@@ -177,7 +177,7 @@ $(document).ready(function () {
        });
     });
     /*define the json for discount book*/
-    $.getJSON(window.JSONPATH+"book-discount.json",function (content) {
+    $.getJSON(window.JSONPATH+"book_discount.json",function (content) {
         window.book_discout=content;
         var book_discount_body_list = $(".book-discount-body-list");
         book_discount_body_list.empty();
@@ -202,7 +202,7 @@ $(document).ready(function () {
         book_discount_body_list.append(string);
     });
     /*define the json for new comment book*/
-    $.getJSON(window.JSONPATH+"book-new-comment.json",function (content) {
+    $.getJSON(window.JSONPATH+"book_new_comment.json",function (content) {
        window.book_new_comment = content;
        var book_new_comment_body_list =$(".book-new-comment-body-list");
        book_new_comment_body_list.empty();
@@ -228,7 +228,7 @@ $(document).ready(function () {
     });
 
     /*define the json for new comment book*/
-    $.getJSON(window.JSONPATH+"book-popular.json",function (content) {
+    $.getJSON(window.JSONPATH+"book_popular.json",function (content) {
         window.book_new_comment = content;
         var book_popular_body_list = $(".book-popular-body-list");
         book_popular_body_list.empty();

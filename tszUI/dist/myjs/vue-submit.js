@@ -18,9 +18,11 @@ var header= new Vue({
     methods:{
         showAllSchool () {
             this.bShow = 1;
+            overlay.setOverlay();
         },
         closeAllSchool () {
             this.bShow = 0;
+            overlay.unsetOverlay();
         },
         showAllUniversitys(City,index){
             var _this = this;
@@ -52,6 +54,7 @@ var header= new Vue({
         selectSchool(schoolName){
             this.targetSchool = schoolName;
             this.closeAllSchool();
+            overlay.unsetOverlay();
         }
     }
 });
@@ -124,7 +127,7 @@ var main =new Vue({
         addNewAddress:function () {
             if( this.NewAddressProvince == '' || this.NewAddressCity == '' || this.NewAddressDistrict == '' ||
                 this.NewAddressContactName == '' || this.NewAddressTel == '' || this.NewAddressMore == ''){
-                alert("当前你还有未输出的选项,请选择完整后方能提交");
+                swal('淘书斋提醒',"当前你还有未输出的选项,请选择完整后方能提交",'warning');
             }else{
                 this.AllAddress.push({
                     add_province:this.NewAddressProvince,
@@ -137,7 +140,7 @@ var main =new Vue({
                 });
                 this.NewAddressTel = this.NewAddressContactName = this.NewAddressMore = this.NewAddressDistrict
                 = this.NewAddressContactName = this.NewAddressProvince = '';
-                alert("添加地址OK");
+                swal('淘书斋提醒',"添加地址成功",'success');
                 $("#AddressModal").modal("hide");
                 $('.modal-backdrop').remove();
             }
@@ -148,17 +151,25 @@ var main =new Vue({
         deleteAddress:function (Address) {
             var pos = this.AllAddress.indexOf(Address);
             if(pos!= -1){
-                var ok = confirm("确认删除本条地址");
-                if(ok) {
-                    this.AllAddress.splice(pos, 1);
-                    alert("删除地址成功");
-                }else{
-                    alert("删除地址失败");
-                }
+                var _this = this;
+                swal({
+                    title:'淘书斋提醒',
+                    text:'确认删除本条地址',
+                    icon:'warning',
+                    buttons:["取消","确定"]
+                }).then(function (isconfirm) {
+                    if(isconfirm == true){
+                        _this.AllAddress.splice(pos, 1);
+                        swal('淘书斋提醒','删除地址成功','success');
+                    }else if(isconfirm===false){
+                        swal('淘书斋提醒','删除地址失败','error');
+                    }
+                });
+
             }
         },
         editAddress:function () {
-            alert("修改成功");
+            swal('淘书斋提醒','修改地址成功','success');
             $("#EditAddressModal").modal("hide");
             $('.modal-backdrop').remove();
         },
@@ -177,7 +188,7 @@ var main =new Vue({
         NextStep:function (){
             if(this.currentStep == 1){
                 if(JSON.stringify(this.selectedAddress) == "{}"){
-                    alert("你必须选择一个收货地址才能进行下一步");
+                    swal('淘书斋提醒',"你必须选择一个收货地址才能进行下一步",'warning');
                 }else{
                     this.currentStep ++;
                     console.log("Next step");
@@ -204,15 +215,15 @@ var main =new Vue({
             var UserID = localStorage.getItem('userID');
             console.info(UserID);
             if(UserID == ''){
-                alert("当前未登陆,无需结算");
+                swal('淘书斋提醒',"当前未登陆,无需结算",'warning');
             }else {
                 var userData = localStorage.getItem(UserID);
                 if(userData== ''){
-                    alert("当前未选择任何商品,无需结算");
+                    swal('淘书斋提醒',"当前未选择任何商品,无需结算",'warning');
                 }else{
                     console.log(userData);
                     if(hex_md5(userData) != UserID){
-                        alert("当前商品有人非法篡改,不能结算");
+                        swal('淘书斋提醒',"当前商品有人非法篡改,不能结算",'warning');
                     }else{
                         this.SelectedAllShops = JSON.parse(userData).data;
                         console.log(this.SelectedAllShops);
@@ -225,5 +236,22 @@ var main =new Vue({
                 return this.SelectedAllShops;
             }
         }
+    }
+});
+const overlay = new Vue({
+    el: "#overlay",
+    data: {
+        bOverLay: false
+    },
+    methods: {
+        setOverlay: function () {
+            this.bOverLay = true
+        },
+        unsetOverlay: function () {
+            this.bOverLay = false
+        }
+    },
+    mounted: function () {
+        this.bOverLay = false
     }
 });

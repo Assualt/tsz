@@ -47,13 +47,13 @@
         </div>
         <div class="header_login fr">
             <li class="fl dropdown">
-                <a href="sites/login.html" id="login_btn" data-toggle="dropdown">登录</a>&nbsp;|
+                <a href="login.html" id="login_btn" data-toggle="dropdown">登录</a>&nbsp;|
                 <ul class="dropdown-menu fade" role="menu" aria-labelledby="login_btn">
                     <li role="presentation">
                         <a role="menuitem" tabindex="-1" href="#">我的主页</a>
                     </li>
                     <li role="presentation">
-                        <a role="menuitem" tabindex="-1" href="sites/cart.html">我的购物车</a>
+                        <a role="menuitem" tabindex="-1" href="cart.html">我的购物车</a>
                     </li>
                     <li role="presentation">
                         <a role="menuitem" tabindex="-1" href="#">我的收藏</a>
@@ -66,9 +66,9 @@
                     </li>
                 </ul>
             </li>
-            <li class="fl"><a href="sites/sold.html" target="_blank">出售</a>&nbsp;|</li>
-            <li class="fl"><a href="sites/register.html" style="color: orange" target="_blank">立即注册</a>&nbsp;|</li>
-            <li class="fl"><a href="sites/downloadApp.html" class="fa fa-mobile-phone fa-1x" target="_blank">下载APP</a></li>
+            <li class="fl"><a href="sold.html" target="_blank">出售</a>&nbsp;|</li>
+            <li class="fl"><a href="register.html" style="color: orange" target="_blank">立即注册</a>&nbsp;|</li>
+            <li class="fl"><a href="downloadApp.html" class="fa fa-mobile-phone fa-1x" target="_blank">下载APP</a></li>
         </div>
     </div>
 </header>
@@ -313,7 +313,7 @@
         <div v-bind:class="[currentStep==4?'display_show':'display_hide']">
             <h1>Setp Four</h1>
         </div>
-        <hr>
+        <hr style="margin-top: 100px;">
         <div style="height: 60px">
             <div class="col-md-2"></div>
             <button class="btn btn-default col-md-3" @click="PrevStep()" v-bind:class="[currentStep==1?'disabled':'']">&larr; 上一步</button>
@@ -354,6 +354,9 @@
         <div class="helper-item">
             <i class="fa fa-phone-square fa-2x"></i>
         </div>
+    </div>
+    <div class="swal2-container" id="overlay">
+        <div class="overlay" tabindex="-1" :class="[ bOverLay ? 'display_show' : 'display_hide']"></div>
     </div>
     <!--vue.js-->
     <script type="text/javascript" src="../dist/js/vue.js"></script>
