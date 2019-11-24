@@ -50,7 +50,8 @@ CREATE TABLE `tsz_user_address`
 CREATE TABLE `tsz_user_pswd`
 (
   `user_id` 			INT AUTO_INCREMENT NOT NULL PRIMARY KEY comment '用户ID',
-  `user_encrypt_pass`	VARCHAR(64) NOT NULL					comment '用户密码'
+  `user_encrypt_pass`	VARCHAR(64) NOT NULL					comment '用户密码',
+  `user_name`           VARCHAR(64) NOT NULL                    comment '用户名'
   
 )ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

@@ -36,7 +36,7 @@ def setJSON_ALL_BOOK(book_name, img_url, book_tags,
     book["book_description"] = book_description
     return book
 pass
-# book-discount.json create
+# book_discount.json create
 #     "book_name": "十爱",
 #     "img_url": "dist/res/book_img/十爱.jpg",
 #     "price_now": "1.00",
