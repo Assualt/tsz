@@ -10,6 +10,7 @@ SERVER_LOG = '/home/xhou/work/GitRepository/tsz/tszflask/logs/server.log'
 REDIS_URL    = "127.0.0.1"
 REDIS_PASSWD = "123456"
 REDIS_PORT   = 6379
+REDIS_TIMEOUT = 10
 
 # MYSQL
 MYSQL_HOST = "127.0.0.1"
@@ -28,3 +29,5 @@ TSZ_MODEL_SERVER = 10000
 #
 QUERY_FALED = "Query Failed"
 QUERY_SUCCESS = "Query Success"
+EXEC_SUCCESS = "Exec Success"
+EXEC_FAILED = "Exec Failed"

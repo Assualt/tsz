@@ -21,10 +21,10 @@ class HttpResult(object):
 
 class DBResult(object):
     @staticmethod
-    def format(model_id, message, info) ->dict:
+    def format(model_id, status, info) ->dict:
         return {
             "modelID": model_id,
-            "message": message,
+            "status": status,
             "result"   : info
         }
 
