@@ -9,8 +9,8 @@
         <script type="text/javascript" src="../dist/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="../dist/js/distpicker.data.js"></script>
         <script type="text/javascript" src="../dist/js/distpicker.js"></script>
-<!--        <script type="text/javascript" src="../dist/js/sweetalert2.min.js"></script>-->
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script type="text/javascript" src="../dist/js/sweetalert2.min.js"></script>
+        <!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
         <script type="text/javascript" src="../dist/js/echarts.js" ></script>
         <!--<script type="text/javascript" src="./dist/js/npm.js"></script>-->
         <!--bootstrap css -->
@@ -47,8 +47,8 @@
                 </div>
                 <div class="header_login fr">
                     <li class="fl dropdown">
-                        <a href="../login.html" id="login_btn" data-toggle="dropdown">{{userInfoStatus.name}}</a>&nbsp;|
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="login_btn" :class="[!userInfoStatus.bExpand ? 'fade':'']">
+                        <a href="#" id="login_btn" data-toggle="dropdown">{{bIsLogined? '我':'登录'}}</a>&nbsp;|
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="login_btn" :class="[bIsLogined? '' : 'fade']">
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">我的主页</a>
                             </li>

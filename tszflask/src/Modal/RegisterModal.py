@@ -14,7 +14,7 @@ class RegisterModal(Resource):
         self.parser.add_argument('passwd', type=str)
         self.parser.add_argument('identifying_code', type=str)
 
-    def get(self):
+    def post(self):
         data = self.parser.parse_args()
         username = data.get('name')
         passwd = data.get('passwd')
@@ -35,16 +35,21 @@ class RegisterModal(Resource):
                     logger.info('flush user={u} to mysql {s} errmsg={e}'.format(u=username,s=sqlResult['status'],e=sqlResult['result']))
                     if sqlResult['status'] == config.EXEC_SUCCESS:
                         Redis.delX(key)
-                        return CommResult.HttpResult.format(200, 'Exec OK', {"code":200, "status": "Register OK"})
+                        return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, {"code": AppStatus.APP_200_OK, "message" : "Register OK" })
                     else:
-                        return CommResult.HttpResult.format(200, 'Exec OK', {"code": 500, "status": "Internal Error"})
+                        return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, {"code": AppStatus.APP_500_INTERNAL_ERROR, "message" : AppStatus.APP_500_MESSAGE})
+                else:
+                    return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE,{"code": AppStatus.APP_500_INTERNAL_ERROR,"message": AppStatus.APP_500_MESSAGE})
             else:
                 logger.info('user={u} with identity_code={i} Register Failed invalid indentity_code'.format(u=username,i=identifying_code))
-                return CommResult.HttpResult.format(200,'Exec OK', {"code":405, "status": "Incrrorect Identity Code"})
+                return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, {"code": AppStatus.APP_300_BAD_RESULT, "message": "Incrrorect Identity Code"})
         elif result['status'] == config.QUERY_FALED:
             logger.info('user={u} identity_code={i} has been expired.'.format(u=username,i=identifying_code))
-        return CommResult.HttpResult.format(200, 'Exec OK', {"code":405, "status" : "Register Failed."})
-    pass
+        return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, {"code":AppStatus.APP_301_INVALID_ARGS, "message" : "Register Failed due to expired Identity Code."})
+
+
+    def get(self)->dict:
+        return CommResult.HttpResult.format(HttpStatus.HTTP_405_METHOD_NOT_ALLOWED, HttpStatus.HTTP_405_MESSAGE, {"code":AppStatus.APP_300_BAD_RESULT, "message": ""})
 
 class IdentityModal(Resource):
     def __init__(self):
@@ -69,18 +74,18 @@ class IdentityModal(Resource):
             key = 'R' + username
             result = Redis.setX(key,identity_code, IDentityCode_TimeOut)
             if result['status'] == config.EXEC_FAILED:
-                return CommResult.HttpResult.format(200, 'Exec OK', {"code": 405, "status": result['result']})
+                return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, {"code": AppStatus.APP_500_INTERNAL_ERROR, "message" : result['result']})
         elif type == 2:
             # forget password to Idenity Code
             key = 'F' + username
             result = Redis.setX(key, identity_code, IDentityCode_TimeOut)
             if result['status'] == config.EXEC_FAILED:
-                return CommResult.HttpResult.format(200, 'Exec OK', {"code": 405, "status": result['result']})
+                return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE,{"code": AppStatus.APP_500_INTERNAL_ERROR, "message": result['result']})
         else:
-            return CommResult.HttpResult.format(200, 'Exec OK', {"code": 403, "status": "UnResolved type."})
+            return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK,HttpStatus.HTTP_200_MESSAGE, {"code": AppStatus.APP_403_UNRESOLVED_TYPE, "message": AppStatus.APP_403_MESSAGE})
 
         logger.info("Get Identity code for {u} OK. identity code:{c} timeout:{t}".format(u=username, c=identity_code, t=IDentityCode_TimeOut))
-        return CommResult.HttpResult.format(200, 'Exec OK',{"code":200,"status": "Identity Code has been sent."})
+        return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK,HttpStatus.HTTP_200_MESSAGE, {"code": AppStatus.APP_200_OK, "message" : "Identity Code has been sent."})
 
     def get_random_number(self) -> str:
         return random.randint(100000, 999999)

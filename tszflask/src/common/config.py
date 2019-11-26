@@ -1,3 +1,4 @@
+import os
 # PROJECT_NAME
 PROJECT_NAME = "tsz"
 
@@ -26,8 +27,11 @@ TSZ_MODEL_MYSQL = 10001
 TSZ_MODEL_REDIS = 10002
 TSZ_MODEL_SERVER = 10000
 
-#
+#SQL EXEC Result
 QUERY_FALED = "Query Failed"
 QUERY_SUCCESS = "Query Success"
 EXEC_SUCCESS = "Exec Success"
 EXEC_FAILED = "Exec Failed"
+
+
+KEY = os.urandom(24)

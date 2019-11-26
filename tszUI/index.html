@@ -41,8 +41,8 @@
                 </div>
                 <div class="header_login fr">
                     <li class="fl dropdown">
-                        <a href="sites/login.html" id="login_btn" data-toggle="dropdown">登录</a>&nbsp;|
-                        <ul class="dropdown-menu fade" role="menu" aria-labelledby="login_btn">
+                        <a href="sites/login.html" id="login_btn" data-toggle="dropdown" @click="CheckOrLogin()">{{bIsLogined? '我':'登录'}}</a>&nbsp;|
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="login_btn" :class="[bIsLogined? '' : 'fade']">
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">我的主页</a>
                             </li>

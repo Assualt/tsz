@@ -1,3 +1,5 @@
+
+
 var header= new Vue({
     el:"#header",
     data: {
@@ -8,10 +10,25 @@ var header= new Vue({
         ],
         bShow: 0,
         CurrentCityUniversity:[],
-        targetSchool:"所有学校"
+        targetSchool:"所有学校",
+        userID: '',
+        userToken: '',
+        bIsLogined: false
     },
     mounted:function () {//加载完成的时候需要加载的东西
         this.showAllUniversitys("北京",1);
+        var ca = document.cookie.split(';')
+        for(var i = 0;i < ca.length; ++i){
+            var tmpCookie = ca[i];
+            //cookie = TSZ&UserID&UserToken
+            if(tmpCookie.startsWith("TSZ")){
+                var srcList = tmpCookie.split('&');
+                self.userID = srcList[1];
+                self.userToken = srcList[2];
+                self.bIsLogined = true;
+                break;
+            }
+        }
     },
     filters:{  //过滤器
     },
@@ -55,6 +72,11 @@ var header= new Vue({
             this.targetSchool = schoolName;
             this.closeAllSchool();
             overlay.unsetOverlay();
+        },
+        CheckOrLogin:function(){
+            if(!self.bIsLogined){
+                window.location.href='./sites/login.html';
+            }
         }
     }
 });

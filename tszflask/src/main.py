@@ -6,11 +6,11 @@ from flask import Flask
 from flask_restful import Api
 from src.common import *
 from src.Modal import *
-import os
+from flask_cors import CORS
 
 app = Flask(__name__)
-
-app.config['SECRET_KEY']=os.urandom(24)
+CORS(app)
+app.config['SECRET_KEY']= config.KEY
 
 api = Api(app)
 

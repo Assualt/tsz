@@ -27,28 +27,30 @@ const header = new Vue({
         bShow: 0,
         CurrentCityUniversity: [],
         targetSchool: "所有学校",
-        userInfoStatus: {
-            name: '登录',
-            bExpand: false
-        }
+        userID: '',
+        userToken: '',
+        bIsLogined: false
     },
     mounted: function () {//加载完成的时候需要加载的东西
         this.showAllUniversitys("北京", 1);
+        var ca = document.cookie.split(';')
+        for(var i = 0;i < ca.length; ++i){
+            var tmpCookie = ca[i];
+            //cookie = TSZ&UserID&UserToken
+            if(tmpCookie.startsWith("TSZ")){
+                var srcList = tmpCookie.split('&');
+                this.userID = srcList[1];
+                this.userToken = srcList[2];
+                this.bIsLogined = true;
+                break;
+            }
+        }
     },
     filters: {  //过滤器
     },
     methods: {
         register: function () {
             main.doRegister();
-        },
-        changeStatusInfo: function (ok) {
-            if (ok) {
-                this.userInfoStatus.name = '我';
-                this.userInfoStatus.bExpand = true;
-            } else {
-                this.userInfoStatus.name = '登录';
-                this.userInfoStatus.bExpand = false;
-            }
         },
         exitLogin: function () {
             main.ExitStatusInfo(false);
@@ -259,7 +261,7 @@ var main = new Vue({
                     _this.currentState = 0;
                     _this.checkCurrent(0);
                     if(!bExpand){
-                        header.changeStatusInfo(false);
+                        header.bIsLogined = false;
                     }
                 }else if(isconfirm===false){
                     swal('淘书斋提醒','退出失败','error');
@@ -285,10 +287,28 @@ var main = new Vue({
                     swal('淘书斋提醒','登录失败!请检查用户名和密码是否填写后再次登录!','error');
                     return;
                 }
-                console.log("点击了登录按钮");
+                this.$http.post('http://127.0.0.1:5000/login',{
+                    "name":this.submitData.username,
+                    "passwd":this.submitData.password
+                }).then(data=>{
+                    var Result = data['body'];
+                    console.log("result:",Result)
+                    if(Result['status'] != 200){
+                        swal('淘书斋提醒','登录失败\n' + Result['message'],'error');       
+                        return;
+                    }else if(Result['info']['code'] != 200){
+                        swal('淘书斋提醒','登录失败\n' + Result['info']['message'],'error');
+                        return;
+                    }else{
+                        this.currentState = 1;
+                        header.bIsLogined = true;
+                        //info.message is the token
+                        var CookieKey = 'TSZ&' + this.submitData.username + '&' + Result['info']['message'];
+                        //set cookie to local web broswer
+                    }
+                });
                 swal('淘书斋提醒','登录成功','success');
-                this.currentState = 1;
-                header.changeStatusInfo(true);
+                
             }else if (this.Mode === 1){
                 //注册验证
                 swal('淘书斋提醒','注册成功,跳转值登录界面','success');

@@ -12,10 +12,10 @@ class HttpResult(object):
     def invalid_args() ->dict:
         return {
             "status": 200,
-            "message": "Exec Failed",
+            "message": "Request OK",
             "info" : {
                 "code":400,
-                "status":"Invalid Args"
+                "message":"Invalid Args"
             }
         }
 
