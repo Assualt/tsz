@@ -33,5 +33,8 @@ QUERY_SUCCESS = "Query Success"
 EXEC_SUCCESS = "Exec Success"
 EXEC_FAILED = "Exec Failed"
 
+KEY = os.urandom(16)
 
-KEY = os.urandom(24)
+
+#LOGIN
+LOGIN_TIME_OUT = 3600 * 24

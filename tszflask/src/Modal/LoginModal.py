@@ -29,13 +29,14 @@ class LoginModal(Resource):
                 logger.warning("query {u} result(s) have(s) been found over 1 ".format(u=user))
                 return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, {"code": AppStatus.APP_500_INTERNAL_ERROR, "message" : AppStatus.APP_500_MESSAGE})
             elif result_info[0][1] == passwd:
-                # generator tokenx
+                # generator token_x
                 timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                token = HashHelper.Token.get_token(config.PROJECT_NAME, str(config.KEY), timestamp, user)
+                token = HashHelper.Token.get_token(config.KEY, config.PROJECT_NAME, timestamp, user)
                 key = "T" + user + str(result_info[0][0])
-                Redis.setX(key,token)
+                Redis.setX(key,token, expire_time=config.LOGIN_TIME_OUT)
+                message = token +"/" + str(HashHelper.base64encode(config.PROJECT_NAME))
                 logger.info("account:{account} token:{token} timestamp:{time}".format(account=user, token=token,time=timestamp))
-                return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, {"code": AppStatus.APP_200_OK, "message" : "Login Success"})
+                return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, {"code": AppStatus.APP_200_OK, "message" : message})
             else:
                 return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, { "code": 402, "message" : "Incorrect Password or User {u} not exist".format(u=user)})
         elif result["status"] == QUERY_FALED:

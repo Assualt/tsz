@@ -287,24 +287,35 @@ var main = new Vue({
                     swal('淘书斋提醒','登录失败!请检查用户名和密码是否填写后再次登录!','error');
                     return;
                 }
-                this.$http.post('http://127.0.0.1:5000/login',{
+                this.$http.post('http://192.168.0.105:5000/login',{
                     "name":this.submitData.username,
-                    "passwd":this.submitData.password
+                    "passwd":HashAttribute(this.submitData.password)
                 }).then(data=>{
                     var Result = data['body'];
                     console.log("result:",Result)
                     if(Result['status'] != 200){
-                        swal('淘书斋提醒','登录失败\n' + Result['message'],'error');       
+                        swal({
+                            title: '淘书斋提醒',
+                            text:'登录失败.' + ['message'],
+                            icon: 'error'
+                        });
                         return;
                     }else if(Result['info']['code'] != 200){
-                        swal('淘书斋提醒','登录失败\n' + Result['info']['message'],'error');
+                        swal({
+                            title: '淘书斋提醒',
+                            text:'登录失败.' + Result['info']['message'],
+                            icon: 'error'
+                        });
                         return;
                     }else{
                         this.currentState = 1;
                         header.bIsLogined = true;
+                        var tszID = 'tszid';
                         //info.message is the token
-                        var CookieKey = 'TSZ&' + this.submitData.username + '&' + Result['info']['message'];
-                        //set cookie to local web broswer
+                        var TokenList = Result['info']['message'].split('/');
+                        var cookie = CreateCookie(tszID, TokenList[1],'/', TokenList[0], new Date().toGMTString());
+                        console.log("document set cookie;" , cookie);
+                        document.cookie = cookie;
                     }
                 });
                 swal('淘书斋提醒','登录成功','success');

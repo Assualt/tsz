@@ -19,4 +19,4 @@ api.add_resource(RegisterModal.RegisterModal, '/register')
 api.add_resource(RegisterModal.IdentityModal, '/verify')
 if __name__ == '__main__':
     logger.info("system SECRET_KEY:{k}".format(k=app.config["SECRET_KEY"]))
-    app.run(debug=True)
+    app.run(host="0.0.0.0",debug=True)

@@ -1,5 +1,6 @@
 import hashlib
 import base64
+from Crypto.Cipher import AES
 md5_utils = hashlib.md5()
 sha1_utils = hashlib.sha1()
 sha256_utils = hashlib.sha256()
@@ -64,9 +65,11 @@ def base64encode(data, encoding = 'utf-8') -> str:
 
 class Token(object):
     @staticmethod
-    def get_token(PROJECT_NAME, PROJECT_API_KEY, login_time, account ) -> str:
-        ss = PROJECT_NAME + ";" + PROJECT_API_KEY + ";" + login_time + ";" + account
-        return md5(ss, 'utf8')
+    def get_token(key, PROJECT_NAME, login_time, account) -> str:
+        chiper = AES.new(key, AES.MODE_EAX)
+        tmp = PROJECT_NAME + ";"  + login_time + ";" + account
+        s_token = chiper.encrypt(str.encode(tmp))
+        return str(base64encode(str(s_token)))
 
 if __name__ == '__main__':
     try:
@@ -77,5 +80,9 @@ if __name__ == '__main__':
         print(sha512("123"))
         print(base64encode("123@.com"))
         print(base64decode(base64encode("123@.com")))
+        import os
+        KEY = bytes(os.urandom(16))
+        print(Token.get_token(KEY, "123456", "123213", "admin@p.cn"))
+
     except Exception as e:
         print("e", e)
