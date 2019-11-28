@@ -1,6 +1,11 @@
+import datetime
 import hashlib
 import base64
-from Crypto.Cipher import AES
+import time
+import hmac
+from http import cookies
+import random
+
 md5_utils = hashlib.md5()
 sha1_utils = hashlib.sha1()
 sha256_utils = hashlib.sha256()
@@ -64,12 +69,47 @@ def base64encode(data, encoding = 'utf-8') -> str:
 
 
 class Token(object):
+
     @staticmethod
-    def get_token(key, PROJECT_NAME, login_time, account) -> str:
-        chiper = AES.new(key, AES.MODE_EAX)
-        tmp = PROJECT_NAME + ";"  + login_time + ";" + account
-        s_token = chiper.encrypt(str.encode(tmp))
-        return str(base64encode(str(s_token)))
+    def generate_token(key:str, account:str, expire_time:int = 3600 * 24 * 7):
+        t_str = str(time.time() + expire_time)
+        t_byte = t_str.encode('utf-8')
+        t_sha1_str = hmac.new(key.encode(),t_byte,'sha1').hexdigest()
+        s_token = t_str + ':' + t_sha1_str + ':' + account
+        b64_token = base64.urlsafe_b64encode(s_token.encode('utf-8'))
+        return b64_token.decode('utf-8')
+
+    @staticmethod
+    def certify_token(key, account, token)->str:
+        try:
+            token_str = base64.urlsafe_b64decode(token).decode('utf-8')
+            token_list = token_str.split(':')
+            if len(token_list) != 3:
+                return "the token length must be 3"
+            ts_str = token_list[0]
+            if float(ts_str) < time.time():
+                return "the token has been expired"
+            known_sha1_str = token_list[1]
+            known_account = token_list[2]
+            if known_account != account:
+                return "the token doesn't belong to {u} user".format(u=account)
+            sha1_str = hmac.new(key.encode('utf-8'), ts_str.encode('utf-8'), 'sha1')
+            calc_str = sha1_str.hexdigest()
+            if calc_str != known_sha1_str:
+                return "the token decode error."
+            return ""
+        except:
+            return "certify_token failed"
+
+    @staticmethod
+    def generator_cookie(security_token, expire_days = 30)->str:
+        expiration = datetime.datetime.now() + datetime.timedelta(days=expire_days)
+        cookie = cookies.SimpleCookie()
+        cookie['session'] = md5(security_token)
+        cookie['session']['domain'] = '.tsz.com'
+        cookie['session']['path'] = '/'
+        cookie['session']['expires'] = expiration.strftime("%a, %d-%b-%Y %H:%M:%S PST")
+        return cookie.output() + ',' + security_token
 
 if __name__ == '__main__':
     try:
@@ -80,9 +120,9 @@ if __name__ == '__main__':
         print(sha512("123"))
         print(base64encode("123@.com"))
         print(base64decode(base64encode("123@.com")))
-        import os
-        KEY = bytes(os.urandom(16))
-        print(Token.get_token(KEY, "123456", "123213", "admin@p.cn"))
-
+        s_token = Token.generate_token("tszid",'admin@p.cn')
+        print(s_token)
+        print(Token.certify_token('tszid','admin@p.cn',s_token))
+        print(Token.generator_cookie(s_token))
     except Exception as e:
         print("e", e)

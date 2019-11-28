@@ -310,12 +310,9 @@ var main = new Vue({
                     }else{
                         this.currentState = 1;
                         header.bIsLogined = true;
-                        var tszID = 'tszid';
                         //info.message is the token
-                        var TokenList = Result['info']['message'].split('/');
-                        var cookie = CreateCookie(tszID, TokenList[1],'/', TokenList[0], new Date().toGMTString());
-                        console.log("document set cookie;" , cookie);
-                        document.cookie = cookie;
+                        console.log("cookie:",Result['info']['message']);
+                        setCookie(Result['info']['message']);
                     }
                 });
                 swal('淘书斋提醒','登录成功','success');

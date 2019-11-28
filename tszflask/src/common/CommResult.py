@@ -1,11 +1,14 @@
 from src.common.config import TSZ_MODEL_MYSQL,TSZ_MODEL_REDIS,TSZ_MODEL_SERVER
 class HttpResult(object):
     @staticmethod
-    def format(code, message, info) -> dict:
+    def format(code, message, app_code, app_message) -> dict:
         return {
                 "status": code,
                 "message": message,
-                "info": info
+                "info": {
+                    "code":app_code,
+                    "message":app_message
+                }
         }
 
     @staticmethod
