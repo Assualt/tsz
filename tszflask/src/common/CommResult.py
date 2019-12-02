@@ -1,4 +1,5 @@
-from src.common.config import TSZ_MODEL_MYSQL,TSZ_MODEL_REDIS,TSZ_MODEL_SERVER
+from src.common.AppStatus import *
+from src.common.HttpStatus import *
 class HttpResult(object):
     @staticmethod
     def format(code, message, app_code, app_message) -> dict:
@@ -6,8 +7,8 @@ class HttpResult(object):
                 "status": code,
                 "message": message,
                 "info": {
-                    "code":app_code,
-                    "message":app_message
+                    "code": app_code,
+                    "message": app_message
                 }
         }
 
@@ -17,10 +18,25 @@ class HttpResult(object):
             "status": 200,
             "message": "Request OK",
             "info" : {
-                "code":400,
-                "message":"Invalid Args"
+                "code": 400,
+                "message": "Invalid Args"
             }
         }
+
+    @staticmethod
+    def user_not_login() ->dict:
+        return {
+            "status": 200,
+            "message": "Request OK",
+            "info": {
+                "code": 300,
+                "message": "current User not logined."
+            }
+        }
+
+    @staticmethod
+    def unsupported_method() ->dict:
+        return HttpResult.format(HTTP_405_METHOD_NOT_ALLOWED, HTTP_405_MESSAGE, APP_300_BAD_RESULT, "")
 
 class DBResult(object):
     @staticmethod
@@ -28,10 +44,10 @@ class DBResult(object):
         return {
             "modelID": model_id,
             "status": status,
-            "result"   : info
+            "result": info
         }
 
 
 if __name__ == '__main__':
-    print(HttpResult.format(200, "OK", {"result": "OK"}))
-    print(DBResult.format(TSZ_MODEL_MYSQL, "OK",None))
+    print(HttpResult.format(200, "OK", "result", "OK"))
+    print(DBResult.format(10001, "OK",None))

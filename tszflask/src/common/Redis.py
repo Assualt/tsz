@@ -2,7 +2,7 @@ import redis
 import time
 import datetime
 from src.common import logger
-from src.common.config import REDIS_URL, REDIS_PASSWD, REDIS_PORT, TSZ_MODEL_REDIS, REDIS_TIMEOUT,QUERY_FALED,QUERY_SUCCESS,EXEC_FAILED,EXEC_SUCCESS
+from src.common.Config import REDIS_URL, REDIS_PASSWD, REDIS_PORT, TSZ_MODEL_REDIS, REDIS_TIMEOUT,QUERY_FALED,QUERY_SUCCESS,EXEC_FAILED,EXEC_SUCCESS
 from src.common.CommResult import DBResult
 redis_pool = redis.ConnectionPool(host=REDIS_URL, port=REDIS_PORT,password=REDIS_PASSWD)
 
@@ -32,7 +32,7 @@ def getX(key, expire_time = 3600 * 24, update = False) -> dict:
         if None != val and update:
             redis_cli.expire(key, expire_time)
             logger.debug("set {key} expiretime:{expire}".format(key=key, expire=datetime.datetime.fromtimestamp(int(time.time())+expire_time)))
-        return DBResult.format(TSZ_MODEL_REDIS, QUERY_SUCCESS, val)
+        return DBResult.format(TSZ_MODEL_REDIS, QUERY_SUCCESS, val.decode())
     except Exception as e:
         errmsg = "Catch Execption in Redis getX({key}). ErrMsg:{msg}".format(key=key, msg=e)
         logger.warning(errmsg)

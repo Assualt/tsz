@@ -1,10 +1,9 @@
-from flask_restful import reqparse, abort, Api, Resource
+from flask_restful import reqparse, Resource
 from src.common import *
-from src.common.config import *
+from src.common.Config import *
 from datetime import datetime
+from src.const import SQLFormatter as sql
 
-SQL_QUERY_ID_PASSWD = "select user_id,user_encrypt_pass from tsz_user_pswd where user_name = %s"
-SQL_QUERY_ID_EXISTS = "select user_id from tsz_user_pswd where user_name=%s"
 class LoginModal(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -12,7 +11,7 @@ class LoginModal(Resource):
         self.parser.add_argument('passwd', type=str)
 
     def get(self):
-        return CommResult.HttpResult.format(HttpStatus.HTTP_405_METHOD_NOT_ALLOWED, HttpStatus.HTTP_405_MESSAGE,AppStatus.APP_300_BAD_RESULT,"")
+        return CommResult.HttpResult.unsupported_method()
 
     def post(self):
         data = self.parser.parse_args()
@@ -21,7 +20,7 @@ class LoginModal(Resource):
         logger.info("Get Request OK. user:{user} passwd:{passwd}".format(user=user, passwd=passwd))
         if user == None or passwd == None:
             return CommResult.HttpResult.invalid_args()
-        result = Mysql.MysqlHelper().query(SQL_QUERY_ID_PASSWD, [user])
+        result = Mysql.MysqlHelper().query(sql.SQL_QUERY_ID_PASSWD, [user])
         logger.debug("Get key From mysql. result:{res}".format(res = result))
         if result["status"] == QUERY_SUCCESS:
             result_info = result["result"]
@@ -31,10 +30,10 @@ class LoginModal(Resource):
             elif result_info[0][1] == passwd:
                 # generator token_x
                 timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                token = HashHelper.Token.generate_token(config.PROJECT_NAME, user)
+                token = HashHelper.Token.generate_token(Config.PROJECT_NAME, user)
                 cookie = HashHelper.Token.generator_cookie(token)
                 key = "T" + user + str(result_info[0][0])
-                Redis.setX(key,token, expire_time=config.LOGIN_TIME_OUT)
+                Redis.setX(key,token, expire_time=Config.LOGIN_TIME_OUT)
                 logger.info("account:{account} token:{token} timestamp:{time}".format(account=user, token=token,time=timestamp))
                 return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, AppStatus.APP_200_OK, cookie)
             else:
@@ -59,12 +58,12 @@ class LoginOutModal(Resource):
         if s_token == None or s_user == None:
             return CommResult.HttpResult.invalid_args()
         # check the user found in database
-        dbresult = Mysql.MysqlHelper().query(SQL_QUERY_ID_EXISTS, [s_user])
+        dbresult = Mysql.MysqlHelper().query(sql.SQL_QUERY_ID_EXISTS, [s_user])
         if dbresult['status'] == QUERY_FALED or dbresult['result'] is None:
             return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, 402, "User {u} not found in datebase.".format(u=s_user))
         s_user_id = dbresult['result'][0][0]
         # check the token is vaild or not
-        message = HashHelper.Token.certify_token(config.PROJECT_NAME, s_user, s_token)
+        message = HashHelper.Token.certify_token(Config.PROJECT_NAME, s_user, s_token)
 
         if message != "":
             logger.warning('check token for {u} failed. reason:{r}'.format(u=s_user, r=message))
@@ -76,7 +75,7 @@ class LoginOutModal(Resource):
             logger.info('current user:{u} not logined. no need to loginout'.format(u=s_user))
             return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, AppStatus.APP_403_UNRESOLVED_TYPE, "Current user is no need to loginout")
         val = dbresult['result']
-        if val and val.decode() == s_token:
+        if val and val == s_token:
             # remove the key from redis
             Redis.delX(key)
             logger.info('user:{u} has been logined out'.format(u=s_user))
@@ -85,4 +84,4 @@ class LoginOutModal(Resource):
         return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, 302 , "Loginout OK")
 
     def get(self):
-        return CommResult.HttpResult.format(HttpStatus.HTTP_405_METHOD_NOT_ALLOWED, HttpStatus.HTTP_405_MESSAGE,AppStatus.APP_300_BAD_RESULT,"")
+        return CommResult.HttpResult.unsupported_method()

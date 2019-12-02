@@ -1,7 +1,7 @@
 import pymysql
 from DBUtils.PooledDB import PooledDB
 from src.common.CommResult import *
-from src.common.config import *
+from src.common.Config import *
 
 DB_CONFIG = {
     'host' : MYSQL_HOST,
@@ -51,9 +51,9 @@ class MysqlHelper(object):
             self._conn.commit()
             if count:
                 return DBResult.format(TSZ_MODEL_MYSQL, EXEC_SUCCESS, None)
-            return DBResult.format(TSZ_MODEL_MYSQL, EXEC_FAILED, None);
+            return DBResult.format(TSZ_MODEL_MYSQL, EXEC_FAILED, None)
         except Exception as e:
-            return DBResult.format(TSZ_MODEL_MYSQL, EXEC_FAILED, "Catch Exception in MysqlHelper.query {e}".format(e=e))
+            return DBResult.format(TSZ_MODEL_MYSQL, EXEC_FAILED, "Catch Exception in MysqlHelper.insert {e}".format(e=e))
 
     def update(self, sql:str, param = None) ->dict:
         try:

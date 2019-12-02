@@ -1,5 +1,5 @@
 import logging as log
-from .config import SERVER_LOG
+from .Config import SERVER_LOG
 
 logger = log.getLogger()
 logger.setLevel(log.DEBUG)
