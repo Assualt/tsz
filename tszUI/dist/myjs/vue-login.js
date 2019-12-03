@@ -33,26 +33,54 @@ const header = new Vue({
     },
     mounted: function () {//加载完成的时候需要加载的东西
         this.showAllUniversitys("北京", 1);
-        var ca = document.cookie.split(';')
-        for(var i = 0;i < ca.length; ++i){
-            var tmpCookie = ca[i];
-            //cookie = TSZ&UserID&UserToken
-            if(tmpCookie.startsWith("TSZ")){
-                var srcList = tmpCookie.split('&');
-                this.userID = srcList[1];
-                this.userToken = srcList[2];
-                this.bIsLogined = true;
-                break;
-            }
+        // Check Cookie
+        var tmp = getSessionToken();
+        if(!tmp.length){
+            this.bIsLogined = false;
+        }else{
+            this.bIsLogined = true;
+            this.userToken = tmp['token'];
         }
     },
     filters: {  //过滤器
     },
     methods: {
+        //注册
         register: function () {
             main.doRegister();
         },
+        //注销登录
         exitLogin: function () {
+            var tokenMap = getSessionToken();
+            //post loginout
+            this.$http.post('http://192.168.0.105:5000/loginout',{
+                's_token': tokenMap['token'],
+                's_user': tokenMap['user']
+            }).then(data=>{
+                var Result = data['body'];
+                if(Result['status'] != 200){
+                    swal({
+                        title: '淘书斋提醒',
+                        text:'注销失败.' + ['message'],
+                        icon: 'error'
+                    });
+                    return;
+                }else if(Result['info']['code'] != 200){
+                    swal({
+                        title: '淘书斋提醒',
+                        text:'注销失败.' + Result['info']['message'],
+                        icon: 'error'
+                    });
+                    return;
+                }else{
+                    swal({
+                        title: '淘书斋提醒',
+                        text:'注销成功',
+                        icon: 'success'
+                    });
+                    clearSession();
+                }
+            });
             main.ExitStatusInfo(false);
         },
         showAllSchool: function () {
@@ -116,12 +144,12 @@ var main = new Vue({
             strongtext:'',
         },
         userInfo:{
-            account:"1433223",
-            nickName:"受伤的小袋鼠",
+            account:"",
+            nickName:"",
             gender:{
                 male:false,
                 female:false,
-                secret:true
+                secret:false
             },
             nickPhoto:'',
             province:'',
@@ -180,6 +208,58 @@ var main = new Vue({
         }
     },
     methods:{
+        setUserInfo(){
+            console.log("set user info");
+            var _this = this;
+            var tokenMap = getSessionToken();
+            console.log(tokenMap);
+            this.$http.post('http://192.168.0.105:5000/getinfo',{
+                's_token': tokenMap['token'],
+                's_user': tokenMap['user']
+            }).then(data=>{
+                var Result = data['body'];
+                if(Result['status'] != 200){
+                    swal({
+                        title: '淘书斋提醒',
+                        text:'获取用户数据失败.' + ['message'],
+                        icon: 'error'
+                    });
+                    return;
+                }else if(Result['info']['code'] != 200){
+                    swal({
+                        title: '淘书斋提醒',
+                        text:'获取用户数据失败.' + Result['info']['message'],
+                        icon: 'error'
+                    });
+                    return;
+                }else{
+                    var retdict = Result['info']['message'];
+                    console.log(retdict);
+                    if(retdict.length == 0){
+                        swal({
+                            title: '淘书斋提醒',
+                            text:'获取用户数据失败.',
+                            icon: 'error'
+                        });
+                        return;
+                    }
+                    _this.userInfo.account = tokenMap['user'];
+                    _this.userInfo.nickName = retdict['nichen'];
+                    var sexIndex = retdict['sex'];
+                    if(sexIndex == 0)
+                        _this.userInfo.gender.male = true;
+                    else if(sexIndex ==1)
+                        _this.userInfo.gender.female = true;
+                    else
+                        _this.userInfo.gender.secret = true;
+                    _this.userInfo.descriptionc = retdict['desc'];
+                    _this.userInfo.university = retdict['uni'];
+                    // _this.userInfo.province = retdict['']
+                    
+                }
+            });
+
+        },
         setDefaultAddress:function(address){
             this.Address.forEach((res)=>{
                 res.bdefault = address.id === res.id;
@@ -292,7 +372,6 @@ var main = new Vue({
                     "passwd":HashAttribute(this.submitData.password)
                 }).then(data=>{
                     var Result = data['body'];
-                    console.log("result:",Result)
                     if(Result['status'] != 200){
                         swal({
                             title: '淘书斋提醒',
@@ -310,11 +389,10 @@ var main = new Vue({
                     }else{
                         this.currentState = 1;
                         header.bIsLogined = true;
-                        //info.message is the token
-                        console.log("cookie:",Result['info']['message']);
-                        setCookie(Result['info']['message']);
+                        setCookie(Result['info']['message'], this.submitData.username);
                     }
                 });
+                main.setUserInfo();
                 swal('淘书斋提醒','登录成功','success');
                 
             }else if (this.Mode === 1){
