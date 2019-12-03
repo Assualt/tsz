@@ -19,7 +19,7 @@ api.add_resource(RegisterModal.RegisterModal, '/register')
 api.add_resource(RegisterModal.IdentityModal, '/verify')
 api.add_resource(LoginModal.LoginOutModal, '/loginout')
 api.add_resource(UserModal.UserInfo,'/insert')
-
+api.add_resource(UserModal.GetUserInfo,'/getinfo')
 
 if __name__ == '__main__':
     logger.info("system SECRET_KEY:{k}".format(k=app.config["SECRET_KEY"]))

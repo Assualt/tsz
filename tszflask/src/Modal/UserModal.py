@@ -2,9 +2,7 @@ from flask_restful import reqparse, Resource
 from src.common import CommResult,Config,HttpStatus,AppStatus,Mysql,Redis,logger
 from . import CommonCheck
 from src.const import SQLFormatter as sql
-from src.sqlbean.TszUser import Convert2_tsz_user
-from datetime import datetime
-
+from src.sqlbean.TszUser import convert_to_tsz_user
 
 class UserInfo(Resource):
     def __init__(self):
@@ -75,23 +73,17 @@ class GetUserInfo(Resource):
         s_user = data.get('s_user','')
         if not s_token or not s_user:
             return CommResult.HttpResult.invalid_args()
-
         # Check Login Status
         if not CommonCheck.CheckLoginStatus(s_token, s_user):
             return CommResult.HttpResult.user_not_login()
-        
         # Get User ID
         s_user_id = CommonCheck.GetLoginUserId(s_user)
-
         dbresult = Mysql.MysqlHelper().query(sql.SQL_QUERY_TSZ_USER, [s_user_id])
-    
         if dbresult['status'] == Config.QUERY_FALED or not dbresult['result']:
             return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, AppStatus.APP_500_INTERNAL_ERROR, AppStatus.APP_500_MESSAGE)
         query_result = dbresult['result'][0]
-
-        retdict = Convert2_tsz_user(query_result)
-
-        return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK,HttpStatus.HTTP_200_OK, AppStatus.APP_200_OK, retdict )        
+        retdict = convert_to_tsz_user(query_result)
+        return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK,HttpStatus.HTTP_200_OK, AppStatus.APP_200_OK, retdict)
 
 
 
