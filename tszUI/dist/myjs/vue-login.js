@@ -289,7 +289,7 @@ var main = new Vue({
             this.NewAddress.id = Index;
             model.modal('hide');
             swal('淘书斋提醒','添加新地址成功','success');
-            this.Address.push(this.NewAddress);
+                
         },
         getConfirmNum:function(){
 
