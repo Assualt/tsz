@@ -31,11 +31,16 @@ class LoginModal(Resource):
                 # generator token_x
                 timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 token = HashHelper.Token.generate_token(Config.PROJECT_NAME, user)
-                cookie = HashHelper.Token.generator_cookie(token)
                 key = "T" + user + str(result_info[0][0])
                 Redis.setX(key,token, expire_time=Config.LOGIN_TIME_OUT)
-                logger.info("account:{account} token:{token} timestamp:{time}".format(account=user, token=token,time=timestamp))
-                return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, AppStatus.APP_200_OK, cookie)
+                # cookie should be  { strcookieMd5;cookie;expiresDays;}
+                cookie = HashHelper.hash_md5(token)
+                str_cookie_sha1 = HashHelper.hash_sha1(cookie)
+                str_expiresDays = Config.LOGIN_TIME_OUT / 86400
+                ret_cookie = '{m1};{c};{e}'.format(m1=str_cookie_sha1,c=cookie,e=str_expiresDays)
+                logger.info("s:{s} s1:{s1}".format(s=cookie, s1=str_cookie_sha1))
+                logger.info("account:{account} token:{token} timestamp:{time} ret_cookie:{ret_cookie}".format(account=user, token=token,time=timestamp,ret_cookie=ret_cookie))
+                return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, AppStatus.APP_200_OK, ret_cookie)
             else:
                 return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, 402, "Incorrect Password or User {u} not exist".format(u=user))
         elif result["status"] == QUERY_FALED:

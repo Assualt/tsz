@@ -12,16 +12,25 @@ import '../static/styles/common.css'
 import '../static/styles/hover-min.css'
 import '../static/bootstrap/js/bootstrap.min'
 Vue.config.productionTip = false
+
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import md5 from 'js-md5';
-
-
+import sha1 from 'js-sha1'
+import app from './constants/App'
 import VueCookies from 'vue-cookies'
+
+
 Vue.use(VueCookies)
-Vue.prototype.$md5 = md5;
 Vue.use(VueAxios,axios)
+
+
+Vue.prototype.$md5 = md5;
+Vue.prototype.$app = app;
+Vue.prototype.$sha1 = sha1;
 /* eslint-disable */
+
+
 
 let bus = new Vue()
 Vue.prototype.bus = bus

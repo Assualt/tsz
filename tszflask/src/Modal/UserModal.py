@@ -1,5 +1,5 @@
 from flask_restful import reqparse, Resource
-from src.common import CommResult,Config,HttpStatus,AppStatus,Mysql,Redis,logger
+from src.common import CommResult,Config,HttpStatus,AppStatus,Mysql,Redis,logger,HashHelper
 from . import CommonCheck
 from src.const import SQLFormatter as sql
 from src.sqlbean.TszUser import convert_to_tsz_user
@@ -69,18 +69,30 @@ class GetUserInfo(Resource):
 
     def post(self)->dict:
         data = self.parser.parse_args()
-        s_token = data.get('s_token', '')
+        s_token = data.get('s_token', '')  ## upload is the token_md5
         s_user = data.get('s_user','')
+        logger.debug('get args: '+ data)
         if not s_token or not s_user:
             return CommResult.HttpResult.invalid_args()
-        # Check Login Status
-        if not CommonCheck.CheckLoginStatus(s_token, s_user):
-            return CommResult.HttpResult.user_not_login()
-        # Get User ID
+
+
+        # Get User ID First
         s_user_id = CommonCheck.GetLoginUserId(s_user)
         dbresult = Mysql.MysqlHelper().query(sql.SQL_QUERY_TSZ_USER, [s_user_id])
         if dbresult['status'] == Config.QUERY_FALED or not dbresult['result']:
-            return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, AppStatus.APP_500_INTERNAL_ERROR, AppStatus.APP_500_MESSAGE)
+            return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, AppStatus.APP_400_BAD_REQUEST,"user id not found!")
+
+        # Get Login Token and calc the token md5 is  == s_token
+        # Check Login Status
+        key = 'T' + s_user + str(s_user_id)
+        dbresult = Redis.getX(key)
+        if dbresult['status'] == Config.QUERY_FALED or not dbresult['result']:
+            return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, 402, "current user not logined.")
+        s_token_from_redis = dbresult['result'][0]
+        if s_token != HashHelper.hash_md5(s_token_from_redis):
+            return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, 405, "token is invalid")
+        if not CommonCheck.CheckLoginStatus(s_token_from_redis, s_user):
+            return CommResult.HttpResult.user_not_login()
         query_result = dbresult['result'][0]
         retdict = convert_to_tsz_user(query_result)
         return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK,HttpStatus.HTTP_200_OK, AppStatus.APP_200_OK, retdict)

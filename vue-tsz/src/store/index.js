@@ -7,7 +7,8 @@ Vue.use(Vuex)
 //存放变量的值
 const state = {
   AllCityUniversities:[],
-  CurrentMode:0,
+  CurrentMode:0, //user info mode-> mode:0 login mode:1 Register
+  CurrentCookie:''
 };
 
 const getters = {
@@ -16,6 +17,9 @@ const getters = {
   },
   getClickRegisterModel(state){
     return state.CurrentMode;
+  },
+  getCurrentCookie(state){
+    return state.CurrentCookie;
   }
 };
 
@@ -25,9 +29,13 @@ const mutations = {
   },
   //mode 0 Login
   //mode 1 Register
-  setCurrenMode(state, mode){
+  setCurrentMode(state, mode){
     state.CurrentMode = mode;
+  },
+  setCurrentCookie(state, cookie){
+    state.CurrentCookie = cookie;
   }
+
 
 }
 
@@ -35,8 +43,11 @@ const actions = {
     setCities (context, cities) {
         context.commit('setAllCityUniversities', cities);
     },
-    asyncCurrentMode:({commit}, mode)=>{
-      commit('setCurrenMode', mode)
+    asyncCurrentMode(commit, mode){
+      commit('setCurrentMode', mode);
+    },
+    asyncCurrentCookie(commit, cookie){
+      commit('setCurrentCookie', cookie);
     }
 };
 

@@ -13,7 +13,7 @@
 						</ul>
 				</div>
 				<div class="tab-content main_body">
-						<div class="tab-pane fade" id="login" :class="[currentState == 0 ? 'in active':'']">
+						<div class="tab-pane in active" id="login" v-if="currentState == 0">
 								<h1>{{title}}</h1>
 								<hr>
 								<form action="" class="form-horizontal" role="form" method="get">
@@ -38,7 +38,7 @@
 										<div class="form-group" v-if="Mode==1">
 												<label for="cofrimNumber" class="col-md-3 control-label"><i class="fa fa-check-circle" aria-hidden="true"></i></label>
 												<div class="col-md-7" style="display:flex;">
-														<input type="password" class="form-control" id="cofrimNumber" placeholder="输入验证码" required="required" v-model="submitData.confirmp" size="6">
+														<input type="text" class="form-control" id="cofrimNumber" placeholder="输入验证码" required="required" v-model="submitData.confirmp" size="6">
 														<a class="btn btn-link" @click="getConfirmNum" :disabled="confirmData.show" :title="confirmData.title">获取验证码</a>
 														<div class="ConfrimNumtooltips" v-if="confirmData.show">{{confirmData.confirSeconds}}s 后重新获取验证码</div>
 												</div>
@@ -49,7 +49,8 @@
 														<input value="重置" class="btn btn-primary form-control">
 												</div>
 												<div class="col-sm-2">
-														<input :value="[ Mode== 0 ? '登录' : '注册' ]" class="btn btn-warning form-control" @click="onSubmit">
+														<input v-if="Mode==0" value="登录" class="btn btn-warning form-control" @click="onSubmit">
+                            <input v-else-if="Mode==1" value="注册" class="btn btn-warning form-control" @click="onRegister">
 												</div>
 												<div class="col-sm-2" id="forget_psw"><a href="#" class="btn btn-link" @click="forgetPassword">忘记密码?</a></div>
 										</div>
@@ -68,7 +69,7 @@
 										</div>
 								</div>
 						</div>
-						<div class="tab-pane fade" id="basic_info" :class="[currentState == 1 ? 'in active':'']">
+						<div class="tab-pane in active" id="basic_info" v-else-if="currentState==1">
 								<div class="container-fluid">
 										<form class="form-horizontal" role="form" id="basic_info_1">
 												<fieldset>
@@ -152,7 +153,7 @@
 												<fieldset>
 														<legend>管理收货地址</legend>
 														<div class="list-group">
-																<div class="panel-group" id="addr1" v-for="(item,index) in Address">
+																<div class="panel-group" id="addr1" v-for="(item,index) in Address" :key="index">
 																		<div class="panel" :class="[item.bdefault ? 'panel-primary':'panel-default']">
 																				<div class="panel-heading">
 																						<h4 class="panel-title">
@@ -211,19 +212,19 @@
 																												<div class="form-group col-md-4">
 																														<label class="sr-only" for="province2">Province</label>
 																														<select class="form-control" id="province2" required v-model="selectedAddress.province" @change="Province2Cities">
-																																<option :value="province" v-for="(province,index) in AllAddressProvince">{{province}}</option>
+																																<option :value="province" v-for="(province,index) in AllAddressProvince" :key="index">{{province}}</option>
 																														</select>
 																												</div>
 																												<div class="form-group col-md-4">
 																														<label class="sr-only" for="city2">City</label>
 																														<select class="form-control" id="city2" required v-model="selectedAddress.city" @change="City2Disticts">
-																																<option :value="city" v-for="(city,index) in CurrentSelectedCities">{{city}}</option>
+																																<option :value="city" v-for="(city,index) in CurrentSelectedCities" :key="index">{{city}}</option>
 																														</select>
 																												</div>
 																												<div class="form-group col-md-4">
 																														<label class="sr-only" for="district2">District</label>
 																														<select class="form-control" id="district2" required v-model="selectedAddress.distict">
-																																<option :value="district" v-for="(district,index) in CurrentSelectedDistricts">{{district}}</option>
+																																<option :value="district" v-for="(district,index) in CurrentSelectedDistricts" :key="index">{{district}}</option>
 																														</select>
 																												</div>
 																										</div>
@@ -284,10 +285,10 @@
           }
         }
       },
-		  clickTo(index){
-
+	    clickTo(index){
+        
 		  },
-      onSubmit(){
+      onSubmit(){ //login
         //safe check
 	      if(this.submitData.username == "" || this.submitData.password==""){
           this.toolTipData.class = 'alert-warning';
@@ -300,39 +301,96 @@
           }, 3000);
           this.confirmData.show =true;
           return;
-	      }
-	      const self = this;
-	      this.axios.post('http://192.168.0.105:5000/login', {
-		        name:self.submitData.username,
-			      passwd:this.$md5(self.submitData.password)
-		      }).then(res=>{
-						const ResultData = res.data;
-						if(ResultData.status != 200){
-              console.log("登录失败"+ ResultData.message);
+        } 
+        const self = this;
+        this.axios.post('http://192.168.0.105:5000/login', {
+          name:self.submitData.username,
+          passwd:this.$md5(self.submitData.password)
+        }).then(res=>{
+          const ResultData = res.data;
+          if(ResultData.status != 200){
+            console.log("登录失败"+ ResultData.message);
+            return;
+          }else if(ResultData.info.code != 200){
+            console.log("登录失败"+ ResultData.info.message);
+            return;
+          }else{
+            //Recevive =  sha1;cookie;Expires(d);md5
+            let CookiesMsg = ResultData.info.message.split(";");
+            if(CookiesMsg.length != 3){
+              console.log("Such user("+ this.submitData.username + ") Receive Cookie msg is not Corrected." + CookiesMsg);
               return;
-						}else if(ResultData.info.code != 200){
-              console.log("登录失败"+ ResultData.info.message);
+            }
+            var strCookieMd5 = CookiesMsg[0];
+            var strCookie = CookiesMsg[1];
+            var strCookieExpireDays = parseInt(CookiesMsg[2],10);
+            //坑 js/md5 与python/md5 不一致 使用sha1函数
+            var CalcSha1 = this.$sha1(CookiesMsg[1]);
+            if(CalcSha1 != strCookieMd5){
+              console.log("Cookie "+strCookieMd5+" is not invalid");
               return;
-						}else{
-							//set Cookie
-              console.log("登陆成功");
-							//divide token
-							let Cookies = ResultData.info.message.replace('Set-Cookie: ','').split(';');
-							if(Cookies.length == 0){
-							  console.log('Cookie not set.');
-							}else{
-							  var Session = Cookies[0].substring(Cookies[0].indexOf("=")+1);
-							  var Domain = Cookies[1].substring(Cookies[1].indexOf("=")+1);
-							  var Expires = Cookies[2].substring(Cookies[2].indexOf("=")+1);
-							  var Path = Cookies[3].substring(Cookies[3].indexOf("=")+1, Cookies[3].lastIndexOf(","));
-							  var Token = Cookies[3].substring(Cookies[3].lastIndexOf(",")+1);
-							  this.$cookies.set('token',Token, Expires,Path,Domain,true);
-							}
-              self.currentState = 1;
-						}
-	      }).catch(err=>{
-						console.log("Request Error For Err"+err);
-	      });
+            }
+            this.$cookies.set(this.$app.APP_COOKIE_NAME, strCookie, strCookieExpireDays);
+            console.log("登录成功 currentCookie:"+ this.$cookies.get(this.$app.APP_COOKIE_NAME) + " set OK");
+            //set to the state
+            this.$store.commit('setCurrentCookie', strCookie);
+            self.currentState = 1;
+          }
+        }).catch(err=>{
+          console.log("Request Error For Err"+err);
+        });
+        // get user info
+        this.axios.post('http://192.168.0.105:5000/getinfo',{
+          s_user:this.submitData.username,
+          s_token:this.$cookies.get(this.$app.APP_COOKIE_NAME)
+        }).then(res=>{
+          const ResultData = res.data;
+          if(ResultData.status != 200){
+            console.log("获取用户数据失败!" + ResultData.message);
+            return;
+          }else if(ResultData.info.code != 200){
+            console.log("获取用户数据失败!" + ResultData.info.message);
+            return;
+          }else{
+
+          }
+        }).catch(err=>{
+          console.log("获取用户信息数据失败!" + err);
+        });
+      },
+      onRegister(){
+        if(this.submitData.username == "" || this.submitData.password==""){
+          this.toolTipData.class = 'alert-warning';
+          this.toolTipData.text = '当前输入的用户名为空或者密码输入为空';
+          this.toolTipData.display = true;
+          this.toolTipData.strongtext = '淘书斋提醒:';
+          const _this = this;
+          setTimeout(function(){
+            _this.toolTipData.display = false;
+          }, 3000);
+          this.confirmData.show =true;
+          return;
+        }
+        const self = this;
+        this.axios.post('http://192.168.0.105:5000/register',{
+          name:self.submitData.username,
+          passwd:self.$md5(self.submitData.password),
+          identifying_code:self.submitData.confirmp
+        }).then(res=>{
+          const ResultData = res.data;
+          if(ResultData.status != 200){
+            console.log("注册失败!" + ResultData.message);
+            return;
+          }else if(ResultData.info.code != 200){
+            console.log("注册失败!" + ResultData.info.message);
+            return;
+          }else{
+            console.log("注册成功!");
+          }
+        }).catch(err=>{
+          console.log("Request Error for Err " +err);
+        });
+        this.Mode = 1;
       },
       forgetPassword(){
         if(this.submitData.username == ""){

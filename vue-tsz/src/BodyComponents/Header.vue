@@ -123,7 +123,7 @@ export default{
     doRegister: function () {
       let mode = this.$store.state.CurrentMode;
       if(mode == 0) {
-        this.$store.commit('setCurrenMode', 1);
+        this.$store.commit('setCurrentMode', 1);
       }
 	    this.$router.push('login');
     }
@@ -133,7 +133,11 @@ export default{
 		this.bIsLogined = false;
   },
 	computed:{
-
+		logined(){
+			if(this.$store.state.CurrentCookie != '')
+				this.bIsLogined = true;
+			return this.bIsLogined;
+		}
 	},
 	props:[
     'universities'

@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # coding=utf-8
+from datetime import timedelta
+from functools import update_wrapper
+
+from requests.compat import basestring
+
 __author__ = "xhou"
 
 from flask import Flask
@@ -9,7 +14,6 @@ from src.Modal import LoginModal,RegisterModal,UserModal
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
 app.config['SECRET_KEY']= Config.KEY
 
 api = Api(app)
@@ -23,4 +27,5 @@ api.add_resource(UserModal.GetUserInfo,'/getinfo')
 
 if __name__ == '__main__':
     logger.info("system SECRET_KEY:{k}".format(k=app.config["SECRET_KEY"]))
+    CORS(app)
     app.run(host="0.0.0.0",debug=True)

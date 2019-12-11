@@ -6,50 +6,18 @@ import hmac
 from http import cookies
 import random
 
-md5_utils = hashlib.md5()
-sha1_utils = hashlib.sha1()
-sha256_utils = hashlib.sha256()
-sha512_utils = hashlib.sha512()
 
-def md5(data, encoding = 'utf-8') -> str:
-    if len(data) == 0:
-        return ""
+def hash_md5(data, encoding='utf8')->str:
     try:
-        md5_utils.update(data.encode(encoding))
-        md5_encode = md5_utils.hexdigest()
+        return hashlib.md5(data.encode(encoding)).hexdigest()
     except Exception as e:
         raise ValueError("Calc Md5 Error. ErrMsg:{exp}".format(exp=e))
-    return md5_encode
 
-def sha1(data, encoding = 'utf-8') -> str:
-    if len(data) == 0:
-        return ""
+def hash_sha1(data, encoding='utf8')->str:
     try:
-        sha1_utils.update(data.encode(encoding))
-        sha1_encode = sha1_utils.hexdigest()
+        return hashlib.sha1(data.encode(encoding)).hexdigest()
     except Exception as e:
-        raise ValueError("calc sha1 error. err msg:{exp}".format(exp=e))
-    return sha1_encode
-
-def sha256(data, encoding = 'utf-8') -> str:
-    if len(data) == 0:
-        return ""
-    try:
-        sha256_utils.update(data.encode(encoding))
-        sha256_encode = sha256_utils.hexdigest()
-    except Exception as e:
-        raise ValueError("calc sha256 error. err msg:{exp}".format(exp=e))
-    return sha256_encode
-
-def sha512(data, encoding = 'utf-8') -> str:
-    if len(data) == 0:
-        return ""
-    try:
-        sha512_utils.update(data.encode(encoding))
-        sha512_encode = sha512_utils.hexdigest()
-    except Exception as e:
-        raise ValueError("calc sha512 error. err msg:{exp}".format(exp=e))
-    return sha512_encode
+        raise ValueError("Calc sha1 Error. ErrMsg:{exp}".format(exp=e))
 
 def base64decode(data) -> str:
     if not len(data):
@@ -102,27 +70,30 @@ class Token(object):
             return "certify_token failed"
 
     @staticmethod
-    def generator_cookie(security_token, expire_days = 30)->str:
+    def generator_cookie_str(security_token, expire_days = 30)->str:
         expiration = datetime.datetime.now() + datetime.timedelta(days=expire_days)
         cookie = cookies.SimpleCookie()
-        cookie['session'] = md5(security_token)
+        cookie['session'] = hash_md5(security_token)
         cookie['session']['domain'] = '.tsz.com'
         cookie['session']['path'] = '/'
         cookie['session']['expires'] = expiration.strftime("%a, %d-%b-%Y %H:%M:%S PST")
         return cookie.output() + ',' + security_token
 
+
+
 if __name__ == '__main__':
     try:
-        print(md5("123"))
-        print(md5("123","gb2312"))
-        print(sha1("123"))
-        print(sha256("123"))
-        print(sha512("123"))
         print(base64encode("123@.com"))
         print(base64decode(base64encode("123@.com")))
         s_token = Token.generate_token("tszid",'admin@p.cn')
         print(s_token)
         print(Token.certify_token('tszid','admin@p.cn',s_token))
-        print(Token.generator_cookie(s_token))
+        print(Token.generator_cookie_str(s_token))
+        print(hash_sha1('4bfcd234749aafcc4a5845c66667055e'))
+        print(hash_sha1('4bfcd234749aafcc4a5845c66667055e'))
+        print(hash_sha1('4bfcd234749aafcc4a5845c66667055e'))
+        print(hash_md5('123'))
+        print(hash_md5('123'))
+        print(hash_md5('123'))
     except Exception as e:
         print("e", e)

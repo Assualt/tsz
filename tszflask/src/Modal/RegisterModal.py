@@ -24,7 +24,7 @@ class RegisterModal(Resource):
         key = 'R' + username
         result = Redis.getX(key)
         if result['status'] == Config.QUERY_SUCCESS:
-            if result['result'] != None and result['result'].decode() == identifying_code:
+            if result['result'] != None and result['result'] == identifying_code:
                 # update the mysql tsz_user_pswd
                 my = Mysql.MysqlHelper()
                 sqlResult = my.query(sql.SQL_QUERY_ID)
