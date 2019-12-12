@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import store from './store'
+import store from './store/index'
 import $ from 'jquery'
 import 'bootstrap3/dist/css/bootstrap-theme.min.css'
 import 'bootstrap3/dist/css/bootstrap.min.css'

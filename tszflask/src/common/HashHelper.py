@@ -90,10 +90,9 @@ if __name__ == '__main__':
         print(Token.certify_token('tszid','admin@p.cn',s_token))
         print(Token.generator_cookie_str(s_token))
         print(hash_sha1('4bfcd234749aafcc4a5845c66667055e'))
-        print(hash_sha1('4bfcd234749aafcc4a5845c66667055e'))
-        print(hash_sha1('4bfcd234749aafcc4a5845c66667055e'))
-        print(hash_md5('123'))
-        print(hash_md5('123'))
-        print(hash_md5('123'))
+        print(Token.certify_token('tsz', 'admin@p.cn',
+                                  'MTU3Njc2NzczMC4wNjUxNzA4OjgxYmU3ZDdiYzM0MzhhZDY0MDM0Y2RkMDNjNTQxNDIyZjRmZmMwOTc6YWRtaW5AcC5jbg=='))
+        print(hash_md5(
+            'MTU3Njc2NzczMC4wNjUxNzA4OjgxYmU3ZDdiYzM0MzhhZDY0MDM0Y2RkMDNjNTQxNDIyZjRmZmMwOTc6YWRtaW5AcC5jbg=='))
     except Exception as e:
         print("e", e)

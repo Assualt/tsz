@@ -29,13 +29,13 @@
 														<input type="password" class="form-control" id="password" placeholder="键入密码" required="required" v-model="submitData.password">
 												</div>
 										</div>
-										<div class="form-group" v-if="Mode==1">
+										<div class="form-group" v-if="CurrentMode==1">
 												<label for="password1" class="col-md-3 control-label"><i class="fa fa-lock text-success" aria-hidden="true"></i></label>
 												<div class="col-md-7">
 														<input type="password" class="form-control" id="password1" placeholder="再次键入密码" required="required" v-model="submitData.againpsw" @blur="checkPasswprd">
 												</div>
 										</div>
-										<div class="form-group" v-if="Mode==1">
+										<div class="form-group" v-if="CurrentMode==1">
 												<label for="cofrimNumber" class="col-md-3 control-label"><i class="fa fa-check-circle" aria-hidden="true"></i></label>
 												<div class="col-md-7" style="display:flex;">
 														<input type="text" class="form-control" id="cofrimNumber" placeholder="输入验证码" required="required" v-model="submitData.confirmp" size="6">
@@ -391,6 +391,7 @@
           console.log("Request Error for Err " +err);
         });
         this.Mode = 1;
+        
       },
       forgetPassword(){
         if(this.submitData.username == ""){
@@ -666,7 +667,7 @@
     },
 		computed:{
       /**
-       * @return {boolean}
+       * @return {int}
        */
       CurrentMode(){
         this.Mode = this.$store.state.CurrentMode;

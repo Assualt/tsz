@@ -26,6 +26,5 @@ api.add_resource(UserModal.UserInfo,'/insert')
 api.add_resource(UserModal.GetUserInfo,'/getinfo')
 
 if __name__ == '__main__':
-    logger.info("system SECRET_KEY:{k}".format(k=app.config["SECRET_KEY"]))
     CORS(app)
     app.run(host="0.0.0.0",debug=True)

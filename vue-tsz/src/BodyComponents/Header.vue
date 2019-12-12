@@ -19,9 +19,11 @@
 								</div>
 						</div>
 						<div class="header_login fr">
-								<li class="fl dropdown">
-										<a href="#" id="login_btn" data-toggle="dropdown" @click="checkLogin()">{{bIsLogined? '我':'登录'}}</a>&nbsp;|
-										<ul class="dropdown-menu" role="menu" aria-labelledby="login_btn" :class="[bIsLogined? '' : 'fade']">
+								<li class="fl dropdown" :class="dropdown_opened? 'open':'' ">
+										<a href="#" id="login_btn" data-toggle="dropdown" v-if="logined" @click="toggleDropDown" :aria-expanded="dropdown_opened">我</a>
+                    <a href="#" id="login_btn" v-else @click="checkLogin">登录</a>
+                    &nbsp;|
+										<ul class="dropdown-menu" role="menu" aria-labelledby="login_btn"  v-if="logined">
 												<li role="presentation">
 														<a role="menuitem" tabindex="-1" href="#">我的主页</a>
 												</li>
@@ -35,7 +37,7 @@
 														<a role="menuitem" tabindex="-1" href="#">修改密码</a>
 												</li>
 												<li role="presentation">
-														<a role="menuitem" tabindex="-1" href="#">退出</a>
+														<a role="menuitem" tabindex="-1" href="#" @click="loginout">退出</a>
 												</li>
 										</ul>
 								</li>
@@ -62,7 +64,8 @@ export default{
       targetSchool: "所有学校",
       userID: '',
       userToken: '',
-      bIsLogined: false
+      bIsLogined: false,
+      dropdown_opened:false
 		}
   },
 	comments:{
@@ -72,8 +75,7 @@ export default{
     showAllSchool: function () {
       this.bShow = 1;
       this.bus.$emit("ReceiveMessage", true);
-      if(!this.bIsLogined)
-        this.showAllUniversitys('所有学校','0');
+      this.showAllUniversitys('所有学校','0');
     },
     closeAllSchool: function () {
       this.bShow = 0;
@@ -126,6 +128,23 @@ export default{
         this.$store.commit('setCurrentMode', 1);
       }
 	    this.$router.push('login');
+    },
+    toggleDropDown: function(){
+      this.dropdown_opened = !this.dropdown_opened;
+    },
+    loginout: function(){
+      if(this.logined){
+        this.axios.post('http://192.168.0.105:5000/loginout',{
+          s_user:'',
+          s_token:this.$cookies.get(this.$app.APP_COOKIE_NAME)
+        }).then(res=>{
+
+        }).catch(err=>{
+
+        });
+      }else{
+
+      }
     }
 	},
 	mounted: function () { //html 加载完成之后执行
