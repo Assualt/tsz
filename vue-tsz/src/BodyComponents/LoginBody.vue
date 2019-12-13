@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import TSZLoginLeft from '../components/LoiginLeft'
+import TSZLoginLeft from '../components/LoginLeft'
 import TSZLoginRight from '../components/LoginRight'
 import TSZToolTip from '../components/ToolTip'
   export default {

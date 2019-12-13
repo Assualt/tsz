@@ -21,28 +21,31 @@
 						<div class="header_login fr">
 								<li class="fl dropdown" :class="dropdown_opened? 'open':'' ">
 										<a href="#" id="login_btn" data-toggle="dropdown" v-if="logined" @click="toggleDropDown" :aria-expanded="dropdown_opened">我</a>
-                    <a href="#" id="login_btn" v-else @click="checkLogin">登录</a>
+                    <router-link to="/login" id="login_btn" v-else v-on:click.native="checkLoginStatus(0)">登录</router-link>
                     &nbsp;|
 										<ul class="dropdown-menu" role="menu" aria-labelledby="login_btn"  v-if="logined">
 												<li role="presentation">
 														<a role="menuitem" tabindex="-1" href="#">我的主页</a>
 												</li>
 												<li role="presentation">
+                            <router-link role="menuitem" tabindex="-1" to="/cart">我的购物车</router-link>
 														<a role="menuitem" tabindex="-1" href="#">我的购物车</a>
 												</li>
 												<li role="presentation">
-														<a role="menuitem" tabindex="-1" href="#">我的收藏</a>
+                            <router-link role="menuitem" tabindex="-1" to="/favorite">我的收藏</router-link>
 												</li>
 												<li role="presentation">
-														<a role="menuitem" tabindex="-1" href="#">修改密码</a>
+                            <router-link role="menuitem" tabindex="-1" to="/login">修改密码</router-link>
 												</li>
 												<li role="presentation">
 														<a role="menuitem" tabindex="-1" href="#" @click="loginout">退出</a>
 												</li>
 										</ul>
 								</li>
-								<li class="fl"><a href="#" target="_blank">出售</a>&nbsp;|</li>
-								<li class="fl"><a href="#" style="color: orange" @click="doRegister">立即注册</a>&nbsp;|</li>
+								<li class="fl">
+                  <router-link to="/sold" target="_blacnk" >出售</router-link> &nbsp;|
+                </li>
+                <li class="fl"><router-link style="color:orange" to="/login" v-on:click.native="checkLoginStatus(1)">立即注册</router-link>&nbsp;|</li>
 								<li class="fl"><a href="#" class="fa fa-mobile-phone fa-1x" target="_blank">下载APP</a></li>
 						</div>
 				</div>
@@ -68,7 +71,7 @@ export default{
       dropdown_opened:false
 		}
   },
-	comments:{
+	components:{
     TSZOverlay
 	},
 	methods:{
@@ -116,18 +119,8 @@ export default{
       this.closeAllSchool();
       this.bus.$emit("ReceiveMessage", false);
     },
-    checkLogin: function(){
-      if(!this.bIsLogined){//未登录
-				// this.$router.currentRoute.fullPath = '/login';
-        this.$router.push('login');
-      }
-    },
-    doRegister: function () {
-      let mode = this.$store.state.CurrentMode;
-      if(mode == 0) {
-        this.$store.commit('setCurrentMode', 1);
-      }
-	    this.$router.push('login');
+    checkLoginStatus:function(mode){
+      this.$store.commit('setCurrentMode', mode);
     },
     toggleDropDown: function(){
       this.dropdown_opened = !this.dropdown_opened;

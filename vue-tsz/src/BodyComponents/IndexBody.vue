@@ -8,8 +8,8 @@
 						</div>
 						<div class="scanner_view_list fl">
 								<ul class="scanner_view_list_ul">
-										<li><a href="#" @click="checkLogin">登录</a></li>
-										<li><a href="#">注册</a></li>
+										<li><router-link to="/login" v-on:click.native="checkLoginStatus(0)">登录</router-link></li>
+										<li><router-link to="/login" v-on:click.native="checkLoginStatus(1)">注册</router-link></li>
 										<li><a href="#">求购</a></li>
 										<li><a href="#">免费赠阅</a></li>
 								</ul>
@@ -71,9 +71,9 @@ import TSZImgSection from '../components/ImgSection'
 	    'blogined'
 	  ],
 	  methods:{
-      checkLogin:function () {
-				this.$router.push('login');
-      }
+      	checkLoginStatus:function (mode) {
+			this.$store.commit('setCurrentMode',mode);
+      	}
 	  },
 	  created () {
 			this.axios.get('http://192.168.0.105:8080/static/json/hot-topic.json').then((res)=>{
