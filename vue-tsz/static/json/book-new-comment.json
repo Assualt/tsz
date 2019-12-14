@@ -1,7 +1,7 @@
 [
   {
     "book_name":"卡耐基魅力口才",
-    "img_url":"dist/res/book_img/卡耐基.jpg",
+    "img_url":"static/upload/卡耐基.jpg",
     "price_now":"5.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -13,7 +13,7 @@
   },
   {
     "book_name":"三栖人",
-    "img_url":"dist/res/book_img/三栖人.jpg",
+    "img_url":"static/upload/三栖人.jpg",
     "price_now":"12.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -26,7 +26,7 @@
   },
   {
     "book_name":"伊斯坦布尔的幸福",
-    "img_url":"dist/res/book_img/伊斯坦布尔的幸福.jpg",
+    "img_url":"static/upload/伊斯坦布尔的幸福.jpg",
     "price_now":"13.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -39,7 +39,7 @@
   },
   {
     "book_name":"虚无的十字架",
-    "img_url":"dist/res/book_img/虚无的十字架.jpg",
+    "img_url":"static/upload/虚无的十字架.jpg",
     "price_now":"12.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -52,7 +52,7 @@
   },
   {
     "book_name":"长安乱",
-    "img_url":"dist/res/book_img/长安乱.jpg",
+    "img_url":"static/upload/长安乱.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -65,7 +65,7 @@
   },
   {
     "book_name":"面包树上的女人",
-    "img_url":"dist/res/book_img/面包树上的女人.jpg",
+    "img_url":"static/upload/面包树上的女人.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -78,7 +78,7 @@
   },
   {
     "book_name":"一千零一夜",
-    "img_url":"dist/res/book_img/一千零一夜.jpg",
+    "img_url":"static/upload/一千零一夜.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -91,7 +91,7 @@
   },
   {
     "book_name":"亲爱的安德烈",
-    "img_url":"dist/res/book_img/亲爱的安德烈.jpg",
+    "img_url":"static/upload/亲爱的安德烈.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -104,7 +104,7 @@
   },
   {
     "book_name":"何以笙箫默",
-    "img_url":"dist/res/book_img/何以笙箫默.jpg",
+    "img_url":"static/upload/何以笙箫默.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -117,7 +117,7 @@
   },
   {
     "book_name":"十爱",
-    "img_url":"dist/res/book_img/十爱.jpg",
+    "img_url":"static/upload/十爱.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -130,7 +130,7 @@
   },
   {
     "book_name":"外国文化史",
-    "img_url":"dist/res/book_img/外国文化史.jpg",
+    "img_url":"static/upload/外国文化史.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -143,7 +143,7 @@
   },
   {
     "book_name":"历年考研英语真题解析及复习思路",
-    "img_url":"dist/res/book_img/历年考研英语真题解析及复习思路.jpg",
+    "img_url":"static/upload/历年考研英语真题解析及复习思路.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -156,7 +156,7 @@
   },
   {
     "book_name":"探索发现",
-    "img_url":"dist/res/book_img/探索发现.jpg",
+    "img_url":"static/upload/探索发现.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -169,7 +169,7 @@
   },
   {
     "book_name":"弟子规",
-    "img_url":"dist/res/book_img/弟子规.jpg",
+    "img_url":"static/upload/弟子规.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -182,7 +182,7 @@
   },
   {
     "book_name":"改变从消费模式开始",
-    "img_url":"dist/res/book_img/改变从消费模式开始.jpg",
+    "img_url":"static/upload/改变从消费模式开始.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -195,7 +195,7 @@
   },
   {
     "book_name":"十爱",
-    "img_url":"dist/res/book_img/十爱.jpg",
+    "img_url":"static/upload/十爱.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -208,7 +208,7 @@
   },
   {
     "book_name":"利用Python进行数据分析",
-    "img_url":"dist/res/book_img/利用Python进行数据分析.jpg",
+    "img_url":"static/upload/利用Python进行数据分析.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -221,7 +221,7 @@
   },
   {
     "book_name":"一看就会的英语语法书",
-    "img_url":"dist/res/book_img/一看就会的英语语法书.jpg",
+    "img_url":"static/upload/一看就会的英语语法书.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -234,7 +234,7 @@
   },
   {
     "book_name":"投影子的人",
-    "img_url":"dist/res/book_img/投影子的人.jpg",
+    "img_url":"static/upload/投影子的人.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",
@@ -247,7 +247,7 @@
   },
   {
     "book_name":"探索发现",
-    "img_url":"dist/res/book_img/探索发现.jpg",
+    "img_url":"static/upload/探索发现.jpg",
     "price_now":"1.00",
     "price_before":"33.00",
     "book_author":"卡耐基",

@@ -1,24 +1,25 @@
 <template>
   <div>
     <TSZHeader :universities="universities"></TSZHeader>
-    <TSZIndexBody></TSZIndexBody>
+    <TSZCartBody></TSZCartBody>
     <TSZFooter></TSZFooter>
     <TSZOverlay></TSZOverlay>
   </div>
 </template>
 
 <script>
-//Common
 import TSZHeader from "../BodyComponents/Header";
 import TSZFooter from "../BodyComponents/Footer";
 import TSZOverlay from "../components/Overlay";
-
-//body
-import TSZIndexBody from "../BodyComponents/IndexBody";
-
+import TSZCartBody from "../BodyComponents/CartBody"
 export default {
-  name: "Index",
-  components: { TSZHeader, TSZFooter, TSZOverlay, TSZIndexBody },
+  name: "cart",
+  components: {
+    TSZHeader,
+    TSZFooter,
+    TSZOverlay,
+    TSZCartBody
+  },
   props: ["universities"]
 };
 </script>

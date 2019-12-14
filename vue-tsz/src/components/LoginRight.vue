@@ -223,13 +223,13 @@
                   <div class="col-md-7">
                     <input
                       type="file"
-                      accept=".png, .jpg, .jpeg, image/png, image/jpg, image/jpeg"
+                      accept="image/*"
                       :disabled="!bEdit"
-                      @change="uploadFile($event)"
+                      @change="changeLogoImage($event)"
                     />
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" v-if="bEdit">
                   <label class="control-label col-md-2">学校</label>
                   <div class="col-md-10 form-group">
                     <div class="col-md-5">
@@ -257,6 +257,18 @@
                         >{{item}}</option>
                       </select>
                     </div>
+                  </div>
+                </div>
+                <div class="form-group" v-else>
+                  <label class="control-label col-md-2">学校</label>
+                  <div class="col-md-7">
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="userInfo.university"
+                      name="university"
+                      :disabled="!bEdit"
+                    />
                   </div>
                 </div>
                 <div class="form-group">
@@ -290,7 +302,7 @@
               </div>
               <div class="col-md-3" align="center">
                 <img
-                  src="#"
+                  :src="userInfo.nickLogo.logoData"
                   alt="头像"
                   width="140"
                   height="220"
@@ -308,7 +320,12 @@
           <fieldset>
             <legend>管理收货地址</legend>
             <div class="list-group">
-              <div class="panel-group" :id="item.id | idFilter" v-for="(item,index) in Address" :key="index">
+              <div
+                class="panel-group"
+                :id="item.id | idFilter"
+                v-for="(item,index) in Address"
+                :key="index"
+              >
                 <div class="panel" :class="[item.bdefault ? 'panel-primary':'panel-default']">
                   <div class="panel-heading">
                     <h4 class="panel-title">
@@ -363,20 +380,16 @@
               </div>
             </div>
             <div>
-              <button
-                class="btn btn-danger col-md-4"
-                type="button"
-                @click="openNewAddressModel"
-              >
+              <button class="btn btn-danger col-md-4" type="button" @click="openNewAddressModel">
                 <!-- data-toggle="modal"
                 data-target="#address_add_modal"
-              > -->
+                >-->
                 <span class="fa-stack fa-lg">
                   <i class="fa fa-circle-o fa-stack-2x"></i>
                   <i class="fa fa-plus fa-stack-1x"></i>
                 </span>添加新的收货地址
               </button>
-              <div 
+              <div
                 v-if="bshowNewAddressModel"
                 class="modal"
                 id="address_add_modal"
@@ -463,6 +476,15 @@
                           <input type="text" placeholder="姓名" required v-model="NewAddress.name" />
                         </div>
                         <div class="input-group add-more">
+                          <span class="fl">邮政编码</span>
+                          <input
+                            type="text"
+                            placeholder="姓名"
+                            required
+                            v-model="NewAddress.postcode"
+                          />
+                        </div>
+                        <div class="input-group add-more">
                           <span class="fl">具体地址</span>
                           <input
                             type="text"
@@ -479,12 +501,7 @@
                         class="btn btn-default"
                         @click="removePaddingAndClosingModel"
                       >取消</button>
-                      <button 
-                        type="button" 
-                        class="btn btn-primary" 
-                        @click="addAddress">
-                        添加
-                        </button>
+                      <button type="button" class="btn btn-primary" @click="addAddress">添加</button>
                     </div>
                   </div>
                 </div>
@@ -498,10 +515,10 @@
 </template>
 
 <script>
-import TSZOverlay from '../components/Overlay'
+import TSZOverlay from "../components/Overlay";
 export default {
   name: "LoginRight",
-  components:{
+  components: {
     TSZOverlay
   },
   methods: {
@@ -538,31 +555,31 @@ export default {
       }
     },
     //设置默认地址
-    setDefaultAddress:function(item){
-      for(var i=0;i<this.Address.length;i++){
-        if(this.Address[i].id == item.id){
+    setDefaultAddress: function(item) {
+      for (var i = 0; i < this.Address.length; i++) {
+        if (this.Address[i].id == item.id) {
           this.Address[i].bdefault = true;
-        }else{
+        } else {
           this.Address[i].bdefault = false;
         }
       }
     },
-    deleteAddress:function(item){
-      for(var i=0;i<this.Address.length;i++){
-        if(this.Address[i].id == item.id){
-          this.Address.slice(i,i+1);
+    deleteAddress: function(item) {
+      for (var i = 0; i < this.Address.length; i++) {
+        if (this.Address[i].id == item.id) {
+          this.Address.splice(i, 1);
           break;
         }
       }
     },
     //remove the body padding
     removePaddingAndClosingModel() {
-      console.log("removePaddingAndClosingModel");  
-      $("body").css("padding-right",0);
+      console.log("removePaddingAndClosingModel");
+      $("body").css("padding-right", 0);
       this.bshowNewAddressModel = false;
       this.bus.$emit("ReceiveMessage", false);
     },
-    openNewAddressModel:function(){
+    openNewAddressModel: function() {
       console.log("Open NewAddressModel");
       this.bshowNewAddressModel = true;
       this.bus.$emit("ReceiveMessage", true);
@@ -584,7 +601,7 @@ export default {
       }
       const self = this;
       this.axios
-        .post("http://192.168.0.105:5000/login", {
+        .post("api/login", {
           name: self.submitData.username,
           passwd: this.$md5(self.submitData.password)
         })
@@ -627,33 +644,41 @@ export default {
                 this.$cookies.get(this.$app.APP_COOKIE_NAME) +
                 " set OK"
             );
+            //多次请求 不能并列执行，因为axios是 异步模式，不能保证执行的顺序
             //set to the state
             this.$store.commit("setCurrentCookie", strCookie);
             self.currentState = 1;
+            this.axios
+              .post("api/getinfo", {
+                s_user: this.submitData.username,
+                s_token: this.$cookies.get(this.$app.APP_COOKIE_NAME)
+              })
+              .then(res => {
+                const ResultData = res.data;
+                if (ResultData.status != 200) {
+                  console.log("获取用户数据失败!" + ResultData.message);
+                  return;
+                } else if (ResultData.info.code != 200) {
+                  console.log("获取用户数据失败!" + ResultData.info.message);
+                  return;
+                } else {
+                 console.log("获取用户数据成功!" + JSON.stringify(ResultData.info.message));
+                 self.userInfo.account = ResultData.info.message.name;
+                 self.userInfo.nickName = ResultData.info.message.nichen;
+                 self.userInfo.gender = parseInt(ResultData.info.message.sex);
+                 self.userInfo.address = ResultData.info.message.address;
+                 self.userInfo.university = ResultData.info.message.uni;
+                 self.userInfo.description = ResultData.info.message.desc;       
+                }
+              })
+              .catch(err => {
+                console.log("获取用户信息数据失败!" + err);
+              });
           }
         })
         .catch(err => {
           console.log("Request Error For Err" + err);
-        });
-      // get user info
-      this.axios
-        .post("http://192.168.0.105:5000/getinfo", {
-          s_user: this.submitData.username,
-          s_token: this.$cookies.get(this.$app.APP_COOKIE_NAME)
-        })
-        .then(res => {
-          const ResultData = res.data;
-          if (ResultData.status != 200) {
-            console.log("获取用户数据失败!" + ResultData.message);
-            return;
-          } else if (ResultData.info.code != 200) {
-            console.log("获取用户数据失败!" + ResultData.info.message);
-            return;
-          } else {
-          }
-        })
-        .catch(err => {
-          console.log("获取用户信息数据失败!" + err);
+          return false;
         });
     },
     onRegister() {
@@ -671,7 +696,7 @@ export default {
       }
       const self = this;
       this.axios
-        .post("http://192.168.0.105:5000/register", {
+        .post("api/register", {
           name: self.submitData.username,
           passwd: self.$md5(self.submitData.password),
           identifying_code: self.submitData.confirmp
@@ -699,7 +724,7 @@ export default {
         this.toolTipData.text = "当前输入的用户名为空,获取验证码失败";
       } else {
         this.axios
-          .get("http://192.168.0.105:5000/verify", {
+          .get("api/verify", {
             params: {
               name: this.submitData.username,
               type: 2
@@ -739,7 +764,7 @@ export default {
         this.toolTipData.text = "当前输入的用户名为空,获取验证码失败";
       } else {
         this.axios
-          .get("http://192.168.0.105:5000/verify", {
+          .get("api/verify", {
             params: {
               name: this.submitData.username,
               type: 1
@@ -823,8 +848,12 @@ export default {
       }
       const self = this;
       this.universities.forEach(data => {
-        if (data.name == self.selectProvince) {
-          self.currentProviceUniversities = data.unis;
+        if(data.city == self.selectProvince){
+          self.currentProviceUniversities = [];
+          data.university.forEach((d,i)=>{
+            if(i!= 0)
+              self.currentProviceUniversities.push(d.name);
+          })
         }
       });
     },
@@ -842,8 +871,8 @@ export default {
         return;
       }
       var maxID = 0;
-      for(var i = 0;i<this.Address.length; i++){
-        if(parseInt(this.Address[i].id) >= maxID){
+      for (var i = 0; i < this.Address.length; i++) {
+        if (parseInt(this.Address[i].id) >= maxID) {
           maxID = parseInt(this.Address[i].id);
         }
       }
@@ -889,9 +918,33 @@ export default {
         this.CurrentSelectedDistricts = ["---- 选择区 ----"];
       }
     },
+    //重置确认信息框的数据
     ResetConfirmData: function() {
       this.confirmData.confirSeconds = 10;
       this.confirmData.show = false;
+    },
+    changeLogoImage: function(e) {
+      let ImageFile = event.target.files[0];
+      console.log("上传->" + ImageFile);
+      let fileReader = new FileReader();
+      if (ImageFile.size > 1024 * 1024) {
+        //大于1M no accepted
+        alert("上传图片超过1M，请重新选择图片");
+        ImageFile.value = "";
+        return;
+      }
+      console.log("changeLogoImage:" + e);
+      this.userInfo.nickLogo.logoName = ImageFile.name;
+      this.userInfo.nickLogo.logoFile = e.target.files;
+      fileReader.readAsDataURL(ImageFile); //读取图片
+      let _this = this;
+      fileReader.onload = event => {
+        //读取成功
+        event.srcElement.value = "";
+        _this.userInfo.nickLogo.logoData = fileReader.result;
+        console.log("读取数据成功");
+        _this.bEdit = true;
+      };
     }
   },
   data() {
@@ -916,19 +969,54 @@ export default {
         account: "",
         nickName: "",
         gender: 2, //0.male 1.female 2.默认 保密
-        nickPhoto: "",
         province: "",
         university: "",
         address: "",
-        description: ""
+        description: "",
+        nickLogo: {
+          logoName: "",
+          logoFile: "",
+          logoData: "#"
+        }
       },
       selectProvince: "",
       currentProviceUniversities: [],
       bEdit: false,
-      AllProvinces: [],
+      AllProvinces: ["北京",
+        "上海",
+        "黑龙江",
+        "吉林",
+        "辽宁",
+        "天津",
+        "安徽",
+        "江苏",
+        "浙江",
+        "陕西",
+        "湖北",
+        "广东",
+        "湖南",
+        "甘肃",
+        "四川",
+        "山东",
+        "福建",
+        "河南",
+        "重庆",
+        "云南",
+        "河北",
+        "江西",
+        "山西",
+        "贵州",
+        "广西",
+        "内蒙古",
+        "宁夏",
+        "青海",
+        "西藏",
+        "香港",
+        "澳门",
+        "台湾"],
       Address: [
         {
-          id:1,
+          id: 1,
           name: "xxx",
           tel: "1375xxx198",
           detail: "重庆市黔江区**街道**路",
@@ -942,9 +1030,9 @@ export default {
         name: "",
         tel: "",
         detail: "",
-        postcode: "40000",
+        postcode: "",
         bdefault: false,
-        bExpand:false
+        bExpand: false
       },
       //Address Selected
       selectedAddress: {
@@ -955,7 +1043,7 @@ export default {
       AllAddressProvince: ["---- 选择省 ----"],
       CurrentSelectedCities: ["---- 选择市 ----"],
       CurrentSelectedDistricts: ["---- 选择区 ----"],
-      bshowNewAddressModel:false //是否打开新建地址框
+      bshowNewAddressModel: false //是否打开新建地址框
     };
   },
   props: ["toolTipData", "universities", "allcities"],
@@ -981,7 +1069,7 @@ export default {
       return "addr" + id;
     },
     idChild(id) {
-      return 'addr' + id + "1";
+      return "addr" + id + "1";
     },
     toFixed(val) {
       return val.toFixed(2);
@@ -1325,11 +1413,10 @@ canvas.yzm {
   text-align: center;
 }
 
-#address_add_modal{
+#address_add_modal {
   width: 600px;
-  height: 400px;
+  height: 500px;
   margin: 0 28%;
   display: block;
 }
-
 </style>

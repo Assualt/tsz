@@ -1,0 +1,8 @@
+tszUI/dist/font-awersome
+tszUI/dist/js
+tszUI/dist/css
+tszUI/dist/res
+tszUI/.idea
+
+tszflask/logs/server.log 
+vue-tsz/static/images/*
