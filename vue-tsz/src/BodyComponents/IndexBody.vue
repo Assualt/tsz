@@ -2,9 +2,9 @@
   <div class="main">
     <div class="top fl">
       <div class="scanner_view_logo fl">
-        <a href="#">
+        <router-link to="/">
           <img src="../assets/logo.png" alt="未能正确加载图片" width="180" height="64" />
-        </a>
+        </router-link>
       </div>
       <div class="scanner_view_list fl">
         <ul class="scanner_view_list_ul">
@@ -12,7 +12,7 @@
             <router-link to="/login" v-on:click.native="checkLoginStatus(0)">登录</router-link>
           </li>
           <li>
-            <router-link to="/login" v-on:click.native="checkLoginStatus(1)">注册</router-link>
+            <router-link to="/sold">出售</router-link>
           </li>
           <li>
             <a href="#">求购</a>

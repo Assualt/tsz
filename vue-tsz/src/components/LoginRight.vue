@@ -166,7 +166,6 @@
                       v-model="userInfo.account"
                       class="form-control"
                       readonly
-                      name="account"
                       id="account"
                     />
                   </div>
@@ -178,7 +177,6 @@
                       type="text"
                       class="form-control"
                       v-model="userInfo.nickName"
-                      name="nicheng"
                       :disabled="!bEdit"
                     />
                   </div>
@@ -189,7 +187,6 @@
                     <div class="col-md-4">
                       <input
                         type="radio"
-                        name="sex"
                         value="0"
                         v-model="userInfo.gender"
                         :disabled="!bEdit"
@@ -199,7 +196,6 @@
                     <div class="col-md-4">
                       <input
                         type="radio"
-                        name="sex"
                         value="1"
                         v-model="userInfo.gender"
                         :disabled="!bEdit"
@@ -209,7 +205,6 @@
                     <div class="col-md-4">
                       <input
                         type="radio"
-                        name="sex"
                         value="2"
                         v-model="userInfo.gender"
                         :disabled="!bEdit"
@@ -237,7 +232,7 @@
                         id="province"
                         class="form-control"
                         :disabled="!bEdit"
-                        v-model="selectProvince"
+                        v-model="selectedProvince"
                         @change="selectUniversity"
                       >
                         <option
@@ -248,12 +243,17 @@
                       </select>
                     </div>
                     <div class="col-md-7">
-                      <select class="form-control" id="school" :disabled="!bEdit">
+                      <select 
+                        class="form-control" 
+                        id="school" 
+                        :disabled="!bEdit"
+                        v-model="selectedUniversity"
+                        @change="userInfo.university=selectedProvince+selectedUniversity"
+                      >
                         <option
                           v-for="(item,index) in currentProviceUniversities"
                           :value="item"
                           :key="index"
-                          @click="userInfo.university=item"
                         >{{item}}</option>
                       </select>
                     </div>
@@ -286,7 +286,6 @@
                   <label class="control-label col-md-2">描述</label>
                   <div class="col-md-10">
                     <textarea
-                      name="des"
                       :disabled="!bEdit"
                       placeholder="请输入描述性语言(150字以内)"
                       maxlength="150"
@@ -296,8 +295,8 @@
                 </div>
                 <div class="form-group" id="basic_info_1_btn">
                   <button class="btn btn-link" type="button" @click="bEdit=true">修改资料</button>
-                  <button class="btn btn-primary" @click="bEdit=false" :disabled="!bEdit">放弃修改</button>
-                  <button class="btn btn-danger" :disabled="bEdit">提交</button>
+                  <button class="btn btn-primary" @click="giveupUpdateUserInfo()" :disabled="!bEdit">放弃修改</button>
+                  <button class="btn btn-danger" :disabled="!bEdit" @click="updateUserInfo()">提交</button>
                 </div>
               </div>
               <div class="col-md-3" align="center">
@@ -316,7 +315,7 @@
         </div>
       </div>
       <div class="tab-pane in active" id="address_management" v-else-if="currentState==2">
-        <form class="form-horizontal" role="form" id="basic_info_2">
+        <form class="form-horizontal" id="basic_info_2">
           <fieldset>
             <legend>管理收货地址</legend>
             <div class="list-group">
@@ -510,16 +509,24 @@
           </fieldset>
         </form>
       </div>
+      <div class="tab-pane in active" id="" v-else-if="currentState==3">
+        <TSZBookTable></TSZBookTable>
+      </div>
+      <div class="tab-pane in active" id="" v-else-if="currentState==4">
+        <TSZBooksEval></TSZBooksEval>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import TSZOverlay from "../components/Overlay";
+import TSZBookTable from "../components/BooksTable"
+import TSZBooksEval from "../components/BooksSaleEval"
 export default {
   name: "LoginRight",
   components: {
-    TSZOverlay
+    TSZOverlay,TSZBookTable,TSZBooksEval
   },
   methods: {
     checkCurrent(Index) {
@@ -668,7 +675,8 @@ export default {
                  self.userInfo.gender = parseInt(ResultData.info.message.sex);
                  self.userInfo.address = ResultData.info.message.address;
                  self.userInfo.university = ResultData.info.message.uni;
-                 self.userInfo.description = ResultData.info.message.desc;       
+                 self.userInfo.description = ResultData.info.message.desc;     
+                 self.userInfo_const = self.userInfo;  
                 }
               })
               .catch(err => {
@@ -843,12 +851,12 @@ export default {
       }
     },
     selectUniversity: function() {
-      if (this.selectProvince == "") {
+      if (this.selectedProvince == "") {
         this.currentProviceUniversities = [];
       }
       const self = this;
       this.universities.forEach(data => {
-        if(data.city == self.selectProvince){
+        if(data.city == self.selectedProvince){
           self.currentProviceUniversities = [];
           data.university.forEach((d,i)=>{
             if(i!= 0)
@@ -945,11 +953,23 @@ export default {
         console.log("读取数据成功");
         _this.bEdit = true;
       };
+    },
+    //更新用户数据
+    updateUserInfo:function(){
+      this.userInfo_const = this.userInfo;
+      console.log("提交更改");
+    },
+    //放弃更改数据
+    giveupUpdateUserInfo:function(){
+      this.selectUniversity = '';
+      this.selectedProvince = '';
+      this.userInfo = this.userInfo_const;
+      this.bEdit = false;
     }
   },
   data() {
     return {
-      currentState: 0,
+      currentState: 4,
       title: "登录淘书斋",
       submitData: {
         //提交的表单数据
@@ -965,7 +985,7 @@ export default {
       },
       Mode: 0, // 0. 登录模式  1. 注册模式
       //用户模式
-      userInfo: {
+      userInfo: { //存放可用于修改的数据 
         account: "",
         nickName: "",
         gender: 2, //0.male 1.female 2.默认 保密
@@ -979,7 +999,22 @@ export default {
           logoData: "#"
         }
       },
-      selectProvince: "",
+      userInfo_const:{
+        account: "",
+        nickName: "",
+        gender: 2, //0.male 1.female 2.默认 保密
+        province: "",
+        university: "",
+        address: "",
+        description: "",
+        nickLogo: {
+          logoName: "",
+          logoFile: "",
+          logoData: "#"
+        }
+      },
+      selectedProvince: "",
+      selectedUniversity:"",
       currentProviceUniversities: [],
       bEdit: false,
       AllProvinces: ["北京",
@@ -1233,104 +1268,6 @@ tbody tr th {
   font-weight: 100;
 }
 
-#show_in_list h4 a {
-  color: rgb(155, 180, 0);
-}
-#show_in_list ul {
-  width: 100%;
-  padding: 0;
-}
-#show_in_list ul li {
-  width: 100%;
-  height: 160px;
-  border: 1px solid #dedede;
-  /*border: 1px solid red;*/
-  background: rgb(245, 245, 245);
-  margin-top: 5px;
-}
-.book_list_info {
-  height: 100%;
-}
-.book_list_info_left {
-  height: 100%;
-  padding: 10px 0 0 20px;
-  background: white;
-  width: 23%;
-}
-.book_list_info_right {
-  width: 77%;
-  height: 100%;
-}
-.list_info_1 {
-  width: 100%;
-  height: 20px;
-  padding-top: 3px;
-  padding-left: 10px;
-}
-.list_info_1 a {
-  color: black;
-}
-.list_info_1 a:hover {
-  color: orange;
-}
-.list_info_2 {
-  width: 100%;
-  height: 35px;
-  padding: 5px;
-}
-.list_info_2 div.badge:nth-child(1) {
-  background: rgba(255, 0, 0, 0.5);
-}
-.list_info_2 div.badge:nth-child(2) {
-  background: rgba(174, 160, 113, 0.8);
-}
-.list_info_2 div.badge:nth-child(3) {
-  background: rgba(209, 219, 113, 0.8);
-}
-.list_info_2 div.badge a {
-  color: white;
-}
-.list_info_3 {
-  margin-top: 3px;
-  width: 100%;
-  height: 25px;
-}
-.list_info_4 {
-  width: 100%;
-  height: 25px;
-}
-.list_info_5 {
-  padding-left: 10px;
-  width: 100%;
-  height: auto;
-}
-.list_info_2 h4 {
-  margin: 5px 5px 5px 15px;
-  color: rgba(233, 123, 1, 1);
-}
-.list_info_2 div {
-  color: white;
-  padding: 6px;
-  margin-left: 5px;
-}
-.info_price {
-  font-size: 16px;
-  font-weight: bolder;
-  color: red;
-  margin: 3px 9px;
-}
-.info_price_before {
-  font-size: 12px;
-  font-weight: 400;
-  color: #777777;
-  opacity: 0.5;
-  margin: 5px 6px;
-}
-.info_price_dis {
-  color: #aaaaaa;
-  font-size: 12px;
-  margin-top: 4px;
-}
 #book_management_2 {
   width: 100%;
   /*overflow: visible;*/

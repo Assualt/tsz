@@ -19,7 +19,7 @@ import md5 from 'js-md5';
 import sha1 from 'js-sha1'
 import app from './constants/App'
 import VueCookies from 'vue-cookies'
-
+import echarts from 'echarts'
 
 Vue.use(VueCookies)
 Vue.use(VueAxios,axios)
@@ -28,6 +28,7 @@ Vue.use(VueAxios,axios)
 Vue.prototype.$md5 = md5;
 Vue.prototype.$app = app;
 Vue.prototype.$sha1 = sha1;
+Vue.prototype.$echars = echarts;
 /* eslint-disable */
 
 
