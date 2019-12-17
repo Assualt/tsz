@@ -519,6 +519,7 @@ var main = new Vue({
                        data.charts.forEach((perChart)=>{
                           if(perChart.types == "line"){
                               sale_his_line.setOption(perChart.options);
+                              console.log(perChart.options);
                           }
                            if(perChart.types==="bar"){
                                sale_his_bar.setOption(perChart.options);

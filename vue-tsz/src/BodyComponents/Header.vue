@@ -7,36 +7,42 @@
         class="a_school"
         @click="showAllSchool()"
       >&nbsp;[&nbsp;{{targetSchool}}&nbsp;]</a>
-      <div :class="{show_school:true,display_show:bShow,display_hide:!bShow}">
-        <div class="show_school_head">
-          <p class="fl">请选择学校</p>
-          <button
-            class="btn btn-sm fa fa-close fr"
-            id="show_school_btn_cls"
-            @click="closeAllSchool()"
-          ></button>
-        </div>
-        <div class="show_school_body">
-          <p class="fl">
-            快捷方式:
-            <a href="#" style="color: rgb(0,168,155);" @click="showAllUniversitys('所有学校',-1)">所有学校</a>
-          </p>
-          <div class="show_school_body_2 fl">
-            <a
-              href="#"
-              class="fl"
-              v-for="(item,index) in AllProvinces"
-              :key="index"
-              @click="showAllUniversitys(item,index)"
-            >{{item}}</a>
+      <transition name="top">
+        <div v-if="bShow" class="show_school display_show">
+          <div class="show_school_head">
+            <p class="fl">请选择学校</p>
+            <button
+              class="btn btn-sm fa fa-close fr"
+              id="show_school_btn_cls"
+              @click="closeAllSchool()"
+            ></button>
           </div>
-          <div class="show_school_body_3 fl">
-            <p v-for="(item,index) in CurrentCityUniversity" :key="index" class="fl">
-              <a href="#" @click="selectSchool(item)">{{item}}</a>
+          <div class="show_school_body">
+            <p class="fl">
+              快捷方式:
+              <a
+                href="#"
+                style="color: rgb(0,168,155);"
+                @click="showAllUniversitys('所有学校',-1)"
+              >所有学校</a>
             </p>
+            <div class="show_school_body_2 fl">
+              <a
+                href="#"
+                class="fl"
+                v-for="(item,index) in AllProvinces"
+                :key="index"
+                @click="showAllUniversitys(item,index)"
+              >{{item}}</a>
+            </div>
+            <div class="show_school_body_3 fl">
+              <p v-for="(item,index) in CurrentCityUniversity" :key="index" class="fl">
+                <a href="#" @click="selectSchool(item)">{{item}}</a>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </transition>
       <div class="header_login fr">
         <li class="fl dropdown" :class="dropdown_opened? 'open':'' ">
           <a
@@ -50,11 +56,10 @@
           <router-link to="/login" id="login_btn" v-else v-on:click.native="checkLoginStatus(0)">登录</router-link>&nbsp;|
           <ul class="dropdown-menu" role="menu" aria-labelledby="login_btn" v-if="logined">
             <li role="presentation">
-              <a role="menuitem" tabindex="-1" href="#">我的主页</a>
+              <router-link role="menuitem" tabindex="-1" to="/index">我的主页</router-link>
             </li>
             <li role="presentation">
               <router-link role="menuitem" tabindex="-1" to="/cart">我的购物车</router-link>
-              <a role="menuitem" tabindex="-1" href="#">我的购物车</a>
             </li>
             <li role="presentation">
               <router-link role="menuitem" tabindex="-1" to="/favorite">我的收藏</router-link>
@@ -189,7 +194,7 @@ export default {
     loginout: function() {
       if (this.logined) {
         this.axios
-          .post(this.$app.APP_SERVER_URL +"/loginout", {
+          .post(this.$app.APP_SERVER_URL + "/loginout", {
             s_user: "",
             s_token: this.$cookies.get(this.$app.APP_COOKIE_NAME)
           })
@@ -212,7 +217,7 @@ export default {
   },
   props: ["universities"],
   created: function() {
-    //html 加载完成之前执行    
+    //html 加载完成之前执行
   }
 };
 </script>

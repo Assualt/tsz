@@ -185,30 +185,15 @@
                   <label class="control-label col-md-2">性别</label>
                   <div class="col-md-7">
                     <div class="col-md-4">
-                      <input
-                        type="radio"
-                        value="0"
-                        v-model="userInfo.gender"
-                        :disabled="!bEdit"
-                      />
+                      <input type="radio" value="0" v-model="userInfo.gender" :disabled="!bEdit" />
                       <label class="control-label">男</label>
                     </div>
                     <div class="col-md-4">
-                      <input
-                        type="radio"
-                        value="1"
-                        v-model="userInfo.gender"
-                        :disabled="!bEdit"
-                      />
+                      <input type="radio" value="1" v-model="userInfo.gender" :disabled="!bEdit" />
                       <label class="control-label">女</label>
                     </div>
                     <div class="col-md-4">
-                      <input
-                        type="radio"
-                        value="2"
-                        v-model="userInfo.gender"
-                        :disabled="!bEdit"
-                      />
+                      <input type="radio" value="2" v-model="userInfo.gender" :disabled="!bEdit" />
                       <label class="control-label">保密</label>
                     </div>
                   </div>
@@ -243,9 +228,9 @@
                       </select>
                     </div>
                     <div class="col-md-7">
-                      <select 
-                        class="form-control" 
-                        id="school" 
+                      <select
+                        class="form-control"
+                        id="school"
                         :disabled="!bEdit"
                         v-model="selectedUniversity"
                         @change="userInfo.university=selectedProvince+selectedUniversity"
@@ -295,7 +280,11 @@
                 </div>
                 <div class="form-group" id="basic_info_1_btn">
                   <button class="btn btn-link" type="button" @click="bEdit=true">修改资料</button>
-                  <button class="btn btn-primary" @click="giveupUpdateUserInfo()" :disabled="!bEdit">放弃修改</button>
+                  <button
+                    class="btn btn-primary"
+                    @click="giveupUpdateUserInfo()"
+                    :disabled="!bEdit"
+                  >放弃修改</button>
                   <button class="btn btn-danger" :disabled="!bEdit" @click="updateUserInfo()">提交</button>
                 </div>
               </div>
@@ -388,131 +377,133 @@
                   <i class="fa fa-plus fa-stack-1x"></i>
                 </span>添加新的收货地址
               </button>
-              <div
-                v-if="bshowNewAddressModel"
-                class="modal"
-                id="address_add_modal"
-                tabindex="0"
-                role="dialog"
-                aria-labelledby="address_title"
-                aria-hidden="true"
-              >
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <button
-                        type="button"
-                        class="close"
-                        data-dismiss="modal"
-                        aria-hidden="true"
-                        @click="removePaddingAndClosingModel"
-                      >&times;</button>
-                      <h4 class="modal-title" id="address_title">添加收货地址</h4>
-                    </div>
-                    <div class="modal-body">
-                      <form class="form-inline">
-                        <div>
-                          <div class="form-group col-md-4">
-                            <label class="sr-only" for="province2">Province</label>
-                            <select
-                              class="form-control"
-                              id="province2"
-                              required
-                              v-model="selectedAddress.province"
-                              @change="Province2Cities"
-                            >
-                              <option
-                                :value="province"
-                                v-for="(province,index) in AllAddressProvince"
-                                :key="index"
-                              >{{province}}</option>
-                            </select>
+              <transition name="fade">
+                <div
+                  v-if="bshowNewAddressModel"
+                  class="modal"
+                  id="address_add_modal"
+                  tabindex="0"
+                  role="dialog"
+                  aria-labelledby="address_title"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button
+                          type="button"
+                          class="close"
+                          data-dismiss="modal"
+                          aria-hidden="true"
+                          @click="removePaddingAndClosingModel"
+                        >&times;</button>
+                        <h4 class="modal-title" id="address_title">添加收货地址</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form class="form-inline">
+                          <div>
+                            <div class="form-group col-md-4">
+                              <label class="sr-only" for="province2">Province</label>
+                              <select
+                                class="form-control"
+                                id="province2"
+                                required
+                                v-model="selectedAddress.province"
+                                @change="Province2Cities"
+                              >
+                                <option
+                                  :value="province"
+                                  v-for="(province,index) in AllAddressProvince"
+                                  :key="index"
+                                >{{province}}</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                              <label class="sr-only" for="city2">City</label>
+                              <select
+                                class="form-control"
+                                id="city2"
+                                required
+                                v-model="selectedAddress.city"
+                                @change="City2Disticts"
+                              >
+                                <option
+                                  :value="city"
+                                  v-for="(city,index) in CurrentSelectedCities"
+                                  :key="index"
+                                >{{city}}</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                              <label class="sr-only" for="district2">District</label>
+                              <select
+                                class="form-control"
+                                id="district2"
+                                required
+                                v-model="selectedAddress.distict"
+                              >
+                                <option
+                                  :value="district"
+                                  v-for="(district,index) in CurrentSelectedDistricts"
+                                  :key="index"
+                                >{{district}}</option>
+                              </select>
+                            </div>
                           </div>
-                          <div class="form-group col-md-4">
-                            <label class="sr-only" for="city2">City</label>
-                            <select
-                              class="form-control"
-                              id="city2"
+                          <div class="input-group add-more">
+                            <span class="fl">联系电话</span>
+                            <input
+                              type="tel"
+                              maxlength="20"
+                              placeholder="联系电话"
                               required
-                              v-model="selectedAddress.city"
-                              @change="City2Disticts"
-                            >
-                              <option
-                                :value="city"
-                                v-for="(city,index) in CurrentSelectedCities"
-                                :key="index"
-                              >{{city}}</option>
-                            </select>
+                              v-model="NewAddress.tel"
+                            />
                           </div>
-                          <div class="form-group col-md-4">
-                            <label class="sr-only" for="district2">District</label>
-                            <select
-                              class="form-control"
-                              id="district2"
+                          <div class="input-group add-more">
+                            <span class="fl">姓名</span>
+                            <input type="text" placeholder="姓名" required v-model="NewAddress.name" />
+                          </div>
+                          <div class="input-group add-more">
+                            <span class="fl">邮政编码</span>
+                            <input
+                              type="text"
+                              placeholder="姓名"
                               required
-                              v-model="selectedAddress.distict"
-                            >
-                              <option
-                                :value="district"
-                                v-for="(district,index) in CurrentSelectedDistricts"
-                                :key="index"
-                              >{{district}}</option>
-                            </select>
+                              v-model="NewAddress.postcode"
+                            />
                           </div>
-                        </div>
-                        <div class="input-group add-more">
-                          <span class="fl">联系电话</span>
-                          <input
-                            type="tel"
-                            maxlength="20"
-                            placeholder="联系电话"
-                            required
-                            v-model="NewAddress.tel"
-                          />
-                        </div>
-                        <div class="input-group add-more">
-                          <span class="fl">姓名</span>
-                          <input type="text" placeholder="姓名" required v-model="NewAddress.name" />
-                        </div>
-                        <div class="input-group add-more">
-                          <span class="fl">邮政编码</span>
-                          <input
-                            type="text"
-                            placeholder="姓名"
-                            required
-                            v-model="NewAddress.postcode"
-                          />
-                        </div>
-                        <div class="input-group add-more">
-                          <span class="fl">具体地址</span>
-                          <input
-                            type="text"
-                            placeholder="详细地址"
-                            required
-                            v-model="NewAddress.detail"
-                          />
-                        </div>
-                      </form>
-                    </div>
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-default"
-                        @click="removePaddingAndClosingModel"
-                      >取消</button>
-                      <button type="button" class="btn btn-primary" @click="addAddress">添加</button>
+                          <div class="input-group add-more">
+                            <span class="fl">具体地址</span>
+                            <input
+                              type="text"
+                              placeholder="详细地址"
+                              required
+                              v-model="NewAddress.detail"
+                            />
+                          </div>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-default"
+                          @click="removePaddingAndClosingModel"
+                        >取消</button>
+                        <button type="button" class="btn btn-primary" @click="addAddress">添加</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </transition>
             </div>
           </fieldset>
         </form>
       </div>
-      <div class="tab-pane in active" id="" v-else-if="currentState==3">
+      <div class="tab-pane in active" id v-else-if="currentState==3">
         <TSZBookTable></TSZBookTable>
       </div>
-      <div class="tab-pane in active" id="" v-else-if="currentState==4">
+      <div class="tab-pane in active" id v-else-if="currentState==4">
         <TSZBooksEval></TSZBooksEval>
       </div>
     </div>
@@ -521,12 +512,14 @@
 
 <script>
 import TSZOverlay from "../components/Overlay";
-import TSZBookTable from "../components/BooksTable"
-import TSZBooksEval from "../components/BooksSaleEval"
+import TSZBookTable from "../components/BooksTable";
+import TSZBooksEval from "../components/BooksSaleEval";
 export default {
   name: "LoginRight",
   components: {
-    TSZOverlay,TSZBookTable,TSZBooksEval
+    TSZOverlay,
+    TSZBookTable,
+    TSZBooksEval
   },
   methods: {
     checkCurrent(Index) {
@@ -669,14 +662,17 @@ export default {
                   console.log("获取用户数据失败!" + ResultData.info.message);
                   return;
                 } else {
-                 console.log("获取用户数据成功!" + JSON.stringify(ResultData.info.message));
-                 self.userInfo.account = ResultData.info.message.name;
-                 self.userInfo.nickName = ResultData.info.message.nichen;
-                 self.userInfo.gender = parseInt(ResultData.info.message.sex);
-                 self.userInfo.address = ResultData.info.message.address;
-                 self.userInfo.university = ResultData.info.message.uni;
-                 self.userInfo.description = ResultData.info.message.desc;     
-                 self.userInfo_const = self.userInfo;  
+                  console.log(
+                    "获取用户数据成功!" +
+                      JSON.stringify(ResultData.info.message)
+                  );
+                  self.userInfo.account = ResultData.info.message.name;
+                  self.userInfo.nickName = ResultData.info.message.nichen;
+                  self.userInfo.gender = parseInt(ResultData.info.message.sex);
+                  self.userInfo.address = ResultData.info.message.address;
+                  self.userInfo.university = ResultData.info.message.uni;
+                  self.userInfo.description = ResultData.info.message.desc;
+                  self.userInfo_const = self.userInfo;
                 }
               })
               .catch(err => {
@@ -724,7 +720,7 @@ export default {
         .catch(err => {
           console.log("Request Error for Err " + err);
         });
-      this.checkLoginStatus(0);
+      // this.checkLoginStatus(0);
     },
     forgetPassword() {
       if (this.submitData.username == "") {
@@ -856,12 +852,11 @@ export default {
       }
       const self = this;
       this.universities.forEach(data => {
-        if(data.city == self.selectedProvince){
+        if (data.city == self.selectedProvince) {
           self.currentProviceUniversities = [];
-          data.university.forEach((d,i)=>{
-            if(i!= 0)
-              self.currentProviceUniversities.push(d.name);
-          })
+          data.university.forEach((d, i) => {
+            if (i != 0) self.currentProviceUniversities.push(d.name);
+          });
         }
       });
     },
@@ -955,21 +950,21 @@ export default {
       };
     },
     //更新用户数据
-    updateUserInfo:function(){
+    updateUserInfo: function() {
       this.userInfo_const = this.userInfo;
       console.log("提交更改");
     },
     //放弃更改数据
-    giveupUpdateUserInfo:function(){
-      this.selectUniversity = '';
-      this.selectedProvince = '';
+    giveupUpdateUserInfo: function() {
+      this.selectUniversity = "";
+      this.selectedProvince = "";
       this.userInfo = this.userInfo_const;
       this.bEdit = false;
     }
   },
   data() {
     return {
-      currentState: 4,
+      currentState: 0,
       title: "登录淘书斋",
       submitData: {
         //提交的表单数据
@@ -985,7 +980,8 @@ export default {
       },
       Mode: 0, // 0. 登录模式  1. 注册模式
       //用户模式
-      userInfo: { //存放可用于修改的数据 
+      userInfo: {
+        //存放可用于修改的数据
         account: "",
         nickName: "",
         gender: 2, //0.male 1.female 2.默认 保密
@@ -999,7 +995,7 @@ export default {
           logoData: "#"
         }
       },
-      userInfo_const:{
+      userInfo_const: {
         account: "",
         nickName: "",
         gender: 2, //0.male 1.female 2.默认 保密
@@ -1014,10 +1010,11 @@ export default {
         }
       },
       selectedProvince: "",
-      selectedUniversity:"",
+      selectedUniversity: "",
       currentProviceUniversities: [],
       bEdit: false,
-      AllProvinces: ["北京",
+      AllProvinces: [
+        "北京",
         "上海",
         "黑龙江",
         "吉林",
@@ -1048,7 +1045,8 @@ export default {
         "西藏",
         "香港",
         "澳门",
-        "台湾"],
+        "台湾"
+      ],
       Address: [
         {
           id: 1,

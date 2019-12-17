@@ -1,35 +1,114 @@
-*{
+* {
     margin: 0;
     padding: 0;
 }
-a:hover{
+
+a:hover {
     text-decoration: none;
 }
-ul{
+
+ul {
     list-style: none;
 }
-ul>li{
+
+ul>li {
     float: left;
 }
-p:hover{
+
+p:hover {
     cursor: pointer;
 }
-.fl{
+
+.fl {
     float: left;
 }
-.fr{
+
+.fr {
     float: right;
 }
 
-.display_hide{
+.display_hide {
     display: none;
 }
-.display_show{
+
+.display_show {
     display: block;
 }
-.opacity_1{
+
+.opacity_1 {
     opacity: 1;
 }
-.opacity_04{
+
+.opacity_04 {
     opacity: 0.4;
+}
+
+/* fade 淡化进出 */
+
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}
+
+.fade-leave, .fade-enter-to {
+    opacity: 1;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: all .5s ease;
+}
+
+/*scale 缩放进出*/
+
+.scale-enter, .scale-leave-to {
+    transform: scale(0)
+}
+
+.scale-leave, .scale-enter-to {
+    transform: scale(1)
+}
+
+.scale-enter-active, .scale-leave-active {
+    transition: all .2s
+}
+
+/* left 左侧进出 (通常用于左侧边栏) */
+
+.left-enter, .left-leave-to {
+    transform: translate3d(-100%, 0, 0)
+}
+
+.left-leave, .left-enter-to {
+    transform: translate3d(0, 0, 0)
+}
+
+.left-enter-active, .left-leave-active {
+    transition: all .2s
+}
+
+/* right 右侧进出 (通常用于右侧边栏) */
+
+.right-enter, .right-leave-to {
+    transform: translate3d(100%, 0, 0)
+}
+
+.right-leave, .right-enter-to {
+    transform: translate3d(0, 0, 0)
+}
+
+.right-enter-active, .right-leave-active {
+    transition: all .2s
+}
+
+/* top 顶部进出 (通常用于提示弹窗) */
+
+.top-enter, .top-leave-to {
+    transform: translate3d(0, -100%, 0)
+}
+
+.top-leave, .top-enter-to {
+    transform: translate3d(0, 0, 0)
+}
+
+.top-enter-active, .top-leave-active {
+    transition: all .2s
 }
