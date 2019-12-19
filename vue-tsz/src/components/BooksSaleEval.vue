@@ -30,7 +30,7 @@ export default {
         if(RetData=={}){
           console.log("Reuest Error");
         }else{
-          const data = res.data;
+          const data = RetData.data;
           data.forEach((perChart)=>{
             if(this.showType == 0 && perChart.name == "sale_history"){
               self.saleoptions = perChart.options;

@@ -240,7 +240,7 @@ export default {
     }
   },
   async created(){
-    await init_user_book();
+    await this.init_user_book();
   },
   mounted() {
   }
