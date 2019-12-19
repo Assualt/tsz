@@ -584,7 +584,7 @@ export default {
       this.bshowNewAddressModel = true;
       this.bus.$emit("ReceiveMessage", true);
     },
-    onSubmit() {
+    async onSubmit() {
       //login
       //safe check
       if (this.submitData.username == "" || this.submitData.password == "") {
@@ -599,93 +599,78 @@ export default {
         this.confirmData.show = true;
         return;
       }
-      const self = this;
-      this.axios
-        .post("api/login", {
-          name: self.submitData.username,
-          passwd: this.$md5(self.submitData.password)
-        })
-        .then(res => {
-          const ResultData = res.data;
-          if (ResultData.status != 200) {
-            console.log("登录失败" + ResultData.message);
-            return;
-          } else if (ResultData.info.code != 200) {
-            console.log("登录失败" + ResultData.info.message);
-            return;
-          } else {
-            //Recevive =  sha1;cookie;Expires(d);md5
-            let CookiesMsg = ResultData.info.message.split(";");
-            if (CookiesMsg.length != 3) {
-              console.log(
-                "Such user(" +
-                  this.submitData.username +
-                  ") Receive Cookie msg is not Corrected." +
-                  CookiesMsg
-              );
-              return;
-            }
-            var strCookieMd5 = CookiesMsg[0];
-            var strCookie = CookiesMsg[1];
-            var strCookieExpireDays = parseInt(CookiesMsg[2], 10);
-            //坑 js/md5 与python/md5 不一致 使用sha1函数
-            var CalcSha1 = this.$sha1(CookiesMsg[1]);
-            if (CalcSha1 != strCookieMd5) {
-              console.log("Cookie " + strCookieMd5 + " is not invalid");
-              return;
-            }
-            this.$cookies.set(
-              this.$app.APP_COOKIE_NAME,
-              strCookie,
-              strCookieExpireDays
-            );
-            console.log(
-              "登录成功 currentCookie:" +
-                this.$cookies.get(this.$app.APP_COOKIE_NAME) +
-                " set OK"
-            );
-            //多次请求 不能并列执行，因为axios是 异步模式，不能保证执行的顺序
-            //set to the state
-            this.$store.commit("setCurrentCookie", strCookie);
-            self.currentState = 1;
-            this.axios
-              .post("api/getinfo", {
-                s_user: this.submitData.username,
-                s_token: this.$cookies.get(this.$app.APP_COOKIE_NAME)
-              })
-              .then(res => {
-                const ResultData = res.data;
-                if (ResultData.status != 200) {
-                  console.log("获取用户数据失败!" + ResultData.message);
-                  return;
-                } else if (ResultData.info.code != 200) {
-                  console.log("获取用户数据失败!" + ResultData.info.message);
-                  return;
-                } else {
-                  console.log(
-                    "获取用户数据成功!" +
-                      JSON.stringify(ResultData.info.message)
-                  );
-                  self.userInfo.account = ResultData.info.message.name;
-                  self.userInfo.nickName = ResultData.info.message.nichen;
-                  self.userInfo.gender = parseInt(ResultData.info.message.sex);
-                  self.userInfo.address = ResultData.info.message.address;
-                  self.userInfo.university = ResultData.info.message.uni;
-                  self.userInfo.description = ResultData.info.message.desc;
-                  self.userInfo_const = self.userInfo;
-                }
-              })
-              .catch(err => {
-                console.log("获取用户信息数据失败!" + err);
-              });
-          }
-        })
-        .catch(err => {
-          console.log("Request Error For Err" + err);
-          return false;
-        });
+      let loginParams = {
+        name: this.submitData.username,
+        passwd: this.$md5(this.submitData.password)
+      };
+      let Result = await this.axios_post("api/login", loginParams);
+      if (Result == {}) return;
+      let ResultData = Result.data;
+      if (ResultData.status != 200) {
+        console.log("登录失败" + ResultData.message);
+        return;
+      } else if (ResultData.info.code != 200) {
+        console.log("登录失败" + ResultData.info.message);
+        return;
+      } else {
+        let CookiesMsg = ResultData.info.message.split(";");
+        if (CookiesMsg.length != 3) {
+          console.log(
+            "Such user(" +
+              this.submitData.username +
+              ") Receive Cookie msg is not Corrected." +
+              CookiesMsg
+          );
+          return;
+        }
+        var strCookieMd5 = CookiesMsg[0];
+        var strCookie = CookiesMsg[1];
+        var strCookieExpireDays = parseInt(CookiesMsg[2], 10);
+        //坑 js/md5 与python/md5 不一致 使用sha1函数
+        var CalcSha1 = this.$sha1(CookiesMsg[1]);
+        if (CalcSha1 != strCookieMd5) {
+          console.log("Cookie " + strCookieMd5 + " is not invalid");
+          return;
+        }
+        this.$cookies.set(
+          this.$app.APP_COOKIE_NAME,
+          strCookie,
+          strCookieExpireDays
+        );
+        console.log(
+          "登录成功 currentCookie:" +
+            this.$cookies.get(this.$app.APP_COOKIE_NAME) +
+            " set OK"
+        );
+      }
+
+      let getInfoParams = {
+        s_user: this.submitData.username,
+        s_token: this.$cookies.get(this.$app.APP_COOKIE_NAME)
+      };
+      Result = await this.axios_post("api/getinfo", getInfoParams);
+      if (Result == {}) return;
+      ResultData = Result.data;
+      if (ResultData.status != 200) {
+        console.log("获取用户数据失败!" + ResultData.message);
+        return;
+      } else if (ResultData.info.code != 200) {
+        console.log("获取用户数据失败!" + ResultData.info.message);
+        return;
+      }
+      console.log(
+        "获取用户数据成功!" + JSON.stringify(ResultData.info.message)
+      );
+      this.userInfo.account = ResultData.info.message.name;
+      this.userInfo.nickName = ResultData.info.message.nichen;
+      this.userInfo.gender = parseInt(ResultData.info.message.sex);
+      this.userInfo.address = ResultData.info.message.address;
+      this.userInfo.university = ResultData.info.message.uni;
+      this.userInfo.description = ResultData.info.message.desc;
+      this.userInfo_const = this.userInfo;
+      this.currentState = 1;
     },
-    onRegister() {
+    async onRegister() {
       if (this.submitData.username == "" || this.submitData.password == "") {
         this.toolTipData.class = "alert-warning";
         this.toolTipData.text = "当前输入的用户名为空或者密码输入为空";
@@ -699,58 +684,46 @@ export default {
         return;
       }
       const self = this;
-      this.axios
-        .post("api/register", {
-          name: self.submitData.username,
-          passwd: self.$md5(self.submitData.password),
-          identifying_code: self.submitData.confirmp
-        })
-        .then(res => {
-          const ResultData = res.data;
-          if (ResultData.status != 200) {
-            console.log("注册失败!" + ResultData.message);
-            return;
-          } else if (ResultData.info.code != 200) {
-            console.log("注册失败!" + ResultData.info.message);
-            return;
-          } else {
-            console.log("注册成功!");
-          }
-        })
-        .catch(err => {
-          console.log("Request Error for Err " + err);
-        });
+      let RegisterParam = {
+        name: self.submitData.username,
+        passwd: self.$md5(self.submitData.password),
+        identifying_code: self.submitData.confirmp
+      };
+      const Result = await this.axios_post("api/register", RegisterParam);
+      if (Result == {}) return;
+      const ResultData = Result.data;
+      if (ResultData.status != 200) {
+        console.log("注册失败!" + ResultData.message);
+        return;
+      } else if (ResultData.info.code != 200) {
+        console.log("注册失败!" + ResultData.info.message);
+        return;
+      }
+      console.log("注册成功!");
       // this.checkLoginStatus(0);
     },
-    forgetPassword() {
+    async forgetPassword() {
       if (this.submitData.username == "") {
         this.toolTipData.class = "alert-warning";
         this.toolTipData.text = "当前输入的用户名为空,获取验证码失败";
       } else {
-        this.axios
-          .get("api/verify", {
-            params: {
-              name: this.submitData.username,
-              type: 2
-            }
-          })
-          .then(res => {
-            const ResultData = res.data;
-            if (ResultData.status != 200) {
-              this.toolTipData.text = ResultData["message"];
-              this.toolTipData.class = "alert-danger";
-            } else if (ResultData["info"]["code"] != 200) {
-              this.toolTipData.text = ResultData["info"]["message"];
-              this.toolTipData.class = "alert-danger";
-            } else {
-              this.toolTipData.text = "验证码已发送,请注意查收!";
-              this.toolTipData.class = "alert-info";
-            }
-          })
-          .catch(err => {
-            this.toolTipData.class = "alert-danger";
-            this.toolTipData.text = err.toString();
-          });
+        let Params = {
+          name: this.submitData.username,
+          type: 2
+        };
+        const Result = await this.axios_get("api/verify", Params);
+        if (Result == {}) return;
+        const ResultData = Result.data;
+        if (ResultData.status != 200) {
+          this.toolTipData.text = ResultData["message"];
+          this.toolTipData.class = "alert-danger";
+        } else if (ResultData["info"]["code"] != 200) {
+          this.toolTipData.text = ResultData["info"]["message"];
+          this.toolTipData.class = "alert-danger";
+        } else {
+          this.toolTipData.text = "验证码已发送,请注意查收!";
+          this.toolTipData.class = "alert-info";
+        }
       }
       this.toolTipData.display = true;
       this.toolTipData.strongtext = "淘书斋提醒:";
@@ -762,35 +735,32 @@ export default {
       this.countDown();
     },
     //获取验证码
-    getConfirmNum: function() {
+    async getConfirmNum() {
       if (this.submitData.username == "") {
         this.toolTipData.class = "alert-warning";
         this.toolTipData.text = "当前输入的用户名为空,获取验证码失败";
       } else {
-        this.axios
-          .get("api/verify", {
-            params: {
-              name: this.submitData.username,
-              type: 1
-            }
-          })
-          .then(res => {
-            const ResultData = res.data;
-            if (ResultData.status != 200) {
-              this.toolTipData.text = ResultData["message"];
-              this.toolTipData.class = "alert-danger";
-            } else if (ResultData["info"]["code"] != 200) {
-              this.toolTipData.text = ResultData["info"]["message"];
-              this.toolTipData.class = "alert-danger";
-            } else {
-              this.toolTipData.text = "验证码已发送,请注意查收!";
-              this.toolTipData.class = "alert-info";
-            }
-          })
-          .catch(err => {
+        let Params = {
+          name: this.submitData.username,
+          type: 1
+        };
+        const Result = this.axios_post("api/verify",Params);
+        if(Result=={}){
+          this.toolTipData.class = "alert-danger";
+          this.toolTipData.text = err.toString();
+        }else{
+          const ResultData = Result.data;
+          if (ResultData.status != 200) {
+            this.toolTipData.text = ResultData["message"];
             this.toolTipData.class = "alert-danger";
-            this.toolTipData.text = err.toString();
-          });
+          } else if (ResultData["info"]["code"] != 200) {
+            this.toolTipData.text = ResultData["info"]["message"];
+            this.toolTipData.class = "alert-danger";
+          } else {
+            this.toolTipData.text = "验证码已发送,请注意查收!";
+            this.toolTipData.class = "alert-info";
+          }
+        }
       }
       this.toolTipData.display = true;
       this.toolTipData.strongtext = "淘书斋提醒:";

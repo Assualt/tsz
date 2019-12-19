@@ -454,14 +454,12 @@ export default {
     },
     getHeight: function(Item) {
       return Item.goods_info.length * 145;
-    }
-  },
-  mounted() {
-    var _this = this;
-    this.axios
-      .get("static/json/cart.json", [])
-      .then(res => {
-        res.data.forEach(data => {
+    },
+    async init_cart_book(){
+      const RetData = await this.axios_get("static/json/cart.json",[]);
+      const _this = this;
+      if(RetData != {}){
+        RetData.data.forEach(data => {
           if (data.id == "1") {
             _this.cartGoodsShops = data.goods;
             _this.cartGoodsShops.forEach(data => {
@@ -470,7 +468,15 @@ export default {
             });
           }
         });
-      });
+      }
+    }
+  },
+  async created(){
+    await this.init_cart_book();
+  },
+  mounted() {
+
+    
   },
   computed:{
     

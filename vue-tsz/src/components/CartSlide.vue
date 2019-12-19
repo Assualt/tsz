@@ -214,14 +214,18 @@ export default {
       guessLikeCurrentIndex: 0
     };
   },
+  async created(){
+    await this.Init();
+  },
   mounted() {
-    this.Init();
+    
   },
   methods: {
-    Init: function() {
+    async Init() {
       var _this = this;
-      this.axios.get("static/json/daily_interest.json", []).then(res => {
-        let allData = res.data;
+      const RetData = await this.axios_get("static/json/daily_interest.json",[]);
+      if (RetData != {}) {
+        let allData = RetData.data;
         allData.forEach(data => {
           if (data.name === "guess_like") {
             _this.guessLikeAll = data.item;
@@ -246,7 +250,7 @@ export default {
             }
           }
         });
-      });
+      }
     },
     lubbo: function() {
       $("#daily_hot").carousel({ interval: 5000 });

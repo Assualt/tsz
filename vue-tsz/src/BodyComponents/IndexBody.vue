@@ -84,28 +84,26 @@ export default {
       this.$store.commit("setCurrentMode", mode);
     }
   },
-  created() {
-    this.axios
-      .get("static/json/hot-topic.json")
-      .then(res => {
-        let allData = res.data;
-        allData.forEach(data => {
-          if (data.name === "hot-topic") {
-            this.hotTopicWord = data.value;
-          } else if (data.name === "hot-bookstore") {
-            this.hotStore = data.value;
-          } else if (data.name === "hot-person") {
-            this.hotPerson = data.value;
-          } else if (data.name === "most-focus") {
-            this.mostFocus = data.value;
-          } else if (data.name === "new-register") {
-            this.newRegister = data.value;
-          }
-        });
-      })
-      .catch(function(err) {
-        console.log("Request Error. err" + err);
+  async created() {
+    const RetData = await this.axios_get("static/json/hot-topic.json",[]);
+    if (RetData == {}) {
+      console.log("Request Data is empty.");
+    } else {
+      const allData = RetData.data;
+      allData.forEach(data => {
+        if (data.name === "hot-topic") {
+          this.hotTopicWord = data.value;
+        } else if (data.name === "hot-bookstore") {
+          this.hotStore = data.value;
+        } else if (data.name === "hot-person") {
+          this.hotPerson = data.value;
+        } else if (data.name === "most-focus") {
+          this.mostFocus = data.value;
+        } else if (data.name === "new-register") {
+          this.newRegister = data.value;
+        }
       });
+    }
   }
 };
 </script>

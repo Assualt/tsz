@@ -104,7 +104,5 @@ class LoginOutModal(Resource):
         logger.info('user:{u} has been logined out'.format(u=s_user))
         return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE,
                                             AppStatus.APP_200_OK, "Loginout OK")
-
-
     def get(self):
         return CommResult.HttpResult.unsupported_method()

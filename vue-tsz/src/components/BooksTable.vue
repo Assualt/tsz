@@ -212,6 +212,17 @@ export default {
       } else if (mode == 1) {
         console.log(123);
       }
+    },
+    async init_user_book(){
+      const RetData = await this.axios_get("static/json/user-book.json",[]);
+      if(RetData != {}){
+        this.PagesManger.allBooks = RetData.data.books;
+        this.PagesManger.maxPages = Math.floor(
+          this.PagesManger.allBooks.length / this.PagesManger.currentShowCnt
+        );
+        //set current books
+        this.calcCurrentBooks(0);
+      }
     }
   },
   filters: {
@@ -228,20 +239,10 @@ export default {
       return val.toFixed(2);
     }
   },
+  async created(){
+    await init_user_book();
+  },
   mounted() {
-    this.axios
-      .get("static/json/user-book.json")
-      .then(res => {
-        this.PagesManger.allBooks = res.data.books;
-        this.PagesManger.maxPages = Math.floor(
-          this.PagesManger.allBooks.length / this.PagesManger.currentShowCnt
-        );
-        //set current books
-        this.calcCurrentBooks(0);
-      })
-      .catch(err => {
-        console.log("catch err" + err);
-      });
   }
 };
 </script>

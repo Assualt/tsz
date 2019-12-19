@@ -191,22 +191,20 @@ export default {
     toggleDropDown: function() {
       this.dropdown_opened = !this.dropdown_opened;
     },
-    loginout: function() {
+    async loginout() {
       if (this.logined) {
-        this.axios
-          .post(this.$app.APP_SERVER_URL + "/loginout", {
-            s_user: "",
-            s_token: this.$cookies.get(this.$app.APP_COOKIE_NAME)
-          })
-          .then(res => {})
-          .catch(err => {});
+        let params = {
+          s_user: "",
+          s_token: this.$cookies.get(this.$app.APP_COOKIE_NAME)
+        };
+        const result = await this.axios_post("api/loginout", params);
+        console.log(result);
       } else {
       }
     }
   },
   mounted: function() {
     //html 加载完成之后执行
-    //Init
     this.bIsLogined = false;
   },
   computed: {

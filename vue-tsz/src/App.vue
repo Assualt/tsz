@@ -13,21 +13,19 @@ export default {
       AllChineseCites: {}
     };
   },
-  created() {
-    let self = this;
-    this.AllCityUniversity = [];
-    this.axios
-      .get("static/json/area_university.json")
-      .then(res => {
-        self.AllCityUniversity = res.data;
-      })
-      .catch(err => {
-        console.log("Request Error." + err);
-      });
-    this.axios
-      .get("static/json/chinese_cities.json")
-      .then(res => {
-        let CitiesData = res.data;
+  methods:{
+    async initUniversities(){
+      try{
+        const retData = await this.axios_get("static/json/area_university.json",[]);
+        this.AllCityUniversity = retData.data;
+      }catch(err){
+        console.log("init Universities failed " + err);
+      }
+    },
+    async initAllCities(){
+      try{
+        const retData = await this.axios_get("static/json/chinese_cities.json",[]);
+        let CitiesData = retData.data;
         const self = this;
         const AllProvinces = CitiesData["86"];
         for (const Provincecode in AllProvinces) {
@@ -47,11 +45,14 @@ export default {
           }
           self.AllChineseCites[AllProvinces[Provincecode]] = cities_disticts;
         }
-      })
-      .catch(err => {
-        console.log("Request Error." + err);
-      });
-    // this.$store.dispatch("setCities",this.AllCityUniversity);
+      }catch(err){
+        console.log("init Universities failed " + err);
+      }
+    }
+  },
+  created() {
+    this.initUniversities();
+    this.initAllCities();
   }
 };
 </script>

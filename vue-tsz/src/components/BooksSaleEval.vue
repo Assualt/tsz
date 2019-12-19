@@ -21,12 +21,15 @@ export default {
     };
   },
   methods: {
-    drawBar(type, options) {
+    async drawBar(type, options) {
       // 基于dom，初始化echarts实例
       let barGraph = echarts.init(document.getElementById("saleEval"));
       if(type == 1){
         const self = this;
-        this.axios.get('static/json/sale_options.json').then(res=>{
+        const RetData = await this.axios_get('static/json/sale_options.json',[]);
+        if(RetData=={}){
+          console.log("Reuest Error");
+        }else{
           const data = res.data;
           data.forEach((perChart)=>{
             if(this.showType == 0 && perChart.name == "sale_history"){
@@ -37,18 +40,14 @@ export default {
               barGraph.setOption(this.saleoptions)
             }
           });
-        }).catch(err=>{
-          console.log("error on axios.get" + err);
-        });
+        }
       }else if(type==2){
         barGraph.setOption(options);
       }
     }
   },
-  mounted() {
-    this.$nextTick(function (){
-      this.drawBar(1,{});
-    });
+  async mounted() {    
+    await this.drawBar(1,{});
   }
 };
 </script>

@@ -45,31 +45,27 @@ export default {
       books: []
     };
   },
-  created() {
+  async created() {
     if (this.type == 0) {
-      this.axios
-        .get("static/json/book-recommend.json", [])
-        .then(res => {
-          this.books = res.data;
-        });
+      const RetData = await this.axios_get("static/json/book-recommend.json",[]);
+      if (RetData != {}) {
+        this.books = RetData.data;
+      }
     } else if (this.type == 1) {
-      this.axios
-        .get("static/json/book-discount.json", [])
-        .then(res => {
-          this.books = res.data;
-        });
+      const RetData = await this.axios_get("static/json/book-discount.json",[]);
+      if (RetData != {}) {
+        this.books = res.data;
+      }
     } else if (this.type == 2) {
-      this.axios
-        .get("static/json/book-new-comment.json", [])
-        .then(res => {
-          this.books = res.data;
-        });
+      const RetData = await this.axios_get("static/json/book-new-comment.json",[]);
+      if (RetData != {}) {
+        this.books = res.data;
+      }
     } else if (this.type == 3) {
-      this.axios
-        .get("static/json/book-popular.json", [])
-        .then(res => {
-          this.books = res.data;
-        });
+      const RetData = await this.axios_get("static/json/book-popular.json",[]);
+      if (RetData != {}) {
+        this.books = res.data;
+      }
     }
   }
 };

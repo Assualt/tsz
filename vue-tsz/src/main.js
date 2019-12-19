@@ -20,6 +20,7 @@ import sha1 from 'js-sha1'
 import app from './constants/App'
 import VueCookies from 'vue-cookies'
 import echarts from 'echarts'
+import VueRouter from 'vue-router'
 
 Vue.use(VueCookies)
 Vue.use(VueAxios,axios)
@@ -31,6 +32,25 @@ Vue.prototype.$sha1 = sha1;
 Vue.prototype.$echars = echarts;
 /* eslint-disable */
 
+//define the axios function
+Vue.prototype.axios_get=async function(url,params){
+  try {
+    const retData = await this.axios.get(url, params);
+    return retData;
+  } catch (error) {
+    console.log("Request " + url + " Failed " + error);
+    return {};
+  }
+};
+Vue.prototype.axios_post=async function(url, params) {
+  try {
+    const retData = await this.axios.post(url, params);
+    return retData;
+  } catch (error) {
+    console.log("Request " + url + " Failed " + error);
+    return {};
+  }
+}
 
 
 let bus = new Vue()
