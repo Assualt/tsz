@@ -604,7 +604,7 @@ export default {
         passwd: this.$md5(this.submitData.password)
       };
       let Result = await this.axios_post("api/login", loginParams);
-      if (Result == {}) return;
+      if (Result == false) return false;
       let ResultData = Result.data;
       if (ResultData.status != 200) {
         console.log("登录失败" + ResultData.message);
@@ -649,7 +649,7 @@ export default {
         s_token: this.$cookies.get(this.$app.APP_COOKIE_NAME)
       };
       Result = await this.axios_post("api/getinfo", getInfoParams);
-      if (Result == {}) return;
+      if (Result ==false) return;
       ResultData = Result.data;
       if (ResultData.status != 200) {
         console.log("获取用户数据失败!" + ResultData.message);
@@ -690,7 +690,7 @@ export default {
         identifying_code: self.submitData.confirmp
       };
       const Result = await this.axios_post("api/register", RegisterParam);
-      if (Result == {}) return;
+      if (Result ==false) return;
       const ResultData = Result.data;
       if (ResultData.status != 200) {
         console.log("注册失败!" + ResultData.message);
@@ -712,7 +712,7 @@ export default {
           type: 2
         };
         const Result = await this.axios_get("api/verify", Params);
-        if (Result == {}) return;
+        if (Result ==false) return;
         const ResultData = Result.data;
         if (ResultData.status != 200) {
           this.toolTipData.text = ResultData["message"];
@@ -745,7 +745,7 @@ export default {
           type: 1
         };
         const Result = this.axios_post("api/verify",Params);
-        if(Result=={}){
+        if(Result==false){
           this.toolTipData.class = "alert-danger";
           this.toolTipData.text = err.toString();
         }else{
@@ -934,7 +934,7 @@ export default {
   },
   data() {
     return {
-      currentState: 0,
+      currentState: 4,
       title: "登录淘书斋",
       submitData: {
         //提交的表单数据

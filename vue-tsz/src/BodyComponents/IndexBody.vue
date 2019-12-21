@@ -86,7 +86,7 @@ export default {
   },
   async created() {
     const RetData = await this.axios_get("static/json/hot-topic.json",[]);
-    if (RetData == {}) {
+    if (RetData ==false) {
       console.log("Request Data is empty.");
     } else {
       const allData = RetData.data;

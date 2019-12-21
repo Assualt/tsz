@@ -458,7 +458,7 @@ export default {
     async init_cart_book(){
       const RetData = await this.axios_get("static/json/cart.json",[]);
       const _this = this;
-      if(RetData != {}){
+      if(RetData !=false){
         RetData.data.forEach(data => {
           if (data.id == "1") {
             _this.cartGoodsShops = data.goods;

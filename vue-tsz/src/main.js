@@ -48,7 +48,7 @@ Vue.prototype.axios_post=async function(url, params) {
     return retData;
   } catch (error) {
     console.log("Request " + url + " Failed " + error);
-    return {};
+    return false;
   }
 }
 

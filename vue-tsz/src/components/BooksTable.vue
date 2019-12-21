@@ -215,7 +215,7 @@ export default {
     },
     async init_user_book(){
       const RetData = await this.axios_get("static/json/user-book.json",[]);
-      if(RetData != {}){
+      if(RetData != false){
         this.PagesManger.allBooks = RetData.data.books;
         this.PagesManger.maxPages = Math.floor(
           this.PagesManger.allBooks.length / this.PagesManger.currentShowCnt

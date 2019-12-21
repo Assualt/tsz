@@ -48,22 +48,22 @@ export default {
   async created() {
     if (this.type == 0) {
       const RetData = await this.axios_get("static/json/book-recommend.json",[]);
-      if (RetData != {}) {
+      if (RetData !=false) {
         this.books = RetData.data;
       }
     } else if (this.type == 1) {
       const RetData = await this.axios_get("static/json/book-discount.json",[]);
-      if (RetData != {}) {
+      if (RetData != false) {
         this.books = RetData.data;
       }
     } else if (this.type == 2) {
       const RetData = await this.axios_get("static/json/book-new-comment.json",[]);
-      if (RetData != {}) {
+      if (RetData != false) {
         this.books = RetData.data;
       }
     } else if (this.type == 3) {
       const RetData = await this.axios_get("static/json/book-popular.json",[]);
-      if (RetData != {}) {
+      if (RetData != false) {
         this.books = RetData.data;
       }
     }
