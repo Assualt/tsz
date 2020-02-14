@@ -59,8 +59,8 @@ class IdentityModal(Resource):
     def get(self):
         data = self.parser.parse_args()
         username = data.get('name')
-        type = data.get('type')
-
+        utype = data.get('type')
+        logger.info("get {u} and type:{t}".format(u=username,t=utype))
         identity_code  = self.get_random_number()
 
         ###
@@ -68,13 +68,13 @@ class IdentityModal(Resource):
         # please in IDentityCode_TimeOut to update
         ###
 
-        if type == 1:
+        if utype == 1:
             # Register Identity Code
             key = 'R' + username
             result = Redis.setX(key,identity_code, IDentityCode_TimeOut)
             if result['status'] == Config.EXEC_FAILED:
                 return CommResult.HttpResult.format(HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE, AppStatus.APP_500_INTERNAL_ERROR, result['result'])
-        elif type == 2:
+        elif utype == 2:
             # forget password to Idenity Code
             key = 'F' + username
             result = Redis.setX(key, identity_code, IDentityCode_TimeOut)

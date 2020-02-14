@@ -155,10 +155,14 @@ export default {
       }
       if (this.universities.length !== 0) {
         if (index === -1) {
-          //所有学校全部Append
+          //所有学校全部Appendx
           self.CurrentCityUniversity = [];
           self.CurrentCityUniversity.push("所有学校");
           this.universities.forEach(data => {
+            // console.log(JSON.stringify(data));
+            if(data.university===undefined){
+              return;
+            }
             data.university.forEach((uni, index) => {
               if (index !== 0) self.CurrentCityUniversity.push(uni.name);
             });
@@ -186,20 +190,61 @@ export default {
       this.bus.$emit("ReceiveMessage", false);
     },
     checkLoginStatus: function(mode) {
-      this.$store.commit("setCurrentMode", mode);
+      if(this.$store.state.isLogined == false)
+        this.$store.commit("setCurrentMode", mode);
+      else{
+        this.$swal({
+          title:'淘书斋提醒',
+          text:'当前用户已经登录，不能注册!\n 如需注册，请先注销后，再注册!',
+          type:'info'
+        });
+      }
     },
     toggleDropDown: function() {
       this.dropdown_opened = !this.dropdown_opened;
     },
     async loginout() {
+      const self = this;
       if (this.logined) {
-        let params = {
-          s_user: "",
-          s_token: this.$cookies.get(this.$app.APP_COOKIE_NAME)
-        };
-        const result = await this.axios_post("api/loginout", params);
-        console.log(result);
+        this.$swal({
+          title:'淘书摘提醒',
+          text:'确认退出登录',
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          focusCancel:true,
+          type:'question',
+        }).then(async function(ret){
+          if(ret.value){
+            let params = {
+              s_user: "",
+              s_token: self.$cookies.get(self.$app.APP_COOKIE_NAME)
+            };
+            const result = await self.axios_post("api/loginout", params);
+            self.$store.commit('setCurrentCookie', null);
+            self.$cookies.remove(self.$app.APP_COOKIE_NAME);
+            self.$store.commit('setLogined',false);
+            self.bIsLogined = false;
+            self.$swal({
+              title:'淘书斋提醒',
+              text:'注销成功',
+              type:'success',
+              confirmButtonText:'确定',
+              showCancelButton:false,
+              focusConfirm:true
+            });
+          }else{
+            self.$swal({
+              title:'淘书斋提醒',
+              text:'注销取消',
+              type:'success',
+              confirmButtonText:'确定',
+              showCancelButton:false,
+              focusConfirm:true
+            });
+          }
+        });
       } else {
+        console.log("当前用户没有登录，无需注销");
       }
     }
   },
@@ -209,7 +254,8 @@ export default {
   },
   computed: {
     logined() {
-      if (this.$store.state.CurrentCookie != "") this.bIsLogined = true;
+      var currentCookie = this.$store.state.CurrentCookie;
+      if (currentCookie != "" && currentCookie != null) this.bIsLogined = true;
       return this.bIsLogined;
     }
   },

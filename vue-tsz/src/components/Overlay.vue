@@ -42,5 +42,11 @@ export default {
   z-index: 1000;
   position: fixed;
 }
+.display_hide{
+  display: none;
+}
+.display_show{
+  display: block;
+}
 /*end of overlay*/
 </style>

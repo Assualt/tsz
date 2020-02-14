@@ -3,13 +3,13 @@
     <div class="form-group" style="height:30px">
       <div class="col-md-4">
         <label for="saleType">请选择类别</label>
-        <select id="saleType" class="from-control" v-model="saleTypeChoice" @change="selectBar">
+        <select id="saleType" class="form-control" v-model="saleTypeChoice" @change="selectBar">
           <option v-for="(data,index) in saleType" :key="index">{{data}}</option>
         </select>
       </div>
       <div class="col-md-4">
         <label for="saleTime">请选择年份</label>
-        <select id="saleTime" class="from-control" v-model="saleTypeYear">
+        <select id="saleTime" class="form-control" v-model="saleTypeYear">
           <option v-for="(data,index) in dateRangeYear" :key="index">{{data}}</option>
         </select>
       </div>
@@ -81,7 +81,8 @@ export default {
 
 <style scoped>
 #saleEval {
+  margin-top: 50px;
   width: 685px;
-  height: 630px;
+  height: 620px;
 }
 </style>

@@ -22,10 +22,13 @@ import VueCookies from 'vue-cookies'
 import echarts from 'echarts'
 import VueRouter from 'vue-router'
 
-Vue.use(VueCookies)
+//引入组件
+import VueSweetalert2 from './plugins/vue-sweetalert2'
+
+Vue.use(VueSweetalert2)
 Vue.use(VueAxios,axios)
 
-
+Vue.prototype.$cookies = VueCookies;
 Vue.prototype.$md5 = md5;
 Vue.prototype.$app = app;
 Vue.prototype.$sha1 = sha1;
@@ -35,7 +38,7 @@ Vue.prototype.$echars = echarts;
 //define the axios function
 Vue.prototype.axios_get=async function(url,params){
   try {
-    const retData = await this.axios.get(url, params);
+    var retData =await this.axios.get(url, {params});
     return retData;
   } catch (error) {
     console.log("Request " + url + " Failed " + error);

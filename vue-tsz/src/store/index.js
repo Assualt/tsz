@@ -8,7 +8,8 @@ Vue.use(Vuex)
 const state = {
   AllCityUniversities:[],
   CurrentMode:0, //user info mode-> mode:0 login mode:1 Register
-  CurrentCookie:''
+  CurrentCookie:'',
+  isLogined:false,
 };
 
 const getters = {
@@ -20,6 +21,9 @@ const getters = {
   },
   getCurrentCookie(state){
     return state.CurrentCookie;
+  },
+  getLogined(state){
+    return state.isLogined;
   }
 };
 
@@ -34,8 +38,10 @@ const mutations = {
   },
   setCurrentCookie(state, cookie){
     state.CurrentCookie = cookie;
+  },
+  setLogined(state, logined){
+    state.isLogined = logined;
   }
-
 
 }
 
@@ -48,6 +54,9 @@ const actions = {
     },
     asyncCurrentCookie(commit, cookie){
       commit('setCurrentCookie', cookie);
+    },
+    asyncLogined(commit, flag){
+      commit('setLogined', flag);
     }
 };
 

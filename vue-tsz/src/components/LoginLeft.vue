@@ -41,16 +41,13 @@
           <a class="hvr-grow" @click="clickTo(4)">图书售卖记录</a>
         </li>
         <li :class="[currentState == 5 ? 'more_list_li_active':'disabled']">
-          <a class="hvr-grow" @click="clickTo(5)">图书买入</a>
+          <a class="hvr-grow" @click="clickTo(5)">日志记录</a>
         </li>
         <li :class="[currentState == 6 ? 'more_list_li_active':'disabled']">
-          <a class="hvr-grow" @click="clickTo(6)">日志记录</a>
+          <a class="hvr-grow" @click="clickTo(6)">收益评估</a>
         </li>
         <li :class="[currentState == 7 ? 'more_list_li_active':'disabled']">
-          <a class="hvr-grow" @click="clickTo(7)">收益评估</a>
-        </li>
-        <li :class="[currentState == 8 ? 'more_list_li_active':'disabled']">
-          <a class="hvr-grow" @click="clickTo(8)">修改密码</a>
+          <a class="hvr-grow" @click="clickTo(7)">修改密码</a>
         </li>
         <li>
           <a href="#" @click="ExitStatusInfo(false)">退出登录</a>

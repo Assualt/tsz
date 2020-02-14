@@ -70,7 +70,7 @@ export default {
   background: #f5f5f5;
   padding: 20px 14%;
   margin: 15px 0 1% 0;
-  height: 320px;
+  height: 370px;
 }
 .slider_view_btn {
   width: 100%;

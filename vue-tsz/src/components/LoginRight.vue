@@ -18,21 +18,18 @@
           <a href="#" @click="clickTo(4)">售卖记录</a>
         </li>
         <li :class="checkCurrent(5)">
-          <a href="#" @click="clickTo(5)">买入</a>
+          <a href="#" @click="clickTo(5)">登录日志</a>
         </li>
         <li :class="checkCurrent(6)">
-          <a href="#" @click="clickTo(6)">登录日志</a>
+          <a href="#" @click="clickTo(6)">评估</a>
         </li>
         <li :class="checkCurrent(7)">
-          <a href="#" @click="clickTo(7)">评估</a>
-        </li>
-        <li :class="checkCurrent(8)">
-          <a href="#" @click="clickTo(8)">其他</a>
+          <a href="#" @click="clickTo(7)">其他</a>
         </li>
       </ul>
     </div>
     <div class="tab-content main_body">
-      <div class="tab-pane in active" id="login" v-if="currentState == 0">
+      <div class="tab-pane in active" id="login" v-if="!Logined && currentState == 0">
         <h1>{{title}}</h1>
         <hr />
         <form action class="form-horizontal" role="form" method="get">
@@ -112,6 +109,7 @@
             <div class="col-sm-3"></div>
             <div class="col-sm-2">
               <input
+                type="button"
                 value="重置"
                 class="btn btn-primary form-control"
                 @click="submitData.password= ''; submitData.againpsw ='';"
@@ -120,12 +118,14 @@
             <div class="col-sm-2">
               <input
                 v-if="Mode==0"
+                type="=button"
                 value="登录"
                 class="btn btn-warning form-control"
                 @click="onSubmit"
               />
               <input
                 v-else-if="Mode==1"
+                type="button"
                 value="注册"
                 class="btn btn-warning form-control"
                 @click="onRegister"
@@ -150,7 +150,7 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane in active" id="basic_info" v-else-if="currentState==1">
+      <div class="tab-pane in active" id="basic_info" v-else-if="Logined && currentState==1">
         <div class="container-fluid">
           <form class="form-horizontal" role="form" id="basic_info_1">
             <fieldset>
@@ -303,7 +303,7 @@
           </form>
         </div>
       </div>
-      <div class="tab-pane in active" id="address_management" v-else-if="currentState==2">
+      <div class="tab-pane in active" id="address_management" v-else-if="Logined && currentState==2">
         <form class="form-horizontal" id="basic_info_2">
           <fieldset>
             <legend>管理收货地址</legend>
@@ -500,10 +500,10 @@
           </fieldset>
         </form>
       </div>
-      <div class="tab-pane in active" id v-else-if="currentState==3">
+      <div class="tab-pane in active" id v-else-if="Logined && currentState==3">
         <TSZBookTable></TSZBookTable>
       </div>
-      <div class="tab-pane in active" id v-else-if="currentState==4">
+      <div class="tab-pane in active" id v-else-if="Logined && currentState==4">
         <TSZBooksEval></TSZBooksEval>
       </div>
     </div>
@@ -524,7 +524,7 @@ export default {
   methods: {
     checkCurrent(Index) {
       if (this.currentState == 0) {
-        if (Index >= 1 && Index <= 8) {
+        if (Index >= 1 && Index <= 7) {
           return "disabled";
         } else {
           if (Index == 0) {
@@ -557,11 +557,7 @@ export default {
     //设置默认地址
     setDefaultAddress: function(item) {
       for (var i = 0; i < this.Address.length; i++) {
-        if (this.Address[i].id == item.id) {
-          this.Address[i].bdefault = true;
-        } else {
-          this.Address[i].bdefault = false;
-        }
+        this.Address[i].bdefault = this.Address[i].id == item.id ? true : false;
       }
     },
     deleteAddress: function(item) {
@@ -574,19 +570,18 @@ export default {
     },
     //remove the body padding
     removePaddingAndClosingModel() {
-      console.log("removePaddingAndClosingModel");
       $("body").css("padding-right", 0);
       this.bshowNewAddressModel = false;
       this.bus.$emit("ReceiveMessage", false);
     },
     openNewAddressModel: function() {
-      console.log("Open NewAddressModel");
       this.bshowNewAddressModel = true;
       this.bus.$emit("ReceiveMessage", true);
     },
     async onSubmit() {
       //login
       //safe check
+      const self = this;
       if (this.submitData.username == "" || this.submitData.password == "") {
         this.toolTipData.class = "alert-warning";
         this.toolTipData.text = "当前输入的用户名为空或者密码输入为空";
@@ -607,20 +602,47 @@ export default {
       if (Result == false) return false;
       let ResultData = Result.data;
       if (ResultData.status != 200) {
-        console.log("登录失败" + ResultData.message);
+        this.$swal({
+            title:'淘书斋提醒',
+            text: ResultData.info.message,
+            confirmButtonText:'确定',
+            showCancelButton:false,
+            focusConfirm:true,
+            type:'error',
+            onClose:function(){//显示框关闭 清空密码框
+              self.submitData.password = '' ;
+            }
+          }
+        );
         return;
       } else if (ResultData.info.code != 200) {
-        console.log("登录失败" + ResultData.info.message);
+        this.$swal({
+            title:'淘书斋提醒',
+            text: ResultData.info.message,
+            confirmButtonText:'确定',
+            showCancelButton:false,
+            focusConfirm:true,
+            type:'error',
+            onClose:function(){//显示框关闭 清空密码框
+              self.submitData.password = '' ;
+            }
+          }
+        );
         return;
       } else {
         let CookiesMsg = ResultData.info.message.split(";");
         if (CookiesMsg.length != 3) {
-          console.log(
-            "Such user(" +
-              this.submitData.username +
-              ") Receive Cookie msg is not Corrected." +
-              CookiesMsg
-          );
+          this.$swal({
+            title:'淘书斋提醒',
+            text: 'such user (' + this.submitData.username + ") Receive Cookie msg is not Corrected.",
+            confirmButtonText:'确定',
+            showCancelButton:false,
+            focusConfirm:true,
+            type:'error',
+            onClose:function(){//显示框关闭 清空密码框
+              self.submitData.password = '' ;
+            }
+          });
           return;
         }
         var strCookieMd5 = CookiesMsg[0];
@@ -629,7 +651,14 @@ export default {
         //坑 js/md5 与python/md5 不一致 使用sha1函数
         var CalcSha1 = this.$sha1(CookiesMsg[1]);
         if (CalcSha1 != strCookieMd5) {
-          console.log("Cookie " + strCookieMd5 + " is not invalid");
+          this.$swal({
+            title:'淘书斋提醒',
+            text: 'Cookie is not valid',
+            confirmButtonText:'确定',
+            showCancelButton:false,
+            focusConfirm:true,
+            type:'error',
+          });
           return;
         }
         this.$cookies.set(
@@ -637,13 +666,20 @@ export default {
           strCookie,
           strCookieExpireDays
         );
-        console.log(
-          "登录成功 currentCookie:" +
-            this.$cookies.get(this.$app.APP_COOKIE_NAME) +
-            " set OK"
-        );
+        this.$swal({
+          title:'淘书斋提醒',
+          text:'登录成功',
+          confirmButtonText:'确定',
+          showCancelButton:false,
+          focusConfirm:true,
+          type:'success'
+        });
       }
-
+      //设置cookie 记录到state
+      this.$store.commit('setCurrentCookie',strCookie);
+      //设置登录状态到state
+      this.$store.commit('setLogined', true);
+      this.currentState = 1;
       let getInfoParams = {
         s_user: this.submitData.username,
         s_token: this.$cookies.get(this.$app.APP_COOKIE_NAME)
@@ -652,15 +688,12 @@ export default {
       if (Result ==false) return;
       ResultData = Result.data;
       if (ResultData.status != 200) {
-        console.log("获取用户数据失败!" + ResultData.message);
+        // console.log("获取用户数据失败!" + ResultData.message);
         return;
       } else if (ResultData.info.code != 200) {
-        console.log("获取用户数据失败!" + ResultData.info.message);
+        // console.log("获取用户数据失败!" + ResultData.info.message);
         return;
       }
-      console.log(
-        "获取用户数据成功!" + JSON.stringify(ResultData.info.message)
-      );
       this.userInfo.account = ResultData.info.message.name;
       this.userInfo.nickName = ResultData.info.message.nichen;
       this.userInfo.gender = parseInt(ResultData.info.message.sex);
@@ -668,7 +701,7 @@ export default {
       this.userInfo.university = ResultData.info.message.uni;
       this.userInfo.description = ResultData.info.message.desc;
       this.userInfo_const = this.userInfo;
-      this.currentState = 1;
+      
     },
     async onRegister() {
       if (this.submitData.username == "" || this.submitData.password == "") {
@@ -683,6 +716,9 @@ export default {
         this.confirmData.show = true;
         return;
       }
+      //同意条款
+      
+
       const self = this;
       let RegisterParam = {
         name: self.submitData.username,
@@ -693,13 +729,34 @@ export default {
       if (Result ==false) return;
       const ResultData = Result.data;
       if (ResultData.status != 200) {
-        console.log("注册失败!" + ResultData.message);
+        this.$swal({
+          title:'淘书斋提醒',
+          text:'注册失败!' + ResultData.info.message,
+          type:'error'
+        });
         return;
       } else if (ResultData.info.code != 200) {
-        console.log("注册失败!" + ResultData.info.message);
+        this.$swal({
+          title:'淘书斋提醒',
+          text:'注册失败!' + ResultData.info.message,
+          type:'error'
+        });
         return;
       }
-      console.log("注册成功!");
+      this.$swal({
+          title:'淘书斋提醒',
+          text:'注册成功，3秒后跳入登录界面',
+          confirmButtonText:'确定',
+          showCancelButton:false,
+          focusConfirm:true,
+          type:'success',
+          onClose:function(){
+            //3秒后执行 跳转至登录界面
+            setTimeout(function(){
+              self.$store.commit('setCurrentMode',0);
+            },3000);
+          }
+        });
       // this.checkLoginStatus(0);
     },
     async forgetPassword() {
@@ -744,7 +801,8 @@ export default {
           name: this.submitData.username,
           type: 1
         };
-        const Result = this.axios_post("api/verify",Params);
+        //异步方法 需要await
+        const Result = await this.axios_get("api/verify",Params);
         if(Result==false){
           this.toolTipData.class = "alert-danger";
           this.toolTipData.text = err.toString();
@@ -934,7 +992,7 @@ export default {
   },
   data() {
     return {
-      currentState: 4,
+      currentState: 0,
       title: "登录淘书斋",
       submitData: {
         //提交的表单数据
@@ -1055,13 +1113,20 @@ export default {
     this.universities.forEach(data => {
       self.AllProvinces.push(data.city);
       let unis = [];
-      data.university.forEach((uni, index) => {
-        if (index != 0) unis.push(uni.name);
-      });
+      if(data.university !== undefined){
+        data.university.forEach((uni, index) => {
+          if (index != 0) unis.push(uni.name);
+        }); 
+      }
       self.universities.push({ name: data.city, unis: unis });
     });
     for (const province in this.allcities) {
       self.AllAddressProvince.push(province);
+    }
+    if(!this.Logined){
+      this.currentState = 0;
+    }else{
+      this.currentState = 1;
     }
   },
   filters: {
@@ -1088,6 +1153,14 @@ export default {
     CurrentMode() {
       this.Mode = this.$store.state.CurrentMode;
       return this.$store.state.CurrentMode;
+    },
+    Logined(){
+      var flag = this.$store.state.isLogined;
+      if( flag == false){
+        this.currentState = 0;
+        return false;
+      }
+      return true;
     }
   }
 };
