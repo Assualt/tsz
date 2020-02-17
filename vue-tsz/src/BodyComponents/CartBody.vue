@@ -35,8 +35,8 @@ import TSZCartSlide from "../components/CartSlide"
 export default {
   name: "CartBody",
   components:{
-      TSZGoodsTable,
-      TSZCartSlide
+    TSZGoodsTable,
+    TSZCartSlide
   }
 };
 </script>

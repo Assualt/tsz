@@ -7,7 +7,7 @@
         class="a_school"
         @click="showAllSchool()"
       >&nbsp;[&nbsp;{{targetSchool}}&nbsp;]</a>
-      <transition name="top">
+      <transition name="scale">
         <div v-if="bShow" class="show_school display_show">
           <div class="show_school_head">
             <p class="fl">请选择学校</p>
@@ -56,7 +56,7 @@
           <router-link to="/login" id="login_btn" v-else v-on:click.native="checkLoginStatus(0)">登录</router-link>&nbsp;|
           <ul class="dropdown-menu" role="menu" aria-labelledby="login_btn" v-if="logined">
             <li role="presentation">
-              <router-link role="menuitem" tabindex="-1" to="/index">我的主页</router-link>
+              <router-link role="menuitem" tabindex="-1" to="/login">我的主页</router-link>
             </li>
             <li role="presentation">
               <router-link role="menuitem" tabindex="-1" to="/cart">我的购物车</router-link>

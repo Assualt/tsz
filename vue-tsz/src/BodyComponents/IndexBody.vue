@@ -43,16 +43,16 @@
             <a href="javascript:void(0)" id="joinus">加入用户体验交流群</a>
           </p>
         </div>
-        <TSZHotObject objectName="热门书店" :rdata="hotStore" type="1"></TSZHotObject>
-        <TSZHotObject objectName="热门个人" :rdata="hotPerson" type="1"></TSZHotObject>
-        <TSZHotObject objectName="多人关注" :rdata="mostFocus" type="0"></TSZHotObject>
-        <TSZHotObject objectName="最近注册" :rdata="newRegister" type="0"></TSZHotObject>
+        <TSZHotObject objectName="热门书店" urlpart="hotstore" :rdata="hotStore" type="1"></TSZHotObject>
+        <TSZHotObject objectName="热门个人" urlpart="hotperson" :rdata="hotPerson" type="1"></TSZHotObject>
+        <TSZHotObject objectName="多人关注" urlpart="mostfocus" :rdata="mostFocus" type="0"></TSZHotObject>
+        <TSZHotObject objectName="最近注册" urlpart="recentrgst" :rdata="newRegister" type="0"></TSZHotObject>
       </div>
       <div class="book-list-right fr">
-        <TSZImgSection sectionName="好书推荐" type="0"></TSZImgSection>
-        <TSZImgSection sectionName="打折推荐" type="1"></TSZImgSection>
-        <TSZImgSection sectionName="新书推荐" type="2"></TSZImgSection>
-        <TSZImgSection sectionName="最受欢迎" type="3"></TSZImgSection>
+        <TSZImgSection sectionName="好书推荐" urlpart="excellent" type="0"></TSZImgSection>
+        <TSZImgSection sectionName="打折推荐" urlpart="discount" type="1"></TSZImgSection>
+        <TSZImgSection sectionName="新书推荐" urlpart="newbook" type="2"></TSZImgSection>
+        <TSZImgSection sectionName="最受欢迎" urlpart="popular" type="3"></TSZImgSection>
       </div>
     </div>
   </div>

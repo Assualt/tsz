@@ -11,14 +11,14 @@
       <li class="fl">
         <a href="#">
           降价商品&nbsp;
-          <strong>4</strong>
+          <strong >{{ReducedpriceNum}}</strong>
         </a>
       </li>
       <div class="jg fl">|</div>
       <li class="fl">
         <a href="#">
           库存紧张&nbsp;
-          <strong>4</strong>
+          <strong>{{TightstockNum}}</strong>
         </a>
       </li>
       <div class="fr total">
@@ -122,20 +122,20 @@
                     </div>
                   </div>
                   <div class="fl body_info_type">
-                    <p>出版社&nbsp;{{itt.book_des[0].publisher}}</p>
-                    <p>规格&nbsp;{{itt.book_des[0].size}}</p>
-                    <p>版次&nbsp;{{itt.book_des[0].edition}}</p>
-                    <p>作者&nbsp;{{itt.book_des[0].author}}</p>
+                    <p>出版社&nbsp;{{itt.book_des.publisher}}</p>
+                    <p>规格&nbsp;{{itt.book_des.size}}</p>
+                    <p>版次&nbsp;{{itt.book_des.edition}}</p>
+                    <p>作者&nbsp;{{itt.book_des.author}}</p>
                   </div>
                 </div>
                 <div class="body_else fl body_price">
                   <del>
                     <i class="fa fa-yen"></i>
-                    {{itt.book_des[0].old_price}}
+                    {{itt.book_des.old_price}}
                   </del>
                   <br />
                   <p class="fa fa-yen">
-                    <strong>{{itt.book_des[0].dis_price}}</strong>
+                    <strong>{{itt.book_des.dis_price}}</strong>
                   </p>
                 </div>
                 <div class="body_else fl body_num">
@@ -143,7 +143,7 @@
                     <button type="button" class="fl" value="sub" @click="DecreaseCnt(itt)">-</button>
                     <input
                       type="text"
-                      v-model="itt.book_des[0].num"
+                      v-model="itt.book_des.num"
                       class="fl"
                       name="goods_num"
                       ng-pattern="/[^a-zA-Z]"
@@ -155,7 +155,7 @@
                 <div class="body_else fl body_all_price">
                   <p
                     class="fa fa-yen"
-                  >{{ (itt.book_des[0].num * itt.book_des[0].dis_price).toFixed(2) }}</p>
+                  >{{ (itt.book_des.num * itt.book_des.dis_price).toFixed(2) }}</p>
                 </div>
                 <div class="body_else fl body_op">
                   <a href="#" @click="moveIntoLocale(itt)">移入收藏夹</a>
@@ -167,7 +167,15 @@
           </div>
         </div>
       </li>
+      <div v-if="AllBooksCleared">
+        <h1 align="center">亲，你当前的购物车<i class="fa fa-cart-plus primary" aria-hidden="true"></i>空空如也！</h1>
+        <p align="center" style="color:#123321">
+          <router-link to="/sold">赶紧去挑选基本适合自己的书籍吧.</router-link>
+        </p>
+      </div>
+      
     </ul>
+    
     <div class="all_total fl">
       <div class="all_total_left fl">
         <input
@@ -207,6 +215,10 @@ export default {
   name: "GoodsTable",
   data() {
     return {
+      //降价商品
+      ReducedpriceNum:0,
+      //库存紧张商品
+      TightstockNum:0,
       cartGoodsShops: [],
       cartGoodsNum: 0, //已加入购物车图书数量
       isAllSelected: false, //是否所有购物车商品被全部选中
@@ -217,34 +229,58 @@ export default {
   },
   methods: {
     IncreaseCnt: function(Item) {
-      if (Item.book_des[0].num > 19) {
-        console.log("淘书斋提醒" + "当前商品库存20件，最大选择20件" + "info");
-        Item.book_des[0].num = 20;
+      if ((Item.book_des.num+1) > Item.book_des.buy_limit && Item.book_des.buy_limit != -1) {
+        this.$swal({
+          title:'淘书斋提醒',
+          text:'当前商品限购'+ Item.book_des.buy_limit +'件，最大选择'+ Item.book_des.buy_limit,
+          type:'info',
+          showCancelButton:false
+        });
+        Item.book_des.num = Item.book_des.buy_limit;
       } else {
-        Item.book_des[0].num++;
+        Item.book_des.num++;
       }
       this.handleAllCnt(2, Item, true);
-      // console.log("Increase Cnt" + Item.book_des[0].num);
+      // console.log("Increase Cnt" + Item.book_des.num);
     },
     DecreaseCnt: function(Item) {
-      if (Item.book_des[0].num === 1) {
-        console.log("淘书斋提醒" + "当前至少选择一件商品" +"info");
+      if (Item.book_des.num === 1) {
+        this.$swal({
+          title:'淘书斋提醒',
+          text:'当前至少选择一件商品',
+          type:'info',
+          showCancelButton:false
+        });
       } else {
-        Item.book_des[0].num--;
+        Item.book_des.num--;
       }
       this.handleAllCnt(2, Item, true);
-      // console.log("Decrease Cnt" + Item.book_des[0].num);
     },
     InputChange: function(Item) {
-      if (isNaN(Item.book_des[0].num)) {
-        alert("淘书斋提醒\n" +"你输入的不是一个有效的整数,请重新输入\n");
-        Item.book_des[0].num = 1;
-      } else if (Item.book_des[0].num < 0) {
-        alert("淘书斋提醒\n" + "当前至少选择一件商品\n");
-        Item.book_des[0].num = 1;
-      } else if (Item.book_des[0].num > 20) {
-        alert("淘书斋提醒\n"+"当前商品库存20件，最大选择20件\n");
-        Item.book_des[0].num = 20;
+      if (isNaN(Item.book_des.num)) {
+        this.$swal({
+          title:'淘书斋提醒',
+          text:'你输入的不是一个有效的整数，请重新输入',
+          type:'info',
+          showCancelButton:false
+        })
+        Item.book_des.num = 1;
+      } else if (Item.book_des.num <= 0) {
+        this.$swal({
+          title:'淘书斋提醒',
+          text:'当前至少选择一件商品',
+          type:'info',
+          showCancelButton:false
+        });
+        Item.book_des.num = 1;
+      } else if ((parseInt(Item.book_des.num)+1) > Item.book_des.buy_limit && Item.book_des.buy_limit != -1) {
+        this.$swal({
+          title:'淘书斋提醒',
+          text:'当前商品限购'+ Item.book_des.buy_limit +'件，最大选择' + Item.book_des.buy_limit,
+          type:'info',
+          showCancelButton:false
+        });
+        Item.book_des.num = Item.book_des.buy_limit;
       }
       this.handleAllCnt(2, Item, true);
     },
@@ -256,12 +292,85 @@ export default {
       //移入选中到收藏夹
       console.log("移入选中的进入收藏夹");
     },
-    removeItem: function(good) {
+    removeItem: function(Item) {
+      const self = this;
       //删除商品
-      console.log("remove item");
+      this.$swal({
+        title:'淘书斋提醒',
+        text:'确定删除《' + Item.book_name +'》[' + Item.book_des.author +' 著] 的图书吗?',
+        type:'question',
+        confirmButtonText:'确定',
+        cancelButtonText:'取消',
+        focusCancel:true
+      }).then((ret)=>{
+        if(ret.value){
+          self.cartGoodsShops.forEach(shop=>{
+            shop.goods_info.forEach((book,index)=>{
+              if(book.book_des.ID == Item.book_des.ID){
+                if(book.book_des.tight_stock == true) 
+                  self.TightstockNum--;
+                shop.goods_info.splice(index, 1);
+                self.cartGoodsNum--;
+              };
+            });
+          });
+          self.cartGoodsShops.forEach((shop, index)=>{
+            if(shop.goods_info.length == 0){
+              self.cartGoodsShops.splice(index, 1);
+            }
+          });
+          this.$swal({
+            title:'淘书斋提醒',
+            text:'删除《' + Item.book_name +'》[' + Item.book_des.author +' 著] 的图书成功',
+            type:'success',
+            showCancelButton:false
+          })
+        }
+      });
+      console.log("remove item", JSON.stringify(Item));
+      this.handleAllCnt(2, Item, false);
     },
     removeSeleted: function() {
-      console.log(this.SelectedAllShops.length);
+      if(this.SelectedAllShops.length == 0){
+        return;
+      }
+      let Removetext = "删除";
+      this.SelectedAllShops.forEach((Item)=>{
+        Removetext+= "《" + Item.bookName + "》[" + Item.bookAuthor + " 著],"
+      });
+      this.$swal({
+        title:'淘书斋提醒',
+        text: "确定" + Removetext + "的图书吗？",
+        type:'question',
+        confirmButtonText:'确定',
+        cancelButtonText:'取消',
+        focusCancel:true
+      }).then((ret)=>{
+        if(ret.value){
+          const self = this;
+          this.SelectedAllShops.forEach(Item=>{
+            self.cartGoodsShops.forEach(shop=>{
+              shop.goods_info.forEach((book,index)=>{
+                if(book.book_des.ID == Item.bookID){
+                  shop.goods_info.splice(index,1);
+                  this.handleAllCnt(2, Item, false);
+                }
+              });
+            });
+          });
+          self.cartGoodsShops.forEach((shop, index)=>{
+            if(shop.goods_info.length == 0){
+              self.cartGoodsShops.splice(index, 1);
+            }
+          });
+          this.$swal({
+            title:'淘书斋提醒',
+            text:'删除'+Removetext+ '的图书成功',
+            type:'success',
+            showCancelButton:false
+          })
+        }
+      });
     },
     /**
      * @function: handleAllCnt 处理所有选中的图书
@@ -304,12 +413,12 @@ export default {
               bookStoreID: bookStoreID,
               bookStoreName: bookStoreName,
               bookName: data.book_name,
-              bookID: data.book_des[0].ID,
-              bookAuthor: data.book_des[0].author,
-              bookPrice: data.book_des[0].dis_price,
-              bookCnt: data.book_des[0].num,
+              bookID: data.book_des.ID,
+              bookAuthor: data.book_des.author,
+              bookPrice: data.book_des.dis_price,
+              bookCnt: data.book_des.num,
               bookTotal: (
-                data.book_des[0].dis_price * data.book_des[0].num
+                data.book_des.dis_price * data.book_des.num
               ).toFixed(2)
             });
           });
@@ -327,12 +436,12 @@ export default {
                 bookStoreID: bookStoreID,
                 bookStoreName: bookStoreName,
                 bookName: data.book_name,
-                bookID: data.book_des[0].ID,
-                bookAuthor: data.book_des[0].author,
-                bookPrice: data.book_des[0].dis_price,
-                bookCnt: data.book_des[0].num,
+                bookID: data.book_des.ID,
+                bookAuthor: data.book_des.author,
+                bookPrice: data.book_des.dis_price,
+                bookCnt: data.book_des.num,
                 bookTotal: (
-                  data.book_des[0].dis_price * data.book_des[0].num
+                  data.book_des.dis_price * data.book_des.num
                 ).toFixed(2)
               });
             });
@@ -345,12 +454,12 @@ export default {
                   bookStoreName: bookStoreName,
                   bookStoreID: bookStoreID,
                   bookName: data.book_name,
-                  bookID: data.book_des[0].ID,
-                  bookAuthor: data.book_des[0].author,
-                  bookPrice: data.book_des[0].dis_price,
-                  bookCnt: data.book_des[0].num,
+                  bookID: data.book_des.ID,
+                  bookAuthor: data.book_des.author,
+                  bookPrice: data.book_des.dis_price,
+                  bookCnt: data.book_des.num,
                   bookTotal: (
-                    data.book_des[0].dis_price * data.book_des[0].num
+                    data.book_des.dis_price * data.book_des.num
                   ).toFixed(2)
                 });
               }
@@ -361,7 +470,7 @@ export default {
       var EnableSubmit = this.SelectedAllShops.length == 0 ? true : false;
       $("#btn_js1").attr("disabled", EnableSubmit);
       $("#btn_js2").attr("disabled", EnableSubmit);
-      console.log(JSON.stringify(this.SelectedAllShops));
+      console.log("hjadasda:-->",JSON.stringify(this.SelectedAllShops));
       var _this = this;
       _this.allCount = 0;
       _this.allTotalMoney = 0;
@@ -462,24 +571,32 @@ export default {
         RetData.data.forEach(data => {
           if (data.id == "1") {
             _this.cartGoodsShops = data.goods;
-            _this.cartGoodsShops.forEach(data => {
-              var goods = data.goods_info;
+            _this.cartGoodsShops.forEach(books => {
+              var goods = books.goods_info;
               _this.cartGoodsNum += Object.keys(goods).length;
+              goods.forEach((book)=>{
+                if(book.book_des.tight_stock)
+                  _this.TightstockNum++;
+              })
             });
           }
         });
       }
     }
   },
+  computed:{
+    
+  },
   async created(){
     await this.init_cart_book();
   },
   mounted() {
-
-    
+  
   },
   computed:{
-    
+    AllBooksCleared(){
+      return this.cartGoodsShops.length == 0;
+    }
   }
 };
 </script>
@@ -577,13 +694,14 @@ export default {
 }
 .shop_list {
   width: 100%;
-  height: 760px;
+  height: auto;
   /*border:solid 1px red;*/
   padding: 5px;
-  min-height: 50px;
+  min-height: 200px;
   max-height: 600px;
   overflow: auto;
   margin-bottom: 20px;
+  
 }
 .shop_list li {
   width: 100%;
@@ -610,6 +728,7 @@ export default {
 }
 .discount {
   margin-left: 10px;
+  width: 100%;
 }
 .discount a {
   color: orange;

@@ -7,7 +7,7 @@
     <ul id="hot-object">
       <li v-for="(item,index) in rdata" :key="index">
         <span>
-          <a href="javascript:void(0)" class="fl">
+          <a :href="urlpart+'/'+item.id" class="fl">
             <img :src="item.img_url" alt="图片加载错误" width="32" height="32" />
           </a>
           <p class="fl hvr-grow">{{item.name}}&nbsp;&nbsp;(&nbsp;{{item.id}}&nbsp;)</p>
@@ -19,11 +19,11 @@
     <h4>{{objectName}}</h4>
     <ul class="most-object-list">
       <li class="hvr-grow" v-for="(item,index) in rdata" :key="index">
-        <a :href="item.img_url">
+        <a :href="urlpart+'/'+item.id">
           <img :src="item.img_url" alt="#" width="40" height="40" />
         </a>
       </li>
-    </ul>
+    </ul> 
   </div>
 </template>
 
@@ -35,7 +35,7 @@ export default {
       ownData: []
     };
   },
-  props: ["objectName", "type", "rdata"],
+  props: ["objectName", "type", "rdata", "urlpart"],
   created() {
     this.ownData = this.rdata[this.objectName];
   }

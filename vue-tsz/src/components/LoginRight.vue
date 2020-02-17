@@ -303,7 +303,11 @@
           </form>
         </div>
       </div>
-      <div class="tab-pane in active" id="address_management" v-else-if="Logined && currentState==2">
+      <div
+        class="tab-pane in active"
+        id="address_management"
+        v-else-if="Logined && currentState==2"
+      >
         <form class="form-horizontal" id="basic_info_2">
           <fieldset>
             <legend>管理收货地址</legend>
@@ -567,6 +571,13 @@ export default {
           break;
         }
       }
+      this.$swal({
+        title: "淘书斋提醒",
+        text: "删除收货地址成功",
+        type: "success",
+        showCancelButton: false,
+        confirmButtonText: "确定"
+      });
     },
     //remove the body padding
     removePaddingAndClosingModel() {
@@ -603,44 +614,48 @@ export default {
       let ResultData = Result.data;
       if (ResultData.status != 200) {
         this.$swal({
-            title:'淘书斋提醒',
-            text: ResultData.info.message,
-            confirmButtonText:'确定',
-            showCancelButton:false,
-            focusConfirm:true,
-            type:'error',
-            onClose:function(){//显示框关闭 清空密码框
-              self.submitData.password = '' ;
-            }
+          title: "淘书斋提醒",
+          text: ResultData.info.message,
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          focusConfirm: true,
+          type: "error",
+          onClose: function() {
+            //显示框关闭 清空密码框
+            self.submitData.password = "";
           }
-        );
+        });
         return;
       } else if (ResultData.info.code != 200) {
         this.$swal({
-            title:'淘书斋提醒',
-            text: ResultData.info.message,
-            confirmButtonText:'确定',
-            showCancelButton:false,
-            focusConfirm:true,
-            type:'error',
-            onClose:function(){//显示框关闭 清空密码框
-              self.submitData.password = '' ;
-            }
+          title: "淘书斋提醒",
+          text: ResultData.info.message,
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          focusConfirm: true,
+          type: "error",
+          onClose: function() {
+            //显示框关闭 清空密码框
+            self.submitData.password = "";
           }
-        );
+        });
         return;
       } else {
         let CookiesMsg = ResultData.info.message.split(";");
         if (CookiesMsg.length != 3) {
           this.$swal({
-            title:'淘书斋提醒',
-            text: 'such user (' + this.submitData.username + ") Receive Cookie msg is not Corrected.",
-            confirmButtonText:'确定',
-            showCancelButton:false,
-            focusConfirm:true,
-            type:'error',
-            onClose:function(){//显示框关闭 清空密码框
-              self.submitData.password = '' ;
+            title: "淘书斋提醒",
+            text:
+              "such user (" +
+              this.submitData.username +
+              ") Receive Cookie msg is not Corrected.",
+            confirmButtonText: "确定",
+            showCancelButton: false,
+            focusConfirm: true,
+            type: "error",
+            onClose: function() {
+              //显示框关闭 清空密码框
+              self.submitData.password = "";
             }
           });
           return;
@@ -652,12 +667,12 @@ export default {
         var CalcSha1 = this.$sha1(CookiesMsg[1]);
         if (CalcSha1 != strCookieMd5) {
           this.$swal({
-            title:'淘书斋提醒',
-            text: 'Cookie is not valid',
-            confirmButtonText:'确定',
-            showCancelButton:false,
-            focusConfirm:true,
-            type:'error',
+            title: "淘书斋提醒",
+            text: "Cookie is not valid",
+            confirmButtonText: "确定",
+            showCancelButton: false,
+            focusConfirm: true,
+            type: "error"
           });
           return;
         }
@@ -667,25 +682,25 @@ export default {
           strCookieExpireDays
         );
         this.$swal({
-          title:'淘书斋提醒',
-          text:'登录成功',
-          confirmButtonText:'确定',
-          showCancelButton:false,
-          focusConfirm:true,
-          type:'success'
+          title: "淘书斋提醒",
+          text: "登录成功",
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          focusConfirm: true,
+          type: "success"
         });
       }
       //设置cookie 记录到state
-      this.$store.commit('setCurrentCookie',strCookie);
+      this.$store.commit("setCurrentCookie", strCookie);
       //设置登录状态到state
-      this.$store.commit('setLogined', true);
+      this.$store.commit("setLogined", true);
       this.currentState = 1;
       let getInfoParams = {
         s_user: this.submitData.username,
         s_token: this.$cookies.get(this.$app.APP_COOKIE_NAME)
       };
       Result = await this.axios_post("api/getinfo", getInfoParams);
-      if (Result ==false) return;
+      if (Result == false) return;
       ResultData = Result.data;
       if (ResultData.status != 200) {
         // console.log("获取用户数据失败!" + ResultData.message);
@@ -701,7 +716,6 @@ export default {
       this.userInfo.university = ResultData.info.message.uni;
       this.userInfo.description = ResultData.info.message.desc;
       this.userInfo_const = this.userInfo;
-      
     },
     async onRegister() {
       if (this.submitData.username == "" || this.submitData.password == "") {
@@ -717,7 +731,6 @@ export default {
         return;
       }
       //同意条款
-      
 
       const self = this;
       let RegisterParam = {
@@ -726,37 +739,37 @@ export default {
         identifying_code: self.submitData.confirmp
       };
       const Result = await this.axios_post("api/register", RegisterParam);
-      if (Result ==false) return;
+      if (Result == false) return;
       const ResultData = Result.data;
       if (ResultData.status != 200) {
         this.$swal({
-          title:'淘书斋提醒',
-          text:'注册失败!' + ResultData.info.message,
-          type:'error'
+          title: "淘书斋提醒",
+          text: "注册失败!" + ResultData.info.message,
+          type: "error"
         });
         return;
       } else if (ResultData.info.code != 200) {
         this.$swal({
-          title:'淘书斋提醒',
-          text:'注册失败!' + ResultData.info.message,
-          type:'error'
+          title: "淘书斋提醒",
+          text: "注册失败!" + ResultData.info.message,
+          type: "error"
         });
         return;
       }
       this.$swal({
-          title:'淘书斋提醒',
-          text:'注册成功，3秒后跳入登录界面',
-          confirmButtonText:'确定',
-          showCancelButton:false,
-          focusConfirm:true,
-          type:'success',
-          onClose:function(){
-            //3秒后执行 跳转至登录界面
-            setTimeout(function(){
-              self.$store.commit('setCurrentMode',0);
-            },3000);
-          }
-        });
+        title: "淘书斋提醒",
+        text: "注册成功，3秒后跳入登录界面",
+        confirmButtonText: "确定",
+        showCancelButton: false,
+        focusConfirm: true,
+        type: "success",
+        onClose: function() {
+          //3秒后执行 跳转至登录界面
+          setTimeout(function() {
+            self.$store.commit("setCurrentMode", 0);
+          }, 3000);
+        }
+      });
       // this.checkLoginStatus(0);
     },
     async forgetPassword() {
@@ -769,7 +782,7 @@ export default {
           type: 2
         };
         const Result = await this.axios_get("api/verify", Params);
-        if (Result ==false) return;
+        if (Result == false) return;
         const ResultData = Result.data;
         if (ResultData.status != 200) {
           this.toolTipData.text = ResultData["message"];
@@ -802,11 +815,11 @@ export default {
           type: 1
         };
         //异步方法 需要await
-        const Result = await this.axios_get("api/verify",Params);
-        if(Result==false){
+        const Result = await this.axios_get("api/verify", Params);
+        if (Result == false) {
           this.toolTipData.class = "alert-danger";
           this.toolTipData.text = err.toString();
-        }else{
+        } else {
           const ResultData = Result.data;
           if (ResultData.status != 200) {
             this.toolTipData.text = ResultData["message"];
@@ -897,7 +910,13 @@ export default {
         this.NewAddress.name = "";
         this.NewAddress.tel = "";
         this.NewAddress.detail = "";
-        console.log("添加地址Failed");
+        this.$swal({
+          title: "淘书斋提醒",
+          text: "添加收货地址失败",
+          type: "error",
+          showCancelButton: false,
+          confirmButtonText: "确定"
+        });
         this.removePaddingAndClosingModel();
         return;
       }
@@ -907,10 +926,19 @@ export default {
           maxID = parseInt(this.Address[i].id);
         }
       }
-      console.log("Get Max ID:" + maxID);
       this.NewAddress.id = maxID + 1;
+      this.NewAddress.detail =
+        this.selectedAddress.province +
+        this.selectedAddress.city +
+        this.selectedAddress.distict;
       this.Address.push(this.NewAddress);
-      console.log("添加地址OK");
+      this.$swal({
+        title: "淘书斋提醒",
+        text: "添加收货地址成功",
+        type: "success",
+        showCancelButton: false,
+        confirmButtonText: "确定"
+      });
       this.removePaddingAndClosingModel();
     },
     Province2Cities: function() {
@@ -988,6 +1016,96 @@ export default {
       this.selectedProvince = "";
       this.userInfo = this.userInfo_const;
       this.bEdit = false;
+    },
+    password_strength_check: function(psw_new) {
+      /*
+       *密码强度:
+       * 全数字 :1
+       * 全字母 :a-z A-Z  2
+       * 大小写混:4
+       * 特殊字符:8
+       * 0-4 弱
+       * 4-8 中
+       * 8-12 强
+       */
+      var str_num = psw_new.length;
+      var Num_char_num =
+        psw_new.match(/[0-9]/gi) == null ? 0 : psw_new.match(/[0-9]/gi).length;
+      var Small_char_num =
+        psw_new.match(/[a-z]/g) == null ? 0 : psw_new.match(/[a-z]/g).length;
+      var Big_char_num =
+        psw_new.match(/[A-Z]/g) == null ? 0 : psw_new.match(/[A-Z]/g).length;
+      var Esp_char_num =
+        psw_new.length - Num_char_num - Small_char_num - Big_char_num;
+      var strength = 0;
+      if (str_num === Num_char_num) {
+        //全数字
+        strength += 1;
+      } else if (str_num === Big_char_num || str_num === Small_char_num) {
+        //全字母 全大/小写
+        strength += 2;
+      } else if (
+        (str_num === Big_char_num + Small_char_num &&
+          Big_char_num * Small_char_num > 0) ||
+        (str_num === Big_char_num + Num_char_num &&
+          Big_char_num * Num_char_num > 0) ||
+        (str_num === Small_char_num + Num_char_num &&
+          Small_char_num * Num_char_num > 0)
+      ) {
+        //为大写混合 或者大/小写字母和数字混合
+        strength += 4;
+      } else if (
+        str_num === Num_char_num + Big_char_num + Small_char_num &&
+        Num_char_num * Small_char_num * Big_char_num > 0
+      ) {
+        //大小写和字母混合
+        var num_rate = Num_char_num / parseFloat(str_num);
+        var big_rate = Big_char_num / parseFloat(str_num);
+        var small_rate = Small_char_num / parseFloat(str_num);
+        var abs =
+          Math.abs(num_rate - small_rate) +
+          Math.abs(big_rate - num_rate) +
+          Math.abs(small_rate - big_rate);
+        if (abs >= 0 && abs <= 0.1) {
+          //三者出现频率相当
+          strength += 10;
+        } else if (abs > 0.1 && abs <= 0.3) {
+          strength += 9;
+        } else if (abs > 0.3 && abs <= 0.5) {
+          //三
+          strength += 8;
+        } else {
+          //
+          strength += 7;
+        }
+      } else if (Esp_char_num > 0) {
+        strength = 4;
+        var rest_num = str_num - Esp_char_num;
+        if (
+          rest_num === Big_char_num ||
+          rest_num === Small_char_num ||
+          rest_num === Num_char_num
+        ) {
+          //有特殊字符和 大/小写/数字其一组合
+          strength += 2;
+        } else if (
+          (rest_num === Big_char_num + Num_char_num &&
+            Big_char_num * Num_char_num > 0) ||
+          (rest_num === Big_char_num + Small_char_num &&
+            Big_char_num * Small_char_num > 0) ||
+          (rest_num === Num_char_num + Small_char_num &&
+            Num_char_num * Small_char_num > 0)
+        ) {
+          //有特殊字符和 大/小写/数字其二组合
+          strength += 4;
+        } else if (
+          rest_num === Big_char_num + Num_char_num + Small_char_num &&
+          Big_char_num * Small_char_num * Num_char_num > 0
+        ) {
+          strength += 6;
+        }
+      }
+      return strength;
     }
   },
   data() {
@@ -1113,19 +1231,19 @@ export default {
     this.universities.forEach(data => {
       self.AllProvinces.push(data.city);
       let unis = [];
-      if(data.university !== undefined){
+      if (data.university !== undefined) {
         data.university.forEach((uni, index) => {
           if (index != 0) unis.push(uni.name);
-        }); 
+        });
       }
       self.universities.push({ name: data.city, unis: unis });
     });
     for (const province in this.allcities) {
       self.AllAddressProvince.push(province);
     }
-    if(!this.Logined){
+    if (!this.Logined) {
       this.currentState = 0;
-    }else{
+    } else {
       this.currentState = 1;
     }
   },
@@ -1154,9 +1272,9 @@ export default {
       this.Mode = this.$store.state.CurrentMode;
       return this.$store.state.CurrentMode;
     },
-    Logined(){
+    Logined() {
       var flag = this.$store.state.isLogined;
-      if( flag == false){
+      if (flag == false) {
         this.currentState = 0;
         return false;
       }
@@ -1193,7 +1311,7 @@ export default {
   padding: 1% 3%;
 }
 
-.loginOtherWays {
+.logirWays {
   display: flex;
   padding: 0 15%;
 }

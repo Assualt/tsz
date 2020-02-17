@@ -5,14 +5,14 @@
         {{sectionName}}&nbsp;
         <i class="fa fa-bookmark"></i>
       </p>
-      <a href="javascript:void(0)" class="fr" name="click_more">
+      <a :href="'search?key='+sectionName" class="fr" name="click_more">
         更多
         <i class="fa fa-angle-right"></i>
       </a>
     </div>
     <div class="book-sections-body fl">
       <div class="book-info fl" v-for="(item,index) in books" :key="index">
-        <a href="javascript:void(0)">
+        <a :href="'search?bookname='+item.book_name+'&sorted='+urlpart">
           <img
             :src="item.img_url"
             :title="item.book_name"
@@ -39,7 +39,7 @@
 <script>
 export default {
   name: "ImgSection",
-  props: ["sectionName", "type"],
+  props: ["sectionName", "type","urlpart"],
   data() {
     return {
       books: []

@@ -8,8 +8,8 @@ Vue.use(Vuex)
 const state = {
   AllCityUniversities:[],
   CurrentMode:0, //user info mode-> mode:0 login mode:1 Register
-  CurrentCookie:'',
-  isLogined:false,
+  CurrentCookie: window.sessionStorage.getItem('uid'),
+  isLogined:window.sessionStorage.getItem('ulogin') == null ? false : true,
 };
 
 const getters = {
@@ -38,16 +38,16 @@ const mutations = {
   },
   setCurrentCookie(state, cookie){
     state.CurrentCookie = cookie;
+    window.sessionStorage.setItem('uid', cookie);
   },
   setLogined(state, logined){
     state.isLogined = logined;
+    window.sessionStorage.setItem('ulogin', logined);
   }
-
 }
-
 const actions = {
     setCities (context, cities) {
-        context.commit('setAllCityUniversities', cities);
+      context.commit('setAllCityUniversities', cities);
     },
     asyncCurrentMode(commit, mode){
       commit('setCurrentMode', mode);

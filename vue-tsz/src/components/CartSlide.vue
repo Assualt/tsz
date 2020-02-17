@@ -308,6 +308,7 @@ export default {
 </script>
 
 <style scoped>
+
 /*recommend_daily*/
 .recommend_daily {
   width: 100%;

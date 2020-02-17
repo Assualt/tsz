@@ -110,5 +110,10 @@ p:hover {
 }
 
 .top-enter-active, .top-leave-active {
-    transition: all .2s
+    transition: all .4s
+}
+
+
+a,li:hover{
+    cursor: pointer;
 }
