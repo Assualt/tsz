@@ -26,32 +26,9 @@
       </p>
     </div>
     <div class="person_details">
-      <h4>功能列表</h4>
+      <h4>最近访客</h4>
       <ul class="fl more_list">
-        <li :class="[currentState == 1 ? 'more_list_li_active':'disabled']">
-          <a class="hvr-grow" @click="clickTo(1)">基本资料</a>
-        </li>
-        <li :class="[currentState == 2 ? 'more_list_li_active':'disabled']">
-          <a class="hvr-grow" @click="clickTo(2)">图书管理</a>
-        </li>
-        <li :class="[currentState == 3 ? 'more_list_li_active':'disabled']">
-          <a class="hvr-grow" @click="clickTo(3)">收货地址</a>
-        </li>
-        <li :class="[currentState == 4 ? 'more_list_li_active':'disabled']">
-          <a class="hvr-grow" @click="clickTo(4)">图书售卖记录</a>
-        </li>
-        <li :class="[currentState == 5 ? 'more_list_li_active':'disabled']">
-          <a class="hvr-grow" @click="clickTo(5)">日志记录</a>
-        </li>
-        <li :class="[currentState == 6 ? 'more_list_li_active':'disabled']">
-          <a class="hvr-grow" @click="clickTo(6)">收益评估</a>
-        </li>
-        <li :class="[currentState == 7 ? 'more_list_li_active':'disabled']">
-          <a class="hvr-grow" @click="clickTo(7)">修改密码</a>
-        </li>
-        <li>
-          <a href="#" @click="ExitStatusInfo(false)">退出登录</a>
-        </li>
+        
       </ul>
     </div>
   </div>
@@ -106,7 +83,7 @@ export default {
   border-top: solid 5px rgb(245, 245, 245);
   margin-top: 3px;
   width: 100%;
-  height: 20%;
+  height: 40%;
   /*border: 1px solid red ;*/
   border-bottom: 4px solid rgb(245, 245, 245);
 }
@@ -134,7 +111,7 @@ export default {
 .more_list {
   padding-left: 0px;
   width: 100%;
-  height: 80%;
+  height: 40%;
 }
 .more_list li {
   margin-top: 5px;

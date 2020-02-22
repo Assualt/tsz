@@ -62,6 +62,9 @@
               <router-link role="menuitem" tabindex="-1" to="/cart">我的购物车</router-link>
             </li>
             <li role="presentation">
+              <router-link role="menuitem" tabindex="-1" to="/trade">我的交易记录</router-link>
+            </li>
+            <li role="presentation">
               <router-link role="menuitem" tabindex="-1" to="/favorite">我的收藏</router-link>
             </li>
             <li role="presentation">

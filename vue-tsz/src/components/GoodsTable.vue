@@ -11,7 +11,7 @@
       <li class="fl">
         <a href="#">
           降价商品&nbsp;
-          <strong >{{ReducedpriceNum}}</strong>
+          <strong>{{ReducedpriceNum}}</strong>
         </a>
       </li>
       <div class="jg fl">|</div>
@@ -28,23 +28,16 @@
           type="button"
           value="结算"
           class="btn btn-warning hvr-grow fr"
-          disabled
           id="btn_js1"
           @click="submitCheck()"
+          :disabled="SelectedAllShops.length==0"
         />
       </div>
     </ul>
     <div class="shop_all fl">
       <div class="fl shop_all_body">
         <div class="shop_all_head fl">
-          <input
-            type="checkbox"
-            class="fl"
-            value="all_sel"
-            name="1"
-            @click="handleAllCnt(0,cartGoodsShops,false)"
-            v-model="isAllSelected"
-          />&nbsp;全选&nbsp;
+          <input type="checkbox" class="fl" value="all_sel" name="1" @click="handleBooks(0,null,true)" />&nbsp;全选&nbsp;
         </div>
         <div class="shop_all_head fl">商品信息</div>
         <div class="shop_all_head fl">单价</div>
@@ -65,117 +58,159 @@
             type="checkbox"
             class="fl"
             value="shop_name"
-            @click="handleAllCnt(1,item,false)"
-            v-model="item.isChecked"
+            @click="handleBooks(1,item.goods_store_id, true)"
+            :checked="item.isChecked"
           />
-          <p class="fl">&nbsp;店铺&nbsp;{{item.goods_store_name}}</p>
+          <p class="fl">&nbsp;店铺&nbsp;{{item.goods_store_name}}&nbsp;&nbsp;</p>
           <a href="#" class="fl hvr-float-shadow">
             <img src="static/images/contact.jpeg" alt="#" width="15" height="15" />
           </a>
           <div class="fl discount">
-            <a href="#">
+            <a href="#" @click="selectShowCoupon(item.goods_store_id)">
               &nbsp;&nbsp;&nbsp;优惠券&nbsp;
-              <i class="fa fa-angle-down"></i>&nbsp;
+              <i class="fa fa-angle-up" v-if="item.showCoupon==true"></i>
+              <i class="fa fa-angle-down" v-else></i>&nbsp;
             </a>
-            <ul class="shop_list_item fl">
-              <li class="shop_list_body fl" v-for="(itt,inn) in item.goods_info" :key="inn">
-                <div class="body_info fl">
-                  <input
-                    type="checkbox"
-                    value="goods_item"
-                    class="fl"
-                    style="width: 5%;"
-                    @click="handleAllCnt(2,itt,false)"
-                    v-model="itt.isChecked"
-                  />
-                  <div class="fl body_info_img">
-                    <a href="#" class="hvr-grow-shadow">
-                      <img
-                        :src="itt.book_img"
-                        alt="未能正确加载图片"
-                        width="70"
-                        height="90"
-                        :title="itt.book_name"
-                      />
+            <div class="favorcontent" v-show="item.showCoupon">
+              <div class="angle"></div>
+              <a href="#" class="close-coupon" @click="item.showCoupon=false">
+                <i class="fa fa-close"></i>
+              </a>
+              <div class="favortips">
+                <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                <span>已经领取 {{item.coupon.gotnumber}} 张优惠券，有新优惠券待领取</span>
+              </div>
+              <ul class="coupon-list">
+                <li v-for="(it,index) in item.coupon.available" :key="index">
+                  <div class="coupon-amount">
+                    <span class="rmb">&yen;</span>
+                    {{it.coupon_price}}
+                  </div>
+                  <div class="coupon-detail">
+                    <div class="coupon-info fl">
+                      <p class="coupon-title">优惠券&nbsp;满{{it.coupon_acquire}}减{{it.coupon_price}}</p>
+                      <p class="coupon-time">{{it.coupon_time}}</p>
+                    </div>
+                    <div class="coupon-op">
+                      <span
+                        class="coupon-button"
+                        v-if="!it.has_received"
+                        @click="getCoupon(item.goods_store_id, it.coupon_id)"
+                      >领 取</span>
+                      <span class="coupon-button" v-else>已 领 取</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <ul class="shop_list_item fl">
+            <li class="shop_list_body fl" v-for="(itt,inn) in item.goods_info" :key="inn">
+              <div class="body_info fl">
+                <input
+                  type="checkbox"
+                  value="goods_item"
+                  class="fl"
+                  style="width: 5%;"
+                  @click="handleBooks(2,itt.book_des.ID, true)"
+                  v-model="itt.isChecked"
+                  v-if="!itt.book_invalid"
+                />
+                <input type="checkbox" style="width: 5%;" v-else disabled class="fl" />
+                <div class="fl body_info_img">
+                  <a :href="itt.book_img" class="hvr-grow-shadow" target="_blank">
+                    <img
+                      :src="itt.book_img"
+                      alt="未能正确加载图片"
+                      width="70"
+                      height="90"
+                      :title="itt.book_name"
+                    />
+                  </a>
+                </div>
+                <div class="fl body_info_des">
+                  <div class="body_info_des_top">
+                    <a href="#" class="body_info_des_top_fnt">{{itt.book_ad}}</a>
+                  </div>
+                  <div class="body_info_des_top">
+                    <a href="javascript:void(0)" title="信用卡支付">
+                      <img src="static/images/xcard.png" alt />
+                    </a>
+                    <a href="javascript:void(0)" title="0首付，慢慢还，拥有所爱，无需等待！">
+                      <img src="static/images/fenqi.png" alt />
+                    </a>
+                    <a href="javascript:void(0)" title="消费者保障服务，卖家承诺商品如实描述">
+                      <img src="static/images/customer_guarantee.png" alt />
+                    </a>
+                    <a href="javascript:void(0)" title="订单险">
+                      <img src="static/images/guarantee.png" alt />
+                    </a>
+                    <a
+                      href="javascript:void(0)"
+                      title="满足7天无理由退货申请的前提下，包邮商品需要买家承担退货邮费，非包邮商品需要买家承担发货和退货邮费。"
+                    >
+                      <img src="static/images/7day.jpg" alt />
                     </a>
                   </div>
-                  <div class="fl body_info_des">
-                    <div class="body_info_des_top">
-                      <a href="#" class="body_info_des_top_fnt">{{itt.book_ad}}</a>
-                    </div>
-                    <div class="body_info_des_top">
-                      <a href="#" title="信用卡支付">
-                        <img src="static/images/xcard.png" alt />
-                      </a>
-                      <a href="#" title="0首付，慢慢还，拥有所爱，无需等待！">
-                        <img src="static/images/fenqi.png" alt />
-                      </a>
-                      <a href="#" title="消费者保障服务，卖家承诺商品如实描述">
-                        <img src="static/images/customer_guarantee.png" alt />
-                      </a>
-                      <a href="#" title="订单险">
-                        <img src="static/images/guarantee.png" alt />
-                      </a>
-                      <a href="#" title="满足7天无理由退货申请的前提下，包邮商品需要买家承担退货邮费，非包邮商品需要买家承担发货和退货邮费。">
-                        <img src="static/images/7day.jpg" alt />
-                      </a>
-                    </div>
-                  </div>
-                  <div class="fl body_info_type">
-                    <p>出版社&nbsp;{{itt.book_des.publisher}}</p>
-                    <p>规格&nbsp;{{itt.book_des.size}}</p>
-                    <p>版次&nbsp;{{itt.book_des.edition}}</p>
-                    <p>作者&nbsp;{{itt.book_des.author}}</p>
-                  </div>
                 </div>
-                <div class="body_else fl body_price">
-                  <del>
-                    <i class="fa fa-yen"></i>
-                    {{itt.book_des.old_price}}
-                  </del>
-                  <br />
-                  <p class="fa fa-yen">
-                    <strong>{{itt.book_des.dis_price}}</strong>
-                  </p>
+                <div class="fl body_info_type">
+                  <p>出版社&nbsp;{{itt.book_des.publisher}}</p>
+                  <p>规格&nbsp;{{itt.book_des.size}}</p>
+                  <p>版次&nbsp;{{itt.book_des.edition}}</p>
+                  <p>作者&nbsp;{{itt.book_des.author}}</p>
                 </div>
-                <div class="body_else fl body_num">
-                  <span>
-                    <button type="button" class="fl" value="sub" @click="DecreaseCnt(itt)">-</button>
-                    <input
-                      type="text"
-                      v-model="itt.book_des.num"
-                      class="fl"
-                      name="goods_num"
-                      ng-pattern="/[^a-zA-Z]"
-                      @change="InputChange(itt)"
-                    />
-                    <button type="button" class="fl" value="plus" @click="IncreaseCnt(itt)">+</button>
-                  </span>
-                </div>
-                <div class="body_else fl body_all_price">
-                  <p
-                    class="fa fa-yen"
-                  >{{ (itt.book_des.num * itt.book_des.dis_price).toFixed(2) }}</p>
-                </div>
-                <div class="body_else fl body_op">
-                  <a href="#" @click="moveIntoLocale(itt)">移入收藏夹</a>
-                  <br />
-                  <a href="#" @click="removeItem(itt)">删除</a>
-                </div>
-              </li>
-            </ul>
-          </div>
+              </div>
+              <div class="body_else fl body_price">
+                <del>
+                  <i class="fa fa-yen"></i>
+                  {{itt.book_des.old_price}}
+                </del>
+                <br />
+                <p class="fa fa-yen">
+                  <strong>{{itt.book_des.dis_price}}</strong>
+                </p>
+              </div>
+              <div class="body_else fl body_num">
+                <span>
+                  <button type="button" class="fl" value="sub" @click="DecreaseCnt(itt)">-</button>
+                  <input
+                    type="text"
+                    v-model="itt.book_des.num"
+                    class="fl"
+                    name="goods_num"
+                    ng-pattern="/[^a-zA-Z]"
+                    @change="InputChange(itt)"
+                  />
+                  <button type="button" class="fl" value="plus" @click="IncreaseCnt(itt)">+</button>
+                </span>
+              </div>
+              <div class="body_else fl body_all_price">
+                <p class="fa fa-yen">{{ (itt.book_des.num * itt.book_des.dis_price).toFixed(2) }}</p>
+              </div>
+              <div class="body_else fl body_op">
+                <a href="#" @click="moveIntoLocale(itt)">移入收藏夹</a>
+                <br />
+                <a href="#" @click="removeItem(itt)">删除</a>
+                <p
+                  v-if="itt.book_invalid"
+                  style="color:red;font-size:14px;font-weight:bold;"
+                >该商品已经失效</p>
+              </div>
+            </li>
+          </ul>
         </div>
       </li>
       <div v-if="AllBooksCleared">
-        <h1 align="center">亲，你当前的购物车<i class="fa fa-cart-plus primary" aria-hidden="true"></i>空空如也！</h1>
+        <h1 align="center">
+          亲，你当前的购物车
+          <i class="fa fa-cart-plus primary" aria-hidden="true"></i>空空如也！
+        </h1>
         <p align="center" style="color:#123321">
           <router-link to="/sold">赶紧去挑选基本适合自己的书籍吧.</router-link>
         </p>
       </div>
-      
     </ul>
-    
+
     <div class="all_total fl">
       <div class="all_total_left fl">
         <input
@@ -183,11 +218,11 @@
           class="fl"
           value="all_sel"
           name="2"
-          @click="handleAllCnt(0,cartGoodsShops,false)"
+          @click="handleBooks(0, null, true)"
           v-model="isAllSelected"
         />&nbsp;全选&nbsp;
         <a href="javascript:void(0)" id="delete" @click="removeSeleted()">删除</a>
-        <a href="#" id="clear">清除失效宝贝</a>
+        <a href="#" id="clear" @click="removeInvalidBooks()">清除失效宝贝</a>
         <a href="#" id="join">移入收藏夹</a>
         <a href="#">分享</a>
       </div>
@@ -205,7 +240,7 @@
       value="结算"
       id="btn_js2"
       @click="submitCheck()"
-      disabled
+      :disabled="SelectedAllShops.length==0"
     >结算</button>
   </div>
 </template>
@@ -216,9 +251,9 @@ export default {
   data() {
     return {
       //降价商品
-      ReducedpriceNum:0,
+      ReducedpriceNum: 0,
       //库存紧张商品
-      TightstockNum:0,
+      TightstockNum: 0,
       cartGoodsShops: [],
       cartGoodsNum: 0, //已加入购物车图书数量
       isAllSelected: false, //是否所有购物车商品被全部选中
@@ -228,61 +263,149 @@ export default {
     };
   },
   methods: {
-    IncreaseCnt: function(Item) {
-      if ((Item.book_des.num+1) > Item.book_des.buy_limit && Item.book_des.buy_limit != -1) {
+    //清除失效宝贝
+    removeInvalidBooks: function() {
+      const self = this;
+      var cartShopBooks = [];
+      var clearedInValidBook = false;
+      var clearedInvalidBooksNumber = 0;
+      this.cartGoodsShops.forEach(shop => {
+        shop.goods_info.forEach((book, index) => {
+          if (!book.book_invalid) {
+            cartShopBooks.push(book);
+          } else {
+            clearedInvalidBooksNumber++;
+            clearedInValidBook = true;
+            self.cartGoodsNum--;
+          }
+        });
+        shop.goods_info = cartShopBooks;
+      });
+      cartShopBooks = [];
+      this.cartGoodsShops.forEach((shop, index) => {
+        if (shop.goods_info.length != 0) {
+          cartShopBooks.push(shop);
+        }
+      });
+      this.cartShopBooks = cartShopBooks;
+      
+      if (clearedInValidBook) {
         this.$swal({
-          title:'淘书斋提醒',
-          text:'当前商品限购'+ Item.book_des.buy_limit +'件，最大选择'+ Item.book_des.buy_limit,
-          type:'info',
-          showCancelButton:false
+          title: "淘书斋提醒",
+          text: "已清除" + clearedInvalidBooksNumber + "失效图书.",
+          type: "info",
+          showCancelButton: false,
+          confirmButtonText: "确定"
+        });
+      } else if (clearedInvalidBooksNumber == 0) {
+        this.$swal({
+          title: "淘书斋提醒",
+          text: "当前无失效的图书，无需清理!",
+          type: "info",
+          showCancelButton: false,
+          confirmButtonText: "确定"
+        });
+      } else {
+        this.$swal({
+          title: "淘书斋提醒",
+          text: "清除无效图书失败!",
+          type: "error",
+          showCancelButton: false,
+          confirmButtonText: "确定"
+        });
+      }
+    },
+    //获得优惠券
+    getCoupon: function(goods_store_id, coupon_id) {
+      this.cartGoodsShops.forEach(shop => {
+        if (shop.goods_store_id == goods_store_id) {
+          shop.coupon.available.forEach(signle_coupon => {
+            if (signle_coupon.coupon_id == coupon_id) {
+              signle_coupon.has_received = true;
+              shop.coupon.gotnumber++;
+            }
+          });
+        }
+      });
+    },
+    selectShowCoupon: function(store_id) {
+      this.cartGoodsShops.forEach(shop => {
+        if (shop.goods_store_id == store_id) {
+          shop.showCoupon = !shop.showCoupon;
+        } else {
+          shop.showCoupon = false;
+        }
+      });
+    },
+    IncreaseCnt: function(Item) {
+      if (
+        Item.book_des.num + 1 > Item.book_des.buy_limit &&
+        Item.book_des.buy_limit != -1
+      ) {
+        this.$swal({
+          title: "淘书斋提醒",
+          text:
+            "当前商品限购" +
+            Item.book_des.buy_limit +
+            "件，最大选择" +
+            Item.book_des.buy_limit,
+          type: "info",
+          showCancelButton: false
         });
         Item.book_des.num = Item.book_des.buy_limit;
       } else {
         Item.book_des.num++;
       }
-      this.handleAllCnt(2, Item, true);
+      this.handleBooks(2, Item.book_des.ID, false);
       // console.log("Increase Cnt" + Item.book_des.num);
     },
     DecreaseCnt: function(Item) {
       if (Item.book_des.num === 1) {
         this.$swal({
-          title:'淘书斋提醒',
-          text:'当前至少选择一件商品',
-          type:'info',
-          showCancelButton:false
+          title: "淘书斋提醒",
+          text: "当前至少选择一件商品",
+          type: "info",
+          showCancelButton: false
         });
       } else {
         Item.book_des.num--;
       }
-      this.handleAllCnt(2, Item, true);
+      this.handleBooks(2, Item.book_des.ID, false);
     },
     InputChange: function(Item) {
       if (isNaN(Item.book_des.num)) {
         this.$swal({
-          title:'淘书斋提醒',
-          text:'你输入的不是一个有效的整数，请重新输入',
-          type:'info',
-          showCancelButton:false
-        })
+          title: "淘书斋提醒",
+          text: "你输入的不是一个有效的整数，请重新输入",
+          type: "info",
+          showCancelButton: false
+        });
         Item.book_des.num = 1;
       } else if (Item.book_des.num <= 0) {
         this.$swal({
-          title:'淘书斋提醒',
-          text:'当前至少选择一件商品',
-          type:'info',
-          showCancelButton:false
+          title: "淘书斋提醒",
+          text: "当前至少选择一件商品",
+          type: "info",
+          showCancelButton: false
         });
         Item.book_des.num = 1;
-      } else if ((parseInt(Item.book_des.num)+1) > Item.book_des.buy_limit && Item.book_des.buy_limit != -1) {
+      } else if (
+        parseInt(Item.book_des.num) + 1 > Item.book_des.buy_limit &&
+        Item.book_des.buy_limit != -1
+      ) {
         this.$swal({
-          title:'淘书斋提醒',
-          text:'当前商品限购'+ Item.book_des.buy_limit +'件，最大选择' + Item.book_des.buy_limit,
-          type:'info',
-          showCancelButton:false
+          title: "淘书斋提醒",
+          text:
+            "当前商品限购" +
+            Item.book_des.buy_limit +
+            "件，最大选择" +
+            Item.book_des.buy_limit,
+          type: "info",
+          showCancelButton: false
         });
         Item.book_des.num = Item.book_des.buy_limit;
       }
-      this.handleAllCnt(2, Item, true);
+      this.handleBooks(2, Item.book_des.ID, false);
     },
     moveIntoLocale: function(good) {
       //移入收藏夹
@@ -296,189 +419,175 @@ export default {
       const self = this;
       //删除商品
       this.$swal({
-        title:'淘书斋提醒',
-        text:'确定删除《' + Item.book_name +'》[' + Item.book_des.author +' 著] 的图书吗?',
-        type:'question',
-        confirmButtonText:'确定',
-        cancelButtonText:'取消',
-        focusCancel:true
-      }).then((ret)=>{
-        if(ret.value){
-          self.cartGoodsShops.forEach(shop=>{
-            shop.goods_info.forEach((book,index)=>{
-              if(book.book_des.ID == Item.book_des.ID){
-                if(book.book_des.tight_stock == true) 
-                  self.TightstockNum--;
-                shop.goods_info.splice(index, 1);
+        title: "淘书斋提醒",
+        text:
+          "确定删除《" +
+          Item.book_name +
+          "》[" +
+          Item.book_des.author +
+          " 著] 的图书吗?",
+        type: "question",
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        focusCancel: true
+      }).then(ret => {
+        if (ret.value) {
+          var temp = [];
+          self.cartGoodsShops.forEach(shop => {
+            shop.goods_info.forEach((book, index) => {
+              if (book.book_des.ID == Item.book_des.ID) {
+                if (book.book_des.tight_stock == true) self.TightstockNum--;
+                book.isChecked = false; //清除 选择
                 self.cartGoodsNum--;
-              };
+              } else {
+                temp.push(book);
+              }
             });
+            shop.goods_info = temp;
           });
-          self.cartGoodsShops.forEach((shop, index)=>{
-            if(shop.goods_info.length == 0){
-              self.cartGoodsShops.splice(index, 1);
+          temp = [];
+          self.cartGoodsShops.forEach((shop, index) => {
+            if (shop.goods_info.length != 0) {
+              temp.push(shop);
             }
           });
+          self.cartGoodsShops = temp;
           this.$swal({
-            title:'淘书斋提醒',
-            text:'删除《' + Item.book_name +'》[' + Item.book_des.author +' 著] 的图书成功',
-            type:'success',
-            showCancelButton:false
-          })
+            title: "淘书斋提醒",
+            text:
+              "删除《" +
+              Item.book_name +
+              "》[" +
+              Item.book_des.author +
+              " 著] 的图书成功",
+            type: "success",
+            showCancelButton: false
+          });
+          this.handleBooks(2, Item.book_des.ID, false);
         }
       });
-      console.log("remove item", JSON.stringify(Item));
-      this.handleAllCnt(2, Item, false);
+      
     },
     removeSeleted: function() {
-      if(this.SelectedAllShops.length == 0){
+      if (this.SelectedAllShops.length == 0) {
         return;
       }
       let Removetext = "删除";
-      this.SelectedAllShops.forEach((Item)=>{
-        Removetext+= "《" + Item.bookName + "》[" + Item.bookAuthor + " 著],"
+      this.SelectedAllShops.forEach(Item => {
+        Removetext += "《" + Item.bookName + "》[" + Item.bookAuthor + " 著],";
       });
       this.$swal({
-        title:'淘书斋提醒',
+        title: "淘书斋提醒",
         text: "确定" + Removetext + "的图书吗？",
-        type:'question',
-        confirmButtonText:'确定',
-        cancelButtonText:'取消',
-        focusCancel:true
-      }).then((ret)=>{
-        if(ret.value){
+        type: "question",
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        focusCancel: true
+      }).then(ret => {
+        if (ret.value) {
           const self = this;
-          this.SelectedAllShops.forEach(Item=>{
-            self.cartGoodsShops.forEach(shop=>{
-              shop.goods_info.forEach((book,index)=>{
-                if(book.book_des.ID == Item.bookID){
-                  shop.goods_info.splice(index,1);
-                  this.handleAllCnt(2, Item, false);
+          var temp;
+          this.SelectedAllShops.forEach(Item => {
+            temp = [];
+            self.cartGoodsShops.forEach(shop => {
+              shop.goods_info.forEach((book, index) => {
+                if (book.book_des.ID == Item.bookID) {
+                  book.isChecked = false;
+                  self.cartGoodsNum--;
+                } else {
+                  temp.push(book);
                 }
               });
+              shop.goods_info = temp;
             });
           });
-          self.cartGoodsShops.forEach((shop, index)=>{
-            if(shop.goods_info.length == 0){
-              self.cartGoodsShops.splice(index, 1);
+          temp = [];
+          self.cartGoodsShops.forEach((shop, index) => {
+            if (shop.goods_info.length != 0) {
+              temp.push(shop);
             }
           });
+          self.cartGoodsShops = temp;
           this.$swal({
-            title:'淘书斋提醒',
-            text:'删除'+Removetext+ '的图书成功',
-            type:'success',
-            showCancelButton:false
-          })
+            title: "淘书斋提醒",
+            text: "删除" + Removetext + "的图书成功",
+            type: "success",
+            showCancelButton: false
+          });
+          self.SelectedAllShops = [];
+          self.allTotalMoney = 0.0;
+          self.allCount = 0;
         }
       });
     },
     /**
-     * @function: handleAllCnt 处理所有选中的图书
-     * @param: Index  0:全选 1:商店全选 2:书本的选择
-     * @param: Item   当前书本的所有属性,判断是否为选中或者取消选中
-     * @param: bskip  false:点击单选或者全选按钮 true:修改选中书本的数量
+     * @function:
+     * @param: handleType: 0.全选 1.某个书店被全部选择 2.某一本书被选中
+     * @param: Item: 可以是null, 可以是某个书店的id, 或者是书本的id
+     * @param: flag: 手否去掉更新checked属性 
      */
-    handleAllCnt: function(Index, Item, bskip) {
-      if (!bskip) {
-        if (Index === 0) {
-          //全选
-          var flag = !this.isAllSelected;
-          this.isAllSelected = flag;
-          Item.forEach(data => {
-            data.isChecked = flag;
-            data.goods_info.forEach(da => {
-              da.isChecked = flag;
+    handleBooks: function(handleType, id, flag) {
+      const self = this;
+      //更新 checked 属性
+      if(flag){
+        if (handleType == 0) {
+          this.isAllSelected = !this.isAllSelected;
+          this.cartGoodsShops.forEach(shop => {
+            shop.isChecked = self.isAllSelected;
+            shop.goods_info.forEach(book => {
+              if (!book.book_invalid) {
+                book.isChecked = self.isAllSelected;
+              }
             });
           });
-        } else if (Index === 1) {
-          var flag = !Item.isChecked;
-          Item.isChecked = flag;
-          Item.goods_info.forEach(data => {
-            data.isChecked = flag;
+        } else if (handleType == 1) {
+          this.cartGoodsShops.forEach(shop => {
+            if (shop.goods_store_id == id) {
+              var isShopChecked = !shop.isChecked;
+              shop.isChecked = isShopChecked;
+              shop.goods_info.forEach(book => {
+                if (!book.book_invalid) book.isChecked = isShopChecked;
+              });
+            }
           });
-        } else if (Index === 2) {
-          var flag = !Item.isChecked;
-          Item.isChecked = flag;
+        } else if (handleType == 2) {
+          this.cartGoodsShops.forEach(shop => {
+            shop.goods_info.forEach(book => {
+              if (book.book_des.ID == id && !book.book_invalid) {
+                book.isChecked = !book.isChecked;
+              }
+            });
+          });
         }
       }
+      //计算 checked的书籍 并且更新 Selected
+      //先清空 选择的数据
       this.SelectedAllShops = [];
-      var _this = this;
-      if (this.isAllSelected) {//书本全部选择
-        this.cartGoodsShops.forEach(res => {
-          var bookStoreID = res.goods_store_id;
-          var bookStoreName = res.goods_store_name;
-          res.goods_info.forEach(data => {
-            _this.SelectedAllShops.push({
-              ID: this.randomWord(false, 20),
-              bookStoreID: bookStoreID,
-              bookStoreName: bookStoreName,
-              bookName: data.book_name,
-              bookID: data.book_des.ID,
-              bookAuthor: data.book_des.author,
-              bookPrice: data.book_des.dis_price,
-              bookCnt: data.book_des.num,
+      this.cartGoodsShops.forEach((shop)=>{
+        shop.goods_info.forEach((book)=>{
+          if(book.isChecked && !book.book_invalid){
+            self.SelectedAllShops.push({
+              ID: self.randomWord(false, 20), //订单ID
+              bookStoreID: shop.goods_store_id,
+              bookStoreName: shop.goods_store_name,
+              bookName: book.book_name,
+              bookID: book.book_des.ID,
+              bookAuthor: book.book_des.author,
+              bookPrice: book.book_des.dis_price,
+              bookCnt: book.book_des.num,
               bookTotal: (
-                data.book_des.dis_price * data.book_des.num
+                book.book_des.dis_price * book.book_des.num
               ).toFixed(2)
-            });
-          });
-        });
-      } else {
-        //部分书本选择
-        this.cartGoodsShops.forEach(res => {
-          var bookStoreID = res.goods_store_id;
-          var bookStoreName = res.goods_store_name;
-          if (res.isChecked === true) {
-            //这个商店被全部选中
-            res.goods_info.forEach(data => {
-              _this.SelectedAllShops.push({
-                ID: this.randomWord(false, 20), //订单ID
-                bookStoreID: bookStoreID,
-                bookStoreName: bookStoreName,
-                bookName: data.book_name,
-                bookID: data.book_des.ID,
-                bookAuthor: data.book_des.author,
-                bookPrice: data.book_des.dis_price,
-                bookCnt: data.book_des.num,
-                bookTotal: (
-                  data.book_des.dis_price * data.book_des.num
-                ).toFixed(2)
-              });
-            });
-          } else {
-            res.goods_info.forEach(data => {
-              //这个商店部分书籍被选择
-              if (data.isChecked === true) {
-                _this.SelectedAllShops.push({
-                  ID: this.randomWord(false, 20),
-                  bookStoreName: bookStoreName,
-                  bookStoreID: bookStoreID,
-                  bookName: data.book_name,
-                  bookID: data.book_des.ID,
-                  bookAuthor: data.book_des.author,
-                  bookPrice: data.book_des.dis_price,
-                  bookCnt: data.book_des.num,
-                  bookTotal: (
-                    data.book_des.dis_price * data.book_des.num
-                  ).toFixed(2)
-                });
-              }
             });
           }
         });
-      }
-      var EnableSubmit = this.SelectedAllShops.length == 0 ? true : false;
-      $("#btn_js1").attr("disabled", EnableSubmit);
-      $("#btn_js2").attr("disabled", EnableSubmit);
-      console.log("hjadasda:-->",JSON.stringify(this.SelectedAllShops));
-      var _this = this;
-      _this.allCount = 0;
-      _this.allTotalMoney = 0;
-      _this.SelectedAllShops.forEach(res => {
-        _this.allCount += res.bookCnt;
-        _this.allTotalMoney =
-          parseFloat(_this.allTotalMoney) + parseFloat(res.bookTotal);
-        _this.allTotalMoney = _this.allTotalMoney.toFixed(2);
+      });
+      //计算需要支付的金额
+      this.allTotalMoney = 0.0;
+      this.allCount = 0;
+      this.SelectedAllShops.forEach((book_order)=>{
+        self.allCount += parseInt(book_order.bookCnt);
+        self.allTotalMoney += parseFloat(book_order.bookTotal);
       });
     },
     randomWord: function(randomFlag, min, max) {
@@ -564,37 +673,32 @@ export default {
     getHeight: function(Item) {
       return Item.goods_info.length * 145;
     },
-    async init_cart_book(){
-      const RetData = await this.axios_get("static/json/cart.json",[]);
+    async init_cart_book() {
+      const RetData = await this.axios_get("static/json/cart.json", []);
       const _this = this;
-      if(RetData !=false){
+      if (RetData != false) {
         RetData.data.forEach(data => {
           if (data.id == "1") {
             _this.cartGoodsShops = data.goods;
             _this.cartGoodsShops.forEach(books => {
               var goods = books.goods_info;
               _this.cartGoodsNum += Object.keys(goods).length;
-              goods.forEach((book)=>{
-                if(book.book_des.tight_stock)
-                  _this.TightstockNum++;
-              })
+              goods.forEach(book => {
+                if (book.book_des.tight_stock) _this.TightstockNum++;
+              });
             });
           }
         });
       }
     }
   },
-  computed:{
-    
-  },
-  async created(){
+  computed: {},
+  async created() {
     await this.init_cart_book();
   },
-  mounted() {
-  
-  },
-  computed:{
-    AllBooksCleared(){
+  mounted() {},
+  computed: {
+    AllBooksCleared() {
       return this.cartGoodsShops.length == 0;
     }
   }
@@ -701,7 +805,6 @@ export default {
   max-height: 600px;
   overflow: auto;
   margin-bottom: 20px;
-  
 }
 .shop_list li {
   width: 100%;
@@ -721,6 +824,90 @@ export default {
   padding-left: 5px;
   padding-right: 5px;
   margin-bottom: 10px;
+  margin-top: 10px;
+}
+.favorcontent {
+  position: absolute;
+  width: 338px;
+  border: solid 1px #efefef;
+  padding: 5px 8px;
+  background: #fff;
+  margin-top: 10px;
+}
+.angle {
+  position: absolute;
+  top: -20px;
+  left: 40px;
+  width: 0px;
+  height: 0px;
+  border-top: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #d6e0e0;
+  border-left: 10px solid transparent;
+}
+.favortips {
+  height: 36px;
+  padding: 11px 10px 6px 8px;
+  width: 100%;
+  border-bottom: solid 1px #efefef;
+}
+.favortips span {
+  font-size: 12px;
+  padding-left: 10px;
+}
+
+.coupon-list li {
+  width: 100%;
+  height: 30px;
+  margin: 10px 0;
+}
+.coupon-amount {
+  float: left;
+  width: 55px;
+  height: 25px;
+  line-height: 25px;
+  background-position: -125px -25px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: Arial;
+  padding-left: 8px;
+  background: transparent url(/static/images/favor.png) no-repeat;
+}
+.coupon-amount .rmb {
+  font-weight: 400;
+  padding-right: 2px;
+  font-size: 12px;
+}
+.coupon-detail .coupon-info {
+  float: left;
+  width: 166px;
+  line-height: 1;
+  margin-left: 10px;
+}
+.coupon-detail .coupon-info .coupon-title {
+  font-size: 12px;
+  margin-bottom: 5px;
+  color: #6d6d6d;
+}
+.coupon-detail .coupon-info .coupon-time {
+  font-size: 12px;
+  color: #a5a5a5;
+  font-family: Tahoma;
+}
+.coupon-op .coupon-button {
+  float: right;
+  color: #666;
+  display: block;
+  width: auto;
+  height: 23px;
+  border: 1px solid #e9e9e9;
+  line-height: 23px;
+  text-align: center;
+  margin-right: 25px;
+}
+.close-coupon {
+  position: absolute;
+  right: 20px;
 }
 
 .shop_list_head p {
@@ -728,7 +915,6 @@ export default {
 }
 .discount {
   margin-left: 10px;
-  width: 100%;
 }
 .discount a {
   color: orange;
@@ -797,7 +983,7 @@ export default {
   width: 18px;
   opacity: 0.6;
   border: solid 1px rgb(204, 204, 204);
-  height: 26px;
+  height: 24px;
 }
 .body_num span button:hover {
   border: solid 1px orange;
@@ -821,7 +1007,6 @@ export default {
 .all_total {
   width: 90%;
   height: 50px;
-  border: solid 1px red;
   padding: 12px 15px 12px 15px;
   background: rgb(229, 229, 229);
   margin-left: 10px;

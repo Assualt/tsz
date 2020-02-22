@@ -15,16 +15,10 @@
           <a href="#" @click="clickTo(3)">图书管理</a>
         </li>
         <li :class="checkCurrent(4)">
-          <a href="#" @click="clickTo(4)">售卖记录</a>
+          <a href="#" @click="clickTo(4)">售卖概览</a>
         </li>
         <li :class="checkCurrent(5)">
           <a href="#" @click="clickTo(5)">登录日志</a>
-        </li>
-        <li :class="checkCurrent(6)">
-          <a href="#" @click="clickTo(6)">评估</a>
-        </li>
-        <li :class="checkCurrent(7)">
-          <a href="#" @click="clickTo(7)">其他</a>
         </li>
       </ul>
     </div>
@@ -528,7 +522,7 @@ export default {
   methods: {
     checkCurrent(Index) {
       if (this.currentState == 0) {
-        if (Index >= 1 && Index <= 7) {
+        if (Index >= 1 && Index <= 5) {
           return "disabled";
         } else {
           if (Index == 0) {
@@ -550,12 +544,8 @@ export default {
       }
     },
     clickTo(index) {
-      if (this.currentState != 0) {
-        if (index == 0) {
-          console.log("确定要退出吗");
-        } else {
-          this.currentState = index;
-        }
+      if (this.currentState != 0 && index != 0) {
+        this.currentState = index;
       }
     },
     //设置默认地址

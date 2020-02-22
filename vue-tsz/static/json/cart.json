@@ -56,12 +56,13 @@
         "isChecked": false,
         "goods_info": [
           {
+            "book_invalid":false,
             "book_name": "亲爱的安德烈-->1",
             "book_img": "static/upload/亲爱的安德烈.jpg",
             "book_ad": "亲爱的安德烈",
             "isChecked": false,
             "book_des": {
-              "ID": 1005,
+              "ID": 1001,
               "num": 1,
               "size": "110*200*10（mm)",
               "publisher": "人民出版社",
@@ -74,24 +75,64 @@
             }
           },
           {
-            "book_name": "亲爱的安德烈-->1",
-            "book_img": "static/upload/亲爱的安德烈.jpg",
-            "book_ad": "亲爱的安德烈",
+            "book_invalid":true,
+            "book_name": "5分钟丰胸",
+            "book_img": "static/upload/5分钟丰胸.jpg",
+            "book_ad": "5分钟丰胸",
             "isChecked": false,
             "book_des": {
-              "ID": 1005,
+              "ID": 1002,
               "num": 1,
               "size": "110*200*10（mm)",
               "publisher": "人民出版社",
-              "author": "王多多",
-              "edition": "第二版",
-              "old_price": "29.98",
-              "dis_price": "155.98",
+              "author": "塔及利亚",
+              "edition": "第8版",
+              "old_price": "199.98",
+              "dis_price": "179.00",
+              "buy_limit": 20,
+              "tight_stock": false
+            }
+          },
+          {
+            "book_invalid":false,
+            "book_name": "白鹿原",
+            "book_img": "static/upload/白鹿原.jpg",
+            "book_ad": "白鹿原",
+            "isChecked": false,
+            "book_des": {
+              "ID": 1003,
+              "num": 1,
+              "size": "120*200*10（mm)",
+              "publisher": "电子科技出版社",
+              "author": "高适",
+              "edition": "-",
+              "old_price": "49.98",
+              "dis_price": "45.00",
               "buy_limit": 20,
               "tight_stock": false
             }
           }
-        ]
+        ],
+        "showCoupon":false,
+        "coupon":{
+          "gotnumber":0,
+          "available":[
+            {
+              "coupon_id":1,
+              "coupon_price":5,
+              "coupon_acquire":100,
+              "coupon_time":"2020.02.21-2020.02.24",
+              "has_received":false
+            },
+            {
+              "coupon_id":2,
+              "coupon_price":20,
+              "coupon_acquire":200,
+              "coupon_time":"2020.02.15-2020.02.25",
+              "has_received":false
+            }
+          ]
+        }
       }
       
     ]

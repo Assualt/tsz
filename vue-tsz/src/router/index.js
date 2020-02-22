@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Index from '../pages/Index'
 import Login from '../pages/Login'
 import Cart from '../pages/Cart'
+import Trade from '../pages/Trade'
 import store from '../store/index.js'
 
 Vue.use(Router)
@@ -35,6 +36,14 @@ const router = new Router({
       component: Cart,
       meta:{
         requireAuth: true //判断路由是否需要登录权限
+      }
+    },
+    {
+      path: '/trade',
+      name: 'Trade',
+      component: Trade,
+      meta:{
+        requireAuth: true
       }
     }
   ]
