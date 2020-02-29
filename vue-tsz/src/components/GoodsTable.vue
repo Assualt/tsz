@@ -37,7 +37,13 @@
     <div class="shop_all fl">
       <div class="fl shop_all_body">
         <div class="shop_all_head fl">
-          <input type="checkbox" class="fl" value="all_sel" name="1" @click="handleBooks(0,null,true)" />&nbsp;全选&nbsp;
+          <input
+            type="checkbox"
+            class="fl"
+            value="all_sel"
+            name="1"
+            @click="handleBooks(0,null,true)"
+          />&nbsp;全选&nbsp;
         </div>
         <div class="shop_all_head fl">商品信息</div>
         <div class="shop_all_head fl">单价</div>
@@ -263,7 +269,11 @@ export default {
     };
   },
   methods: {
-    //清除失效宝贝
+    /**
+     * @function: removeInvalidBooks 清除掉失效的图书
+     * @param: None
+     * @return: None
+     */
     removeInvalidBooks: function() {
       const self = this;
       var cartShopBooks = [];
@@ -288,7 +298,7 @@ export default {
         }
       });
       this.cartShopBooks = cartShopBooks;
-      
+
       if (clearedInValidBook) {
         this.$swal({
           title: "淘书斋提醒",
@@ -316,6 +326,12 @@ export default {
       }
     },
     //获得优惠券
+    /**
+     * @function:getCoupon 根据书店的ID和优惠券的ID计算当前可用的优惠券数量
+     * @param: goods_store_id 书店的ID
+     * @param: coupon_id 优惠券ID
+     * @return:
+     */
     getCoupon: function(goods_store_id, coupon_id) {
       this.cartGoodsShops.forEach(shop => {
         if (shop.goods_store_id == goods_store_id) {
@@ -328,6 +344,11 @@ export default {
         }
       });
     },
+    /**
+     * @function: selectShowCoupon 根据书店的ID显示优惠券多个书店只显示一个优惠券菜单
+     * @param: store_id 书店的ID
+     * @return: 
+     */
     selectShowCoupon: function(store_id) {
       this.cartGoodsShops.forEach(shop => {
         if (shop.goods_store_id == store_id) {
@@ -337,6 +358,11 @@ export default {
         }
       });
     },
+    /**
+     * @function: IncreaseCnt 增加Item图书的选择数量
+     * @param: Item 每一个图书的所有属性
+     * @return:
+     */
     IncreaseCnt: function(Item) {
       if (
         Item.book_des.num + 1 > Item.book_des.buy_limit &&
@@ -359,6 +385,11 @@ export default {
       this.handleBooks(2, Item.book_des.ID, false);
       // console.log("Increase Cnt" + Item.book_des.num);
     },
+    /**
+     * @function: DecreaseCnt 减少Item图书的选择数量
+     * @param: Item 每一个图书的所有属性
+     * @return:
+     */
     DecreaseCnt: function(Item) {
       if (Item.book_des.num === 1) {
         this.$swal({
@@ -372,6 +403,11 @@ export default {
       }
       this.handleBooks(2, Item.book_des.ID, false);
     },
+    /**
+     * @function: InputChange 输入框输入书籍的数量
+     * @param: Item 每本图书的所有属性
+     * @return:
+     */
     InputChange: function(Item) {
       if (isNaN(Item.book_des.num)) {
         this.$swal({
@@ -407,14 +443,28 @@ export default {
       }
       this.handleBooks(2, Item.book_des.ID, false);
     },
-    moveIntoLocale: function(good) {
+    /**
+     * @function: moveIntoLocale 把当前商品移入收藏夹
+     * @param: Item 当前物品
+     * @return:
+     */
+    moveIntoLocale: function(Item) {
       //移入收藏夹
       console.log("移入当前商品收藏夹");
     },
+    /**
+     * @function: moveSeletedtoLocale 把当前选中商品移入收藏夹
+     * @return:
+     */
     moveSeletedtoLocale: function() {
       //移入选中到收藏夹
       console.log("移入选中的进入收藏夹");
     },
+    /**
+     * @function: removeItem 把当前商品删除
+     * @param: Item 当前物品
+     * @return:
+     */
     removeItem: function(Item) {
       const self = this;
       //删除商品
@@ -466,8 +516,11 @@ export default {
           this.handleBooks(2, Item.book_des.ID, false);
         }
       });
-      
     },
+    /**
+     * @function: removeSeleted 把当前选中商品删除
+     * @return:
+     */
     removeSeleted: function() {
       if (this.SelectedAllShops.length == 0) {
         return;
@@ -521,15 +574,16 @@ export default {
       });
     },
     /**
-     * @function:
+     * @function: 保证单选，多选，全选的情况，并计算生产选中的商品以及动态计算支付成本
      * @param: handleType: 0.全选 1.某个书店被全部选择 2.某一本书被选中
      * @param: Item: 可以是null, 可以是某个书店的id, 或者是书本的id
-     * @param: flag: 手否去掉更新checked属性 
+     * @param: flag: 手否去掉更新checked属性
+     * @return:
      */
     handleBooks: function(handleType, id, flag) {
       const self = this;
       //更新 checked 属性
-      if(flag){
+      if (flag) {
         if (handleType == 0) {
           this.isAllSelected = !this.isAllSelected;
           this.cartGoodsShops.forEach(shop => {
@@ -563,9 +617,9 @@ export default {
       //计算 checked的书籍 并且更新 Selected
       //先清空 选择的数据
       this.SelectedAllShops = [];
-      this.cartGoodsShops.forEach((shop)=>{
-        shop.goods_info.forEach((book)=>{
-          if(book.isChecked && !book.book_invalid){
+      this.cartGoodsShops.forEach(shop => {
+        shop.goods_info.forEach(book => {
+          if (book.isChecked && !book.book_invalid) {
             self.SelectedAllShops.push({
               ID: self.randomWord(false, 20), //订单ID
               bookStoreID: shop.goods_store_id,
@@ -575,9 +629,9 @@ export default {
               bookAuthor: book.book_des.author,
               bookPrice: book.book_des.dis_price,
               bookCnt: book.book_des.num,
-              bookTotal: (
-                book.book_des.dis_price * book.book_des.num
-              ).toFixed(2)
+              bookTotal: (book.book_des.dis_price * book.book_des.num).toFixed(
+                2
+              )
             });
           }
         });
@@ -585,78 +639,30 @@ export default {
       //计算需要支付的金额
       this.allTotalMoney = 0.0;
       this.allCount = 0;
-      this.SelectedAllShops.forEach((book_order)=>{
+      this.SelectedAllShops.forEach(book_order => {
         self.allCount += parseInt(book_order.bookCnt);
         self.allTotalMoney += parseFloat(book_order.bookTotal);
       });
     },
+    /**
+     * @function: randomWord 生产随机字符串
+     * @param: randomFlag
+     * @param: min
+     * @param: max
+     * @return:
+     */
     randomWord: function(randomFlag, min, max) {
       var str = "",
-        range = min,
-        arr = [
-          "0",
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "a",
-          "b",
-          "c",
-          "d",
-          "e",
-          "f",
-          "g",
-          "h",
-          "i",
-          "j",
-          "k",
-          "l",
-          "m",
-          "n",
-          "o",
-          "p",
-          "q",
-          "r",
-          "s",
-          "t",
-          "u",
-          "v",
-          "w",
-          "x",
-          "y",
-          "z",
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G",
-          "H",
-          "I",
-          "J",
-          "K",
-          "L",
-          "M",
-          "N",
-          "O",
-          "P",
-          "Q",
-          "R",
-          "S",
-          "T",
-          "U",
-          "V",
-          "W",
-          "X",
-          "Y",
-          "Z"
-        ];
+      range = min,
+      arr = [
+          "0","1","2","3","4","5","6","7","8","9",
+          "a","b","c","d","e","f","g","h","i","j",
+          "k","l","m","n","o","p","q","r","s","t",
+          "u","v","w","x","y","z","A","B","C","D",
+          "E","F","G","H","I","J","K","L","M","N",
+          "O","P","Q","R","S","T","U","V","W","X",
+          "Y","Z"
+      ];
       // 随机产生
       if (randomFlag) {
         range = Math.round(Math.random() * (max - min)) + min;
@@ -667,12 +673,27 @@ export default {
       }
       return str;
     },
+    /**
+     * @function: submitCheck 提交订单
+     * @param:
+     * @return:
+     */
     submitCheck: function() {
       console.log("提交订单");
     },
+    /**
+     * @function: getHeight 获取div高度设置
+     * @param: Item 
+     * @return:
+     */
     getHeight: function(Item) {
       return Item.goods_info.length * 145;
     },
+    /**
+     * @function: init_cart_book 初始化购物车数据
+     * @param:
+     * @return:
+     */
     async init_cart_book() {
       const RetData = await this.axios_get("static/json/cart.json", []);
       const _this = this;
@@ -835,15 +856,20 @@ export default {
   margin-top: 10px;
 }
 .angle {
+  border-style: solid;
+  border-width: 6px;
+  font-size: 0;
+  height: 0;
+  line-height: 0;
   position: absolute;
-  top: -20px;
-  left: 40px;
-  width: 0px;
-  height: 0px;
-  border-top: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid #d6e0e0;
-  border-left: 10px solid transparent;
+  width: 0;
+  border-color: transparent transparent rgb(231, 224, 2);
+  _border-color: #ff4401 #ff4401 #fff;
+  left: 12%;
+  top: -12px;
+  margin-left: -6px;
+  box-shadow: 0 1px 0 #fff;
+  bottom: 2px;
 }
 .favortips {
   height: 36px;

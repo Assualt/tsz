@@ -554,6 +554,7 @@ export default {
         this.Address[i].bdefault = this.Address[i].id == item.id ? true : false;
       }
     },
+    //删除地址
     deleteAddress: function(item) {
       for (var i = 0; i < this.Address.length; i++) {
         if (this.Address[i].id == item.id) {
@@ -579,8 +580,8 @@ export default {
       this.bshowNewAddressModel = true;
       this.bus.$emit("ReceiveMessage", true);
     },
+    //登录
     async onSubmit() {
-      //login
       //safe check
       const self = this;
       if (this.submitData.username == "" || this.submitData.password == "") {
@@ -666,11 +667,7 @@ export default {
           });
           return;
         }
-        this.$cookies.set(
-          this.$app.APP_COOKIE_NAME,
-          strCookie,
-          strCookieExpireDays
-        );
+        this.$cookies.set(this.$app.APP_COOKIE_NAME,strCookie,strCookieExpireDays);
         this.$swal({
           title: "淘书斋提醒",
           text: "登录成功",
@@ -1019,14 +1016,10 @@ export default {
        * 8-12 强
        */
       var str_num = psw_new.length;
-      var Num_char_num =
-        psw_new.match(/[0-9]/gi) == null ? 0 : psw_new.match(/[0-9]/gi).length;
-      var Small_char_num =
-        psw_new.match(/[a-z]/g) == null ? 0 : psw_new.match(/[a-z]/g).length;
-      var Big_char_num =
-        psw_new.match(/[A-Z]/g) == null ? 0 : psw_new.match(/[A-Z]/g).length;
-      var Esp_char_num =
-        psw_new.length - Num_char_num - Small_char_num - Big_char_num;
+      var Num_char_num = psw_new.match(/[0-9]/gi) == null ? 0 : psw_new.match(/[0-9]/gi).length;
+      var Small_char_num = psw_new.match(/[a-z]/g) == null ? 0 : psw_new.match(/[a-z]/g).length;
+      var Big_char_num = psw_new.match(/[A-Z]/g) == null ? 0 : psw_new.match(/[A-Z]/g).length;
+      var Esp_char_num = psw_new.length - Num_char_num - Small_char_num - Big_char_num;
       var strength = 0;
       if (str_num === Num_char_num) {
         //全数字
@@ -1034,28 +1027,18 @@ export default {
       } else if (str_num === Big_char_num || str_num === Small_char_num) {
         //全字母 全大/小写
         strength += 2;
-      } else if (
-        (str_num === Big_char_num + Small_char_num &&
-          Big_char_num * Small_char_num > 0) ||
-        (str_num === Big_char_num + Num_char_num &&
-          Big_char_num * Num_char_num > 0) ||
-        (str_num === Small_char_num + Num_char_num &&
-          Small_char_num * Num_char_num > 0)
+      } else if ( (str_num === Big_char_num + Small_char_num && Big_char_num * Small_char_num > 0) ||
+        (str_num === Big_char_num + Num_char_num && Big_char_num * Num_char_num > 0) ||
+        (str_num === Small_char_num + Num_char_num && Small_char_num * Num_char_num > 0)
       ) {
         //为大写混合 或者大/小写字母和数字混合
         strength += 4;
-      } else if (
-        str_num === Num_char_num + Big_char_num + Small_char_num &&
-        Num_char_num * Small_char_num * Big_char_num > 0
-      ) {
+      } else if ( str_num === Num_char_num + Big_char_num + Small_char_num && Num_char_num * Small_char_num * Big_char_num > 0) {
         //大小写和字母混合
         var num_rate = Num_char_num / parseFloat(str_num);
         var big_rate = Big_char_num / parseFloat(str_num);
         var small_rate = Small_char_num / parseFloat(str_num);
-        var abs =
-          Math.abs(num_rate - small_rate) +
-          Math.abs(big_rate - num_rate) +
-          Math.abs(small_rate - big_rate);
+        var abs = Math.abs(num_rate - small_rate) + Math.abs(big_rate - num_rate) + Math.abs(small_rate - big_rate);
         if (abs >= 0 && abs <= 0.1) {
           //三者出现频率相当
           strength += 10;
@@ -1071,27 +1054,16 @@ export default {
       } else if (Esp_char_num > 0) {
         strength = 4;
         var rest_num = str_num - Esp_char_num;
-        if (
-          rest_num === Big_char_num ||
-          rest_num === Small_char_num ||
-          rest_num === Num_char_num
-        ) {
+        if ( rest_num === Big_char_num || rest_num === Small_char_num ||rest_num === Num_char_num) {
           //有特殊字符和 大/小写/数字其一组合
           strength += 2;
         } else if (
-          (rest_num === Big_char_num + Num_char_num &&
-            Big_char_num * Num_char_num > 0) ||
-          (rest_num === Big_char_num + Small_char_num &&
-            Big_char_num * Small_char_num > 0) ||
-          (rest_num === Num_char_num + Small_char_num &&
-            Num_char_num * Small_char_num > 0)
-        ) {
+          (rest_num === Big_char_num + Num_char_num && Big_char_num * Num_char_num > 0) ||
+          (rest_num === Big_char_num + Small_char_num && Big_char_num * Small_char_num > 0) ||
+          (rest_num === Num_char_num + Small_char_num && Num_char_num * Small_char_num > 0)) {
           //有特殊字符和 大/小写/数字其二组合
           strength += 4;
-        } else if (
-          rest_num === Big_char_num + Num_char_num + Small_char_num &&
-          Big_char_num * Small_char_num * Num_char_num > 0
-        ) {
+        } else if ( rest_num === Big_char_num + Num_char_num + Small_char_num && Big_char_num * Small_char_num * Num_char_num > 0 ) {
           strength += 6;
         }
       }
@@ -1183,8 +1155,7 @@ export default {
         "澳门",
         "台湾"
       ],
-      Address: [
-        {
+      Address: [{
           id: 1,
           name: "xxx",
           tel: "1375xxx198",
@@ -1255,9 +1226,6 @@ export default {
     }
   },
   computed: {
-    /**
-     * @return {int}
-     */
     CurrentMode() {
       this.Mode = this.$store.state.CurrentMode;
       return this.$store.state.CurrentMode;

@@ -59,13 +59,13 @@
               <router-link role="menuitem" tabindex="-1" to="/login">我的主页</router-link>
             </li>
             <li role="presentation">
-              <router-link role="menuitem" tabindex="-1" to="/cart">我的购物车</router-link>
+              <router-link role="menuitem" tabindex="-1" :to="'/cart?u='+uid" >我的购物车</router-link>
             </li>
             <li role="presentation">
-              <router-link role="menuitem" tabindex="-1" to="/trade">我的交易记录</router-link>
+              <router-link role="menuitem" tabindex="-1" :to="'/trade?u='+uid">我的交易记录</router-link>
             </li>
             <li role="presentation">
-              <router-link role="menuitem" tabindex="-1" to="/favorite">我的收藏</router-link>
+              <router-link role="menuitem" tabindex="-1" :to="'/favorite?u='+uid">我的收藏</router-link>
             </li>
             <li role="presentation">
               <router-link role="menuitem" tabindex="-1" to="/login">修改密码</router-link>
@@ -95,38 +95,9 @@ export default {
   data: function() {
     return {
       AllProvinces: [
-        "北京",
-        "上海",
-        "黑龙江",
-        "吉林",
-        "辽宁",
-        "天津",
-        "安徽",
-        "江苏",
-        "浙江",
-        "陕西",
-        "湖北",
-        "广东",
-        "湖南",
-        "甘肃",
-        "四川",
-        "山东",
-        "福建",
-        "河南",
-        "重庆",
-        "云南",
-        "河北",
-        "江西",
-        "山西",
-        "贵州",
-        "广西",
-        "内蒙古",
-        "宁夏",
-        "青海",
-        "西藏",
-        "香港",
-        "澳门",
-        "台湾"
+        "北京","上海","黑龙江","吉林","辽宁","天津","安徽","江苏","浙江","陕西","湖北","广东","湖南",
+        "甘肃","四川","山东","福建","河南","重庆","云南","河北","江西","山西","贵州","广西","内蒙古",
+        "宁夏","青海","西藏","香港","澳门","台湾"
       ],
       bShow: 0,
       CurrentCityUniversity: [],
@@ -260,6 +231,9 @@ export default {
       var currentCookie = this.$store.state.CurrentCookie;
       if (currentCookie != "" && currentCookie != null) this.bIsLogined = true;
       return this.bIsLogined;
+    },
+    uid(){
+      return this.$store.state.CurrentCookie;
     }
   },
   props: ["universities"],

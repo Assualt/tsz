@@ -2,7 +2,7 @@
   <div class="main">
     <div class="header-tools">
       <div class="header-tools-left fl">
-        <a href="#">
+        <a href="/index">
           <img src="../assets/logo.png" alt width="180" height="64" />
         </a>
       </div>
@@ -37,6 +37,9 @@ export default {
   components:{
     TSZGoodsTable,
     TSZCartSlide
+  },
+  created(){
+    console.log(this.$route.query);
   }
 };
 </script>
