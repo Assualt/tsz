@@ -5,8 +5,13 @@ import random
 
 IDentityCode_TimeOut = 5 * 60
 
-
 class RegisterModal(Resource):
+    """
+    用户注册
+    :param name: 用户名
+    :param passwd: 用户密码
+    :param identifying_code:用户注册验证码
+    """
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('name', type=str)
@@ -15,9 +20,9 @@ class RegisterModal(Resource):
 
     def post(self):
         data = self.parser.parse_args()
-        username = data.get('name')
-        passwd = data.get('passwd')
-        identifying_code = data.get('identifying_code')
+        username = data.get('name', None)
+        passwd = data.get('passwd', None)
+        identifying_code = data.get('identifying_code', None)
         if username == None or passwd == None or identifying_code == None:
             return CommResult.HttpResult.invalid_args()
         # GET IDentity code from redis
@@ -51,6 +56,13 @@ class RegisterModal(Resource):
         return CommResult.HttpResult.unsupported_method()
 
 class IdentityModal(Resource):
+    """
+    获取验证码
+    send identity code to the user
+    please in IDentityCode_TimeOut to update
+    :param name:用户名
+    :param type:用户的验证码类型
+    """
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('name', type=str)
@@ -58,15 +70,12 @@ class IdentityModal(Resource):
 
     def get(self):
         data = self.parser.parse_args()
-        username = data.get('name')
-        utype = data.get('type')
+        username = data.get('name', None)
+        utype = data.get('type', None)
+        if utype == None or username == None:
+            return CommResult.HttpResult.invalid_args()
         logger.info("get {u} and type:{t}".format(u=username,t=utype))
         identity_code  = self.get_random_number()
-
-        ###
-        # send identity code to the user
-        # please in IDentityCode_TimeOut to update
-        ###
 
         if utype == 1:
             # Register Identity Code

@@ -54,7 +54,7 @@ p:hover {
 }
 
 .fade-enter-active, .fade-leave-active {
-    transition: all .5s ease;
+    transition: all .1s ease;
 }
 
 /*scale 缩放进出*/

@@ -5,6 +5,7 @@ import Login from '../pages/Login'
 import Cart from '../pages/Cart'
 import Trade from '../pages/Trade'
 import store from '../store/index.js'
+import Sold from '../pages/Sold'
 
 Vue.use(Router)
 
@@ -44,6 +45,14 @@ const router = new Router({
       component: Trade,
       meta:{
         requireAuth: true
+      }
+    },
+    {
+      path: '/sold',
+      name: 'Sold',
+      component: Sold,
+      meta:{
+        requireAuth: false
       }
     }
   ]

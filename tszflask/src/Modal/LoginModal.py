@@ -6,6 +6,11 @@ from src.const import SQLFormatter as sql
 
 
 class LoginModal( Resource ):
+    """
+    用户登录
+    :param name: 用户名
+    :param passwd: 用户密码(hash_md5)
+    """
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument( 'name', type=str )
@@ -16,9 +21,8 @@ class LoginModal( Resource ):
 
     def post(self):
         data = self.parser.parse_args()
-        user = data.get( 'name' )
-        passwd = data.get( "passwd" )
-        logger.info( "Get Request OK. user:{user} passwd:{passwd}".format( user=user, passwd=passwd ) )
+        user = data.get( 'name', None )
+        passwd = data.get( "passwd", None )
         if user == None or passwd == None:
             return CommResult.HttpResult.invalid_args()
         result = Mysql.MysqlHelper().query( sql.SQL_QUERY_ID_PASSWD, [user] )
@@ -40,12 +44,10 @@ class LoginModal( Resource ):
                 str_cookie_sha1 = HashHelper.hash_sha1( cookie )
                 str_expiresDays = Config.LOGIN_TIME_OUT / 86400
                 ret_cookie = '{m1};{c};{e}'.format( m1=str_cookie_sha1, c=cookie, e=str_expiresDays )
-                logger.info( "s:{s} s1:{s1}".format( s=cookie, s1=str_cookie_sha1 ) )
-                logger.info(
-                    "account:{account} token:{token} timestamp:{time} ret_cookie:{ret_cookie}".format( account=user,
-                                                                                                       token=token,
-                                                                                                       time=timestamp,
-                                                                                                       ret_cookie=ret_cookie ) )
+                logger.info("account:{account} token:{token} timestamp:{time} ret_cookie:{ret_cookie}".format(account=user,
+                                                                                                              token=token,
+                                                                                                              time=timestamp,
+                                                                                                              ret_cookie=ret_cookie ) )
                 return CommResult.HttpResult.format( HttpStatus.HTTP_200_OK, HttpStatus.HTTP_200_MESSAGE,
                                                      AppStatus.APP_200_OK, ret_cookie )
             else:
@@ -60,7 +62,11 @@ class LoginModal( Resource ):
 
 
 class LoginOutModal( Resource ):
-
+    """
+    用户注销
+    :param s_user: 用户名
+    :param s_token: 用户的token_md5
+    """
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument( 's_token' )

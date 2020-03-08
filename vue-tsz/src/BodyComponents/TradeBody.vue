@@ -86,20 +86,24 @@
               </dd>
               <dd>
                 <a href="#">已买到的宝贝</a>
-                <ul class="trade-list">
-                  <li>
-                    <a href="#">我的拍卖</a>
-                  </li>
-                  <li>
-                    <a href="#">我的保险</a>
-                  </li>
-                  <li>
-                    <a href="#">我的彩票</a>
-                  </li>
-                  <li>
-                    <a href="#">官方彩运</a>
-                  </li>
-                </ul>
+                <i class="fa fa-toggle-down fr" v-if="!bExpandAll" @click="bExpandAll=true"></i>
+                <i class="fa fa-toggle-up fr" v-else @click="bExpandAll=false"></i>
+                <transition name="fade">
+                  <ul class="trade-list" v-show="bExpandAll">
+                    <li>
+                      <a href="#">我的拍卖</a>
+                    </li>
+                    <li>
+                      <a href="#">我的保险</a>
+                    </li>
+                    <li>
+                      <a href="#">我的彩票</a>
+                    </li>
+                    <li>
+                      <a href="#">官方彩运</a>
+                    </li>
+                  </ul>
+                </transition>
               </dd>
               <dd>
                 <a href="#">购买过的店铺</a>
@@ -320,25 +324,29 @@
                 <button class="btn btn-default">下一页</button>
               </div>
               <ul class="mytrade-table-main-list">
-                <li class="mytrade-table-main-list-item" v-for="(item,index ) in orderList" :key="index">
+                <li
+                  class="mytrade-table-main-list-item"
+                  v-for="(item,index ) in orderList"
+                  :key="index"
+                >
                   <div class="item-header">
                     <div class="col-md-4">
-                      <input type="checkbox">
+                      <input type="checkbox" class="fl" style="margin-top:15px" />
                       <b>{{item.order_date}}</b>
                       <span>订单号:{{item.order_id}}</span>
                     </div>
                     <div class="col-md-2">
                       <a href="#" class="fl">
-                        <img src="static/images/tm.png" width=16 height=16>
+                        <img src="static/images/tm.png" width="16" height="16" />
                       </a>
                       <a href="#">
-                        <span class="item-store fl">&nbsp;{{item.order_store}}</span> 
+                        <span class="item-store fl">&nbsp;{{item.order_store}}</span>
                       </a>
                     </div>
                     <div class="col-md-6">
                       <div class="col-md-3">
                         <a href="#" class="hvr-float-shadow">
-                          <img src="static/images/contact.jpeg" width=15 height=15 alt="#">
+                          <img src="static/images/contact.jpeg" width="15" height="15" alt="#" />
                         </a>
                         <span class="item-contact">和我聯繫</span>
                       </div>
@@ -356,23 +364,23 @@
                   <div class="item-main">
                     <div class="col-md-4">
                       <div class="col-md-4">
-                        <img :src="item.order_pic" class="img-responsive" height=120>
+                        <img :src="item.order_pic" class="img-responsive" height="120" />
                       </div>
                       <div class="col-md-8">
                         <span class="item-link">
-                          <a href="#">{{item.order_advertisement}}重庆移动 手机 话费充值 20元 快充直充asdasdasdasdasdasdasd 24小时自动充 快速到帐</a>
+                          <a
+                            href="#"
+                          >{{item.order_advertisement}}重庆移动 手机 话费充值 20元 快充直充asdasdasdasdasdasdasd 24小时自动充 快速到帐</a>
                         </span>
                         <p class="item-link">{{item.order_info}}</p>
                         <span>
-                          <img src="static/images/fenqi.png">
-                          <img src="static/images/7day.jpg">
-                          <img src="static/images/guarantee.png">
+                          <img src="static/images/fenqi.png" />
+                          <img src="static/images/7day.jpg" />
+                          <img src="static/images/guarantee.png" />
                         </span>
                       </div>
                     </div>
-                    <div class="col-md-1">
-                      &yen;&nbsp;{{item.order_s_price}}
-                    </div>
+                    <div class="col-md-1">&yen;&nbsp;{{item.order_s_price}}</div>
                     <div class="col-md-1">{{item.order_num}}</div>
                     <div class="col-md-6 item-other">
                       <div class="col-md-3">
@@ -382,32 +390,41 @@
                         <span>&yen;&nbsp;{{item.order_total_price}}</span>
                         <p>(自动充值)</p>
                         <a href="#" v-show="item.order_tel">
-                          <img src="static/images/book_tel.png">
+                          <img src="static/images/book_tel.png" />
                         </a>
                       </div>
                       <div class="col-md-3">
                         <p>充值成功</p>
                         <a :href="'/book_info?id='+item.order_id">订单详情</a>
-                        <br>
+                        <br />
                         <a :href="'/book_info?id='+item.order_id+'&type=hb'">花呗账单</a>
                       </div>
                       <div class="col-md-3">
                         <a :href="'/book_recomment?id='+item.order_id">追加评论</a>
-                        <br>
+                        <br />
                         <a :href="''">再次购买</a>
-                        <br>
-                        <button class="btn btn-primary btn-sm"><a href="#">查看禮包</a></button>
+                        <br />
+                        <button class="btn btn-primary btn-sm">
+                          <a href="#">查看禮包</a>
+                        </button>
                       </div>
                     </div>
                   </div>
                   <div class="item-another" v-show="item.order_enableInsure">
-                    <div class="col-md-4">
-                      保险服务
-                    </div>
-                    <div class="col-md-4">
-                      &yen;&nbsp;{{item.order_insure}}
-                    </div>
+                    <div class="col-md-4">保险服务</div>
+                    <div class="col-md-4">&yen;&nbsp;{{item.order_insure}}</div>
                   </div>
+                </li>
+              </ul>
+              <ul class="pagination fr">
+                <li class="page-item">
+                  <a class="page-link" href="#">Previous</a>
+                </li>
+                <li class="page-item" v-for="(item, index) in pageRange" :key="index">
+                  <a class="page-link" href="#">{{item}}</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#">Next</a>
                 </li>
               </ul>
             </div>
@@ -415,12 +432,10 @@
         </div>
       </div>
     </div>
-    
   </div>
 </template>
 
 <script>
-
 export default {
   name: "TradeBody",
   data: function() {
@@ -456,60 +471,65 @@ export default {
         "退款中订单"
       ],
       orderServiceType: ["全部", "退款中", "已投诉"],
-      orderSearchString: "精简",
-      orderList:[
+      orderSearchString: "",
+      orderList: [
         {
-          order_id:"833937697270767647",
-          order_date:"2020-02-10",
-          order_store:"中國移動官方旗艦店",
-          order_link:"http://",
-          order_pic:"static/upload/阿甘正传.jpg",
-          order_advertisement:"重庆移动 手机 话费充值 20元 快充直充24小时自动充 快速到帐",
-          order_info:"颜色：【春秋款】灰色(条纹男孩)尺码：185/2XL[加绒加厚]",
-          order_s_price:20.00,
-          order_num:1,
-          order_service_link:'https://',
-          order_total_price:20.00,
-          order_tel:true,
-          order_insure:0.00,
-          order_enableInsure:true,
-          order_status:1
+          order_id: "833937697270767647",
+          order_date: "2020-02-10",
+          order_store: "中國移動官方旗艦店",
+          order_link: "http://",
+          order_pic: "static/upload/阿甘正传.jpg",
+          order_advertisement:
+            "重庆移动 手机 话费充值 20元 快充直充24小时自动充 快速到帐",
+          order_info: "颜色：【春秋款】灰色(条纹男孩)尺码：185/2XL[加绒加厚]",
+          order_s_price: 20.0,
+          order_num: 1,
+          order_service_link: "https://",
+          order_total_price: 20.0,
+          order_tel: true,
+          order_insure: 0.0,
+          order_enableInsure: true,
+          order_status: 1
         },
         {
-          order_id:"833937697270767647",
-          order_date:"2020-02-10",
-          order_store:"中國聯通官方旗艦店",
-          order_link:"http://",
-          order_pic:"static/upload/大客戶.jpg",
-          order_advertisement:"重庆移动 手机 话费充值 20元 快充直充24小时自动充 快速到帐",
-          order_info:"颜色：【春秋款】灰色(条纹男孩)尺码：185/2XL[加绒加厚]",
-          order_s_price:20.00,
-          order_num:1,
-          order_service_link:'https://',
-          order_total_price:20.00,
-          order_tel:true,
-          order_insure:0.00,
-          order_enableInsure:true,
-          order_status:1
+          order_id: "833937697270767647",
+          order_date: "2020-02-10",
+          order_store: "中國聯通官方旗艦店",
+          order_link: "http://",
+          order_pic: "static/upload/大客户.jpg",
+          order_advertisement:
+            "重庆移动 手机 话费充值 20元 快充直充24小时自动充 快速到帐",
+          order_info: "颜色：【春秋款】灰色(条纹男孩)尺码：185/2XL[加绒加厚]",
+          order_s_price: 20.0,
+          order_num: 1,
+          order_service_link: "https://",
+          order_total_price: 20.0,
+          order_tel: true,
+          order_insure: 0.0,
+          order_enableInsure: true,
+          order_status: 1
         },
         {
-          order_id:"833937697270767647",
-          order_date:"2020-02-10",
-          order_store:"中國聯通官方旗艦店",
-          order_link:"http://",
-          order_pic:"static/upload/大客戶.jpg",
-          order_advertisement:"重庆移动 手机 话费充值 20元 快充直充24小时自动充 快速到帐",
-          order_info:"颜色：【春秋款】灰色(条纹男孩)尺码：185/2XL[加绒加厚]",
-          order_s_price:20.00,
-          order_num:1,
-          order_service_link:'https://',
-          order_total_price:20.00,
-          order_tel:true,
-          order_insure:0.00,
-          order_enableInsure:false,
-          order_status:1
+          order_id: "833937697270767647",
+          order_date: "2020-02-10",
+          order_store: "中國聯通官方旗艦店",
+          order_link: "http://",
+          order_pic: "static/upload/白鹿原.jpg",
+          order_advertisement:
+            "重庆移动 手机 话费充值 20元 快充直充24小时自动充 快速到帐",
+          order_info: "颜色：【春秋款】灰色(条纹男孩)尺码：185/2XL[加绒加厚]",
+          order_s_price: 20.0,
+          order_num: 1,
+          order_service_link: "https://",
+          order_total_price: 20.0,
+          order_tel: true,
+          order_insure: 0.0,
+          order_enableInsure: false,
+          order_status: 1
         }
-      ]
+      ],
+      bExpandAll: true,
+      pageRange:[1,2,3,4,5]
     };
   },
   methods: {
@@ -609,8 +629,8 @@ export default {
 }
 
 .trade-content {
-  padding: 0 10%;
-  height: 800px;
+  padding: 0 5%;
+  /* height: 1200px; */
   overflow-y: auto;
 }
 .mytrade-panel {
@@ -647,6 +667,8 @@ a:hover {
 }
 .mytrade-menu-item dd a {
   font-size: 12px;
+  height: 20px;
+  line-height: 20px;
 }
 ul.trade-list li {
   width: 100%;
@@ -702,67 +724,67 @@ ul.mytrade-table-header-list li {
   text-align: center;
   line-height: 40px;
 }
-div.mytrade-table-list{
-  width:100%;
-  height:auto;
+div.mytrade-table-list {
+  width: 100%;
+  height: auto;
 }
-ul.mytrade-table-main-list{
-  margin:10px 0 0 0;
+ul.mytrade-table-main-list {
+  margin: 10px 0 0 0;
 }
 
-li.mytrade-table-main-list-item{
-  width:100%;
-  height:auto;
-  margin-top:10px;
+li.mytrade-table-main-list-item {
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
   border-bottom: 1px solid #ececec;
   border-left: 1px solid #ececec;
   border-right: 1px solid #ececec;
 }
 
-li.mytrade-table-main-list-item:hover{
+li.mytrade-table-main-list-item:hover {
   border-bottom: 1px solid #eeeeee;
   border-left: 1px solid #eeeeee;
   border-right: 1px solid #eeeeee;
 }
 
-div.item-header{
-  width:100%;
-  height:42px;
-  background:#ececec;
-  line-height:42px;
-  padding:0 10px;
-  text-align:center;
+div.item-header {
+  width: 100%;
+  height: 42px;
+  background: #ececec;
+  line-height: 42px;
+  padding: 0 10px;
+  text-align: center;
 }
-div.item-header div{
-  height:100%;
+div.item-header div {
+  height: 100%;
 }
-span.item-store{
-  line-height:42px;
-  width:100px;
-  font-size:10px;
-  overflow:hidden; 
-  white-space:nowrap; 
+span.item-store {
+  line-height: 42px;
+  width: 100px;
+  font-size: 10px;
+  overflow: hidden;
+  white-space: nowrap;
   word-break: break-all;
-  text-overflow:ellipsis;
+  text-overflow: ellipsis;
 }
-span.item-contact{
-  line-height:42px;
-  font-size:12px;
-  background:rgb(250,236,150);
-  border:1px solid #fefefe;
+span.item-contact {
+  line-height: 42px;
+  font-size: 12px;
+  background: rgb(250, 236, 150);
+  border: 1px solid #fefefe;
 }
-.item-ops i{
-  line-height:42px;
-}
-
-div.item-main{
-  height:130px;
-  padding:15px 5px;
+.item-ops i {
+  line-height: 42px;
 }
 
-span.item-link{
-  font-size:12px;
-  overflow:hidden;
+div.item-main {
+  height: 150px;
+  padding: 15px 5px;
+}
+
+span.item-link {
+  font-size: 12px;
+  overflow: hidden;
   text-overflow: -o-ellipsis-lastline;
   overflow: hidden;
   display: -webkit-box;
@@ -770,25 +792,30 @@ span.item-link{
   line-clamp: 2;
   -webkit-box-orient: vertical;
 }
-div.item-other div{
-  text-align:center;
+div.item-other div {
+  text-align: center;
 }
 
-div.col-md-3 a,p{
-  font-size:12px;
+div.col-md-3 a,
+p {
+  font-size: 12px;
 }
-div.item-another{
-  width:100%;
-  height:50px;
+div.item-another {
+  width: 100%;
+  height: 50px;
   border-bottom: 1px solid #ececec;
   border-left: 1px solid #ececec;
   border-right: 1px solid #ececec;
-  line-height:50px;
+  line-height: 50px;
 }
 
-div.item-another:hover{
+div.item-another:hover {
   border-bottom: 1px solid #eeeeee;
   border-left: 1px solid #eeeeee;
   border-right: 1px solid #eeeeee;
 }
-</style>
+div.menu-sub {
+  height: 30px;
+  line-height: 30px;
+}
+</style>                
