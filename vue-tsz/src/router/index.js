@@ -6,6 +6,10 @@ import Cart from '../pages/Cart'
 import Trade from '../pages/Trade'
 import store from '../store/index.js'
 import Sold from '../pages/Sold'
+import NotFound from '../pages/404'
+//admin
+import Admin from '../pages/Admin'
+import DashBoard from '../pages/DashBoard'
 
 Vue.use(Router)
 
@@ -36,7 +40,7 @@ const router = new Router({
       name: 'Cart',
       component: Cart,
       meta:{
-        requireAuth: true //判断路由是否需要登录权限
+        // requireAuth: true //判断路由是否需要登录权限
       }
     },
     {
@@ -44,7 +48,7 @@ const router = new Router({
       name: 'Trade',
       component: Trade,
       meta:{
-        requireAuth: true
+        // requireAuth: true
       }
     },
     {
@@ -54,6 +58,63 @@ const router = new Router({
       meta:{
         requireAuth: false
       }
+    },
+    {
+      path: '/admin',
+      redirect: '/admin/login'
+    },
+    {
+      path: '/admin/login',
+      name: 'Admin',
+      component: Admin
+    },
+    {
+      path: '/admin/dashboard',
+      name: 'DashBoard',
+      component: DashBoard,
+      children:[
+        {
+          path:'tags',
+          name:'tags',
+          component: DashBoard
+        },
+        {
+          path:'usermgr',
+          name:'usermgr',
+          component: DashBoard
+        },
+        {
+          path:'ordermgr',
+          name:'ordermgr',
+          component: DashBoard
+        },
+        {
+          path:'server',
+          name:'server',
+          component: DashBoard
+        },
+        {
+          path:'charts',
+          name:'charts',
+          component: DashBoard
+        },
+        {
+          path:'logsmgr',
+          name:'logsmgr',
+          component: DashBoard
+        },
+        {
+          path:'loginout',
+          name:'loginout',
+          component: DashBoard
+        }
+      ]
+    },
+    {
+      path:'*',
+      name: 'notfound',
+      component: NotFound
+
     }
   ]
 })

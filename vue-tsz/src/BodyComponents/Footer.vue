@@ -39,7 +39,9 @@ export default {
 .footer {
   background: rgb(63, 63, 63);
   width: 100%;
-  height: 150px;
+  padding-top: 30px;
+  height: 200px;
+  margin-top: 100px;
 }
 .footer-head {
   width: 100%;

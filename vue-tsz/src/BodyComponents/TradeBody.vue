@@ -340,7 +340,9 @@
                         <img src="static/images/tm.png" width="16" height="16" />
                       </a>
                       <a href="#">
-                        <span class="item-store fl">&nbsp;{{item.order_store}}</span>
+                        <span class="item-store fl">
+                          <a :href="'/store/'+ item.order_store_link">{{item.order_store}}</a>
+                        </span>
                       </a>
                     </div>
                     <div class="col-md-6">
@@ -348,15 +350,15 @@
                         <a href="#" class="hvr-float-shadow">
                           <img src="static/images/contact.jpeg" width="15" height="15" alt="#" />
                         </a>
-                        <span class="item-contact">和我聯繫</span>
+                        <span class="item-contact">和我联系</span>
                       </div>
                       <div class="col-md-6"></div>
                       <div class="col-md-3">
                         <a class="item-ops fr">
-                          <i class="fa fa-trash fa-fw fa-2x"></i>
+                          <i class="fa fa-trash fa-fw fa-1x"></i>
                         </a>
                         <a class="item-ops fr">
-                          <i class="fa fa-flag fa-fw fa-2x"></i>
+                          <i class="fa fa-flag fa-fw fa-1x"></i>
                         </a>
                       </div>
                     </div>
@@ -370,7 +372,7 @@
                         <span class="item-link">
                           <a
                             href="#"
-                          >{{item.order_advertisement}}重庆移动 手机 话费充值 20元 快充直充asdasdasdasdasdasdasd 24小时自动充 快速到帐</a>
+                          >{{item.order_advertisement}}</a>
                         </span>
                         <p class="item-link">{{item.order_info}}</p>
                         <span>
@@ -477,10 +479,9 @@ export default {
           order_id: "833937697270767647",
           order_date: "2020-02-10",
           order_store: "中國移動官方旗艦店",
-          order_link: "http://",
+          order_store_link: "31231233",
           order_pic: "static/upload/阿甘正传.jpg",
-          order_advertisement:
-            "重庆移动 手机 话费充值 20元 快充直充24小时自动充 快速到帐",
+          order_advertisement:"重庆移动 手机 话费充值 20元 快充直充24小时自动充 快速到帐",
           order_info: "颜色：【春秋款】灰色(条纹男孩)尺码：185/2XL[加绒加厚]",
           order_s_price: 20.0,
           order_num: 1,
@@ -495,7 +496,7 @@ export default {
           order_id: "833937697270767647",
           order_date: "2020-02-10",
           order_store: "中國聯通官方旗艦店",
-          order_link: "http://",
+          order_store_link: "2311234",
           order_pic: "static/upload/大客户.jpg",
           order_advertisement:
             "重庆移动 手机 话费充值 20元 快充直充24小时自动充 快速到帐",
@@ -513,7 +514,7 @@ export default {
           order_id: "833937697270767647",
           order_date: "2020-02-10",
           order_store: "中國聯通官方旗艦店",
-          order_link: "http://",
+          order_store_link: "1234543",
           order_pic: "static/upload/白鹿原.jpg",
           order_advertisement:
             "重庆移动 手机 话费充值 20元 快充直充24小时自动充 快速到帐",

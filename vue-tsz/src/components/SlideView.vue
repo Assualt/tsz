@@ -7,7 +7,6 @@
           alt="加载失败"
           value="0"
           id="slide_img"
-          width="100%"
           class="img-responsive"
         />
       </a>
@@ -68,16 +67,21 @@ export default {
 .slider_view {
   width: 100%;
   background: #f5f5f5;
-  padding: 20px 14%;
-  margin: 15px 0 1% 0;
-  height: 370px;
+  padding: 0 14%;
+  margin: 0;
+  height: 350px;
+}
+#slide_img{
+  position: relative;
+  height: 320px;
+  width: 100%;
 }
 .slider_view_btn {
   width: 100%;
   height: 110px;
   position: relative;
   left: 0;
-  top: -170px;
+  top: -220px;
 }
 .slider_sel_btn {
   text-align: center;

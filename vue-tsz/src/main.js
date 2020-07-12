@@ -11,6 +11,10 @@ import 'font-awesome/css/font-awesome.min.css'
 import '../static/styles/common.css'
 import '../static/styles/hover-min.css'
 import '../static/bootstrap/js/bootstrap.min'
+import animated from 'animate.css'
+import 'default-passive-events'
+
+Vue.use(animated)
 Vue.config.productionTip = false
 
 import axios from 'axios'
@@ -34,6 +38,11 @@ Vue.prototype.$app = app;
 Vue.prototype.$sha1 = sha1;
 Vue.prototype.$echars = echarts;
 /* eslint-disable */
+
+/* 引入elements js/css */
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
 
 //define the axios function
 Vue.prototype.axios_get=async function(url,params){

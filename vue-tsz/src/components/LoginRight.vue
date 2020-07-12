@@ -598,15 +598,17 @@ export default {
       }
       let loginParams = {
         name: this.submitData.username,
-        passwd: this.$md5(this.submitData.password)
+        passwd: this.$sha1(this.submitData.password),
+        salt:'123456'
       };
       let Result = await this.axios_post("api/login", loginParams);
       if (Result == false) return false;
       let ResultData = Result.data;
-      if (ResultData.status != 200) {
+      //返回格式为{code:200, msg:'Request OK', data:}
+      if (ResultData.code != 200) {
         this.$swal({
           title: "淘书斋提醒",
-          text: ResultData.info.message,
+          text: ResultData.data,
           confirmButtonText: "确定",
           showCancelButton: false,
           focusConfirm: true,
@@ -617,71 +619,51 @@ export default {
           }
         });
         return;
-      } else if (ResultData.info.code != 200) {
-        this.$swal({
-          title: "淘书斋提醒",
-          text: ResultData.info.message,
-          confirmButtonText: "确定",
-          showCancelButton: false,
-          focusConfirm: true,
-          type: "error",
-          onClose: function() {
-            //显示框关闭 清空密码框
-            self.submitData.password = "";
-          }
-        });
-        return;
-      } else {
-        let CookiesMsg = ResultData.info.message.split(";");
-        if (CookiesMsg.length != 3) {
-          this.$swal({
-            title: "淘书斋提醒",
-            text:
-              "such user (" +
-              this.submitData.username +
-              ") Receive Cookie msg is not Corrected.",
-            confirmButtonText: "确定",
-            showCancelButton: false,
-            focusConfirm: true,
-            type: "error",
-            onClose: function() {
-              //显示框关闭 清空密码框
-              self.submitData.password = "";
-            }
-          });
-          return;
-        }
-        var strCookieMd5 = CookiesMsg[0];
-        var strCookie = CookiesMsg[1];
-        var strCookieExpireDays = parseInt(CookiesMsg[2], 10);
-        //坑 js/md5 与python/md5 不一致 使用sha1函数
-        var CalcSha1 = this.$sha1(CookiesMsg[1]);
-        if (CalcSha1 != strCookieMd5) {
-          this.$swal({
-            title: "淘书斋提醒",
-            text: "Cookie is not valid",
-            confirmButtonText: "确定",
-            showCancelButton: false,
-            focusConfirm: true,
-            type: "error"
-          });
-          return;
-        }
-        this.$cookies.set(this.$app.APP_COOKIE_NAME,strCookie,strCookieExpireDays);
-        this.$swal({
-          title: "淘书斋提醒",
-          text: "登录成功",
-          confirmButtonText: "确定",
-          showCancelButton: false,
-          focusConfirm: true,
-          type: "success"
-        });
       }
+      // data -> xhou;expiretime;md5(uuid+salt)
+      console.log(JSON.stringify(ResultData));
+      
+      //verfiy code
+      let hashList = ResultData.data.split(";");
+      let cookie = hashList[0];
+      let cookieMd5 = hashList[1];
+      if(this.$md5(cookie) != cookieMd5){
+        this.$swal({
+          title: "淘书斋提醒",
+          text: "Cookie md5 check Faild",
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          focusConfirm: true,
+          type: "error",
+          onClose: function() {
+            //显示框关闭 清空密码框
+            self.submitData.password = "";
+          }
+        });
+        return ;
+      }
+      //expiretime 
+      let datalist = window.atob(cookie);
+      let expiretime = parseInt(datalist[1]);
+      let token = datalist[2];
+
+      this.$cookies.set(this.$app.APP_COOKIE_NAME,token);
+      this.$swal({
+        title: "淘书斋提醒",
+        text: "登录成功",
+        confirmButtonText: "确定",
+        showCancelButton: false,
+        focusConfirm: true,
+        type: "success"
+      });
+      
       //设置cookie 记录到state
-      this.$store.commit("setCurrentCookie", strCookie);
+      this.$store.commit("setCurrentCookie", token);
       //设置登录状态到state
       this.$store.commit("setLogined", true);
       this.currentState = 1;
+
+      return;
       let getInfoParams = {
         s_user: this.submitData.username,
         s_token: this.$cookies.get(this.$app.APP_COOKIE_NAME)
