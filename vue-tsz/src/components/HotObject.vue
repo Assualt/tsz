@@ -83,7 +83,7 @@ export default {
 }
 .most-object-list {
   padding: 0 10px 0 15px;
-  margin: 0px;
+  margin: 0;
   width: 100%;
   height: 100%;
 }

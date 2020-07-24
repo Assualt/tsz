@@ -10,6 +10,12 @@ import NotFound from '../pages/404'
 //admin
 import Admin from '../pages/Admin'
 import DashBoard from '../pages/DashBoard'
+//Index
+import Index1 from '../pages/Index1'
+import Sold1 from '../pages/Sold1'
+import Cart1 from '../pages/Cart1'
+//Submit
+import Submit from '../pages/Submit'
 
 Vue.use(Router)
 
@@ -17,45 +23,59 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/index'
+      redirect: '/index1'
     },
     {
       path: '/index',
-      name:'Index',
-      component:Index,
-      meta:{
-        requireAuth:false
+      name: 'Index',
+      component: Index,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
+      path: '/index1',
+      name: Index1,
+      component: Index1,
+      meta: {
+        requireAuth: false
       }
     },
     {
       path: '/login',
       name: 'Login',
       component: Login,
-      meta:{
-        requireAuth:false
+      meta: {
+        requireAuth: false
       }
     },
     {
       path: '/cart',
       name: 'Cart',
-      component: Cart,
-      meta:{
+      component: Cart1,
+      meta: {
         // requireAuth: true //判断路由是否需要登录权限
       }
+    },
+    {
+      path: '/submit',
+      name: 'Submit',
+      component: Submit,
+      meta: {}
     },
     {
       path: '/trade',
       name: 'Trade',
       component: Trade,
-      meta:{
+      meta: {
         // requireAuth: true
       }
     },
     {
       path: '/sold',
       name: 'Sold',
-      component: Sold,
-      meta:{
+      component: Sold1,
+      meta: {
         requireAuth: false
       }
     },
@@ -72,46 +92,46 @@ const router = new Router({
       path: '/admin/dashboard',
       name: 'DashBoard',
       component: DashBoard,
-      children:[
+      children: [
         {
-          path:'tags',
-          name:'tags',
+          path: 'tags',
+          name: 'tags',
           component: DashBoard
         },
         {
-          path:'usermgr',
-          name:'usermgr',
+          path: 'usermgr',
+          name: 'usermgr',
           component: DashBoard
         },
         {
-          path:'ordermgr',
-          name:'ordermgr',
+          path: 'ordermgr',
+          name: 'ordermgr',
           component: DashBoard
         },
         {
-          path:'server',
-          name:'server',
+          path: 'server',
+          name: 'server',
           component: DashBoard
         },
         {
-          path:'charts',
-          name:'charts',
+          path: 'charts',
+          name: 'charts',
           component: DashBoard
         },
         {
-          path:'logsmgr',
-          name:'logsmgr',
+          path: 'logsmgr',
+          name: 'logsmgr',
           component: DashBoard
         },
         {
-          path:'loginout',
-          name:'loginout',
+          path: 'loginout',
+          name: 'loginout',
           component: DashBoard
         }
       ]
     },
     {
-      path:'*',
+      path: '*',
       name: 'notfound',
       component: NotFound
 
@@ -119,21 +139,21 @@ const router = new Router({
   ]
 })
 
-router.beforeEach((to,from,next)=>{
-  if(to.meta.requireAuth){
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
     //判断是否登录过
     //从sessionStorage里面 uid=cookie
-    const uid = store.state.CurrentCookie;
-    if(uid == "" || uid == undefined){
-      alert("当前没有用户登录,正在跳转至登录界面");
+    const uid = store.state.CurrentCookie
+    if (uid == '' || uid == undefined) {
+      alert('当前没有用户登录,正在跳转至登录界面')
       next({
-        path:'/login'
+        path: '/login'
       })
-    }else{
+    } else {
       next()
     }
-  }else{
-    next();
+  } else {
+    next()
   }
 })
 export default router

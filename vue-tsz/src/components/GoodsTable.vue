@@ -713,7 +713,6 @@ export default {
       }
     }
   },
-  computed: {},
   async created() {
     await this.init_cart_book();
   },

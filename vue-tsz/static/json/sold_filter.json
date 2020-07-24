@@ -1,0 +1,34 @@
+[
+  {
+    "book_name":"北宋生活顾问",
+    "book_author":"阿鹛",
+    "book_now_price": 3.80,
+    "book_before_price": 29.80,
+    "book_advertisment": "北宋生活顾问（穿越女携手本土男过云淡风轻小日子 坐看隔壁家鸡飞狗跳 我自井井有条)",
+    "book_publish": {
+      "time": "2011-01-11",
+      "name": "现代出版社有限公司"
+    },
+    "book_rate": {
+      "score": 4.5,
+      "comment_number": 5484
+    },
+    "book_image_url": "static/upload/北宋生活顾问.jpg"
+  },
+  {
+    "book_name":"北宋生活顾问",
+    "book_author":"阿鹛",
+    "book_now_price": 3.80,
+    "book_before_price": 29.80,
+    "book_advertisment": "北宋生活顾问（穿越女携手本土男过云淡风轻小日子 坐看隔壁家鸡飞狗跳 我自井井有条)",
+    "book_publish": {
+      "time": "2011-01-11",
+      "name": "现代出版社有限公司"
+    },
+    "book_rate": {
+      "score": 4.5,
+      "comment_number": 5484
+    },
+    "book_image_url": "static/upload/北宋生活顾问.jpg"
+  }
+]

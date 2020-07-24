@@ -287,19 +287,20 @@
     {
       "name":"guess_like",
       "item": [
+
         {
-          "book_name": "历年考研英语真题解析及复习思路(基础试卷版)",
-          "book_img_url": "static/upload/历年考研英语真题解析及复习思路(基础试卷版).jpg",
-          "book_title": "励志书本就选历年考研英语真题解析及复习思路(基础试卷版)",
+          "book_name": "卡耐基",
+          "book_img_url": "static/upload/卡耐基.jpg",
+          "book_title": "励志书本就选卡耐基",
           "book_price_now":"12.00",
           "book_price_before":"23.00",
           "book_sell_num":"30",
           "book_else_des":"优惠促销"
         },
         {
-          "book_name": "卡耐基",
-          "book_img_url": "static/upload/卡耐基.jpg",
-          "book_title": "励志书本就选卡耐基",
+          "book_name": "历年考研英语真题解析及复习思路(基础试卷版)",
+          "book_img_url": "static/upload/历年考研英语真题解析及复习思路(基础试卷版).jpg",
+          "book_title": "励志书本就选历年考研英语真题解析及复习思路(基础试卷版)",
           "book_price_now":"12.00",
           "book_price_before":"23.00",
           "book_sell_num":"30",
