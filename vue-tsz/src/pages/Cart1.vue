@@ -39,9 +39,10 @@
 					        :class="cartsBody.currentCountsIndex==2?'cart-body-title-hovered':''">
 						<span @mouseenter="cartsBody.currentCountsIndex=2">库存紧张 {{cartsBody.counts.tightshops}}</span>
 					</el-col>
-					<el-col :span="3" :offset="8">
-						<span>已选商品:(不含运费)</span>
-						<span class="fa fa-yen" style="color: orange;font-size: 16px;font-weight: bold">:{{cartsBody.selectOptions.price}}</span>
+					<el-col :span="6" :offset="5">
+						<span>已选商品:(不含运费)
+              <p class="fa fa-yen" style="color: orange;font-size: 16px;font-weight: bold">:{{cartsBody.selectOptions.price}}</p>
+            </span>
 					</el-col>
 					<el-col :span="2" align="right">
 						<el-button type="primary" :disabled="cartsBody.selectOptions.price == 0.00" size="medium"

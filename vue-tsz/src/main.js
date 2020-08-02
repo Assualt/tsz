@@ -30,7 +30,7 @@ import VueRouter from 'vue-router'
 import VueSweetalert2 from './plugins/vue-sweetalert2'
 
 Vue.use(VueSweetalert2)
-Vue.use(VueAxios,axios)
+Vue.use(VueAxios, axios)
 
 Vue.prototype.$cookies = VueCookies;
 Vue.prototype.$md5 = md5;
@@ -44,17 +44,23 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
+//mock js
+const { mockXHR } = require('../mock')
+mockXHR()
+
+
+
 //define the axios function
-Vue.prototype.axios_get=async function(url,params){
+Vue.prototype.axios_get = async function (url, params) {
   try {
-    var retData =await this.axios.get(url, {params});
+    var retData = await this.axios.get(url, { params });
     return retData;
   } catch (error) {
     console.log("Request " + url + " Failed " + error);
     return {};
   }
 };
-Vue.prototype.axios_post=async function(url, params) {
+Vue.prototype.axios_post = async function (url, params) {
   try {
     const retData = await this.axios.post(url, params);
     return retData;

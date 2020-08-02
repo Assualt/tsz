@@ -4,7 +4,7 @@
 		<el-main style="padding: 0 10%;width: 100%">
 			<el-row style="height: 100px;line-height: 100px; width: 100%">
 				<el-col :span="8" :offset="2">
-					<img src="../assets/logo.png" alt="" width="180" height="64">
+					<img src="../assets/logo.png" alt width="180" height="64"/>
 				</el-col>
 				<el-col :span="8" :offset="6">
 					<el-col :span="4">
@@ -38,62 +38,117 @@
 				<el-col :span="20" :offset="2" style="height: 100%">
 					<el-row>
 						<el-col style="height: 30px">
-							<span class="hot-keyword">
-								<p class="fl">热搜:</p>
-								<a v-for="(item,index) in hotkeyWord" :key="index" class="fl">{{item}}</a>
-							</span>
+              <span class="hot-keyword">
+                <p class="fl">热搜:</p>
+                <a v-for="(item,index) in hotkeyWord" :key="index" class="fl">{{item}}</a>
+              </span>
 						</el-col>
 					</el-row>
 					<el-row style="margin-top: 10px;" :gutter="6">
 						<el-col :span="7">
 							<el-card shadow="never">
 								<div slot="header" class="clearfix hot-store">
-									<span><b>热门书店</b><i class="fa fa-free-code-camp" style="color: red"></i></span>
+                  <span>
+                    <b>热门书店</b>
+                    <i class="fa fa-free-code-camp" style="color: red"></i>
+                  </span>
 								</div>
 								<ul>
 									<li v-for="(item,index) in hotStore" :key="index" style="width: 100%">
-										<span>
-											<a :href="'/store/'+item.id">
-												<el-image :src="item.img_url" style="width: 32px;height: 32px" fit="fill">
-													<div slot="error" class="image-slot">
+                    <span>
+                      <a :href="'/store/'+item.id">
+                        <el-image :src="item.img_url" style="width: 32px;height: 32px" fit="fill">
+                          <div slot="error" class="image-slot">
                             <i class="el-icon-picture-outline"></i>
                           </div>
-												</el-image>
-											</a>
-											<p class="hvr-grow">{{item.name}}&nbsp;&nbsp;(&nbsp;{{item.id}}&nbsp;)</p>
-										</span>
+                        </el-image>
+                      </a>
+                      <p class="hvr-grow">{{item.name}}&nbsp;&nbsp;(&nbsp;{{item.id}}&nbsp;)</p>
+                    </span>
 									</li>
 								</ul>
 							</el-card>
 							<el-card shadow="never" style="margin-top: 10px">
 								<div slot="header" class="clearfix hot-store">
-									<span><b>热门个人</b><i class="fa fa-free-code-camp" style="color: red"></i></span>
+                  <span>
+                    <b>热门个人</b>
+                    <i class="fa fa-free-code-camp" style="color: red"></i>
+                  </span>
 								</div>
 								<ul>
 									<li v-for="(item,index) in hotPerson" :key="index" style="width: 100%">
-										<span>
-											<a :href="'/store/'+item.id">
-												<el-image :src="item.img_url" style="width: 32px;height: 32px" fit="fill">
-													<div slot="error" class="image-slot">
+                    <span>
+                      <a :href="'/store/'+item.id">
+                        <el-image :src="item.img_url" style="width: 32px;height: 32px" fit="fill">
+                          <div slot="error" class="image-slot">
                             <i class="el-icon-picture-outline"></i>
                           </div>
-												</el-image>
-											</a>
-											<p class="hvr-grow">{{item.name}}&nbsp;&nbsp;(&nbsp;{{item.id}}&nbsp;)</p>
-										</span>
+                        </el-image>
+                      </a>
+                      <p class="hvr-grow">{{item.name}}&nbsp;&nbsp;(&nbsp;{{item.id}}&nbsp;)</p>
+                    </span>
 									</li>
 								</ul>
 							</el-card>
 						</el-col>
 						<el-col :span="17">
 							<el-card shadow="never" style="padding: 10px">
-								<div slot="header" class="clearfix" style="height: 30px;line-height: 30px;justify-content: center">
-									<span style="font-size: 20px;font-weight: 600">好书推荐<i class="el-icon-water-cup"></i></span>
-									<el-button type="text" style="float: right;color: rgb(1,200,181);height: 100%;padding: 0">更多<i class="el-icon-arrow-right"></i></el-button>
+								<div slot="header"
+								     class="clearfix"
+								     style="height: 30px;line-height: 30px;justify-content: center"
+								>
+                  <span style="font-size: 20px;font-weight: 600">
+                    好书推荐
+                    <i class="el-icon-water-cup"></i>
+                  </span>
+									<el-button
+													type="text"
+													style="float: right;color: rgb(1,200,181);height: 100%;padding: 0"
+									>
+										更多
+										<i class="el-icon-arrow-right"></i>
+									</el-button>
 								</div>
 								<div style="width: 100%">
 									<div v-for="(item,index) in booksList.goodbooks" class="book_info" :key="index">
-										<a :href="'search?bookname='+item.book_name+'&sorted=recommend'">
+										<a :href="'#/sold?bookname='+item.book_name+'&sorted=recommend'">
+											<el-image
+															:src="item.img_url"
+															:title="item.book_name"
+															:alt="item.book_name"
+															style="width: 90px;height: 120px"
+															class="hvr-grow-shadow"
+											>
+												<div slot="error" class="image-slot">
+													<i class="el-icon-picture-outline"></i>
+												</div>
+											</el-image>
+										</a>
+										<h6 class="line-limit">{{item.book_name}}</h6>
+										<el-row>
+											<el-col :span="6" :offset="6">
+												<p class="now—price">
+													<i class="fa fa-yen">{{item.price_now}}</i>
+												</p>
+											</el-col>
+											<el-col :span="6" :offset="2">
+												<p class="last-price">
+													<del class="fa fa-yen">{{item.price_before}}</del>
+												</p>
+											</el-col>
+										</el-row>
+									</div>
+								</div>
+							</el-card>
+							<el-card shadow="never" style="padding: 10px; margin-top: 10px">
+								<div slot="header" class="clearfix" style="height: 30px;line-height: 30px;justify-content: center">
+									<span style="font-size: 20px;font-weight: 600">打折推荐<i class="el-icon-water-cup"></i></span>
+									<el-button type="text" style="float: right;color: rgb(1,200,181);height: 100%;padding: 0">更多<i
+													class="el-icon-arrow-right"></i></el-button>
+								</div>
+								<div style="width: 100%">
+									<div v-for="(item,index) in booksList.discounrbooks" class="book_info" :key="index">
+										<a :href="'#/sold?bookname='+item.book_name+'&sorted=discount'">
 											<el-image :src="item.img_url" :title="item.book_name" :alt="item.book_name"
 											          style="width: 90px;height: 120px" class="hvr-grow-shadow">
 												<div slot="error" class="image-slot">
@@ -119,76 +174,43 @@
 							</el-card>
 							<el-card shadow="never" style="padding: 10px; margin-top: 10px">
 								<div slot="header" class="clearfix" style="height: 30px;line-height: 30px;justify-content: center">
-									<span style="font-size: 20px;font-weight: 600">打折推荐 <i class="el-icon-water-cup"></i></span>
+                  <span style="font-size: 20px;font-weight: 600">新书推荐<i class="el-icon-water-cup"></i></span>
+									<el-button type="text" style="float: right;color: rgb(1,200,181);height: 100%;padding: 0">更多<i class="el-icon-arrow-right"></i></el-button>
+								</div>
+								<div style="width: 100%">
+									<div v-for="(item,index) in booksList.newlybooks" class="book_info" :key="index">
+										<a :href="'#/sold?bookname='+item.book_name+'&sorted=newbook'">
+											<el-image :src="item.img_url" :title="item.book_name" :alt="item.book_name" style="width: 90px;height: 120px" class="hvr-grow-shadow">
+												<div slot="error" class="image-slot">
+													<i class="el-icon-picture-outline"></i>
+												</div>
+											</el-image>
+										</a>
+										<h6 class="line-limit">{{item.book_name}}</h6>
+										<el-row>
+											<el-col :span="6" :offset="6">
+												<p class="now—price">
+													<i class="fa fa-yen">{{item.price_now}}</i>
+												</p>
+											</el-col>
+											<el-col :span="6" :offset="2">
+												<p class="last-price">
+													<del class="fa fa-yen">{{item.price_before}}</del>
+												</p>
+											</el-col>
+										</el-row>
+									</div>
+								</div>
+							</el-card>
+							<el-card shadow="never" style="padding: 10px; margin-top: 10px">
+								<div slot="header" class="clearfix" style="height: 30px;line-height: 30px;justify-content: center">
+                  <span style="font-size: 20px;font-weight: 600">最受欢迎推荐<i class="el-icon-water-cup"></i></span>
 									<el-button type="text" style="float: right;color: rgb(1,200,181);height: 100%;padding: 0">更多<i class="el-icon-arrow-right"></i></el-button>
 								</div>
 								<div style="width: 100%">
 									<div v-for="(item,index) in booksList.discounrbooks" class="book_info" :key="index">
-										<a :href="'search?bookname='+item.book_name+'&sorted=discount'">
-											<el-image :src="item.img_url" :title="item.book_name" :alt="item.book_name"
-											          style="width: 90px;height: 120px" class="hvr-grow-shadow">
-												<div slot="error" class="image-slot">
-													<i class="el-icon-picture-outline"></i>
-												</div>
-											</el-image>
-										</a>
-										<h6 class="line-limit">{{item.book_name}}</h6>
-										<el-row>
-											<el-col :span="6" :offset="6">
-												<p class="now—price">
-													<i class="fa fa-yen">{{item.price_now}}</i>
-												</p>
-											</el-col>
-											<el-col :span="6" :offset="2">
-												<p class="last-price">
-													<del class="fa fa-yen">{{item.price_before}}</del>
-												</p>
-											</el-col>
-										</el-row>
-									</div>
-								</div>
-							</el-card>
-							<el-card shadow="never" style="padding: 10px; margin-top: 10px">
-								<div slot="header" class="clearfix" style="height: 30px;line-height: 30px;justify-content: center">
-									<span style="font-size: 20px;font-weight: 600">新书推荐 <i class="el-icon-water-cup"></i></span>
-									<el-button type="text" style="float: right;color: rgb(1,200,181);height: 100%;padding: 0">更多<i class="el-icon-arrow-right"></i></el-button>
-								</div>
-								<div style="width: 100%">
-									<div v-for="(item,index) in booksList.newlybooks" class="book_info">
-										<a :href="'search?bookname='+item.book_name+'&sorted=newbook'">
-											<el-image :src="item.img_url" :title="item.book_name" :alt="item.book_name"
-											          style="width: 90px;height: 120px" class="hvr-grow-shadow">
-												<div slot="error" class="image-slot">
-													<i class="el-icon-picture-outline"></i>
-												</div>
-											</el-image>
-										</a>
-										<h6 class="line-limit">{{item.book_name}}</h6>
-										<el-row>
-											<el-col :span="6" :offset="6">
-												<p class="now—price">
-													<i class="fa fa-yen">{{item.price_now}}</i>
-												</p>
-											</el-col>
-											<el-col :span="6" :offset="2">
-												<p class="last-price">
-													<del class="fa fa-yen">{{item.price_before}}</del>
-												</p>
-											</el-col>
-										</el-row>
-									</div>
-								</div>
-							</el-card>
-							<el-card shadow="never" style="padding: 10px; margin-top: 10px">
-								<div slot="header" class="clearfix" style="height: 30px;line-height: 30px;justify-content: center">
-									<span style="font-size: 20px;font-weight: 600">最受欢迎推荐 <i class="el-icon-water-cup"></i></span>
-									<el-button type="text" style="float: right;color: rgb(1,200,181);height: 100%;padding: 0">更多<i class="el-icon-arrow-right"></i></el-button>
-								</div>
-								<div style="width: 100%">
-									<div v-for="(item,index) in booksList.discounrbooks" class="book_info">
-										<a :href="'search?bookname='+item.book_name+'&sorted=popular'">
-											<el-image :src="item.img_url" :title="item.book_name" :alt="item.book_name"
-											          style="width: 90px;height: 120px" class="hvr-grow-shadow">
+										<a :href="'#/sold?bookname='+item.book_name+'&sorted=popular'">
+											<el-image :src="item.img_url" :title="item.book_name" :alt="item.book_name" style="width: 90px;height: 120px" class="hvr-grow-shadow">
 												<div slot="error" class="image-slot">
 													<i class="el-icon-picture-outline"></i>
 												</div>
@@ -217,11 +239,9 @@
 		</el-main>
 		<Footer></Footer>
 	</div>
-
 </template>
 
 <script>
-
   import Header1 from '../BodyComponents/Header1'
   import Footer from '../BodyComponents/Footer'
   import HotObject from '../components/HotObject'
@@ -232,7 +252,11 @@
     props: ['universities'],
     data () {
       return {
-        carouselImagePath: ['static/images/focus_0.jpg', 'static/images/focus_1.jpg', 'static/images/focus_2.jpg'],
+        carouselImagePath: [
+          'static/images/focus_0.jpg',
+          'static/images/focus_1.jpg',
+          'static/images/focus_2.jpg'
+        ],
         hotkeyWord: ['英文', '计算机', 'CET4/6', 'English'],
         hotStore: [],
         hotPerson: [],
@@ -240,9 +264,9 @@
         newRegister: [],
         booksList: {
           goodbooks: [],
-					discounrbooks:[],
-	        newlybooks:[],
-	        popularbooks:[]
+          discounrbooks: [],
+          newlybooks: [],
+          popularbooks: []
         }
       }
     },
@@ -270,17 +294,17 @@
       if (RetData != false) {
         this.booksList.goodbooks = RetData.data
       }
-      RetData = await this.axios_get("static/json/book-discount.json",[]);
+      RetData = await this.axios_get('static/json/book-discount.json', [])
       if (RetData != false) {
-        this.booksList.discounrbooks = RetData.data;
+        this.booksList.discounrbooks = RetData.data
       }
-      RetData = await this.axios_get("static/json/book-new-comment.json",[]);
+      RetData = await this.axios_get('static/json/book-new-comment.json', [])
       if (RetData != false) {
-        this.booksList.newlybooks = RetData.data;
+        this.booksList.newlybooks = RetData.data
       }
-      RetData = await this.axios_get("static/json/book-popular.json",[]);
+      RetData = await this.axios_get('static/json/book-popular.json', [])
       if (RetData != false) {
-        this.booksList.popularbooks = RetData.data;
+        this.booksList.popularbooks = RetData.data
       }
     }
   }
@@ -298,17 +322,17 @@
 		line-height: 30px;
 		box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 		background-color: #efefef;
-
 	}
 
 	span.hot-keyword p {
 		line-height: 30px;
-		font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+		font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+		"Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 		font-weight: 400;
 		padding-left: 10px;
 		font-size: 16px;
 		width: 50px;
-		margin: 0
+		margin: 0;
 	}
 
 	span.hot-keyword a {
@@ -331,14 +355,16 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
-	p.now—price{
+
+	p.now—price {
 		font-size: 16px;
-		color: rgb(1,200,181);
+		color: rgb(1, 200, 181);
 		line-height: 20px;
 	}
-	p.last-price{
+
+	p.last-price {
 		font-size: 10px;
 		line-height: 20px;
-		color: #C0C4CC;
+		color: #c0c4cc;
 	}
 </style>

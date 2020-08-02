@@ -16,11 +16,17 @@ import Sold1 from '../pages/Sold1'
 import Cart1 from '../pages/Cart1'
 //Submit
 import Submit from '../pages/Submit'
-
+//BooksInfo
+import BookInfo from '../pages/BookInfo'
 Vue.use(Router)
 
 const router = new Router({
   routes: [
+    {
+      path: '/book/*',
+      name: 'BookInfo',
+      component: BookInfo
+    },
     {
       path: '/',
       redirect: '/index1'

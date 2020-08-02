@@ -113,14 +113,16 @@
 			<el-col style="padding: 0 10%;height: 1000px">
 				<li class="filter-books-info" v-for="(item,index) in currentSelect.bookItem" :key="index">
 					<el-col :span="4">
-						<img :src="item.book_image_url" :alt="item.book_author + '/' + item.book_publish.name" width="200"
-						     height="200">
+						<a :href="'#/book/'+item.book_id">
+							<img :src="item.book_image_url" :alt="item.book_author + '/' + item.book_publish.name" width="200"
+							     height="220">
+						</a>
 					</el-col>
 					<el-col :span="16" style="padding: 5px">
 						<el-col>
 							<el-link :underline="false" style="font-size: 16px">{{item.book_advertisment}}</el-link>
 						</el-col>
-						<el-col style="margin-top: 10px">
+						<el-col style="margin-top: 5px">
 							<span class="fa fa-yen now-price">{{item.book_now_price}}</span>
 							<span class="before-price">定价:<del class="fa fa-yen">{{item.book_before_price}}</del></span>
 						</el-col>
@@ -128,7 +130,7 @@
 							<span class="author"><a href="#">{{item.book_author}}</a>&nbsp;著&nbsp;/&nbsp;{{item.book_publish.time}}&nbsp;/&nbsp;<a
 											href="#">{{item.book_publish.name}}</a></span>
 						</el-col>
-						<el-col style="margin-top: 10px">
+						<el-col style="margin-top: 5px">
 							<el-col :span="6">
 								<el-rate v-model="item.book_rate.score" show-text show-score disabled></el-rate>
 							</el-col>
@@ -136,13 +138,22 @@
 								共{{item.book_rate.comment_number}}人评论
 							</el-col>
 						</el-col>
-						<el-col style="margin-top: 10px;">
+						<el-col style="margin-top: 5px;" v-if="item.autarky">
 							<el-tag type="success">当当自营</el-tag>
 							<el-tag type="danger">限时秒杀</el-tag>
 						</el-col>
-						<el-col style="margin-top: 10px">
-							<el-button type="info">加入购物车</el-button>
-							<el-button type="danger">收藏</el-button>
+						<el-col style="margin-top: 5px" v-else>
+              <span class="el-icon-store">
+                <el-link :href="'/store/'+item.book_store.id" :underline="false" type="danger" icon="el-icon-s-shop">{{item.book_store.name}}</el-link>
+                <span v-if="item.book_store.has_gift" style="background:red;color:white;padding: 1px 4px">赠品</span>
+              </span>
+						</el-col>
+						<el-col style="margin-top: 5px">
+							<p>{{item.book_description}}</p>
+						</el-col>
+						<el-col style="margin-top: 0px">
+							<el-button type="info" size="small" @click="addtocart">加入购物车</el-button>
+							<el-button type="danger" size="small" @click="addtofavor">收藏</el-button>
 						</el-col>
 					</el-col>
 				</li>
@@ -261,13 +272,33 @@
             this.currentSelect.tagList.splice(index, 1)
           }
         }
+      },
+      addtofavor: function () {
+        if (this.$store.getters.token === undefined || this.$store.getters.token == '') {
+          this.$message({
+            type: 'warning',
+            message: '当前用户未登录,无法收藏'
+          })
+          return
+        }
+      },
+      addtocart: function () {
+        if (this.$store.getters.token === undefined || this.$store.getters.token == '') {
+          this.$message({
+            type: 'warning',
+            message: '当前用户未登录,无法添加到购物车  '
+          })
+          return
+        }else{
+
+        }
       }
 
     },
     props: ['universities'],
     async created () {
       await this.getFilterBooks()
-    }
+    },
   }
 </script>
 
@@ -311,7 +342,7 @@
 	}
 
 	.filter-books-info {
-		height: 240px;
+		height: 260px;
 		padding: 20px 10px;
 		list-style: none;
 	}

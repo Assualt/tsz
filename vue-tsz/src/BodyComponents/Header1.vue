@@ -24,14 +24,14 @@
 			</el-col>
 			<el-col :span="6" :offset="9">
 				<el-dropdown>
-					<el-button type="text" size="medium" style="color: rgb(1,200,181)">登录</el-button>
-					<el-dropdown-menu slot="dropdown" style="width: 120px">
+					<el-button type="text" size="medium" style="color: rgb(1,200,181)">{{username}}</el-button>
+					<el-dropdown-menu slot="dropdown" style="width: 120px" v-if="username!='登录'">
 						<el-dropdown-item>我的资料</el-dropdown-item>
 						<el-dropdown-item>
 							<router-link to="/cart">我的购物车</router-link>
 						</el-dropdown-item>
 						<el-dropdown-item><router-link to="/favorite">我的收藏</router-link></el-dropdown-item>
-						<el-dropdown-item>退出登录</el-dropdown-item>
+						<el-dropdown-item @click.native.prevent="loginout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 				<router-link to="/sold">
@@ -66,12 +66,17 @@
             '宁夏', '青海', '西藏', '香港', '澳门', '台湾'],
           currentProvinceSchoolList: [],
           currentProvinceIndex: -1
-        }
+        },
+	      username:'登录',
+	      isLogined: false
       }
     },
     props: ['universities'],
     created () {
       this.changeCurrentSchool(this.currentSchoolList.currentProvince, -1)
+      if (this.$store.getters.token) { // 登录
+        this.username = '我';
+      }
     },
     methods: {
       changeCurrentSchool: function (item, index) {
@@ -95,7 +100,12 @@
             }
           })
         }
-      }
+      },
+	    async loginout(){
+        await this.$store.dispatch("user/logout");
+        this.$message({ type: "success", message: "登出成功" });
+        this.username = '登录';
+	    }
     }
   }
 </script>

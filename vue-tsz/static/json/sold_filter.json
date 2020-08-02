@@ -1,5 +1,6 @@
 [
   {
+    "book_id":1234,
     "book_name":"北宋生活顾问",
     "book_author":"阿鹛",
     "book_now_price": 3.80,
@@ -13,14 +14,22 @@
       "score": 4.5,
       "comment_number": 5484
     },
-    "book_image_url": "static/upload/北宋生活顾问.jpg"
+    "book_image_url": "static/upload/北宋生活顾问.jpg",
+    "book_description": "新教育实验发起人、中国教育学会副会长朱永新亲自作序推荐 的小学语文新课标必读 彩绘注音版《爱的教育》可供选择，详情请点击 时常听家长说起孩子不愿意读名著。想过为什么吗？编者认为一是没有选到好书，翻译、编译差",
+    "autarky":false,
+    "book_store":{
+      "id": "12345",
+      "name": "泊霖文轩图书专营店",
+      "has_gift":true
+    }
   },
   {
-    "book_name":"北宋生活顾问",
-    "book_author":"阿鹛",
-    "book_now_price": 3.80,
-    "book_before_price": 29.80,
-    "book_advertisment": "北宋生活顾问（穿越女携手本土男过云淡风轻小日子 坐看隔壁家鸡飞狗跳 我自井井有条)",
+    "book_id":12354,
+    "book_name":"陪孩子终身成长(2020新书)",
+    "book_author":"樊登",
+    "book_now_price": 23.80,
+    "book_before_price": 39.80,
+    "book_advertisment": "陪孩子终身成长(2020新书)",
     "book_publish": {
       "time": "2011-01-11",
       "name": "现代出版社有限公司"
@@ -29,6 +38,8 @@
       "score": 4.5,
       "comment_number": 5484
     },
-    "book_image_url": "static/upload/北宋生活顾问.jpg"
+    "autarky":true,
+    "book_image_url": "static/upload/陪孩子终生成长(樊登2020新书).jpg",
+    "book_description": "新教育实验发起人、中国教育学会副会长朱永新亲自作序推荐 的小学语文新课标必读 彩绘注音版《爱的教育》可供选择，详情请点击 时常听家长说起孩子不愿意读名著。想过为什么吗？编者认为一是没有选到好书，翻译、编译差"
   }
 ]

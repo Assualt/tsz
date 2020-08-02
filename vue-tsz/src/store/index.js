@@ -1,70 +1,26 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
-
+import getters from './getters'
 Vue.use(Vuex)
 
-//存放变量的值
-const state = {
-  AllCityUniversities:[],
-  CurrentMode:0, //user info mode-> mode:0 login mode:1 Register
-  CurrentCookie: window.sessionStorage.getItem('uid'),
-  isLogined:window.sessionStorage.getItem('ulogin') == null ? false : true,
-};
+const modeulesFiles = require.context('./modules', true, /\.js$/)
 
-const getters = {
-  getAllCityUniversities(){
-    return state.AllCityUniversities;
-  },
-  getClickRegisterModel(state){
-    return state.CurrentMode;
-  },
-  getCurrentCookie(state){
-    return state.CurrentCookie;
-  },
-  getLogined(state){
-    return state.isLogined;
-  }
-};
+// https://webpack.js.org/guides/dependency-management/#requirecontext
+const modulesFiles = require.context('./modules', true, /\.js$/)
 
-const mutations = {
-  setAllCityUniversities(state, cities){
-    state.AllCityUniversities = cities;
-  },
-  //mode 0 Login
-  //mode 1 Register
-  setCurrentMode(state, mode){
-    state.CurrentMode = mode;
-  },
-  setCurrentCookie(state, cookie){
-    state.CurrentCookie = cookie;
-    window.sessionStorage.setItem('uid', cookie);
-  },
-  setLogined(state, logined){
-    state.isLogined = logined;
-    window.sessionStorage.setItem('ulogin', logined);
-  }
-}
-const actions = {
-    setCities (context, cities) {
-      context.commit('setAllCityUniversities', cities);
-    },
-    asyncCurrentMode(commit, mode){
-      commit('setCurrentMode', mode);
-    },
-    asyncCurrentCookie(commit, cookie){
-      commit('setCurrentCookie', cookie);
-    },
-    asyncLogined(commit, flag){
-      commit('setLogined', flag);
-    }
-};
+// you do not need `import app from './modules/app'`
+// it will auto require all vuex module from modules file
+const modules = modulesFiles.keys().reduce((modules, modulePath) => {
+  // set './app.js' => 'app'
+  const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1')
+  const value = modulesFiles(modulePath)
+  modules[moduleName] = value.default
+  return modules
+}, {})
+
 
 const store = new Vuex.Store({
-  state,    // 共同维护的一个状态，state里面可以是很多个全局状态
-  getters,  // 获取数据并渲染
-  actions,  // 数据的异步操作
-  mutations  // 处理数据的唯一途径，state的改变或赋值只能在这里
-});
-
+  modules,
+  getters
+})
 export default store
