@@ -73,6 +73,7 @@
 </template>
 <script>
 import { validUsername } from "@/utils/validate";
+import { languageInfoText } from "@/constants/common"
 export default {
   name: "Admin",
   components: {},
@@ -107,7 +108,8 @@ export default {
         userpass: [{ validator: checkPass, trigger: "blur" }],
         verfiycode: [{ validator: checkVerfiy, tigger: "blur" }]
       },
-      loading: false
+      loading: false,
+      constants : {}
     };
   },
   created() {
@@ -166,6 +168,7 @@ export default {
         return;
       }
       this.currentLanguage = command;
+      console.log("current command is :", command)
     }
   }
 };

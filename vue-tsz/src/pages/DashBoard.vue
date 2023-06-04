@@ -5,14 +5,21 @@
         <el-aside style="background-color: #eee" :width="navigationWidth">
           <el-menu :collapse="hideNavigation">
             <transition name="el-fade-in-linear">
-              <el-menu-item index="0" v-if="navigationLogo" style="padding: 2px;height: 100%;">
+              <el-menu-item
+                index="0"
+                v-if="navigationLogo"
+                style="padding: 2px; height: 100%"
+              >
                 <el-image
                   src="https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png"
                   fit="fill"
                 ></el-image>
               </el-menu-item>
             </transition>
-            <el-menu-item index="1" @click="changeNavigation('首页','/admin/dashboard', '1-1')">
+            <el-menu-item
+              index="1"
+              @click="changeNavigation('首页', '/admin/dashboard', '1-1')"
+            >
               <span slot="title">首页</span>
               <i class="el-icon-message-solid"></i>
             </el-menu-item>
@@ -24,12 +31,22 @@
               <el-menu-item-group>
                 <el-menu-item
                   index="2-1"
-                  @click="changeNavigation('普通用户','/admin/dashboard/usermanager/1', '2-1')"
-                >普通用户</el-menu-item>
+                  @click="
+                    changeNavigation('普通用户', '/admin/dashboard/usermanager/1', '2-1')
+                  "
+                  >普通用户</el-menu-item
+                >
                 <el-menu-item
                   index="2-2"
-                  @click="changeNavigation('管理员账户','/admin/dashboard/usermanager/2', '2-2')"
-                >管理员用户</el-menu-item>
+                  @click="
+                    changeNavigation(
+                      '管理员账户',
+                      '/admin/dashboard/usermanager/2',
+                      '2-2'
+                    )
+                  "
+                  >管理员用户</el-menu-item
+                >
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="3">
@@ -40,21 +57,30 @@
               <el-menu-item-group>
                 <el-menu-item
                   index="3-1"
-                  @click="changeNavigation('系统订单','/admin/dashboard/bookmanager/1', '3-1')"
-                >系统订单</el-menu-item>
+                  @click="
+                    changeNavigation('系统订单', '/admin/dashboard/bookmanager/1', '3-1')
+                  "
+                  >系统订单</el-menu-item
+                >
                 <el-menu-item
                   index="3-2"
-                  @click="changeNavigation('账户订单','/admin/dashboard/bookmanager/2', '3-2')"
-                >账户订单</el-menu-item>
+                  @click="
+                    changeNavigation('账户订单', '/admin/dashboard/bookmanager/2', '3-2')
+                  "
+                  >账户订单</el-menu-item
+                >
                 <el-menu-item
                   index="3-3"
-                  @click="changeNavigation('订单列表','/admin/dashboard/bookmanager/3', '3-3')"
-                >订单列表</el-menu-item>
+                  @click="
+                    changeNavigation('订单列表', '/admin/dashboard/bookmanager/3', '3-3')
+                  "
+                  >订单列表</el-menu-item
+                >
               </el-menu-item-group>
             </el-submenu>
             <el-menu-item
               index="4"
-              @click="changeNavigation('系统设置','/admin/dashboard/settings', '4-1')"
+              @click="changeNavigation('系统设置', '/admin/dashboard/settings', '4-1')"
             >
               <span slot="title">系统设置</span>
               <i class="el-icon-setting"></i>
@@ -67,39 +93,47 @@
           <el-row style="width: 100%">
             <el-col
               :span="1"
-              style="text-align:center;line-height: 60px;background-color: #eeeeee;"
+              style="text-align: center; line-height: 60px; background-color: #eeeeee"
             >
               <el-button type="text">
                 <i
                   class="el-icon-s-fold"
-                  style="color: black;font-size: 16px;"
+                  style="color: black; font-size: 16px"
                   v-if="!hideNavigation"
-                  @click="hideNavigation=true"
+                  @click="hideNavigation = true"
                 ></i>
               </el-button>
               <el-button type="text">
                 <i
                   class="el-icon-s-unfold"
-                  style="color: black;font-size: 16px;"
+                  style="color: black; font-size: 16px"
                   v-if="hideNavigation"
-                  @click="hideNavigation=false"
+                  @click="hideNavigation = false"
                 ></i>
               </el-button>
             </el-col>
             <el-col :span="15">
-              <el-header style="text-align: right;line-height: 60px; background-color: #eeeeee">
-                <el-breadcrumb separator="/" style="line-height: 60px;">
+              <el-header
+                style="text-align: right; line-height: 60px; background-color: #eeeeee"
+              >
+                <el-breadcrumb separator="/" style="line-height: 60px">
                   <el-breadcrumb-item
-                    v-for="(item,index) in currentNavigation"
-                    :to="{path: item.url}"
+                    v-for="(item, index) in currentNavigation"
+                    :to="{ path: item.url }"
                     v-bind:key="index"
-                  >{{item.name}}</el-breadcrumb-item>
+                    >{{ item.name }}</el-breadcrumb-item
+                  >
                 </el-breadcrumb>
               </el-header>
             </el-col>
             <el-col
               :span="8"
-              style="background-color: #eeeeee; line-height: 60px; font-size: 16px; color: black"
+              style="
+                background-color: #eeeeee;
+                line-height: 60px;
+                font-size: 16px;
+                color: black;
+              "
               class="fr"
             >
               <el-row :gutter="10">
@@ -133,8 +167,12 @@
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item>个人中心</el-dropdown-item>
                       <el-dropdown-item>首页</el-dropdown-item>
-                      <el-dropdown-item to="https://github.com/Assualt/tsz">项目地址</el-dropdown-item>
-                      <el-dropdown-item divided @click.native.prevent="loginout">退出登录</el-dropdown-item>
+                      <el-dropdown-item to="https://github.com/Assualt/tsz"
+                        >项目地址</el-dropdown-item
+                      >
+                      <el-dropdown-item divided @click.native.prevent="loginout"
+                        >退出登录</el-dropdown-item
+                      >
                     </el-dropdown-menu>
                   </el-dropdown>
                 </el-col>
@@ -143,21 +181,26 @@
           </el-row>
           <el-button
             v-if="!rightDrawerOpened"
-            @click="rightDrawerOpened=true"
+            @click="rightDrawerOpened = true"
             type="primary"
-            style="position: fixed;top: 200px; right: 0;z-index: 1000"
+            style="position: fixed; top: 200px; right: 0; z-index: 1000"
           >
             <i class="el-icon-setting"></i>
           </el-button>
           <el-button
             v-else
             type="primary"
-            style="position: fixed;top: 200px; right: 15%;z-index: 2034"
+            style="position: fixed; top: 200px; right: 15%; z-index: 2034"
           >
             <i class="el-icon-close"></i>
           </el-button>
           <!--	侧边栏弹出框		    -->
-          <el-drawer title="系统布局配置" :visible.sync="rightDrawerOpened" direction="rtl" size="15%">
+          <el-drawer
+            title="系统布局配置"
+            :visible.sync="rightDrawerOpened"
+            direction="rtl"
+            size="15%"
+          >
             <el-row class="setting-row">
               <el-col :span="16" class="setting-col">主题色</el-col>
               <el-col :span="8" class="setting-col">
@@ -167,38 +210,58 @@
             <el-row class="setting-row">
               <el-col :span="16" class="setting-col">开启 Tags-View</el-col>
               <el-col :span="8" class="setting-col">
-                <el-switch v-model="tagviewsOpen" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                <el-switch
+                  v-model="tagviewsOpen"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                ></el-switch>
               </el-col>
             </el-row>
             <el-row class="setting-row">
               <el-col :span="16" class="setting-col">固定Header</el-col>
               <el-col :span="8" class="setting-col">
-                <el-switch v-model="fixedHeader" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                <el-switch
+                  v-model="fixedHeader"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                ></el-switch>
               </el-col>
             </el-row>
             <el-row class="setting-row">
               <el-col :span="16" class="setting-col">侧边栏Logo</el-col>
               <el-col :span="8" class="setting-col">
-                <el-switch v-model="navigationLogo" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                <el-switch
+                  v-model="navigationLogo"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                ></el-switch>
               </el-col>
             </el-row>
             <el-row class="setting-row">
               <el-col :span="16" class="setting-col">菜单支持拼音搜索</el-col>
               <el-col :span="8" class="setting-col">
-                <el-switch v-model="supportPinYin" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                <el-switch
+                  v-model="supportPinYin"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                ></el-switch>
               </el-col>
             </el-row>
             <el-row class="setting-row">
               <el-col :span="16" class="setting-col">隐藏侧边栏</el-col>
               <el-col :span="8" class="setting-col">
-                <el-switch v-model="hideNavigation" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                <el-switch
+                  v-model="hideNavigation"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                ></el-switch>
               </el-col>
             </el-row>
           </el-drawer>
           <!--  Dashboard body-->
           <el-container style="height: 1000px">
-            <el-main class="height-100" v-if="currentPathIndex=='1-1'">主页</el-main>
-            <el-main class="height-100" v-if="currentPathIndex=='2-1'">
+            <el-main class="height-100" v-if="currentPathIndex == '1-1'">主页</el-main>
+            <el-main class="height-100" v-if="currentPathIndex == '2-1'">
               <el-table :data="userMangerData">
                 <el-table-column type="expand">
                   <template slot-scope="props">
@@ -206,51 +269,51 @@
                       <el-row>
                         <el-col :span="8">
                           <el-form-item label="用户名">
-                            <span>{{props.row.userName }}</span>
+                            <span>{{ props.row.userName }}</span>
                           </el-form-item>
                         </el-col>
                         <el-col :span="8">
                           <el-form-item label="昵称">
-                            <span>{{props.row.userNickName}}</span>
+                            <span>{{ props.row.userNickName }}</span>
                           </el-form-item>
                         </el-col>
                         <el-col :span="8">
                           <el-form-item label="密码">
-                            <span>{{props.row.userPassword}}</span>
+                            <span>{{ props.row.userPassword }}</span>
                           </el-form-item>
                         </el-col>
                       </el-row>
                       <el-row>
                         <el-col :span="8">
                           <el-form-item label="用户类别">
-                            <span>{{props.row.userOrgID}}</span>
+                            <span>{{ props.row.userOrgID }}</span>
                           </el-form-item>
                         </el-col>
                         <el-col :span="8">
                           <el-form-item label="性别">
-                            <span>{{props.row.userSex}}</span>
+                            <span>{{ props.row.userSex }}</span>
                           </el-form-item>
                         </el-col>
                         <el-col :span="8">
                           <el-form-item label="电话">
-                            <span>{{props.row.userTel}}</span>
+                            <span>{{ props.row.userTel }}</span>
                           </el-form-item>
                         </el-col>
                       </el-row>
                       <el-row>
                         <el-col :span="8">
                           <el-form-item label="邮箱">
-                            <span>{{props.row.userEmail}}</span>
+                            <span>{{ props.row.userEmail }}</span>
                           </el-form-item>
                         </el-col>
                         <el-col :span="8">
                           <el-form-item label="创建时间">
-                            <span>{{props.row.userJoinDate}}</span>
+                            <span>{{ props.row.userJoinDate }}</span>
                           </el-form-item>
                         </el-col>
                         <el-col :span="8">
                           <el-form-item label="最近登录">
-                            <span>{{props.row.userLastLogin}}</span>
+                            <span>{{ props.row.userLastLogin }}</span>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -258,18 +321,52 @@
                   </template>
                 </el-table-column>
                 <el-table-column prop="userID" label="ID" width="80"></el-table-column>
-                <el-table-column prop="userName" label="用户名" width="80"></el-table-column>
-                <el-table-column prop="userNickName" label="昵称" width="180"></el-table-column>
-                <el-table-column prop="userPassword" label="密码" width="180"></el-table-column>
-                <el-table-column prop="userOrgID" label="用户类别" width="180"></el-table-column>
+                <el-table-column
+                  prop="userName"
+                  label="用户名"
+                  width="80"
+                ></el-table-column>
+                <el-table-column
+                  prop="userNickName"
+                  label="昵称"
+                  width="180"
+                ></el-table-column>
+                <el-table-column
+                  prop="userPassword"
+                  label="密码"
+                  width="180"
+                ></el-table-column>
+                <el-table-column
+                  prop="userOrgID"
+                  label="用户类别"
+                  width="180"
+                ></el-table-column>
                 <el-table-column prop="userSex" label="性别" width="50"></el-table-column>
-                <el-table-column prop="userTel" label="电话" width="100"></el-table-column>
-                <el-table-column prop="userEmail" label="邮箱" width="180"></el-table-column>
-                <el-table-column prop="userJoinDate" label="创建时间" width="180"></el-table-column>
-                <el-table-column prop="userLastLogin" label="最近登录" width="180"></el-table-column>
+                <el-table-column
+                  prop="userTel"
+                  label="电话"
+                  width="100"
+                ></el-table-column>
+                <el-table-column
+                  prop="userEmail"
+                  label="邮箱"
+                  width="180"
+                ></el-table-column>
+                <el-table-column
+                  prop="userJoinDate"
+                  label="创建时间"
+                  width="180"
+                ></el-table-column>
+                <el-table-column
+                  prop="userLastLogin"
+                  label="最近登录"
+                  width="180"
+                ></el-table-column>
                 <el-table-column fixed="right" label="操作" width="100">
                   <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                    <el-button @click="handleClick(scope.row)" type="text" size="small"
+                      >查看</el-button
+                    >
                     <el-button type="text" size="small">编辑</el-button>
                   </template>
                 </el-table-column>
@@ -280,12 +377,20 @@
                 </el-table-column>
               </el-table>
             </el-main>
-            <el-main class="height-100" v-if="currentPathIndex=='2-2'">yonghuguanli/管理员用户</el-main>
-            <el-main class="height-100" v-if="currentPathIndex=='3-1'">系统订单</el-main>
-            <el-main class="height-100" v-if="currentPathIndex=='3-2'">账户订单</el-main>
-            <el-main class="height-100" v-if="currentPathIndex=='3-3'">订单列表</el-main>
-            <el-main class="height-100" v-if="currentPathIndex=='4-1'">
-              <el-tabs tab-position="top" style="height: 200px;">
+            <el-main class="height-100" v-if="currentPathIndex == '2-2'"
+              >yonghuguanli/管理员用户</el-main
+            >
+            <el-main class="height-100" v-if="currentPathIndex == '3-1'"
+              >系统订单</el-main
+            >
+            <el-main class="height-100" v-if="currentPathIndex == '3-2'"
+              >账户订单</el-main
+            >
+            <el-main class="height-100" v-if="currentPathIndex == '3-3'"
+              >订单列表</el-main
+            >
+            <el-main class="height-100" v-if="currentPathIndex == '4-1'">
+              <el-tabs tab-position="top" style="height: 200px">
                 <el-tab-pane label="服务器配置">
                   <el-form ref="form" label-width="100px" v-model="systemDetails">
                     <el-row>
@@ -335,8 +440,9 @@
                             <el-col :span="4">
                               <el-button
                                 type="text"
-                                @click="systemOperation.showServiceProtocol=true"
-                              >预览协议</el-button>
+                                @click="systemOperation.showServiceProtocol = true"
+                                >预览协议</el-button
+                              >
                               <el-dialog
                                 title="用户协议"
                                 :visible.sync="systemOperation.showServiceProtocol"
@@ -344,15 +450,17 @@
                                 center
                                 :open="getProtocolContent()"
                               >
-                                <pre>{{systemOperation.systemProtocolContent}}</pre>
+                                <pre>{{ systemOperation.systemProtocolContent }}</pre>
                                 <span slot="footer" class="dialog-footer">
                                   <el-button
                                     @click="systemOperation.showServiceProtocol = false"
-                                  >取 消</el-button>
+                                    >取 消</el-button
+                                  >
                                   <el-button
                                     type="primary"
                                     @click="systemOperation.showServiceProtocol = false"
-                                  >确 定</el-button>
+                                    >确 定</el-button
+                                  >
                                 </span>
                               </el-dialog>
                             </el-col>
@@ -369,12 +477,20 @@
                           ></el-input>
                         </el-form-item>
                         <el-row :gutter="8">
-                          <el-button type="info" @click="systemOperation.operatorEdit=true">修改</el-button>
+                          <el-button
+                            type="info"
+                            @click="systemOperation.operatorEdit = true"
+                            >修改</el-button
+                          >
                           <el-button type="danger">提交</el-button>
                           <el-button
                             type="reset"
-                            @click="systemOperation.operatorEdit=false; systemDetails=systemDetails_bak;"
-                          >撤销</el-button>
+                            @click="
+                              systemOperation.operatorEdit = false;
+                              systemDetails = systemDetails_bak;
+                            "
+                            >撤销</el-button
+                          >
                         </el-row>
                       </el-col>
                     </el-row>
@@ -397,13 +513,14 @@ import AdminSlideBar from "../components/AdminToolBar";
 import NavControlBar from "../components/NavControlBar";
 import ScrollBar from "../components/ScrollBar";
 import DashBoardBody from "../BodyComponents/DashBoardBody";
+import { fetchAdminUserMngList } from "../api/user";
 export default {
   name: "DashBoard",
   components: {
     AdminSlideBar,
     NavControlBar,
     ScrollBar,
-    DashBoardBody
+    DashBoardBody,
   },
   props: [],
   data() {
@@ -412,8 +529,8 @@ export default {
       currentNavigation: [
         {
           name: "首页",
-          url: "/admin/dashboard"
-        }
+          url: "/admin/dashboard",
+        },
       ],
       rightDrawerOpened: false,
       setting_color: null,
@@ -431,37 +548,24 @@ export default {
         servicePort: 80,
         serviceCA: "",
         serviceProtocol: "static/protocol/service-protocol.txt",
-        serviceDescription: ""
+        serviceDescription: "",
       },
       systemOperation: {
         showServiceProtocol: false,
         systemProtocolContent: "",
-        operatorEdit: false
+        operatorEdit: false,
       },
       systemDetails_bak: null,
-      userMangerData: [
-        {
-          userID: 10001,
-          userName: "Fate丶",
-          userNickName: "TaskBody",
-          userPassword: "***",
-          userSex: "男",
-          userTel: "1375213113",
-          userEmail: "xxxx@11.com",
-          userJoinDate: "2020-05-13 13:32:32",
-          userLastLogin: "2020-06-30 14:20:13",
-          userOrgID: "普通用户"
-        }
-      ],
-      search: ""
+      userMangerData: [],
+      search: "",
     };
   },
   methods: {
     handleClick(scope) {},
-    navbarExpand: function(childValue) {
+    navbarExpand: function (childValue) {
       this.bExpand = childValue;
     },
-    changeNavigation: function(menuName, menuUrl, pathIndex) {
+    changeNavigation: function (menuName, menuUrl, pathIndex) {
       if (this.currentNavigation.length == 1 && pathIndex != "1-1") {
         this.currentNavigation.push({ name: "", url: "" });
       }
@@ -479,23 +583,18 @@ export default {
     },
     async getProtocolContent() {
       try {
-        const retData = await this.axios_get(
-          this.systemDetails.serviceProtocol,
-          []
-        );
+        const retData = await this.axios_get(this.systemDetails.serviceProtocol, []);
         if (retData.length == 0) {
           this.$message({
             type: "warning",
             message:
-              "request serviceProtocol" +
-              this.systemDetails.serviceProtocol +
-              " error."
+              "request serviceProtocol" + this.systemDetails.serviceProtocol + " error.",
           });
         } else this.systemOperation.systemProtocolContent = retData.data;
       } catch (err) {
         this.$message({
           type: "warning",
-          message: "request serviceProtocol error."
+          message: "request serviceProtocol error.",
         });
       }
     },
@@ -505,12 +604,19 @@ export default {
     async loginout() {
       await this.$store.dispatch("user/logout");
       this.$message({ type: "success", message: "登出成功" });
-      this.$router.push({path: "/admin"});
-    }
+      this.$router.push({ path: "/admin" });
+    },
+    fetch_user_mng_list() {
+      fetchAdminUserMngList(1).then(response=> {
+        this.userMangerData = response.data
+      }).catch(err=>{
+        console.log("recv is error", err);
+      })
+    },
   },
   created() {
-    console.log("get query id from admin" + JSON.stringify(this.$route.query));
     this.systemDetails_bak = this.systemDetails;
+    this.fetch_user_mng_list();
   },
   watch: {
     hideNavigation(newVal, oldVal) {
@@ -519,8 +625,8 @@ export default {
       } else {
         this.navigationWidth = "200px";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

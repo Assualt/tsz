@@ -4,7 +4,7 @@ import {MessageBox, Message} from 'element-ui'
 import App from '@/constants/App'
 
 const service = axios.create({
-  baseURL: App.SERVER_URL,
+  // baseURL: App.SERVER_URL,
   timeout: 5000
 })
 

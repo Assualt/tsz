@@ -1,4 +1,3 @@
-
 const tokens = {
   admin: {
     token: 'admin-token'
@@ -56,5 +55,4 @@ module.exports = [
       }
     }
   }
-
 ]
