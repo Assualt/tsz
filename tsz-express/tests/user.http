@@ -1,0 +1,21 @@
+#GET http://localhost:3000/user/index?name=zhangjian HTTP/1.1
+
+GET http://localhost:3000/user/listall HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibmFtZSI6InpoYW5namlhbjIiLCJlbWFpbCI6IjEyMzMxMjMxQDEyMy5jb20iLCJwYXNzd29yZCI6IjEyMzQ1NiIsImlhdCI6MTcxMDk1NTY5MCwiZXhwIjoxNzExNTYwNDkwfQ.xRjBtC0k5sUBxIm8HubIE38_187hwdfOkq-QPVbxCk8
+
+# POST http://localhost:3000/user/create HTTP/1.1
+# Content-Type: application/json
+
+#{
+#    "name" : "zhangjian2",
+#    "email" : "12331231@123.com",
+#    "password" : "123456"
+#}
+
+POST http://localhost:3000/user/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "name" : "zhangjian2",
+    "password" : "123456"
+}
