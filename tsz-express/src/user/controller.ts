@@ -16,8 +16,7 @@ export class User {
     }
 
     @GetMapping("/listall", JwtTool.middleware())
-    public async getAll(req: Request, resp: Response) {
-        console.log(req.rawHeaders)
+    public async getAll(req: Request) {
         return await this.userService.getUserList();
     }
 

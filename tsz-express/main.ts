@@ -7,6 +7,7 @@ import express from 'express'
 import { PrismaClient } from '@prisma/client'
 import { PrismaDB } from './src/db'
 import { JwtTool } from './src/jwt'
+import { RedisClient } from './src/redis'
 
 const container = new Container()
 
@@ -31,6 +32,11 @@ container.bind(PrismaDB).to(PrismaDB)
  * jwt
  */
 container.bind(JwtTool).to(JwtTool)
+
+/***
+ * redis
+ */
+container.bind(RedisClient).to(RedisClient)
 
 /***
  * 添加中间件 如 app.use

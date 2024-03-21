@@ -11,6 +11,5 @@ export class UserDto {
     @IsEmail({}, { message: "`email` address is invalid" })
     email: string
 
-    // @IsNotEmpty({ message: "emtpy `password` is not allowed" })
     password: string
 }

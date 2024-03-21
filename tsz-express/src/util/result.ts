@@ -1,9 +1,11 @@
 
 export enum StatusCode {
     SUCCESS = 200,
+    LOGIN_ALREADY = 201,
     INVALID_ARGUMENTS = 300,
     EXECUTE_FAIL = 301,
     LOGIN_FAIL = 302,
+    
 }
 
 export class ApiResult {

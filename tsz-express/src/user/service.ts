@@ -6,11 +6,14 @@ import { plainToClass, plainToClassFromExist } from "class-transformer";
 import { validate } from "class-validator";
 import { ApiResult, StatusCode } from "../util/result";
 import { JwtTool } from "../jwt";
+import { RedisClient } from "../redis";
+import constant from "../util/constant"
 
 @injectable()
 export class UserService {
     constructor(@inject(PrismaDB) private readonly db: PrismaDB,
-        @inject(JwtTool) private readonly jwt: JwtTool
+        @inject(JwtTool) private readonly jwt: JwtTool,
+        @inject(RedisClient) private readonly redis: RedisClient
     ) {
     }
 
@@ -47,6 +50,13 @@ export class UserService {
     }
 
     public async login(user: UserDto) {
+        let key = constant.getLoginKey(user.name);
+        let result = await this.redis.client_.get(key);
+        if (result != null) {
+            
+            return ApiResult.format(StatusCode.LOGIN_ALREADY, "login already", {token: result});
+        }
+
         const one: User | null = await this.db.client_.user.findFirst({
             where: { name: { equals: user.name } }
         });
@@ -55,8 +65,13 @@ export class UserService {
             return ApiResult.format(StatusCode.LOGIN_FAIL, "login fail", null)
         }
 
-        return ApiResult.format(StatusCode.SUCCESS, "login success", {
-            token: this.jwt.createToken(one)
+        let token = this.jwt.createToken(one)
+        console.log("set key:", key, " value:", token, " exp:", 20)
+        await this.redis.client_.setex(key, 30, token, (err, result) => {
+            if (err) {
+                return ApiResult.format(StatusCode.LOGIN_FAIL, "internel error", {});
+            }
         });
+        return ApiResult.format(StatusCode.SUCCESS, "login success", { token });
     }
 }
