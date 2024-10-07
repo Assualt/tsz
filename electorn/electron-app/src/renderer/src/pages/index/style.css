@@ -1,0 +1,74 @@
+
+.layout {
+    width: 100%;
+}
+
+.train-start {
+    display: inline-block;
+    padding: 2px 4px;
+    background-color: rgb(204, 165, 103);
+    color: rgb(255, 255, 255);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bolder;
+    margin-right: 2px;
+}
+
+.train-end {
+    display: inline-block;
+    padding: 2px 4px;
+    background-color: rgb(109, 167, 127);
+    color: rgb(255, 255, 255);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bolder;
+    margin-right: 2px;
+}
+
+.train-middle {
+    display: inline-block;
+    padding: 2px 4px;
+    background-color: rgb(117, 151, 213);
+    color: rgb(255, 255, 255);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bolder;
+    margin-right: 2px;
+}
+
+.train-fuxing {
+    color: rgb(242, 156, 88);
+    border: 1px solid rgb(242, 156, 88);
+    padding: 2px;
+    aspect-ratio: 1 / 1;
+    border-radius: 2px;
+    margin-right: 4px;
+}
+
+.train-intelligence {
+    color: rgb(125, 176, 141);
+    border: 1px solid rgb(125, 176, 141);
+    padding: 2px;
+    aspect-ratio: 1 / 1;
+    border-radius: 2px;
+    margin-right: 4px;
+}
+
+.train-slice {
+    color: rgb(100, 160, 246);
+    border: 1px solid rgb(100, 160, 246);
+    padding: 2px;
+    aspect-ratio: 1 / 1;
+    border-radius: 2px;
+    margin-right: 4px;
+}
+
+b {
+    font-weight: bolder;
+}
+
+.avatar-info {
+    &:hover {
+        cursor: pointer;
+    }
+}
