@@ -1,19 +1,19 @@
 import React from 'react'
 
 enum SeatType {
-    Business,
-    Superlative,
-    FirstClass,
-    SecondClass,
-    MovingLying,
-    SuperMovingLying,
-    SuperSoftMovingLying,
-    SoftLyingFirstClass,
-    HardLyingSecondClass,
-    SoftSeat,
-    HardSeat,
-    NullSeat,
-    Other,
+  Business,
+  Superlative,
+  FirstClass,
+  SecondClass,
+  MovingLying,
+  SuperMovingLying,
+  SuperSoftMovingLying,
+  SoftLyingFirstClass,
+  HardLyingSecondClass,
+  SoftSeat,
+  HardSeat,
+  NullSeat,
+  Other
 }
 
 export interface TicketInfo {
@@ -29,13 +29,13 @@ export interface TicketInfo {
 }
 
 export interface QueryFilter {
-    from: String
-    to: String
-    startTime: Date
+  from: String
+  to: String
+  startTime: Date
 }
 
 export interface Cities {
-    name: String
-    label: String
-    code:  String
+  name: String
+  label: String
+  code: String
 }

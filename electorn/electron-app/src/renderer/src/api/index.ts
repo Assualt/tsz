@@ -6,7 +6,7 @@ class ApiClient {
   private static instance: ApiClient
   private axiosInstance
   private constructor(baseUrl: string, timeout: Number = 1000) {
-    this.axiosInstance =  axios.create ({
+    this.axiosInstance = axios.create({
       baseURL: '/api/',
       timeout: 1000,
       headers: {

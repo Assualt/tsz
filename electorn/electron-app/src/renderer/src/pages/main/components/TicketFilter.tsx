@@ -57,7 +57,7 @@ const TicketFilter = ({ queryFilter, isLoading, onPickUpDate }: any) => {
             <Form.Item label="出发车站" style={{ fontWeight: 'bolder', fontSize: '1.2em' }}>
               <Checkbox.Group>
                 {queryFilter.from.map((item: any) => {
-                  return <Checkbox label={item} disabled={isLoading}/>
+                  return <Checkbox label={item} disabled={isLoading} />
                 })}
               </Checkbox.Group>
             </Form.Item>
@@ -70,7 +70,7 @@ const TicketFilter = ({ queryFilter, isLoading, onPickUpDate }: any) => {
             <Form.Item label="到达车站" style={{ fontWeight: 'bolder', fontSize: '1.2em' }}>
               <Checkbox.Group>
                 {queryFilter.to.map((item: any) => {
-                  return <Checkbox label={item} disabled={isLoading}/>
+                  return <Checkbox label={item} disabled={isLoading} />
                 })}
               </Checkbox.Group>
             </Form.Item>
@@ -83,14 +83,14 @@ const TicketFilter = ({ queryFilter, isLoading, onPickUpDate }: any) => {
             <Form.Item label="车次席别" style={{ fontWeight: 'bolder', fontSize: '1.2em' }}>
               <Checkbox.Group>
                 {queryFilter.seatType.map((item) => {
-                  return <Checkbox label={item} disabled={isLoading}/>
+                  return <Checkbox label={item} disabled={isLoading} />
                 })}
               </Checkbox.Group>
             </Form.Item>
           </Form>
         </Layout.Col>
       </Layout.Row>
-    </div> 
+    </div>
   )
 }
 

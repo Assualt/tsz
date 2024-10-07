@@ -52,7 +52,7 @@ const GetTableData = (result: any, func: Function) => {
       },
       {
         label: '历时',
-        prop: 'cost',
+        prop: 'cost'
       },
       {
         label: '商务座 特等座',

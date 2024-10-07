@@ -70,7 +70,12 @@ const searchResultColumns: TableProps<SearchResultField>['columns'] = [
     }
   },
   {
-    title: <Space direction='vertical' style={{ minWidth: '20vh'}}><b>出发站</b><b>到达站</b></Space>,
+    title: (
+      <Space direction="vertical" style={{ minWidth: '20vh' }}>
+        <b>出发站</b>
+        <b>到达站</b>
+      </Space>
+    ),
     render: (_, record) => {
       return (
         <Space direction="vertical" size={5} style={{ minWidth: '20vh' }}>
@@ -107,7 +112,12 @@ const searchResultColumns: TableProps<SearchResultField>['columns'] = [
       `${record.end_time.diff(record.begin_time, 'hour')}:${record.end_time.diff(record.begin_time, 'minute') % 60}:00`
   },
   {
-    title: <Space direction='vertical' style={{ minWidth: '20vh'}}><b>商务座</b><b>特等座</b></Space>,
+    title: (
+      <Space direction="vertical" style={{ minWidth: '20vh' }}>
+        <b>商务座</b>
+        <b>特等座</b>
+      </Space>
+    ),
     render: (_, record) => record.seatInfo.business + record.seatInfo.special
   },
   {
@@ -115,7 +125,12 @@ const searchResultColumns: TableProps<SearchResultField>['columns'] = [
     render: (_, record) => record.seatInfo.first
   },
   {
-    title: <Space direction='vertical' style={{ minWidth: '20vh'}}><b>二等座</b><b>二等包座</b></Space>,
+    title: (
+      <Space direction="vertical" style={{ minWidth: '20vh' }}>
+        <b>二等座</b>
+        <b>二等包座</b>
+      </Space>
+    ),
     render: (_, record) => record.seatInfo.second
   },
   {
@@ -127,11 +142,21 @@ const searchResultColumns: TableProps<SearchResultField>['columns'] = [
     render: (_, record) => record.seatInfo.super_soft_lying
   },
   {
-    title: <Space direction='vertical' style={{ minWidth: '20vh'}}><b>软卧</b><b>一等卧</b></Space>,
+    title: (
+      <Space direction="vertical" style={{ minWidth: '20vh' }}>
+        <b>软卧</b>
+        <b>一等卧</b>
+      </Space>
+    ),
     render: (_, record) => record.seatInfo.soft_lying
   },
   {
-    title: <Space direction='vertical' style={{ minWidth: '20vh'}}><b>硬卧</b><b>二等卧</b></Space>,
+    title: (
+      <Space direction="vertical" style={{ minWidth: '20vh' }}>
+        <b>硬卧</b>
+        <b>二等卧</b>
+      </Space>
+    ),
     render: (_, record) => record.seatInfo.hard_lying
   },
   {

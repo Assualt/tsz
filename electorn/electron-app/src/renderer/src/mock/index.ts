@@ -6,7 +6,6 @@ import { param2Obj } from './utils'
 import { ticketMock, mockFunc } from './ticket'
 import { userMock } from './user'
 
-
 export const mocks = [...ticketMock, ...userMock]
 
 export function XHR() {

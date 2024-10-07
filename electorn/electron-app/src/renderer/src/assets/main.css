@@ -203,7 +203,7 @@ code {
   float: left;
   /* border: 1px solid gray; */
   color: black;
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 }
@@ -220,7 +220,7 @@ code {
 }
 
 .detail-content-body {
-  padding: 10px
+  padding: 10px;
 }
 
 .tooltip {

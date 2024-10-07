@@ -283,7 +283,7 @@ const Login: React.FC = ({ setSpin }) => {
   return (
     <Card
       style={{ minWidth: 300, alignItems: 'center', justifyContent: 'center' }}
-      title={logType === LogType.Login ? <span>登录</span> : <span>注册</span> }
+      title={logType === LogType.Login ? <span>登录</span> : <span>注册</span>}
     >
       {logType === LogType.Login ? loginForm() : registerForm()}
     </Card>

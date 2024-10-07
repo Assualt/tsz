@@ -6,29 +6,29 @@ export type SearchBoxField = {
 }
 
 interface SeatLeftTicket {
-    business: number
-    special: number
-    first: number
-    second: number
-    lying: number
-    super_soft_lying: number
-    soft_lying: number
-    hard_lying: number
-    soft_seat: number
-    hard_seat: number
-    no_seat: number
+  business: number
+  special: number
+  first: number
+  second: number
+  lying: number
+  super_soft_lying: number
+  soft_lying: number
+  hard_lying: number
+  soft_seat: number
+  hard_seat: number
+  no_seat: number
 }
 
 interface PriceInfo {
-    seatType: string
-    price: number
+  seatType: string
+  price: number
 }
 
 interface TrainStation {
-    name: string
-    code: string
-    arrivalTime: dayjs.Dayjs
-    leaveTime: dayjs.Dayjs
+  name: string
+  code: string
+  arrivalTime: dayjs.Dayjs
+  leaveTime: dayjs.Dayjs
 }
 
 export interface SearchResultField {
@@ -43,4 +43,3 @@ export interface SearchResultField {
   isStart: boolean
   isEnd: boolean
 }
-

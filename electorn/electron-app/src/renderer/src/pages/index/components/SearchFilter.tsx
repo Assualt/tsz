@@ -212,7 +212,7 @@ const SearchFilter: React.FC = ({
                   fromStationIsSelectAll
                     ? setFromStation([])
                     : setFromStation(getStationLabel(searchParam.from))
-                    console.log(fromStation, fromStationIsSelectAll)
+                  console.log(fromStation, fromStationIsSelectAll)
                 }}
               >
                 全选
