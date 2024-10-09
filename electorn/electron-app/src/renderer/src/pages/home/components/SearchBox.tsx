@@ -31,13 +31,7 @@ const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo)
 }
 
-const SearchBox: React.FC = ({
-  cities,
-  isSearch,
-  setIsSearch,
-  setSearchResult,
-  setSearchParam
-}) => {
+const SearchBox = ({ stations, isSearch, setIsSearch, setSearchResult, setSearchParam }) => {
   const [form] = Form.useForm()
 
   const onFinish = (values: SearchBoxField) => {
@@ -79,7 +73,7 @@ const SearchBox: React.FC = ({
         form={form}
         layout="inline"
         style={{ width: '100%' }}
-        name="basic"
+        name="searchForm"
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -88,8 +82,8 @@ const SearchBox: React.FC = ({
       >
         <Form.Item<SearchBoxField> label="出发地" name="from">
           <Select placeholder="请选择出发地" style={{ width: '20vh' }}>
-            {Array.isArray(cities) &&
-              cities.map((item, index) => {
+            {Array.isArray(stations) &&
+              stations.map((item, index) => {
                 return (
                   <Select.Option key={index} value={item.label}>
                     {item.label}
@@ -110,8 +104,8 @@ const SearchBox: React.FC = ({
 
         <Form.Item<SearchBoxField> label="目的地" name="to">
           <Select placeholder="请选择目的地" style={{ width: '20vh' }}>
-            {Array.isArray(cities) &&
-              cities.map((item, index) => {
+            {Array.isArray(stations) &&
+              stations.map((item, index) => {
                 return (
                   <Select.Option key={index} value={item.label}>
                     {item.label}

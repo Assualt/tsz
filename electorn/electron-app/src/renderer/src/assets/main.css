@@ -139,7 +139,6 @@ code {
   overflow: hidden;
   align-items: center;
   border-radius: 22px;
-  background-color: #202127;
   backdrop-filter: blur(24px);
 }
 

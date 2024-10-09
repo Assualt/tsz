@@ -1,16 +1,16 @@
-import { Layout, Row, Col, Tabs, Form, Checkbox, TimePicker, Button } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Layout, Row, Col, Tabs, Form, Checkbox, TimePicker } from 'antd'
+import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 
 const getNext15Days = () => {
-  let days = []
+  let days: dayjs.Dayjs[] = []
   for (let i = 0; i < 20; i++) {
     days.push(dayjs().add(i, 'day'))
   }
   return days
 }
 
-const dateTabsItem = getNext15Days().map((item, index) => {
+const dateTabsItem = getNext15Days().map((item, _) => {
   return {
     label: item.format('MM-DD'),
     key: item.format('YYYY-MM-DD'),
@@ -33,7 +33,7 @@ const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo)
 }
 
-const getTrainLabel = (value: String) => {
+const getTrainLabel = (value: string) => {
   let trainLabels = {
     G: '高铁',
     D: '动车',
@@ -48,19 +48,24 @@ const getTrainLabel = (value: String) => {
   return trainLabels[value]
 }
 
-const getTrainTypeLabel = (value: Array<string>) => {
-  let trainTypeLabels = []
+const getTrainTypeLabel = (value: string[]) => {
+  let trainTypeLabels: { code: string; label: string }[] = []
   for (let i = 0; i < value.length; ++i) {
     trainTypeLabels.push({ code: value[i], label: getTrainLabel(value[i]) })
   }
   return trainTypeLabels
 }
 
-const getStationLabel = (station: String) => {
-  if (station == '') {
+const getStationLabel = (stations: string[]) => {
+  if (stations.length == 0) {
     return []
   }
-  return [{ code: station, label: station }]
+
+  let stationLabels: DataType[] = []
+  for (let i = 0; i < stations.length; ++i) {
+    stationLabels.push({ code: stations[i], label: stations[i] })
+  }
+  return stationLabels
 }
 
 const getFilterInfo = () => {
@@ -99,38 +104,38 @@ const getFilterInfo = () => {
   }
 }
 
-const SearchFilter: React.FC = ({
-  isSearch,
-  setIsSearch,
-  searchParam,
-  searchResultTrainTypeList
-}) => {
+interface DataType {
+  code: string
+  label: string
+}
+
+const SearchFilter = ({ isSearch, setIsSearch, searchParam, searchResultTrainTypeList }) => {
   const [form] = Form.useForm()
-  const [trainType, setTrainType] = useState<String[]>([])
+  const [trainType, setTrainType] = useState<DataType[]>([])
   const [trainIsIndeterminate, trainIsSelectAll] = [
     trainType.length > 0 && trainType.length < searchResultTrainTypeList.length,
     trainType.length > 0 && trainType.length == searchResultTrainTypeList.length
   ]
 
-  const [fromStation, setFromStation] = useState<String[]>([])
-  const [fromStationIsIndeterminate, fromStationIsSelectAll] = [
-    fromStation.length > 0 && fromStation.length < getStationLabel(searchParam.from).length,
-    fromStation.length > 0 && fromStation.length == getStationLabel(searchParam.from).length
+  const [fromStation, setFromStation] = useState<DataType[]>([])
+  let [fromStationIsIndeterminate, fromStationIsSelectAll] = [
+    fromStation.length > 0 && fromStation.length < getStationLabel([searchParam.from]).length,
+    fromStation.length > 0 && fromStation.length == getStationLabel([searchParam.from]).length
   ]
 
-  const [toStation, setToStation] = useState<String[]>([])
+  const [toStation, setToStation] = useState<DataType[]>([])
   const [toStationIsIndeterminate, toStationIsSelectAll] = [
-    toStation.length > 0 && toStation.length < getStationLabel(searchParam.to).length,
-    toStation.length > 0 && toStation.length == getStationLabel(searchParam.to).length
+    toStation.length > 0 && toStation.length < getStationLabel([searchParam.to]).length,
+    toStation.length > 0 && toStation.length == getStationLabel([searchParam.to]).length
   ]
 
-  const [seatType, setSeatType] = useState<String[]>([])
+  const [seatType, setSeatType] = useState<DataType[]>([])
   const [seatTypeIsIndeterminate, seatTypeIsSelectAll] = [
     seatType.length > 0 && seatType.length < getFilterInfo().data.length,
     seatType.length > 0 && seatType.length == getFilterInfo().data.length
   ]
 
-  const [pickupTimeKey, setPickupTimeKey] = useState<number>(0)
+  const [pickupTimeKey, setPickupTimeKey] = useState<string>()
 
   useEffect(() => {
     setPickupTimeKey(searchParam.date.format('YYYY-MM-DD'))
@@ -154,13 +159,13 @@ const SearchFilter: React.FC = ({
         tabPosition="top"
         onChange={onTabActive}
         activeKey={pickupTimeKey}
-      ></Tabs>
+      />
 
       <Form
         form={form}
         layout="inline"
         style={{ width: '100%' }}
-        name="basic"
+        name="filterForm"
         labelCol={{ span: 2 }}
         wrapperCol={{ span: 18 }}
         initialValues={{ remember: true }}
@@ -188,13 +193,17 @@ const SearchFilter: React.FC = ({
             <Col span={16}>
               <Checkbox.Group onChange={setTrainType} value={trainType}>
                 {getTrainTypeLabel(searchResultTrainTypeList).map((item) => {
-                  return <Checkbox value={item.code}>{item.label}</Checkbox>
+                  return (
+                    <Checkbox value={item.code} key={item.code}>
+                      {item.label}
+                    </Checkbox>
+                  )
                 })}
               </Checkbox.Group>
             </Col>
             <Col span={2}>出发时间</Col>
             <Col span={4}>
-              <TimePicker.RangePicker defaultValue={dayjs()} format="HH:mm:ss" />
+              <TimePicker.RangePicker defaultValue={[dayjs(), dayjs()]} format="HH:mm:ss" />
             </Col>
           </Row>
         </Form.Item>
@@ -208,23 +217,30 @@ const SearchFilter: React.FC = ({
                 indeterminate={fromStationIsIndeterminate}
                 checked={fromStationIsSelectAll}
                 onClick={() => {
-                  console.log(fromStation, fromStationIsSelectAll)
                   fromStationIsSelectAll
                     ? setFromStation([])
-                    : setFromStation(getStationLabel(searchParam.from))
-                  console.log(fromStation, fromStationIsSelectAll)
+                    : setFromStation(getStationLabel([searchParam.from]))
                 }}
               >
                 全选
               </Checkbox>
             </Col>
             <Col span={20}>
-              <Checkbox.Group onChange={setFromStation} value={fromStation}>
-                {getStationLabel(searchParam.from).map((item) => {
+              <Checkbox.Group
+                onChange={(value) => {
+                  setFromStation(value)
+                }}
+                value={fromStation}
+              >
+                {getStationLabel([searchParam.from]).map((item) => {
                   if (item.label == '') {
                     return
                   }
-                  return <Checkbox value={item.code}>{item.label}</Checkbox>
+                  return (
+                    <Checkbox value={item.code} key={item.code}>
+                      {item.label}
+                    </Checkbox>
+                  )
                 })}
               </Checkbox.Group>
             </Col>
@@ -242,7 +258,7 @@ const SearchFilter: React.FC = ({
                 onClick={() => {
                   toStationIsSelectAll
                     ? setToStation([])
-                    : setToStation(getStationLabel(searchParam.to))
+                    : setToStation(getStationLabel([searchParam.to]))
                 }}
               >
                 全选
@@ -250,11 +266,15 @@ const SearchFilter: React.FC = ({
             </Col>
             <Col span={22}>
               <Checkbox.Group onChange={setToStation} value={toStation}>
-                {getStationLabel(searchParam.to).map((item) => {
+                {getStationLabel([searchParam.to]).map((item) => {
                   if (item.label == '') {
                     return
                   }
-                  return <Checkbox value={item.code}>{item.label}</Checkbox>
+                  return (
+                    <Checkbox value={item.code} key={item.code}>
+                      {item.label}
+                    </Checkbox>
+                  )
                 })}
               </Checkbox.Group>
             </Col>
@@ -273,7 +293,11 @@ const SearchFilter: React.FC = ({
             <Col span={22}>
               <Checkbox.Group onChange={setSeatType} value={seatType}>
                 {getFilterInfo().data.map((item) => {
-                  return <Checkbox value={item.code}>{item.label}</Checkbox>
+                  return (
+                    <Checkbox value={item.code} key={item.code}>
+                      {item.label}
+                    </Checkbox>
+                  )
                 })}
               </Checkbox.Group>
             </Col>

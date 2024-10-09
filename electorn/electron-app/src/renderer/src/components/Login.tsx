@@ -3,8 +3,7 @@ import { Card, Form, Button, Input, message, Checkbox, Space } from 'antd'
 import { login, register, getVerifyCode } from '@/api/user'
 
 import React, { useState } from 'react'
-
-import { changeUrl } from '@renderer/stores'
+import { useNavigate } from 'react-router-dom'
 
 enum LogType {
   Login = 'login',
@@ -25,21 +24,6 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 }
 }
 
-const onFinish: FormProps<DataType>['onFinish'] = (values) => {
-  let userName = values['userName']
-  let password = values['password']
-  let type = values['type']
-
-  login(userName, password)
-    .then((res) => {
-      message.success(`登陆成功 ${JSON.stringify(res.data)}`)
-      changeUrl('/index')
-    })
-    .catch((err) => {
-      message.error(err)
-    })
-}
-
 const onFinishFailed: FormProps<DataType>['onFinishFailed'] = (errorInfo) => {
   console.log('Failed:', errorInfo)
 }
@@ -47,7 +31,7 @@ const onFinishFailed: FormProps<DataType>['onFinishFailed'] = (errorInfo) => {
 const handleVerifyCode: boolean = (form: FormInstance<DataType>, setVerifyCode: Function) => {
   let userName = form.getFieldValue('userName')
   if (userName === '' || userName === undefined) {
-    message.error(`请输入用户名 ${userName} ${form.getFieldValue('userName')}`)
+    message.error('请输入用户名')
     return false
   }
 
@@ -72,6 +56,7 @@ const Login: React.FC = ({ setSpin }) => {
   const [verifyCode, setVerifyCode] = useState<number>(0)
   const [verifyButtonText, setVerifyButtonText] = useState<string>('获取验证码')
   const [verifyButtonDisable, setVerifyButtonDisable] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   const onRegisterFinish: FormProps<DataType>['onFinish'] = (values) => {
     let userName = values['userName']
@@ -116,6 +101,20 @@ const Login: React.FC = ({ setSpin }) => {
       }
       setVerifyButtonText(count-- + 's后重试')
     }, 1000)
+  }
+
+  const onLoginFinish: FormProps<DataType>['onFinish'] = (values) => {
+    let userName = values['userName']
+    let password = values['password']
+
+    login(userName, password)
+      .then((res) => {
+        message.success(`登陆成功 ${JSON.stringify(res.data)}`)
+        navigate('/home', { replace: true })
+      })
+      .catch((err) => {
+        message.error(err)
+      })
   }
 
   const registerForm = () => {
@@ -236,7 +235,7 @@ const Login: React.FC = ({ setSpin }) => {
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600, minWidth: 400 }}
         initialValues={{ remember: true }}
-        onFinish={onFinish}
+        onFinish={onLoginFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >

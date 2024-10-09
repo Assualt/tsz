@@ -51,30 +51,8 @@ function getNewMockTicketLeftInfo(from, to, date) {
       },
       isStart: Mock.Random.integer(0, 1) == 0,
       isEnd: Mock.Random.integer(0, 1) == 0,
-      priceInfo: [
-        { seatType: '商务座', price: Mock.Random.integer(1000, 2000) },
-        { seatType: '特等座', price: Mock.Random.integer(200, 2000) },
-        { seatType: '一等座', price: Mock.Random.integer(300, 2000) },
-        { seatType: '二等座', price: Mock.Random.integer(1000, 2000) }
-      ],
-      stations: [{ code: 'xxx', name: fromCity, arrivalTime: dayjs(), leaveTime: dayjs() }]
+      priceInfo: [{ seatType: '商务座', price: Mock.Random.integer(1000, 2000) }]
     }
-    for (let i = 0; i < 10; ++i) {
-      trainInfo.stations.push({
-        code: 'xxx',
-        name: Mock.Random.city(),
-        arrivalTime: dayjs().add(i, 'hour'),
-        leaveTime: dayjs().add(i + 1, 'hour')
-      })
-    }
-
-    trainInfo.stations.push({
-      code: 'xxx',
-      name: toCity,
-      arrivalTime: dayjs().add(10, 'hour'),
-      leaveTime: dayjs().add(10, 'hour')
-    })
-
     trainList.push(trainInfo)
   }
 
@@ -136,6 +114,45 @@ function getMockTicketLeftInfo(from: string = '北京', to: string = '上海') {
   return ticketInfo
 }
 
+interface StationDetail {
+  name: string
+  arrivalTime: string
+  leaveTime: string
+  code: string
+}
+
+function getMockStations(trainNo: string) {
+  let stations: StationDetail[] = []
+  for (let idx = 0; idx < 10; ++idx) {
+    stations.push({
+      name: Mock.Random.city(),
+      arrivalTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      leaveTime: dayjs().add(idx, 'hour').format('YYYY-MM-DD HH:mm:ss'),
+      code: 'xxx'
+    })
+  }
+  return stations
+}
+
+function getMockTrainPrice(trainNo: string) {
+  return {
+    trainNo: trainNo,
+    price: {
+      business: Mock.Random.integer(10, 200),
+      special: Mock.Random.integer(10, 200),
+      first: Mock.Random.integer(10, 200),
+      second: Mock.Random.integer(10, 200),
+      lying: Mock.Random.integer(10, 200),
+      super_soft_lying: Mock.Random.integer(10, 200),
+      soft_lying: Mock.Random.integer(10, 200),
+      hard_lying: Mock.Random.integer(10, 200),
+      hard_seat: Mock.Random.integer(10, 200),
+      soft_seat: Mock.Random.integer(10, 200),
+      no_seat: Mock.Random.integer(10, 200)
+    }
+  }
+}
+
 export const mockFunc = () => {
   Mock.mock(new RegExp('/api/ticket/queryNew'), 'get', function (request) {
     var queryObj = param2Obj(request.url)
@@ -152,5 +169,25 @@ export const ticketMock = [
     url: '/api/ticket/cities',
     type: 'get',
     response: (request) => api.result(200, 'OK', getCities())
+  },
+  {
+    url: '/api/ticket/station',
+    type: 'get',
+    response: (request) => {
+      const query = request.query
+      return api.result(200, 'OK', getMockStations(query['trainNo']))
+    }
+  },
+  {
+    url: '/api/ticket/price',
+    type: 'get',
+    response: (request) => {
+      const queryObj = request.query
+      return api.result(
+        200,
+        'OK',
+        getMockTrainPrice(queryObj['trainNo'])
+      )
+    }
   }
 ]

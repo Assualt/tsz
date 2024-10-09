@@ -56,7 +56,7 @@ class ApiClient {
     return this.axiosInstance.post(url, data)
   }
 
-  public result(code: Number, message: String, data?: any) {
+  public result(code: Number, message: string, data?: any) {
     return {
       status: code,
       message: message,

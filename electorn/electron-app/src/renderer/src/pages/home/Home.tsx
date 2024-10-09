@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 import './style.css'
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons'
-import { BreadcrumbItemProps, Layout, Menu, MenuItemProps, MenuProps, Breadcrumb } from 'antd'
+import { BreadcrumbItemProps, Layout, Menu, MenuProps, Breadcrumb } from 'antd'
 import { Footer } from 'antd/es/layout/layout'
 
 import SearchBox from './components/SearchBox'
@@ -14,7 +14,7 @@ import dayjs from 'dayjs'
 
 // api
 import { fetchAllCities } from '../../api/ticket'
-import { SearchResultField, SearchBoxField } from './Constant'
+import { SearchResultField, SearchBoxField, Train } from './Constant'
 
 const { Header, Content, Sider } = Layout
 
@@ -37,7 +37,7 @@ const menuItems: MenuProps['items'] = [
   }
 ]
 
-const sliderItems: MenuItemProps['items'] = [
+const sliderItems: MenuProps['items'] = [
   UserOutlined,
   LaptopOutlined,
   NotificationOutlined
@@ -61,8 +61,8 @@ const sliderItems: MenuItemProps['items'] = [
 
 const breadcrumbItemes: BreadcrumbItemProps['items'] = [{ title: '12306' }, { title: '车票查询' }]
 
-const App: React.FC = () => {
-  const [cities, setCities] = React.useState([])
+const Home: React.FC = () => {
+  const [stations, setStations] = React.useState<Train[]>([])
   const [isSearch, setIsSearch] = React.useState(false)
   const [searchResult, setSearchResult] = React.useState<SearchResultField[]>([])
   const [searchParam, setSearchParam] = React.useState<SearchBoxField>({
@@ -70,22 +70,13 @@ const App: React.FC = () => {
     to: '',
     date: dayjs()
   })
-  const [searchResultTrainTypeList, setSearchResultTrainTypeList] = React.useState([])
+  const [searchResultTrainTypeList, setSearchResultTrainTypeList] = React.useState<string[]>([])
 
-  const convertToSearchResult = (data: Array<SearchResultField>) => {
-    let trainTypeList = []
+  const convertToSearchResult = (data: SearchResultField[]) => {
+    let trainTypeList: string[] = []
     for (let i = 0; i < data.length; i++) {
       data[i].begin_time = dayjs(data[i].begin_time, 'YYYY-MM-DD HH:mm:ss')
       data[i].end_time = dayjs(data[i].end_time, 'YYYY-MM-DD HH:mm:ss')
-
-      for (let j = 0; j < data[i].stations.length; j++) {
-        data[i].stations[j].arrivalTime = dayjs(
-          data[i].stations[j].arrivalTime,
-          'YYYY-MM-DD HH:mm:ss'
-        )
-        data[i].stations[j].leaveTime = dayjs(data[i].stations[j].leaveTime, 'YYYY-MM-DD HH:mm:ss')
-      }
-
       let type = data[i].trainNo[0]
       if (trainTypeList.indexOf(type) === -1) {
         trainTypeList.push(type)
@@ -99,7 +90,7 @@ const App: React.FC = () => {
   useEffect(() => {
     fetchAllCities()
       .then((res) => {
-        setCities(res.data)
+        setStations(res.data)
         console.log(res)
       })
       .catch((err) => {
@@ -141,7 +132,7 @@ const App: React.FC = () => {
             }}
           >
             <SearchBox
-              cities={cities}
+              stations={stations}
               isSearch={isSearch}
               setIsSearch={setIsSearch}
               setSearchResult={convertToSearchResult}
@@ -162,4 +153,4 @@ const App: React.FC = () => {
   )
 }
 
-export default App
+export default Home

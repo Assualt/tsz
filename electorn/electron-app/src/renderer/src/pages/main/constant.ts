@@ -17,9 +17,9 @@ enum SeatType {
 }
 
 export interface TicketInfo {
-  id: String // 车次
-  from: String // 始发站
-  to: String // 终点站
+  id: string // 车次
+  from: string // 始发站
+  to: string // 终点站
   startTime: Date // 出发时间
   endTime: Date // 到达时间
   costTime: BigInteger // 耗时
@@ -29,13 +29,13 @@ export interface TicketInfo {
 }
 
 export interface QueryFilter {
-  from: String
-  to: String
+  from: string
+  to: string
   startTime: Date
 }
 
 export interface Cities {
-  name: String
-  label: String
-  code: String
+  name: string
+  label: string
+  code: string
 }

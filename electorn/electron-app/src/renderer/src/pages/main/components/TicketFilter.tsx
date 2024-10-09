@@ -1,7 +1,7 @@
 import { Layout, Form, Checkbox, TimeRangePicker } from 'element-react'
 
 const TicketFilter = ({ queryFilter, isLoading, onPickUpDate }: any) => {
-  const onPickUp = (value: String) => {
+  const onPickUp = (value: string) => {
     console.log(value)
     onPickUpDate(value)
   }
@@ -18,7 +18,7 @@ const TicketFilter = ({ queryFilter, isLoading, onPickUpDate }: any) => {
     return dates
   }
 
-  const onChangeValue = (value: String) => {
+  const onChangeValue = (value: string) => {
     console.log(value)
   }
 

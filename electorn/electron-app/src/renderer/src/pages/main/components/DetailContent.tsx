@@ -137,7 +137,7 @@ const GetTrainType = (trainType) => {
   return '普快'
 }
 
-const GetTrainDetail = (queryResult: any, trainNo: String) => {
+const GetTrainDetail = (queryResult: any, trainNo: string) => {
   let trainDetail = {}
   for (let i = 0; i < queryResult.trainList.length; ++i) {
     if (queryResult.trainList[i].no !== trainNo) {
@@ -216,7 +216,7 @@ const DetailContent = ({ isLoading, queryResult }) => {
   const [dialogVisible, changeVisible] = useState(false)
   const [trainDetail, setTrainDetail] = useState({})
 
-  const showTrainDetail = (train: String) => {
+  const showTrainDetail = (train: string) => {
     setTrainDetail(GetTrainDetail(queryResult, train))
     changeVisible(true)
   }

@@ -1,7 +1,7 @@
 import { Form, Select, DatePicker, Button, Message } from 'element-react'
 import { fetchTicketInfo } from '@renderer/api/ticket'
 
-const SearchBox = ({ cities, isLoading, onChangeLoading, onHandleQuery }) => {
+const SearchBox = (cities, isLoading, onChangeLoading, onHandleQuery) => {
   let searchInfo = {
     from: '',
     to: '',
