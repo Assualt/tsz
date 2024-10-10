@@ -81,10 +81,12 @@ const Home: React.FC = () => {
       if (trainTypeList.indexOf(type) === -1) {
         trainTypeList.push(type)
       }
+      data[i].key = i + 1
     }
 
     setSearchResultTrainTypeList(trainTypeList)
     setSearchResult(data)
+    console.log(data)
   }
 
   useEffect(() => {

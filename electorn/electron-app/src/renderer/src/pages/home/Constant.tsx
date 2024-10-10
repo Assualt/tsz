@@ -31,6 +31,7 @@ export interface Train {
 }
 
 export interface TrainStation {
+  key: React.Key
   name: string
   code: string
   arrivalTime: dayjs.Dayjs
@@ -38,6 +39,7 @@ export interface TrainStation {
 }
 
 export interface SearchResultField {
+  key: React.Key
   trainNo: string
   station_from: string
   station_to: string

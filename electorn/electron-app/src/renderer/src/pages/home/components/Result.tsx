@@ -3,11 +3,11 @@ import { Layout, Space, Table, TableProps, Button, Popover, message } from 'antd
 import { SearchResultField, TrainStation, SeatLeftTicketPrice } from '../Constant'
 import dayjs from 'dayjs'
 import { fetchStationByTrainNo, fetchPriceByTrainNo } from '@renderer/api/ticket'
-import { PlusCircleTwoTone, MinusCircleTwoTone } from "@ant-design/icons";
 
 const Result = ({ isSearch, searchResult, searchParam }) => {
   const [popOverContent, setPopOverContent] = React.useState<JSX.Element>()
   const [expandPriceTblData, setExpandPriceTblData] = React.useState<SeatLeftTicketPrice[]>([])
+  const [expandTrainKey, setExpandTrainKey] = React.useState<React.Key[]>([])
 
   const popOverColumns = [
     {
@@ -44,12 +44,13 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
     )
   }
 
-  const updatePopOverContent = (trainNo: string) => {
+  const updatePopOverContent = (trainNo: string, key: React.Key, updateKey: boolean = false) => {
     fetchStationByTrainNo(trainNo)
       .then((res) => {
         let stations: TrainStation[] = []
-        res.data.map((item) => {
+        res.data.map((item, index) => {
           stations.push({
+            key: index + 1,
             name: item.name,
             code: item.code,
             arrivalTime: dayjs(item.arrivalTime),
@@ -61,6 +62,12 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
       .catch((err) => {
         message.error(`请求${trainNo} 车站失败,请稍后再试 ${err}`)
       })
+
+    if (updateKey) {
+      let keyList: React.Key[] = []
+      keyList.push(key)
+      setExpandTrainKey(keyList)
+    }
   }
 
   const trainStationsWrapper = (record: TrainStation[]) => {
@@ -89,7 +96,7 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
               content={popOverContent}
               trigger="click"
             >
-              <Button type="link" onClick={() => updatePopOverContent(record.trainNo)}>
+              <Button type="link" onClick={() => updatePopOverContent(record.trainNo, record.key)}>
                 {record.trainNo}
               </Button>
             </Popover>
@@ -399,12 +406,21 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
         </h2>
 
         <Table<SearchResultField>
+          onRow={(record) => ({
+            onClick: () => {
+              if (expandTrainKey[0] === record.key) {
+                setExpandTrainKey([])
+              } else {
+                updatePopOverContent(record.trainNo, record.key, true)
+              }
+            }
+          })}
           dataSource={searchResult}
           columns={searchResultColumns}
           pagination={false}
           loading={isSearch}
           scroll={{ y: 500 }}
-          style={{ maxHeight: '400px', overflowY: 'scroll' }}
+          style={{ maxHeight: '400px', overflowY: 'scroll', cursor: 'pointer' }}
           expandable={{
             expandedRowRender,
             expandRowByClick: true,
@@ -420,17 +436,10 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
                 .catch((err) => {
                   message.error(`请求 ${record.trainNo}票价失败 ${err}`)
                 })
-                console.log('展开行：', record)
             },
+            expandedRowKeys: expandTrainKey,
+            showExpandColumn: false
           }}
-        />
-        <Button
-          type="primary"
-          onClick={() => {
-            setExpandPriceTblData
-
-          }}
-          size="small"
         />
       </Space>
     </Layout>

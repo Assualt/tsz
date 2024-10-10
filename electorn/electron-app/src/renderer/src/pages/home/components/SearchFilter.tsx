@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 
 const getNext15Days = () => {
   let days: dayjs.Dayjs[] = []
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 15; i++) {
     days.push(dayjs().add(i, 'day'))
   }
   return days
