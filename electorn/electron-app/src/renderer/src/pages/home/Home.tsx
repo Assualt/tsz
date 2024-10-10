@@ -1,20 +1,16 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import './style.css'
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons'
+import { UserOutlined, HomeOutlined } from '@ant-design/icons'
 import { BreadcrumbItemProps, Layout, Menu, MenuProps, Breadcrumb } from 'antd'
 import { Footer } from 'antd/es/layout/layout'
 
-import SearchBox from './components/SearchBox'
-import SearchFilter from './components/SearchFilter'
-import Result from './components/Result'
 import AvatarInfo from './components/AvatarInfo'
 
-import dayjs from 'dayjs'
-
 // api
-import { fetchAllCities } from '../../api/ticket'
-import { SearchResultField, SearchBoxField, Train } from './Constant'
+import { useLocation } from 'react-router-dom'
+import TicketSearch from './tabs/TicketSearch'
+import TicketPreOrder from './tabs/TicketPreOrder'
 
 const { Header, Content, Sider } = Layout
 
@@ -38,67 +34,66 @@ const menuItems: MenuProps['items'] = [
 ]
 
 const sliderItems: MenuProps['items'] = [
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined
-].map((icon, index) => {
-  const key = String(index + 1)
-
-  return {
-    key: `sub${key}`,
-    icon: React.createElement(icon),
-    label: `subnav ${key}`,
-
-    children: new Array(1).fill(null).map((_, j) => {
-      const subKey = index * 4 + j + 1
-      return {
-        key: subKey,
-        label: `option${subKey}`
+  {
+    key: '1',
+    icon: <HomeOutlined />,
+    label: '车票管理',
+    children: [
+      {
+        key: '2',
+        label: '车票查询'
+      },
+      {
+        key: '3',
+        label: '订单查询'
       }
-    })
+    ]
+  },
+  {
+    key: '4',
+    icon: <UserOutlined />,
+    label: '常用信息管理',
+    children: [
+      {
+        key: '5',
+        label: '个人信息'
+      },
+      {
+        key: '6',
+        label: '乘车人管理'
+      }
+    ]
   }
-})
+]
 
-const breadcrumbItemes: BreadcrumbItemProps['items'] = [{ title: '12306' }, { title: '车票查询' }]
+const breadcrumbItemes: BreadcrumbItemProps['items'] = [
+  {
+    href: '/',
+    title: (
+      <>
+        <HomeOutlined />
+        <span>首页</span>
+      </>
+    )
+  },
+  {
+    href: '/home',
+    title: (
+      <>
+        <UserOutlined />
+        <span>12306 查询网站</span>
+      </>
+    )
+  }
+]
+
+const tabProps: Map<string, JSX.Element> = {
+  '/home': <TicketSearch />,
+  '/order': <TicketPreOrder />
+}
 
 const Home: React.FC = () => {
-  const [stations, setStations] = React.useState<Train[]>([])
-  const [isSearch, setIsSearch] = React.useState(false)
-  const [searchResult, setSearchResult] = React.useState<SearchResultField[]>([])
-  const [searchParam, setSearchParam] = React.useState<SearchBoxField>({
-    from: '',
-    to: '',
-    date: dayjs()
-  })
-  const [searchResultTrainTypeList, setSearchResultTrainTypeList] = React.useState<string[]>([])
-
-  const convertToSearchResult = (data: SearchResultField[]) => {
-    let trainTypeList: string[] = []
-    for (let i = 0; i < data.length; i++) {
-      data[i].begin_time = dayjs(data[i].begin_time, 'YYYY-MM-DD HH:mm:ss')
-      data[i].end_time = dayjs(data[i].end_time, 'YYYY-MM-DD HH:mm:ss')
-      let type = data[i].trainNo[0]
-      if (trainTypeList.indexOf(type) === -1) {
-        trainTypeList.push(type)
-      }
-      data[i].key = i + 1
-    }
-
-    setSearchResultTrainTypeList(trainTypeList)
-    setSearchResult(data)
-    console.log(data)
-  }
-
-  useEffect(() => {
-    fetchAllCities()
-      .then((res) => {
-        setStations(res.data)
-        console.log(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
+  const location = useLocation()
 
   return (
     <Layout className="layout">
@@ -133,20 +128,7 @@ const Home: React.FC = () => {
               background: '#fff'
             }}
           >
-            <SearchBox
-              stations={stations}
-              isSearch={isSearch}
-              setIsSearch={setIsSearch}
-              setSearchResult={convertToSearchResult}
-              setSearchParam={setSearchParam}
-            />
-            <SearchFilter
-              isSearch={isSearch}
-              setIsSearch={setIsSearch}
-              searchParam={searchParam}
-              searchResultTrainTypeList={searchResultTrainTypeList}
-            />
-            <Result isSearch={isSearch} searchResult={searchResult} searchParam={searchParam} />
+            {tabProps[location.pathname]}
           </Content>
         </Layout>
       </Layout>

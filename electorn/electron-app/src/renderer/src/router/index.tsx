@@ -34,6 +34,10 @@ export default createBrowserRouter([
     element: <Home />,
   },
   {
+    path: '/order',
+    element: <Home />
+  },
+  {
     path: '/404',
     element: <PageNotFound />
   }
