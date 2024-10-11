@@ -31,3 +31,17 @@ export function getVerifyCode(userName: string) {
     timestamp: dayjs()
   })
 }
+
+export function getUserPassagers(userId: string) {
+  return api.post('/user/getPassagers', {
+    userId: userId,
+    timestamp: dayjs()
+  })
+}
+
+export function getPassagerInfo(userName: string) {
+  return api.post('/user/getPassagerInfo', {
+    userName: userName,
+    timestamp: dayjs()
+  })
+}

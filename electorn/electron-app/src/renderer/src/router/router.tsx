@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 const RouterConfig = [
   { path: '/home', needLogin: true },
-  { path: '/index', needLogin: false}
+  { path: '/index', needLogin: false }
 ]
 
 export default function RouterBefore() {
@@ -29,7 +29,7 @@ export default function RouterBefore() {
   } else {
     return (
       <>
-        <Outlet/>
+        <Outlet />
       </>
     )
   }

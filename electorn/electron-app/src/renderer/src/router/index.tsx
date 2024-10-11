@@ -31,7 +31,7 @@ export default createBrowserRouter([
   },
   {
     path: '/home',
-    element: <Home />,
+    element: <Home />
   },
   {
     path: '/order',

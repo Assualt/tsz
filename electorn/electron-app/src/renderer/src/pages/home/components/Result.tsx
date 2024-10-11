@@ -248,8 +248,15 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
     },
     {
       title: '操作',
-      render: () => {
-        return <Button type="default">预定</Button>
+      render: (record) => {
+        return (
+          <Button
+            type="link"
+            href={`/order?trainNo=${record.trainNo}&trainDate=${searchParam.date.format('YYYY_MM_DD')}`}
+          >
+            预定
+          </Button>
+        )
       },
       align: 'center',
       width: 100

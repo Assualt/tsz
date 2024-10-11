@@ -153,6 +153,25 @@ function getMockTrainPrice(trainNo: string) {
   }
 }
 
+function getTrainDetail(trainNo: string, trainDate: string) {
+  let trainInfo = Mock.mock({
+    trainNo: trainNo,
+    trainDate: trainDate,
+    trainFrom: '@city()',
+    trainTo: '@city()',
+    trainStartTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    trainEndTime: dayjs().add(10, 'hour').format('YYYY-MM-DD HH:mm:ss'),
+    'ticket|4': [
+      {
+        seatType: '@pick(business, special, first, second)',
+        price: '@integer(10, 200)',
+        left: '@integer(0, 50)'
+      }
+    ]
+  })
+  return trainInfo
+}
+
 export const mockFunc = () => {
   Mock.mock(new RegExp('/api/ticket/queryNew'), 'get', function (request) {
     var queryObj = param2Obj(request.url)
@@ -183,11 +202,15 @@ export const ticketMock = [
     type: 'get',
     response: (request) => {
       const queryObj = request.query
-      return api.result(
-        200,
-        'OK',
-        getMockTrainPrice(queryObj['trainNo'])
-      )
+      return api.result(200, 'OK', getMockTrainPrice(queryObj['trainNo']))
+    }
+  },
+  {
+    url: '/api/ticket/trainDetail',
+    type: 'get',
+    response: (request) => {
+      const queryObj = request.query
+      return api.result(200, 'OK', getTrainDetail(queryObj['trainNo'], queryObj['trainDate']))
     }
   }
 ]

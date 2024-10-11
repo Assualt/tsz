@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './style.css'
 import { UserOutlined, HomeOutlined } from '@ant-design/icons'
-import { BreadcrumbItemProps, Layout, Menu, MenuProps, Breadcrumb } from 'antd'
+import { Layout, Menu, MenuProps, Breadcrumb } from 'antd'
 import { Footer } from 'antd/es/layout/layout'
 
 import AvatarInfo from './components/AvatarInfo'
@@ -66,34 +66,76 @@ const sliderItems: MenuProps['items'] = [
   }
 ]
 
-const breadcrumbItemes: BreadcrumbItemProps['items'] = [
+interface BreadCrumbProps {
+  href: string
+  title: JSX.Element
+}
+
+interface TabProps {
+  herf: string
+  content: JSX.Element
+  breadCrumb: BreadCrumbProps[]
+}
+
+const HomeBreadCrumb: BreadCrumbProps = {
+  href: '/',
+  title: (
+    <>
+      <HomeOutlined />
+      <span>首页</span>
+    </>
+  )
+}
+
+const BreadCrumbs: TabProps[] = [
   {
-    href: '/',
-    title: (
-      <>
-        <HomeOutlined />
-        <span>首页</span>
-      </>
-    )
+    herf: '/home',
+    content: <TicketSearch />,
+    breadCrumb: [
+      {
+        href: '/home',
+        title: (
+          <>
+            <UserOutlined />
+            <span>12306 查询网站</span>
+          </>
+        )
+      }
+    ]
   },
   {
-    href: '/home',
-    title: (
-      <>
-        <UserOutlined />
-        <span>12306 查询网站</span>
-      </>
-    )
+    herf: '/order',
+    content: <TicketPreOrder />,
+    breadCrumb: [
+      {
+        href: '/order',
+        title: (
+          <>
+            <UserOutlined />
+            <span>订单查询</span>
+          </>
+        )
+      }
+    ]
   }
 ]
 
-const tabProps: Map<string, JSX.Element> = {
-  '/home': <TicketSearch />,
-  '/order': <TicketPreOrder />
-}
-
 const Home: React.FC = () => {
   const location = useLocation()
+  const [tabItem, setTabItems] = useState<TabProps>({
+    herf: '/home',
+    content: <TicketSearch />,
+    breadCrumb: [HomeBreadCrumb]
+  })
+  useEffect(() => {
+    BreadCrumbs.forEach((item) => {
+      if (item.herf === location.pathname) {
+        let props = item
+        props.breadCrumb = [HomeBreadCrumb, ...item.breadCrumb]
+        setTabItems(props)
+      }
+    })
+  }, [])
 
   return (
     <Layout className="layout">
@@ -119,7 +161,7 @@ const Home: React.FC = () => {
           />
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }} items={breadcrumbItemes} />
+          <Breadcrumb style={{ margin: '16px 0' }} items={tabItem.breadCrumb} />
           <Content
             style={{
               padding: 24,
@@ -128,7 +170,7 @@ const Home: React.FC = () => {
               background: '#fff'
             }}
           >
-            {tabProps[location.pathname]}
+            {tabItem.content}
           </Content>
         </Layout>
       </Layout>

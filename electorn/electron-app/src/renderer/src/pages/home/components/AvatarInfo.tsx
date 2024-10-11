@@ -48,7 +48,7 @@ const menuOnClick: MenuProps['onClick'] = ({ key }) => {
   }
 }
 
-const AvatarInfo : React.FC = () => {
+const AvatarInfo: React.FC = () => {
   return (
     <Badge dot className="avatar-info">
       <Dropdown

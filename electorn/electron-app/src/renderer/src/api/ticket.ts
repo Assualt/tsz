@@ -29,3 +29,8 @@ export function fetchPriceByTrainNo(trainNo: string) {
   const fetchUrl = '/ticket/price?trainNo=' + trainNo
   return api.get(fetchUrl)
 }
+
+export function fetchTrainDetail(trainNo: string, trainDate: string) {
+  const fetchUrl = '/ticket/trainDetail?trainNo=' + trainNo + '&trainDate=' + trainDate
+  return api.get(fetchUrl)
+}

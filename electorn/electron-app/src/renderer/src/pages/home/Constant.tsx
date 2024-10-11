@@ -64,3 +64,33 @@ export interface SeatLeftTicketPrice {
   hard_seat: number
   no_seat: number
 }
+
+interface TicketInfo {
+  seatType: string
+  price: number
+  left: number
+}
+
+export interface TrainInfo {
+  trainNo: string
+  trainDate: dayjs.Dayjs
+  trainFrom: string
+  trainTo: string
+  trainStartTime: string
+  trainEndTime: string
+  ticket: TicketInfo[]
+}
+
+export interface Passager {
+  id: string
+  name: string
+}
+
+export interface PassagerTableItem {
+  key: React.Key
+  passagerType: string
+  seatType: string
+  name: string
+  idCardType: string
+  idCard: string
+}

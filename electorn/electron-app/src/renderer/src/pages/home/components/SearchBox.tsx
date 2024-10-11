@@ -9,7 +9,6 @@ import {
   DatePickerProps
 } from 'antd'
 import { SwapOutlined, SearchOutlined } from '@ant-design/icons'
-import React from 'react'
 import dayjs from 'dayjs'
 
 import { SearchBoxField } from '../Constant'
