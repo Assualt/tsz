@@ -39,8 +39,15 @@ const TicketSearch = () => {
   useEffect(() => {
     fetchAllCities()
       .then((res) => {
-        setStations(res.data)
-        console.log(res)
+        let stations : Train[] = [];
+        for (let i = 0; i < res.data.length; i++) {
+          stations.push({
+            value: res.data[i]?.stationCode,
+            label: res.data[i]?.stationName,
+            code: res.data[i]?.stationCode,
+          })
+        }
+        setStations(stations)
       })
       .catch((err) => {
         console.log(err)

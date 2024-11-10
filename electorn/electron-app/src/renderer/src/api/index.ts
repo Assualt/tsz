@@ -1,16 +1,16 @@
 import axios from 'axios'
 
-export const ApiUrl = 'http://localhost:8080/api/'
+export const ApiUrl = 'http://localhost:8088/api/'
 
 class ApiClient {
   private static instance: ApiClient
   private axiosInstance
-  private constructor(baseUrl: string, timeout: Number = 1000) {
+  private constructor(baseUrl: string, timeOut: number = 1000) {
     this.axiosInstance = axios.create({
-      baseURL: '/api/',
-      timeout: 1000,
+      baseURL: baseUrl,
+      timeout: timeOut,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       }
     })
     this.configAxios()

@@ -184,11 +184,11 @@ export const mockFunc = () => {
   })
 }
 export const ticketMock = [
-  {
-    url: '/api/ticket/cities',
-    type: 'get',
-    response: (request) => api.result(200, 'OK', getCities())
-  },
+  // {
+  //   url: '/api/ticket/cities',
+  //   type: 'get',
+  //   response: () => api.result(200, 'OK', getCities())
+  // },
   {
     url: '/api/ticket/station',
     type: 'get',

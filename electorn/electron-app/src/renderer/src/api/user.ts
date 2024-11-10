@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 
 export function login(userName: string, password: string) {
   return api.post('/user/login', {
-    userName: userName,
+    username: userName,
     password: password,
     timestamp: dayjs()
   })
@@ -11,7 +11,7 @@ export function login(userName: string, password: string) {
 
 export function logout(userName: string) {
   return api.post('/user/logout', {
-    userName: userName,
+    username: userName,
     timestamp: dayjs()
   })
 }

@@ -1,0 +1,14 @@
+
+# ---
+# POST http://localhost:8088/api/user/hello
+
+# 发送POST请求到http://localhost:8088/api/user/login，请求体为JSON格式
+POST http://localhost:8088/api/user/login
+Content-Type: application/json; charset=utf-8
+
+# 请求体内容
+{
+    "username": "admin@admin.com",
+    "password": "admin"
+}
+

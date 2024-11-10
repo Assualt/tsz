@@ -85,7 +85,7 @@ const SearchBox = ({ stations, isSearch, setIsSearch, setSearchResult, setSearch
               stations.map((item, index) => {
                 return (
                   <Select.Option key={index} value={item.label}>
-                    {item.label}
+                    {item.label}({item.code})
                   </Select.Option>
                 )
               })}
@@ -107,7 +107,7 @@ const SearchBox = ({ stations, isSearch, setIsSearch, setSearchResult, setSearch
               stations.map((item, index) => {
                 return (
                   <Select.Option key={index} value={item.label}>
-                    {item.label}
+                    {item.label}({item.code})
                   </Select.Option>
                 )
               })}
