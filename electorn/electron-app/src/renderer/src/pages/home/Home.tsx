@@ -6,11 +6,15 @@ import { Layout, Menu, MenuProps, Breadcrumb } from 'antd'
 import { Footer } from 'antd/es/layout/layout'
 
 import AvatarInfo from './components/AvatarInfo'
+import { useNavigate } from 'react-router-dom'
 
 // api
 import { useLocation } from 'react-router-dom'
 import TicketSearch from './tabs/TicketSearch'
 import TicketPreOrder from './tabs/TicketPreOrder'
+import TicketList from './tabs/TicketList'
+import UserInfo from './tabs/UserInfo'
+import PassagerMgr from './tabs/PassagerInfoMgr'
 
 const { Header, Content, Sider } = Layout
 
@@ -40,11 +44,11 @@ const sliderItems: MenuProps['items'] = [
     label: '车票管理',
     children: [
       {
-        key: '2',
+        key: 'home',
         label: '车票查询'
       },
       {
-        key: '3',
+        key: 'orderlist',
         label: '订单查询'
       }
     ]
@@ -55,11 +59,11 @@ const sliderItems: MenuProps['items'] = [
     label: '常用信息管理',
     children: [
       {
-        key: '5',
+        key: 'userInfo',
         label: '个人信息'
       },
       {
-        key: '6',
+        key: 'passagerMgr',
         label: '乘车人管理'
       }
     ]
@@ -112,7 +116,52 @@ const BreadCrumbs: TabProps[] = [
         title: (
           <>
             <UserOutlined />
-            <span>订单查询</span>
+            <span>订单预定</span>
+          </>
+        )
+      }
+    ]
+  },
+  {
+    herf: '/orderlist',
+    content: <TicketList />,
+    breadCrumb: [
+      {
+        href: '/orderlist',
+        title: (
+          <>
+            <UserOutlined />
+            <span>订单预定</span>
+          </>
+        )
+      }
+    ]
+  },
+  {
+    herf: '/userInfo',
+    content: <UserInfo />,
+    breadCrumb: [
+      {
+        href: '/userInfo',
+        title: (
+          <>
+            <UserOutlined />
+            <span>个人信息</span>
+          </>
+        )
+      }
+    ]
+  },
+  {
+    herf: '/passagerMgr',
+    content: <PassagerMgr />,
+    breadCrumb: [
+      {
+        href: '/passager/mgr',
+        title: (
+          <>
+            <UserOutlined />
+            <span>订单预定</span>
           </>
         )
       }
@@ -121,6 +170,7 @@ const BreadCrumbs: TabProps[] = [
 ]
 
 const Home: React.FC = () => {
+  const navigator = useNavigate()
   const location = useLocation()
   const [tabItem, setTabItems] = useState<TabProps>({
     herf: '/home',
@@ -130,12 +180,13 @@ const Home: React.FC = () => {
   useEffect(() => {
     BreadCrumbs.forEach((item) => {
       if (item.herf === location.pathname) {
-        let props = item
-        props.breadCrumb = [HomeBreadCrumb, ...item.breadCrumb]
-        setTabItems(props)
+        if (item.breadCrumb.length > 0 && item.breadCrumb[0].href !== '/') {
+          item.breadCrumb = [HomeBreadCrumb, ...item.breadCrumb]
+        }
+        setTabItems(item)
       }
     })
-  }, [])
+  }, [location.pathname])
 
   return (
     <Layout className="layout">
@@ -158,16 +209,18 @@ const Home: React.FC = () => {
             defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
             items={sliderItems}
+            onClick={({ key }) => { navigator(`/${key}`) }}
           />
         </Sider>
-        <Layout style={{ padding: '0 24px 24px' }}>
+        <Layout style={{ padding: '0 24px 0px' }}>
           <Breadcrumb style={{ margin: '16px 0' }} items={tabItem.breadCrumb} />
           <Content
             style={{
-              padding: 24,
+              padding: 0,
               margin: 0,
-              minHeight: 280,
-              background: '#fff'
+              height: '100%',
+              background: '#fff',
+              overflowY: 'scroll'
             }}
           >
             {tabItem.content}

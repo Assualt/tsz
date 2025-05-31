@@ -1,7 +1,8 @@
 import { Menu } from 'element-react'
 import { useRef } from 'react'
 
-const MenuNav = () => {
+// 添加函数返回类型，由于返回的是 JSX 元素，使用 JSX.Element 类型
+const MenuNav = (): JSX.Element => {
   const activeIndex = useRef('1-1')
 
   return (

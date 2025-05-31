@@ -17,9 +17,6 @@ class DemoApplicationTests {
 
 	@Test
 	public void queryTicket() {
-		log.info("query ticket");
-		System.err.println(service.queryTicket());
-		service.queryTicket();
 	}
 	
 }

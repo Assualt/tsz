@@ -1,13 +1,15 @@
 import { Form, Select, DatePicker, Button, Message } from 'element-react'
 import { fetchTicketInfo } from '@renderer/api/ticket'
+import { SearchInfo } from '../constant'
+import { useState } from 'react'
 
-const SearchBox = (cities, isLoading, onChangeLoading, onHandleQuery) => {
-  let searchInfo = {
+const SearchBox = (cities, isLoading, onChangeLoading, onHandleQuery): JSX.Element => {
+  const [searchInfo, setSearchInfo] = useState<SearchInfo>({
     from: '',
     to: '',
-    date: new Date()
-  }
-  const onSearch = () => {
+    startTime: new Date()
+  })
+  const onSearch = (): void => {
     onChangeLoading(true)
     setTimeout(() => {
       // TODO: 调用接口获取数据
@@ -15,7 +17,7 @@ const SearchBox = (cities, isLoading, onChangeLoading, onHandleQuery) => {
       fetchTicketInfo(searchInfo.from, searchInfo.to, searchInfo.startTime)
         .then((res) => {
           console.log(res.data)
-          let str = `一共检索到${res.data.size}条数据`
+          const str = `一共检索到${res.data.size}条数据`
           Message.success(str)
           onHandleQuery(res.data)
         })

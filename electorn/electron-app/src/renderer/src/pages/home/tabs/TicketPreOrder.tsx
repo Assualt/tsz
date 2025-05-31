@@ -17,8 +17,9 @@ import { UserOutlined, CloseCircleOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 
 import { fetchTrainDetail } from '@renderer/api/ticket'
-import { getUserPassagers, getPassagerInfo } from '@renderer/api/user'
+import { getUserPassengers, getPassengerInfo } from '@renderer/api/user'
 import { TrainInfo, Passager, PassagerTableItem } from '../Constant'
+import { Tag } from 'element-react'
 
 const CardTitle: JSX.Element = (
   <Space direction="horizontal">
@@ -63,7 +64,8 @@ const getTicketElement = (leftNumber: number): JSX.Element => {
   }
 }
 
-const TicketPreOrder = () => {
+
+const TicketPreOrder = (): JSX.Element => {
   const location = useLocation()
   const [trainNo, setTrainNo] = useState<string>('')
   const [trainDate, setTrainDate] = useState<dayjs.Dayjs>()
@@ -79,21 +81,17 @@ const TicketPreOrder = () => {
     if (no && date) {
       setTrainNo(no)
       setTrainDate(dayjs(date, 'YYYY_MM_DD'))
-      message.info(`查询 ${no} ${date} 的车票信息`)
-
       fetchTrainDetail(no, date)
         .then((res) => {
-          message.info(JSON.stringify(res.data))
           setTrainInfo(res.data)
         })
         .catch((err) => {
           message.error(err)
         })
 
-      getUserPassagers('')
+      getUserPassengers('')
         .then((res) => {
           setPassagers(res.data)
-          message.info(JSON.stringify(res.data))
         })
         .catch((err) => {
           message.error(err)
@@ -114,14 +112,20 @@ const TicketPreOrder = () => {
     { value: '护照', label: '护照' }
   ]
 
+  const optionDelete = (key: string): JSX.Element => {
+    return (
+      <Button onClick={() => console.log("delete" + record.key) } icon={<CloseCircleOutlined />} type="text" />
+    )
+  }
+
   const passagerColumns: TableProps<PassagerTableItem>['columns'] = [
     {
       title: '序号',
-      render: (_, record, index) => `${index + 1}`
+      render: (_, _1, index) => `${index + 1}`
     },
     {
       title: '票种',
-      render: (_, record) => {
+      render: (_, record): JSX.Element => {
         return (
           <Select
             value={record.passagerType}
@@ -134,7 +138,7 @@ const TicketPreOrder = () => {
     },
     {
       title: '席别',
-      render: (_, record) => {
+      render: (_, record): JSX.Element => {
         return (
           <Select style={{ width: 120 }} value={record.seatType}>
             {trainInfo?.ticket?.map((item) => {
@@ -154,20 +158,20 @@ const TicketPreOrder = () => {
     },
     {
       title: '证件号码',
-      render: (_, record) => {
+      render: (_, record): JSX.Element => {
         return <Input value={record.idCard} style={{ width: 160 }} disabled />
       }
     },
     {
       title: '证件类型',
-      render: (_, record) => {
+      render: (_, record): JSX.Element => {
         return <Select value={record.idCardType} style={{ width: 160 }} options={idCardType} />
       }
     },
     {
-      title: '操作',
-      render: (_, record) => {
-        return <Button icon={<CloseCircleOutlined />} type="text" />
+      title: '状态',
+      render: (_, record): JSX.Element => {
+        return <Tag color='green'>有效</Tag>
       }
     }
   ]
@@ -175,7 +179,7 @@ const TicketPreOrder = () => {
   const updatePassagers = (passagers: string[]) => {
     let tmpData: PassagerTableItem[] = []
     passagers.forEach((item, index) => {
-      getPassagerInfo(item)
+      getPassengerInfo(item)
         .then((res) => {
           tmpData = [
             ...tmpData,
@@ -263,6 +267,9 @@ const TicketPreOrder = () => {
           </Space>
           <Table<PassagerTableItem> columns={passagerColumns} dataSource={passagersData} />
         </Card>
+
+        <Divider />
+        
       </Layout>
     </>
   )

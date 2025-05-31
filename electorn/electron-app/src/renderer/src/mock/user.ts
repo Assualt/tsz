@@ -26,23 +26,28 @@ function getPassagerInfo(name: string) {
 }
 
 export const userMock = [
-  // {
-  //   url: '/api/user/login',
-  //   type: 'post',
-  //   response: (config: any) => {
-  //     return api.result(200, 'OK', {
-  //       s_token: '1234567890'
-  //     })
-  //   }
-  // },
-  // {
-  //   url: '/api/user/logout',
-  //   type: 'post',
-  //   response: (request: any) => {
-  //     const { type, body, query } = request
-  //     return api.result(200, 'OK', { body })
-  //   }
-  // },
+  {
+    url: '/api/user/login',
+    type: 'post',
+    response: (config: any) => {
+      return api.result(200, 'OK', {
+        token: '1234567890',
+        userInfo : {
+          userName: 'admin',
+          avatar: 'https://xxx.com/avatar.jpg',
+          userId: 123
+        }
+      })
+    }
+  },
+  {
+    url: '/api/user/logout',
+    type: 'post',
+    response: (request: any) => {
+      const { type, body, query } = request
+      return api.result(200, 'OK', { body })
+    }
+  },
   {
     url: '/api/user/register',
     type: 'post',

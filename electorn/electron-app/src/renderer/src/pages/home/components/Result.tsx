@@ -3,16 +3,18 @@ import { Layout, Space, Table, TableProps, Button, Popover, message } from 'antd
 import { SearchResultField, TrainStation, SeatLeftTicketPrice } from '../Constant'
 import dayjs from 'dayjs'
 import { fetchStationByTrainNo, fetchPriceByTrainNo } from '@renderer/api/ticket'
+import { useNavigate } from 'react-router-dom'
 
 const Result = ({ isSearch, searchResult, searchParam }) => {
   const [popOverContent, setPopOverContent] = React.useState<JSX.Element>()
   const [expandPriceTblData, setExpandPriceTblData] = React.useState<SeatLeftTicketPrice[]>([])
   const [expandTrainKey, setExpandTrainKey] = React.useState<React.Key[]>([])
+  const navigate = useNavigate()
 
   const popOverColumns = [
     {
       title: '站序',
-      render: (_, record, index) => index + 1
+      render: (_, _record: object, index: number): number => index + 1
     },
     {
       title: '站名',
@@ -20,15 +22,15 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
     },
     {
       title: '到站时间',
-      render: (_, record) => record.arrivalTime.format('HH:mm:ss')
+      render: (_, record): string => record.arrivalTime.format('HH:mm:ss')
     },
     {
       title: '出发时间',
-      render: (_, record) => record.leaveTime.format('HH:mm:ss')
+      render: (_, record): string => record.leaveTime.format('HH:mm:ss')
     },
     {
       title: '停留时间',
-      render: (_, record) => record.leaveTime.diff(record.arrivalTime, 'minute') + '分钟'
+      render: (_, record): string => record.leaveTime.diff(record.arrivalTime, 'minute') + '分钟'
     }
   ]
 
@@ -36,7 +38,7 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
     setPopOverContent(trainStationsWrapper([]))
   }, [])
 
-  const showTrainStationsTitle = (record: SearchResultField) => {
+  const showTrainStationsTitle = (record: SearchResultField): JSX.Element => {
     return (
       <h2>
         {record.trainNo} ## {record.station_from} - {record.station_to}
@@ -64,13 +66,11 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
       })
 
     if (updateKey) {
-      let keyList: React.Key[] = []
-      keyList.push(key)
-      setExpandTrainKey(keyList)
+      setExpandTrainKey([key])
     }
   }
 
-  const trainStationsWrapper = (record: TrainStation[]) => {
+  const trainStationsWrapper = (record: TrainStation[]): JSX.Element => {
     return (
       <Table
         columns={popOverColumns}
@@ -87,7 +87,7 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
       title: '车次',
       dataIndex: 'trainNo',
       key: 'trainNo',
-      render: (_, record) => {
+      render: (_, record): JSX.Element => {
         return (
           <Space direction="vertical" size={5}>
             <Popover
@@ -118,7 +118,7 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
           <b>到达站</b>
         </Space>
       ),
-      render: (_, record) => {
+      render: (_, record): JSX.Element => {
         return (
           <Space direction="vertical" size={5}>
             <span>
@@ -142,7 +142,7 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
     },
     {
       title: '到达时间',
-      render: (_, record) => {
+      render: (_, record): JSX.Element => {
         return (
           <Space direction="vertical" size={10}>
             <strong>{record.begin_time.format('HH:mm')}</strong>
@@ -155,7 +155,7 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
     },
     {
       title: '时长',
-      render: (_, record) =>
+      render: (_, record): string =>
         `${record.end_time.diff(record.begin_time, 'hour')}:${record.end_time.diff(record.begin_time, 'minute') % 60}:00`,
       align: 'center',
       width: 100
@@ -248,11 +248,15 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
     },
     {
       title: '操作',
-      render: (record) => {
+      render: (record): JSX.Element => {
         return (
           <Button
             type="link"
-            href={`/order?trainNo=${record.trainNo}&trainDate=${searchParam.date.format('YYYY_MM_DD')}`}
+            // href={`/order?trainNo=${record.trainNo}&trainDate=${searchParam.date.format('YYYY_MM_DD')}`}
+            onClick={() => { 
+              navigate(`/order?trainNo=${record.trainNo}&trainDate=${searchParam.date.format('YYYY_MM_DD')}`)
+              console.log(record.trainNo)
+            }}
           >
             预定
           </Button>
@@ -363,7 +367,7 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
     }
   ]
 
-  const showLeftNumber = (leftNumber: undefined | number) => {
+  const showLeftNumber = (leftNumber: undefined | number): JSX.Element => {
     // 如果leftNumber为undefined，则返回一个空div
     if (leftNumber === undefined) {
       return <div style={{ color: 'gray', fontWeight: 'bold' }}>--</div>
@@ -386,7 +390,7 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
     return <div style={{ color: 'rgb(252, 131, 2)', fontWeight: 'bold' }}>￥{price}</div>
   }
 
-  const expandedRowRender = () => {
+  const expandedRowRender = (): JSX.Element => {
     return (
       <Table<SeatLeftTicketPrice>
         columns={expandColumns}
@@ -414,7 +418,7 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
 
         <Table<SearchResultField>
           onRow={(record) => ({
-            onClick: () => {
+            onClick: (): void => {
               if (expandTrainKey[0] === record.key) {
                 setExpandTrainKey([])
               } else {
@@ -424,7 +428,11 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
           })}
           dataSource={searchResult}
           columns={searchResultColumns}
-          pagination={false}
+          pagination={{
+            pageSize: 10,
+            showSizeChanger: true,
+            showQuickJumper: true
+          }}
           loading={isSearch}
           scroll={{ y: 500 }}
           style={{ maxHeight: '400px', overflowY: 'scroll', cursor: 'pointer' }}
@@ -446,7 +454,7 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
             },
             expandedRowKeys: expandTrainKey,
             showExpandColumn: false
-          }}
+          }} 
         />
       </Space>
     </Layout>

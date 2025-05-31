@@ -1,44 +1,56 @@
-import App from '@renderer/App'
+import { Navigate, createHashRouter, useHref } from 'react-router-dom'
 import Home from '@renderer/pages/home/Home'
-import { Navigate, createBrowserRouter } from 'react-router-dom'
-import RouterBefore from './router'
 import PageNotFound from '@renderer/pages/common/404'
+import RouterBefore from './router'
+import Login from '@renderer/pages/login/index'
 
-export default createBrowserRouter([
+// 定义路由配置
+const routes = [
   {
     path: '/',
-    element: <App />,
+    element: <RouterBefore />,
     children: [
       {
         path: '',
-        element: <RouterBefore />,
-        children: [
-          {
-            path: '/',
-            element: <Navigate replace to="/index" />
-          },
-          {
-            path: '/index',
-            element: <App />
-          },
-          {
-            path: '/login',
-            element: <Home />
-          }
-        ]
+        element: <Navigate to="/login" replace />
+      },
+      {
+        path: 'login',
+        element: <Login />
+      },
+      {
+        path: 'home',
+        element: <Home href="/home" />
+      },
+      {
+        path: 'order',
+        element: <Home href="/order" />
+      },
+      {
+        path: 'orderlist',
+        element: <Home href="/order/list" />
+      },
+      {
+        path: 'userInfo',
+        element: <Home href="/userInfo" />
+      },
+      {
+        path: 'passagerMgr',
+        element: <Home href="/passager/mgr" />
       }
     ]
   },
   {
-    path: '/home',
-    element: <Home />
+    path: '*',
+    element: <Navigate to="/404" replace />
   },
   {
-    path: '/order',
-    element: <Home />
-  },
-  {
-    path: '/404',
+    path: '404',
     element: <PageNotFound />
   }
-])
+]
+
+// 使用 HashRouter 以支持 electron 环境
+const router = createHashRouter(routes)
+
+export default router

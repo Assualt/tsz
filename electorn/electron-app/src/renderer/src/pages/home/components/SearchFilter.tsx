@@ -1,25 +1,5 @@
 import { Layout, Row, Col, Tabs, Form, Checkbox, TimePicker } from 'antd'
-import { useEffect, useState } from 'react'
-import dayjs from 'dayjs'
-
-const getNext15Days = () => {
-  let days: dayjs.Dayjs[] = []
-  for (let i = 0; i < 15; i++) {
-    days.push(dayjs().add(i, 'day'))
-  }
-  return days
-}
-
-const dateTabsItem = getNext15Days().map((item, _) => {
-  return {
-    label: item.format('MM-DD'),
-    key: item.format('YYYY-MM-DD'),
-    children: '',
-    style: { color: 'black', backgroundColor: 'red' }
-  }
-})
-
-const onTabActive = (key: string) => {}
+import { useState } from 'react'
 
 const onFinish = (values: any, func) => {
   console.log('Success:', values)
@@ -118,7 +98,7 @@ const SearchFilter = ({ isSearch, setIsSearch, searchParam, searchResultTrainTyp
   ]
 
   const [fromStation, setFromStation] = useState<DataType[]>([])
-  let [fromStationIsIndeterminate, fromStationIsSelectAll] = [
+  const [fromStationIsIndeterminate, fromStationIsSelectAll] = [
     fromStation.length > 0 && fromStation.length < getStationLabel([searchParam.from]).length,
     fromStation.length > 0 && fromStation.length == getStationLabel([searchParam.from]).length
   ]
@@ -135,36 +115,20 @@ const SearchFilter = ({ isSearch, setIsSearch, searchParam, searchResultTrainTyp
     seatType.length > 0 && seatType.length == getFilterInfo().data.length
   ]
 
-  const [pickupTimeKey, setPickupTimeKey] = useState<string>()
-
-  useEffect(() => {
-    setPickupTimeKey(searchParam.date.format('YYYY-MM-DD'))
-  }, [searchParam, isSearch])
-
   return (
     <Layout
       style={{
         backgroundColor: 'white',
         padding: '20px',
         borderRadius: '10px',
-        // border: '1px solid #e0e0e0',
-        marginTop: '2vh'
+        border: '1px solid #ccc',
+        marginTop: '10px'
       }}
     >
-      <Tabs
-        defaultActiveKey="1"
-        size="small"
-        items={dateTabsItem}
-        type="card"
-        tabPosition="top"
-        onChange={onTabActive}
-        activeKey={pickupTimeKey}
-      />
-
       <Form
         form={form}
         layout="inline"
-        style={{ width: '100%' }}
+        style={{ width: '100%'}}
         name="filterForm"
         labelCol={{ span: 2 }}
         wrapperCol={{ span: 18 }}
@@ -200,10 +164,6 @@ const SearchFilter = ({ isSearch, setIsSearch, searchParam, searchResultTrainTyp
                   )
                 })}
               </Checkbox.Group>
-            </Col>
-            <Col span={2}>出发时间</Col>
-            <Col span={4}>
-              <TimePicker.RangePicker defaultValue={[dayjs(), dayjs()]} format="HH:mm:ss" />
             </Col>
           </Row>
         </Form.Item>

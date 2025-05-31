@@ -1,12 +1,10 @@
 import React from 'react'
-
+import { useNavigate } from 'react-router-dom'
 import { UserOutlined } from '@ant-design/icons'
 import { Avatar, Badge, Dropdown, MenuProps, Space, Typography, message } from 'antd'
 
 // api
 import { logout } from '@renderer/api/user'
-
-import { changeUrl } from '@renderer/stores'
 
 const items: MenuProps['items'] = [
   {
@@ -19,36 +17,54 @@ const items: MenuProps['items'] = [
   },
   {
     key: 'logout',
-    label: '退出登陆'
+    label: '退出登录'
   }
 ]
 
-const menuOnClick: MenuProps['onClick'] = ({ key }) => {
-  if (key == 'info') {
-  } else if (key == 'setting') {
-  } else if (key == 'logout') {
-    logout('hxoun')
-      .then((res) => {
-        message.success(`退出成功 ${JSON.stringify(res.data)}`)
-      })
-      .catch((err) => {
-        message.error(`退出失败 ${err}`)
+export const AvatarInfo: React.FC = () => {
+  const navigate = useNavigate()
+
+  const menuOnClick: MenuProps['onClick'] = ({ key }) => {
+    if (key === 'info') {
+      navigate('/userInfo')
+    } else if (key === 'setting') {
+      navigate('/user/setting')
+    } else if (key === 'logout') {
+      message.loading({ 
+        content: '正在退出登录...',
+        key: 'logout'
       })
 
-    message.loading(
-      {
-        content: '跳转至首页...',
-        key: 'logout',
-        duration: 2
-      },
-      () => {
-        changeUrl('/')
-      }
-    )
+      // 先执行后端登出
+      logout()
+        .then(async () => {
+          // 后端登出成功后，执行本地登出
+          try {
+            await window.api.logout();
+            message.success({ 
+              content: '退出成功',
+              key: 'logout',
+              duration: 1
+            })
+          } catch (error) {
+            console.error('Local logout failed:', error);
+          }
+
+          setTimeout(() => {
+            navigate('/login')
+          }, 500)
+        })
+        .catch((error) => {
+          console.error('Backend logout failed:', error)
+          message.error({
+            content: '退出登录失败',
+            key: 'logout',
+            duration: 2
+          })
+        })
+    }
   }
-}
 
-const AvatarInfo: React.FC = () => {
   return (
     <Badge dot className="avatar-info">
       <Dropdown

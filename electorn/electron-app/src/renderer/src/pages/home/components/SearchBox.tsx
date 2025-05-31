@@ -14,7 +14,7 @@ import dayjs from 'dayjs'
 import { SearchBoxField } from '../Constant'
 import { fetchTicketInfoNew } from '../../../api/ticket'
 
-const onSwitchPlace = (values: FormInstance<SearchBoxField>) => {
+const onSwitchPlace = (values: FormInstance<SearchBoxField>): void => {
   // TODO: 交换出发地和目的地
   const from = values.getFieldValue('from')
   const to = values.getFieldValue('to')
@@ -26,16 +26,21 @@ const onDateChange: DatePickerProps<dayjs.Dayjs[]>['onChange'] = (date, dateStri
   console.log(date, dateString)
 }
 
-const onFinishFailed = (errorInfo: any) => {
+const onFinishFailed = (errorInfo) : void => {
   console.log('Failed:', errorInfo)
 }
 
-const SearchBox = ({ stations, isSearch, setIsSearch, setSearchResult, setSearchParam }) => {
+const SearchBox = ({ stations, isSearch, setIsSearch, setSearchResult, setSearchParam }): JSX.Element => {
   const [form] = Form.useForm()
 
-  const onFinish = (values: SearchBoxField) => {
+  const onFinish = (values: SearchBoxField): void => {
     if (!values.from || !values.to) {
       message.error('出发地和目的地不能为空', 3)
+      return
+    }
+
+    if (values.from === values.to) {
+      message.error('出发地和目的地不能相同', 3)
       return
     }
 
@@ -80,9 +85,9 @@ const SearchBox = ({ stations, isSearch, setIsSearch, setSearchResult, setSearch
         disabled={isSearch}
       >
         <Form.Item<SearchBoxField> label="出发地" name="from">
-          <Select placeholder="请选择出发地" style={{ width: '20vh' }}>
+          <Select placeholder="请选择出发地" style={{ width: '30vh' }}>
             {Array.isArray(stations) &&
-              stations.map((item, index) => {
+              stations?.map((item, index) => {
                 return (
                   <Select.Option key={index} value={item.label}>
                     {item.label}({item.code})
@@ -102,7 +107,7 @@ const SearchBox = ({ stations, isSearch, setIsSearch, setSearchResult, setSearch
         </Form.Item>
 
         <Form.Item<SearchBoxField> label="目的地" name="to">
-          <Select placeholder="请选择目的地" style={{ width: '20vh' }}>
+          <Select placeholder="请选择目的地" style={{ width: '30vh' }}>
             {Array.isArray(stations) &&
               stations.map((item, index) => {
                 return (
@@ -125,7 +130,7 @@ const SearchBox = ({ stations, isSearch, setIsSearch, setSearchResult, setSearch
             maxDate={dayjs().add(15, 'day')}
             placeholder="请选择出发日期"
             lang="zh-CN"
-            style={{ marginLeft: '1vh' }}
+            style={{ marginLeft: '1vh', width: '30vh'}}
             defaultPickerValue={dayjs()}
           />
         </Form.Item>

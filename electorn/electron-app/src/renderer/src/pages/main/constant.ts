@@ -1,5 +1,3 @@
-import React from 'react'
-
 enum SeatType {
   Business,
   Superlative,
@@ -24,8 +22,8 @@ export interface TicketInfo {
   endTime: Date // 到达时间
   costTime: BigInteger // 耗时
   seatType: SeatType // 座位类型
-  price: Number // 价格
-  disCount: Number // 折扣
+  price: number // 价格
+  disCount: number // 折扣
 }
 
 export interface QueryFilter {
@@ -39,3 +37,41 @@ export interface Cities {
   label: string
   code: string
 }
+
+export interface SearchInfo {
+  from: string
+  to: string
+  startTime: Date
+}
+
+export const defaultTrainType: string[] = [
+  '不限',
+  'GC-高铁城际',
+  'D-动车',
+  '复兴号',
+  'C-城际',
+  'Z-直达',
+  'T-特快',
+  'K-快速',
+  '其他'
+]
+
+export const defaultSeatType: string[] = [
+  '不限',
+  '一等座',
+  '二等座',
+  '硬座',
+  '软卧',
+  '硬卧',
+  '无座',
+  '一等卧',
+  '二等卧',
+  '动卧',
+  '硬卧/一等卧',
+  '软卧/一等卧',
+  '硬卧/二等卧',
+  '软卧/二等卧',
+  '动卧/一等卧',
+  '动卧/二等卧',
+  '其他'
+]

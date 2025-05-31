@@ -20,3 +20,7 @@ mybatis:
   config-locations: classpath:mybatis-config.xml  # mybatis-config.xml文件存放路径
   mapper-locations: classpath:mapper/*.xml  # mapper.xml文件存放路径
   type-aliases-package: com.houxin.electron.demo.mapper.dao  # 实体类存放路径
+
+redis:
+  host: 127.0.0.1
+  port: 6379
