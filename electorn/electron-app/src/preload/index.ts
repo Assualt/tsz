@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 const api = {
   // 同步方法
   getLoginState: () => ipcRenderer.invoke('get-login-state'),
-  sendLoginState: (targetId: number, loginData: any) => 
+  sendLoginState: (targetId: number, loginData: any) =>
     ipcRenderer.send('send-login-state', targetId, loginData),
   openNewWindow: async (): Promise<boolean> => {
     try {
@@ -35,8 +35,7 @@ const api = {
   },
 
   // 清理监听器
-  removeAllListeners: (channel: string) => 
-    ipcRenderer.removeAllListeners(channel)
+  removeAllListeners: (channel: string) => ipcRenderer.removeAllListeners(channel)
 }
 
 // 通过 contextBridge 暴露 API

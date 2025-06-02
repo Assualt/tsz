@@ -11,7 +11,7 @@ import {
 import { SwapOutlined, SearchOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 
-import { SearchBoxField } from '../Constant'
+import { SearchBoxField } from '../constants'
 import { fetchTicketInfoNew } from '../../../api/ticket'
 
 const onSwitchPlace = (values: FormInstance<SearchBoxField>): void => {
@@ -26,11 +26,17 @@ const onDateChange: DatePickerProps<dayjs.Dayjs[]>['onChange'] = (date, dateStri
   console.log(date, dateString)
 }
 
-const onFinishFailed = (errorInfo) : void => {
+const onFinishFailed = (errorInfo): void => {
   console.log('Failed:', errorInfo)
 }
 
-const SearchBox = ({ stations, isSearch, setIsSearch, setSearchResult, setSearchParam }): JSX.Element => {
+const SearchBox = ({
+  stations,
+  isSearch,
+  setIsSearch,
+  setSearchResult,
+  setSearchParam
+}): JSX.Element => {
   const [form] = Form.useForm()
 
   const onFinish = (values: SearchBoxField): void => {
@@ -130,7 +136,7 @@ const SearchBox = ({ stations, isSearch, setIsSearch, setSearchResult, setSearch
             maxDate={dayjs().add(15, 'day')}
             placeholder="请选择出发日期"
             lang="zh-CN"
-            style={{ marginLeft: '1vh', width: '30vh'}}
+            style={{ marginLeft: '1vh', width: '30vh' }}
             defaultPickerValue={dayjs()}
           />
         </Form.Item>

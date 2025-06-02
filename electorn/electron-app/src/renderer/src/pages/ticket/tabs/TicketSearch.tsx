@@ -3,8 +3,7 @@ import SearchFilter from '../components/SearchFilter'
 import Result from '../components/Result'
 
 import { fetchAllCities } from '../../../api/ticket'
-import { SearchResultField, SearchBoxField, Train } from '../Constant'
-import { Divider } from 'antd'
+import { SearchResultField, SearchBoxField, Train } from '../constants'
 
 import dayjs from 'dayjs'
 import React, { useEffect } from 'react'
@@ -40,7 +39,7 @@ const TicketSearch = (): JSX.Element => {
   useEffect(() => {
     fetchAllCities()
       .then((res) => {
-        let stations : Train[] = [];
+        let stations: Train[] = []
         for (let i = 0; i < res.data.length; i++) {
           stations.push({
             value: res.data[i]?.stationCode,

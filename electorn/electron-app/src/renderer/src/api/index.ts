@@ -10,7 +10,7 @@ class ApiClient {
       baseURL: baseUrl,
       timeout: timeOut,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       }
     })
     this.configAxios()
@@ -43,7 +43,7 @@ class ApiClient {
 
           // 处理登录响应
           if (response.config.url?.includes('/login')) {
-            const data = resData.data.data  
+            const data = resData.data.data
             console.log('Login response data:', data)
 
             // 检查token

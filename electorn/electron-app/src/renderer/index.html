@@ -4,10 +4,16 @@
     <meta charset="UTF-8" />
     <title>Electron</title>
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta
+    <!-- <meta
       http-equiv="Content-Security-Policy"
-      content="connect-src *; default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
-    />
+      content="connect-src * 'self' data:; 
+              default-src 'self' 'unsafe-inline' 'unsafe-eval' data:;
+              script-src 'self' 'unsafe-inline' 'unsafe-eval';
+              style-src 'self' 'unsafe-inline' https: http: https://at.alicdn.com;
+              img-src 'self' data: https: http:;
+              font-src 'self' data: https: http: https://at.alicdn.com;
+              object-src 'none';"
+    /> -->
   </head>
 
   <body>

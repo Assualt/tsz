@@ -32,7 +32,7 @@ export const userMock = [
     response: (config: any) => {
       return api.result(200, 'OK', {
         token: '1234567890',
-        userInfo : {
+        userInfo: {
           userName: 'admin',
           avatar: 'https://xxx.com/avatar.jpg',
           userId: 123

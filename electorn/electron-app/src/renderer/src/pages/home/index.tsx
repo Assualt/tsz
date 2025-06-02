@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react'
 
 import './style.css'
-import { UserOutlined, HomeOutlined } from '@ant-design/icons'
+import { UserOutlined, HomeOutlined, WechatOutlined } from '@ant-design/icons'
 import { Layout, Menu, MenuProps, Breadcrumb } from 'antd'
 import { Footer } from 'antd/es/layout/layout'
 
-import AvatarInfo from './components/AvatarInfo'
+import AvatarInfo from '@renderer/pages/common/components/AvatarInfo'
 import { useNavigate } from 'react-router-dom'
 
 // api
 import { useLocation } from 'react-router-dom'
-import TicketSearch from './tabs/TicketSearch'
-import TicketPreOrder from './tabs/TicketPreOrder'
-import TicketList from './tabs/TicketList'
-import UserInfo from './tabs/UserInfo'
-import PassagerMgr from './tabs/PassagerInfoMgr'
+import TicketSearch from '@renderer/pages/ticket/tabs/TicketSearch'
+import Chat from '@renderer/pages/chat/index'
+import InfoMgr from '@renderer/pages/infomgr/index'
+import Ticket from '@renderer/pages/ticket/index'
 
 const { Header, Content, Sider } = Layout
 
@@ -39,7 +38,7 @@ const menuItems: MenuProps['items'] = [
 
 const sliderItems: MenuProps['items'] = [
   {
-    key: '1',
+    key: 'ticket',
     icon: <HomeOutlined />,
     label: '车票管理',
     children: [
@@ -63,8 +62,19 @@ const sliderItems: MenuProps['items'] = [
         label: '个人信息'
       },
       {
-        key: 'passagerMgr',
+        key: 'passagerInfo',
         label: '乘车人管理'
+      }
+    ]
+  },
+  {
+    key: 'chat',
+    icon: <WechatOutlined />,
+    label: '聊天',
+    children: [
+      {
+        key: 'chat',
+        label: '聊天'
       }
     ]
   }
@@ -109,7 +119,7 @@ const BreadCrumbs: TabProps[] = [
   },
   {
     herf: '/order',
-    content: <TicketPreOrder />,
+    content: <Ticket />,
     breadCrumb: [
       {
         href: '/order',
@@ -124,7 +134,7 @@ const BreadCrumbs: TabProps[] = [
   },
   {
     herf: '/orderlist',
-    content: <TicketList />,
+    content: <Ticket />,
     breadCrumb: [
       {
         href: '/orderlist',
@@ -139,7 +149,7 @@ const BreadCrumbs: TabProps[] = [
   },
   {
     herf: '/userInfo',
-    content: <UserInfo />,
+    content: <InfoMgr />,
     breadCrumb: [
       {
         href: '/userInfo',
@@ -153,8 +163,8 @@ const BreadCrumbs: TabProps[] = [
     ]
   },
   {
-    herf: '/passagerMgr',
-    content: <PassagerMgr />,
+    herf: '/passagerInfo',
+    content: <InfoMgr />,
     breadCrumb: [
       {
         href: '/passager/mgr',
@@ -162,6 +172,21 @@ const BreadCrumbs: TabProps[] = [
           <>
             <UserOutlined />
             <span>订单预定</span>
+          </>
+        )
+      }
+    ]
+  },
+  {
+    herf: '/chat',
+    content: <Chat />,
+    breadCrumb: [
+      {
+        href: '/chat',
+        title: (
+          <>
+            <UserOutlined />
+            <span>聊天</span>
           </>
         )
       }
@@ -177,6 +202,7 @@ const Home: React.FC = () => {
     content: <TicketSearch />,
     breadCrumb: [HomeBreadCrumb]
   })
+
   useEffect(() => {
     BreadCrumbs.forEach((item) => {
       if (item.herf === location.pathname) {
@@ -205,11 +231,13 @@ const Home: React.FC = () => {
         <Sider width={200} style={{ background: '#fff' }}>
           <Menu
             mode="inline"
-            defaultSelectedKeys={['1']}
+            defaultSelectedKeys={[]}
             defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
             items={sliderItems}
-            onClick={({ key }) => { navigator(`/${key}`) }}
+            onClick={({ key }) => {
+              navigator(`/${key}`)
+            }}
           />
         </Sider>
         <Layout style={{ padding: '0 24px 0px' }}>

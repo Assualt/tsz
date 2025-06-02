@@ -101,7 +101,8 @@ const RouterConfig: RouteConfig[] = [
   { path: '/login', needLogin: false, title: '登录' },
   { path: '/home', needLogin: true, title: '主页', isMain: true },
   { path: '/order', needLogin: true, title: '订单', isMain: true },
-  { path: '/404', needLogin: false, title: '页面未找到' }
+  { path: '/404', needLogin: false, title: '页面未找到' },
+  { path: '/chat', needLogin: true, title: '聊天', isMain: true }
 ]
 
 export default function RouterBefore(): React.FC {
@@ -243,7 +244,7 @@ export default function RouterBefore(): React.FC {
     height: '100vh'
   }
 
-const LoadingSpinner = () => (
+  const LoadingSpinner = () => (
     <Spin spinning={true} size="large" fullscreen>
       <div style={loadingStyle}>
         <div>加载中...</div>

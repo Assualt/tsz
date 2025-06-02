@@ -2,8 +2,8 @@ import { api } from './index'
 import dayjs from 'dayjs'
 
 interface UserInfo {
-  token: string;
-  userInfo: any;
+  token: string
+  userInfo: any
 }
 
 /**
@@ -29,7 +29,7 @@ export const logout = async (username: string): Promise<void> => {
       timestamp: dayjs()
     })
   } finally {
-    localStorage.removeItem('stoken') 
+    localStorage.removeItem('stoken')
     localStorage.removeItem('userInfo')
   }
 }
@@ -37,7 +37,7 @@ export const logout = async (username: string): Promise<void> => {
 /**
  * 用户注册
  * @param username 用户名
- * @param password 密码  
+ * @param password 密码
  * @param verifyCode 验证码
  */
 export const register = (username: string, password: string, verifyCode: string) => {
@@ -96,7 +96,7 @@ export const checkLoginStatus = async (): Promise<boolean> => {
   try {
     const token = localStorage.getItem('stoken')
     const userInfo = localStorage.getItem('userInfo')
-    
+
     if (!token || !userInfo) {
       return false
     }

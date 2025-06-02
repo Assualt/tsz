@@ -1,5 +1,5 @@
-import { Navigate, createHashRouter, useHref } from 'react-router-dom'
-import Home from '@renderer/pages/home/Home'
+import { Navigate, createHashRouter } from 'react-router-dom'
+import Home from '@renderer/pages/home'
 import PageNotFound from '@renderer/pages/common/404'
 import RouterBefore from './router'
 import Login from '@renderer/pages/login/index'
@@ -20,23 +20,27 @@ const routes = [
       },
       {
         path: 'home',
-        element: <Home href="/home" />
+        element: <Home />
       },
       {
         path: 'order',
-        element: <Home href="/order" />
+        element: <Home />
       },
       {
         path: 'orderlist',
-        element: <Home href="/order/list" />
+        element: <Home />
       },
       {
         path: 'userInfo',
-        element: <Home href="/userInfo" />
+        element: <Home />
       },
       {
-        path: 'passagerMgr',
-        element: <Home href="/passager/mgr" />
+        path: 'passagerInfo',
+        element: <Home />
+      },
+      {
+        path: 'chat',
+        element: <Home />
       }
     ]
   },

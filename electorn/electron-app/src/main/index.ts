@@ -17,7 +17,8 @@ function createWindowConfig(options = {}) {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       contextIsolation: true,
-      nodeIntegration: false
+      nodeIntegration: false,
+      webSecurity: false // 添加此项允许本地资源加载
     },
     resizable: true,
     ...options
@@ -44,11 +45,11 @@ function createWindow(): void {
   const mainWindow = new BrowserWindow(createWindowConfig())
   all_windows.set(mainWindow.id, mainWindow)
   mainWindow.setTitle('12306 抢票助手')
-  
+
   mainWindow.on('closed', () => {
     all_windows.delete(mainWindow.id)
   })
-  
+
   setupWindow(mainWindow)
 }
 
@@ -92,19 +93,21 @@ app.whenReady().then(() => {
     const promises = []
     all_windows.forEach((win) => {
       if (win && win !== currentWindow && !win.isDestroyed()) {
-        promises.push(new Promise((resolve) => {
-          const timeout = setTimeout(() => resolve(null), 3000) // 3秒超时
-          win.webContents.send('request-login-state', currentWindow.id)
-          ipcMain.once(`login-state-response-${currentWindow.id}`, (_, data) => {
-            clearTimeout(timeout)
-            resolve(data)
+        promises.push(
+          new Promise((resolve) => {
+            const timeout = setTimeout(() => resolve(null), 3000) // 3秒超时
+            win.webContents.send('request-login-state', currentWindow.id)
+            ipcMain.once(`login-state-response-${currentWindow.id}`, (_, data) => {
+              clearTimeout(timeout)
+              resolve(data)
+            })
           })
-        }))
+        )
       }
     })
 
     const results = await Promise.all(promises)
-    return results.find(result => result !== null) || false
+    return results.find((result) => result !== null) || false
   })
 
   // 监听登录状态发送
@@ -120,20 +123,22 @@ app.whenReady().then(() => {
   ipcMain.handle('open-new-window', async () => {
     try {
       console.log('Opening new window...')
-      const newWindow = new BrowserWindow(createWindowConfig({
-        width: 1400,
-        height: 700,
-        webPreferences: {
-          preload: join(__dirname, '../preload/index.js'),
-          sandbox: false,
-          contextIsolation: true,
-          nodeIntegration: false
-        }
-      }))
-      
+      const newWindow = new BrowserWindow(
+        createWindowConfig({
+          width: 1400,
+          height: 700,
+          webPreferences: {
+            preload: join(__dirname, '../preload/index.js'),
+            sandbox: false,
+            contextIsolation: true,
+            nodeIntegration: false
+          }
+        })
+      )
+
       all_windows.set(newWindow.id, newWindow)
       newWindow.setTitle('12306 抢票助手 - 主界面')
-      
+
       newWindow.on('closed', () => {
         all_windows.delete(newWindow.id)
       })
@@ -148,7 +153,7 @@ app.whenReady().then(() => {
       } else {
         await newWindow.loadFile(join(__dirname, '../renderer/index.html'))
       }
-      
+
       return true
     } catch (error) {
       console.error('Failed to create new window:', error)
@@ -199,7 +204,7 @@ ipcMain.on('window-controls', (_, command) => {
       if (window.isMaximized()) {
         window.unmaximize()
       } else {
-        window.maximize() 
+        window.maximize()
       }
       break
     case 'close':

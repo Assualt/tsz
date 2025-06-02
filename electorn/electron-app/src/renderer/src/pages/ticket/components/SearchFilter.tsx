@@ -128,7 +128,7 @@ const SearchFilter = ({ isSearch, setIsSearch, searchParam, searchResultTrainTyp
       <Form
         form={form}
         layout="inline"
-        style={{ width: '100%'}}
+        style={{ width: '100%' }}
         name="filterForm"
         labelCol={{ span: 2 }}
         wrapperCol={{ span: 18 }}

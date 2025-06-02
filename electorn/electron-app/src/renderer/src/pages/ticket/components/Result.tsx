@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout, Space, Table, TableProps, Button, Popover, message } from 'antd'
-import { SearchResultField, TrainStation, SeatLeftTicketPrice } from '../Constant'
+import { SearchResultField, TrainStation, SeatLeftTicketPrice } from '../constants'
 import dayjs from 'dayjs'
 import { fetchStationByTrainNo, fetchPriceByTrainNo } from '@renderer/api/ticket'
 import { useNavigate } from 'react-router-dom'
@@ -253,8 +253,10 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
           <Button
             type="link"
             // href={`/order?trainNo=${record.trainNo}&trainDate=${searchParam.date.format('YYYY_MM_DD')}`}
-            onClick={() => { 
-              navigate(`/order?trainNo=${record.trainNo}&trainDate=${searchParam.date.format('YYYY_MM_DD')}`)
+            onClick={() => {
+              navigate(
+                `/order?trainNo=${record.trainNo}&trainDate=${searchParam.date.format('YYYY_MM_DD')}`
+              )
               console.log(record.trainNo)
             }}
           >
@@ -454,7 +456,7 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
             },
             expandedRowKeys: expandTrainKey,
             showExpandColumn: false
-          }} 
+          }}
         />
       </Space>
     </Layout>

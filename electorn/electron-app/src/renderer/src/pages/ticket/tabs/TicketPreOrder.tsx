@@ -18,8 +18,7 @@ import dayjs from 'dayjs'
 
 import { fetchTrainDetail } from '@renderer/api/ticket'
 import { getUserPassengers, getPassengerInfo } from '@renderer/api/user'
-import { TrainInfo, Passager, PassagerTableItem } from '../Constant'
-import { Tag } from 'element-react'
+import { TrainInfo, Passager, PassagerTableItem } from '../constants'
 
 const CardTitle: JSX.Element = (
   <Space direction="horizontal">
@@ -63,7 +62,6 @@ const getTicketElement = (leftNumber: number): JSX.Element => {
     return <div style={{ color: 'gray', fontWeight: 'bold' }}>无</div>
   }
 }
-
 
 const TicketPreOrder = (): JSX.Element => {
   const location = useLocation()
@@ -114,7 +112,11 @@ const TicketPreOrder = (): JSX.Element => {
 
   const optionDelete = (key: string): JSX.Element => {
     return (
-      <Button onClick={() => console.log("delete" + record.key) } icon={<CloseCircleOutlined />} type="text" />
+      <Button
+        onClick={() => console.log('delete' + record.key)}
+        icon={<CloseCircleOutlined />}
+        type="text"
+      />
     )
   }
 
@@ -171,7 +173,7 @@ const TicketPreOrder = (): JSX.Element => {
     {
       title: '状态',
       render: (_, record): JSX.Element => {
-        return <Tag color='green'>有效</Tag>
+        return <Tag color="green">有效</Tag>
       }
     }
   ]
@@ -269,7 +271,6 @@ const TicketPreOrder = (): JSX.Element => {
         </Card>
 
         <Divider />
-        
       </Layout>
     </>
   )
