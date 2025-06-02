@@ -32,7 +32,24 @@ const ChatInputBox: React.FC = () => {
     }
   }
 
-  const handleSelectFile = (): void => {}
+  const onSelectFile = (): void => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.onchange = (): void => {
+      const file = input.files?.[0]
+      if (file) {
+        // 处理文件上传逻辑
+        console.log('Selected file:', file)
+        const textArea = document.getElementById('chat-input-box-text-area') as HTMLTextAreaElement
+        if (textArea) {
+          textArea.focus()
+          textArea.value += `![file]${file.path}\n`
+          setInputValue(textArea.value)
+        }
+      }
+    }
+    input.click()
+  }
 
   return (
     <>
@@ -53,7 +70,7 @@ const ChatInputBox: React.FC = () => {
                   type="text"
                   icon={<IconFont type="icon-file" />}
                   onClick={() => {
-                    handleSelectFile()
+                    onSelectFile()
                   }}
                 />
                 <Button type="text" icon={<IconFont type="icon-jiandao" />} />

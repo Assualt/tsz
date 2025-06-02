@@ -1,27 +1,32 @@
-import { List, Avatar } from 'antd'
+import { List, Avatar, Image } from 'antd'
 import Layout from 'antd/es/layout/layout'
 import { Content } from 'antd/es/layout/layout'
+import { MessageType, ChatMessageInfo } from '../constants'
+import {
+  FileTextOutlined,
+  FilePdfOutlined,
+  FileJpgOutlined,
+  FileImageOutlined,
+  FileUnknownOutlined
+} from '@ant-design/icons'
 import VirtualList from 'rc-virtual-list'
 import moment from 'moment' // 引入 moment 库来处理时间格式
 import '../style.css'
 
-enum MessageType {
-  TEXT,
-  IMAGE,
-  FILE,
-  AUDIO,
-  VIDEO
-}
-
-interface UserItem {
-  id: string
-  name: string
-  nickName: string
-  avatar: string
-  content: string
-  time: string
-  msgType: MessageType
-  isSelf: boolean
+// 定义文件类型对应的图标
+const getFileIcon = (fileType: string): JSX.Element => {
+  switch (fileType) {
+    case 'text/plain':
+      return <FileTextOutlined />
+    case 'application/pdf':
+      return <FilePdfOutlined />
+    case 'image/jpeg':
+      return <FileJpgOutlined />
+    case 'image/png':
+      return <FileImageOutlined />
+    default:
+      return <FileUnknownOutlined />
+  }
 }
 
 const ChatMessageBox: React.FC = () => {
@@ -74,17 +79,7 @@ const ChatMessageBox: React.FC = () => {
       avatar: 'https://api.dicebear.com/7.x/miniavs/svg?seed=5',
       content: 'https://api.dicebear.com/7.x/miniavs/svg?seed=6',
       time: '2023-01-01 12:34:00',
-      msgType: MessageType.TEXT,
-      isSelf: true
-    },
-    {
-      id: '5',
-      name: 'John Brown',
-      nickName: 'John Brown',
-      avatar: 'https://api.dicebear.com/7.x/miniavs/svg?seed=5',
-      content: 'https://api.dicebear.com/7.x/miniavs/svg?seed=6',
-      time: '2023-01-01 12:34:00',
-      msgType: MessageType.TEXT,
+      msgType: MessageType.LINK,
       isSelf: true
     },
     {
@@ -98,28 +93,33 @@ const ChatMessageBox: React.FC = () => {
       isSelf: false
     },
     {
-      id: '6',
+      id: '7',
       name: 'John Brown',
       nickName: 'John Brown',
       avatar: 'https://api.dicebear.com/7.x/miniavs/svg?seed=5',
       content: 'https://api.dicebear.com/7.x/miniavs/svg?seed=6',
       time: '2023-01-01 12:02:00',
-      msgType: MessageType.TEXT,
-      isSelf: false
+      msgType: MessageType.FILE,
+      isSelf: false,
+      fileInfo: {
+        name: 'file.txt',
+        type: 'image/jpeg',
+        size: 1024
+      }
     },
     {
-      id: '6',
+      id: '8',
       name: 'John Brown',
       nickName: 'John Brown',
       avatar: 'https://api.dicebear.com/7.x/miniavs/svg?seed=5',
       content: 'https://api.dicebear.com/7.x/miniavs/svg?seed=6',
       time: '2023-01-01 12:02:00',
-      msgType: MessageType.TEXT,
+      msgType: MessageType.AUDIO,
       isSelf: false
     }
   ]
 
-  const showName = (item: UserItem): JSX.Element => {
+  const showName = (item: ChatMessageInfo): JSX.Element => {
     return (
       <>
         <span>{item.name}</span>
@@ -133,7 +133,7 @@ const ChatMessageBox: React.FC = () => {
   const OTHER_MESSAGE_BG_COLOR = '#f0f0f0'
   const MESSAGE_MARGIN = '8px'
 
-  const showContent = (item: UserItem): JSX.Element => {
+  const showContent = (item: ChatMessageInfo): JSX.Element => {
     const bgColor = item.isSelf ? SELF_MESSAGE_BG_COLOR : OTHER_MESSAGE_BG_COLOR
     // 减小最大宽度，避免与滚动条重合
     const maxWidth = item.isSelf ? '70%' : '80%'
@@ -155,22 +155,10 @@ const ChatMessageBox: React.FC = () => {
         </span>
       )
     } else if (item.msgType === MessageType.IMAGE) {
-      return (
-        <img
-          src={item.content}
-          alt="message image"
-          style={{
-            width: '150px',
-            height: '150px',
-            objectFit: 'cover',
-            borderRadius: '8px',
-            maxWidth: maxWidth,
-            height: 'auto'
-          }}
-          onClick={() => window.open(item.content, '_blank')}
-        />
-      )
+      return <Image src={item.content} width={200} />
     } else if (item.msgType === MessageType.FILE) {
+      const icon = getFileIcon(item.fileInfo?.type || '')
+      const size = item.fileInfo?.size ? `${(item.fileInfo.size / 1024).toFixed(2)} KB` : ''
       return (
         <a
           href={item.content}
@@ -187,8 +175,11 @@ const ChatMessageBox: React.FC = () => {
             maxWidth: maxWidth
           }}
         >
-          <span style={{ marginRight: '8px' }}>📄</span>
-          <span>{item.content.split('/').pop()}</span>
+          <span style={{ marginRight: '8px', fontSize: '18px' }}>{icon}</span>
+          <div>
+            <div style={{ fontWeight: 'bold' }}>{item.fileInfo?.name || '未知文件名'}</div>
+            {size && <div style={{ fontSize: '12px', color: '#666' }}>{size}</div>}
+          </div>
         </a>
       )
     } else if (item.msgType === MessageType.AUDIO) {
@@ -198,6 +189,12 @@ const ChatMessageBox: React.FC = () => {
           您的浏览器不支持音频播放。
         </audio>
       )
+    } else if (item.msgType === MessageType.LINK) {
+      return (
+        <a href={item.content} target="_blank" rel="noopener noreferrer">
+          {item.content}
+        </a>
+      )
     }
     return <span>{item.content}</span>
   }
@@ -206,7 +203,7 @@ const ChatMessageBox: React.FC = () => {
     return moment(time).format('HH:mm')
   }
 
-  const showDivider = (item: UserItem, index: number): JSX.Element => {
+  const showDivider = (item: ChatMessageInfo, index: number): JSX.Element => {
     if (index === 0) {
       return <></>
     }
@@ -234,7 +231,7 @@ const ChatMessageBox: React.FC = () => {
         >
           <List split={false}>
             <VirtualList data={data} itemHeight={50} itemKey="id" onScroll={onScroll}>
-              {(item: UserItem, index: number) => (
+              {(item: ChatMessageInfo, index: number) => (
                 <List.Item
                   key={item.id}
                   style={{
