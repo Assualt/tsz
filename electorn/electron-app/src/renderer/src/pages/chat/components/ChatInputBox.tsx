@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import '../style.css'
 import TextArea from 'antd/es/input/TextArea'
-import EmojiPicker from './EmojiPicker'
+import EmojiPicker from './emojPicker'
 
 const IconFont = createFromIconfontCN({
   scriptUrl: ['//at.alicdn.com/t/c/font_4938016_z65v44mc3dj.js'],
