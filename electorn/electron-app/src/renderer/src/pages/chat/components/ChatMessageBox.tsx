@@ -203,21 +203,6 @@ const ChatMessageBox: React.FC = () => {
     return moment(time).format('HH:mm')
   }
 
-  const showDivider = (item: ChatMessageInfo, index: number): JSX.Element => {
-    if (index === 0) {
-      return <></>
-    }
-
-    const prevItem = data[index - 1].time
-    const diffTime = moment(item.time).diff(moment(prevItem), 'minutes')
-    if (diffTime < 30) {
-      return <></>
-    }
-
-    return <></>
-    // return <Divider variant="dotted" style={{ marginTop: '16px'}}>以上是历史消息</Divider>
-  }
-
   return (
     <>
       <Layout style={{ height: '700px', backgroundColor: '#f5f5f5', overflow: 'hidden' }}>
@@ -231,7 +216,7 @@ const ChatMessageBox: React.FC = () => {
         >
           <List split={false}>
             <VirtualList data={data} itemHeight={50} itemKey="id" onScroll={onScroll}>
-              {(item: ChatMessageInfo, index: number) => (
+              {(item: ChatMessageInfo) => (
                 <List.Item
                   key={item.id}
                   style={{
@@ -242,7 +227,6 @@ const ChatMessageBox: React.FC = () => {
                     marginBottom: MESSAGE_MARGIN // 增加消息之间的间距
                   }}
                 >
-                  {showDivider(item, index)}
                   {item.isSelf ? (
                     <List.Item.Meta
                       title={

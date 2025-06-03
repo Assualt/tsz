@@ -1,0 +1,111 @@
+.chatlist-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  border-radius: 5px;
+  /* border: 1px solid red; */
+  padding: 10px 0;
+}
+
+.chatlist-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #e8e8e8;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 10px; /* 可以根据需要调整这个值 */
+}
+
+.chatlist-item:hover {
+  background-color: #f5f5f5;
+}
+
+.chatlist-item-content {
+  flex: 1;
+  margin-left: 10px;
+  overflow: hidden;
+}
+
+.chatlist-body {
+  overflow-y: scroll;
+}
+
+.chatlist-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.chatlist-item-content-title {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chatlist-item-time {
+  font-size: 12px;
+  color: #999;
+}
+
+.chatlist-item-content-content {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chatlist-header {
+  padding: 12px 16px; /* 增加内边距，让内容有更多空间 */
+  background-color: #ffffff; /* 设置白色背景 */
+  border-bottom: 1px solid #e8e8e8; /* 添加底部边框 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); /* 添加轻微阴影，增强层次感 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatlist-search {
+  width: 220px; /* 增加搜索框宽度 */
+  transition: width 0.3s ease; /* 添加宽度变化的过渡效果 */
+}
+
+/* 优化 chatlist-header 中的按钮样式 */
+.chatlist-header .ant-btn {
+  border-radius: 4px; /* 添加圆角 */
+  transition: all 0.3s; /* 添加过渡效果 */
+}
+
+.chatlist-header .ant-btn:hover {
+  background-color: #f5f5f5; /* 鼠标悬停时的背景颜色 */
+  transform: scale(1.1); /* 鼠标悬停时放大按钮 */
+}
+
+.chatlist-header .ant-btn:active {
+  transform: scale(0.95); /* 按钮点击时缩小 */
+}
+
+/* 调整图标颜色和大小 */
+.chatlist-header .ant-btn > .anticon {
+  font-size: 20px; /* 增大图标大小 */
+  color: #1890ff; /* 设置图标颜色 */
+}
+
+.chatlist-header .ant-btn:hover > .anticon {
+  color: #40a9ff; /* 鼠标悬停时图标颜色变亮 */
+}
+
+.chatlist-item-mute-icon {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  color: #999;
+  font-size: 16px;
+}
