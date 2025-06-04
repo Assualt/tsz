@@ -35,12 +35,6 @@ class ApiClient {
       (response) => {
         if (response.status === 200) {
           const resData = response
-          console.log('API Response:', {
-            url: response.config.url,
-            status: response.status,
-            data: resData
-          })
-
           // 处理登录响应
           if (response.config.url?.includes('/login')) {
             const data = resData.data.data

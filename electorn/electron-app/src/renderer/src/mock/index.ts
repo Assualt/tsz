@@ -1,16 +1,15 @@
-// const Mock = require('mockjs')
-
 import Mock from 'mockjs'
 import { param2Obj } from './utils'
 
 import { ticketMock, mockFunc } from './ticket'
 import { userMock } from './user'
+import { chatMock } from './chat'
 
-export const mocks = [...ticketMock, ...userMock]
+export const mocks = [...ticketMock, ...userMock, ...chatMock]
 
-export function XHR() {
+export function XHR(): void {
   Mock.XHR.prototype.proxy_send = Mock.XHR.prototype.send
-  Mock.XHR.prototype.send = function () {
+  Mock.XHR.prototype.send = function (): void {
     if (this.custom.xhr) {
       this.custom.xhr.withCredentials = this.withCredentials || false
 
@@ -23,25 +22,24 @@ export function XHR() {
 
   const XHR2ExpressReqWrap = (respond) => {
     return (options) => {
-      let result = null
-      if (respond instanceof Function) {
-        const { body, type, url } = options
-        // https://expressjs.com/en/4x/api.html#req
-        result = respond({
+      if (!(respond instanceof Function)) {
+        return Mock.mock(respond)
+      }
+
+      const { body, type, url } = options
+      // https://expressjs.com/en/4x/api.html#req
+      return Mock.mock(
+        respond({
           method: type,
           body: JSON.parse(body),
           query: param2Obj(url),
           url: url
         })
-      } else {
-        result = respond
-      }
-      return Mock.mock(result)
+      )
     }
   }
 
   mocks.forEach((item) => {
-    console.log('add mock:' + item.url + ' type:' + item.type)
     Mock.mock(new RegExp(item.url), item.type || 'get', XHR2ExpressReqWrap(item.response))
   })
 

@@ -1,6 +1,7 @@
-import { Button, Col, Layout, Row, Space, Popover } from 'antd'
+import { Button, Col, Layout, Row, Space, Popover, message } from 'antd'
 import { createFromIconfontCN } from '@ant-design/icons'
 import { useState } from 'react'
+import { sendChatMessage } from '@renderer/api/chat'
 
 import '../style.css'
 import TextArea from 'antd/es/input/TextArea'
@@ -16,7 +17,7 @@ const IconFont = createFromIconfontCN({
 })
 
 const ChatInputBox: React.FC = () => {
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState<string>('')
   const fillSelect = (val: string): void => {
     setInputValue((prevValue) => prevValue + val)
     const textArea = document.getElementById('chat-input-box-text-area') as HTMLTextAreaElement
@@ -49,6 +50,16 @@ const ChatInputBox: React.FC = () => {
       }
     }
     input.click()
+  }
+
+  const sendContent = (): void => {
+    sendChatMessage('testId', '1234567890', inputValue)
+      .then(() => {
+        message.success('发送成功')
+      })
+      .catch((err) => {
+        message.error('发送失败' + err)
+      })
   }
 
   return (
@@ -103,6 +114,9 @@ const ChatInputBox: React.FC = () => {
           <Button
             type="text"
             style={{ position: 'relative', top: '-30px', right: '00px', float: 'right' }}
+            onClick={() => {
+              sendContent()
+            }}
           >
             发送
           </Button>

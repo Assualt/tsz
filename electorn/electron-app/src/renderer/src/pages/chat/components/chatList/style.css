@@ -4,8 +4,9 @@
   justify-content: left;
   align-items: left;
   border-radius: 5px;
-  /* border: 1px solid red; */
   padding: 10px 0;
+  overflow-y: scroll;
+  max-height: calc(50%);
 }
 
 .chatlist-item {
@@ -60,6 +61,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 80%;
 }
 
 .chatlist-header {

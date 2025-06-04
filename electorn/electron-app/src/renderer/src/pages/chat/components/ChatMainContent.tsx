@@ -1,10 +1,13 @@
 import ChatMessageBox from './ChatMessageBox'
 import ChatInputBox from './ChatInputBox'
 import { Divider, Layout } from 'antd'
+import { useState } from 'react'
 
 const { Header, Content } = Layout
 
 const ChatMainContent: React.FC = () => {
+  const [needUpdate, setNeedUpdate] = useState<boolean>(false)
+
   return (
     <>
       <Layout>
@@ -22,7 +25,7 @@ const ChatMainContent: React.FC = () => {
           <span>雇佣军(5)</span>
         </Header>
         <Divider style={{ margin: '0' }} />
-        <Content style={{ padding: '0 10px' }}>
+        <Content>
           <ChatMessageBox />
           <Divider style={{ margin: '0' }} />
           <ChatInputBox />

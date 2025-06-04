@@ -1,0 +1,173 @@
+/* 消息列表容器样式 */
+.chat-message-list-container {
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+/* 消息列表项样式 */
+.chat-message-list-item {
+  display: flex;
+  align-items: flex-start;
+  width: 70%;
+}
+
+/* 头像样式 */
+.chat-message-list-item-avatar {
+  margin-right: 12px;
+}
+
+.chat-message-list-item-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* 消息内容样式 */
+.chat-message-list-item-content {
+  flex: 1;
+  max-width: calc(100% - 52px); /* 头像宽度 + 间距 */
+}
+
+.chat-message-list-item-content-text {
+  background-color: #e6f7ff;
+  padding: 8px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  display: inline-block;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+/* 消息时间样式 */
+.chat-message-list-item-content-time {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #999;
+  text-align: right;
+}
+
+/* 显示名称样式 */
+.chat-message-list-item-content-name {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+/* 自己的消息样式 */
+.chat-message-list-container {
+  display: flex;
+  justify-content: flex-start; /* 默认左对齐 */
+  width: 100%;
+}
+
+/* 自己的消息样式 */
+.self-message {
+  justify-content: flex-end; /* 自己的消息右对齐 */
+}
+
+.chat-message-list-item {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* 头像样式 */
+.chat-message-list-item-avatar {
+  margin-right: 12px; /* 非自己消息的头像间距 */
+}
+
+.chat-message-list-item-avatar :hover {
+  cursor: pointer;
+}
+
+.self-message .chat-message-list-item-avatar {
+  margin-left: 12px;
+  margin-right: 0; /* 自己消息的头像间距 */
+}
+
+/* 消息内容样式 */
+.chat-message-list-item-content {
+  flex: 1;
+  max-width: calc(100% - 52px); /* 头像宽度 + 间距 */
+}
+
+.self-message .chat-message-list-item-content {
+  text-align: right; /* 自己消息的内容右对齐 */
+}
+
+/* 消息文本样式 */
+.chat-message-list-item-content-text {
+  background-color: #e6f7ff;
+  padding: 8px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  display: inline-block;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.self-message .chat-message-list-item-content-text {
+  background-color: #9eea6a; /* 自己消息的背景颜色 */
+}
+
+/* 消息时间样式 */
+.chat-message-list-item-content-time {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #999;
+}
+
+.self-message .chat-message-list-item-content-time {
+  text-align: right; /* 自己消息的时间右对齐 */
+}
+
+
+.chat-message-hover-card {
+  border-radius: 8px;
+}
+
+.chat-message-list-item-hover-content-name {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.chat-message-list-item-hover-content-text {
+  color: #666;
+}
+
+
+.chat-file-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #1890ff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.chat-file-link:hover {
+  background-color: #f5f5f5;
+}
+
+.chat-file-icon {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.chat-file-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-file-name {
+  font-weight: bold;
+}
+
+.chat-file-size {
+  font-size: 12px;
+  color: #999;
+}

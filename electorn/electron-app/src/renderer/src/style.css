@@ -1,0 +1,27 @@
+.chat-content {
+  padding: 16px;
+  /* 当内容超出高度时，垂直方向显示滚动条 */
+  overflow-y: auto;
+  /* 添加右内边距，将滚动条右移 */
+  padding-right: 30px;
+  /* 设置最大高度，超出该高度则出现滚动条 */
+  max-height: 700px;
+}
+
+/* 优化 chat-layout 类的背景样式 */
+.chat-layout {
+  height: 700px;
+  /* 修改背景颜色为更柔和的淡蓝色 */
+  background-color: #f0f8ff; 
+  /* 可以添加背景渐变效果 */
+  background: linear-gradient(135deg, #f0f8ff 0%, #e6f7ff 100%); 
+  overflow: hidden;
+  /* 添加一些阴影效果，增强层次感 */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+}
+
+.chat-content {
+  padding: 16px;
+  overflow-y: auto;
+  padding-right: 30px;
+}
