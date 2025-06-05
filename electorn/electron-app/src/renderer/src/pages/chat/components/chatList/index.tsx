@@ -31,13 +31,13 @@ const ChatList = (props: { data: ChatListProps[] }): JSX.Element => {
     }
   }
 
-  const ChatItem = (message: ChatListProps, _key: string): JSX.Element => {
+  const ChatItem = (message: ChatListProps, key: string): JSX.Element => {
     const MAX_UNREAD_DISPLAY = 99
     const displayCount =
       message.unread > MAX_UNREAD_DISPLAY ? `${MAX_UNREAD_DISPLAY}+` : message.unread
 
     return (
-      <div className="chatlist-item" id={`chatlist-item-${_key}`} key={_key}>
+      <div className="chatlist-item" id={`chatlist-item-${key}`} key={key}>
         <div style={{ position: 'relative', marginRight: '10px' }}>
           {message.unread > 0 && (
             <Badge

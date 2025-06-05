@@ -34,7 +34,8 @@
     "mockjs": "^1.1.0",
     "moment": "^2.30.1",
     "rc-virtual-list": "^3.18.6",
-    "react-router-dom": "^6.26.2"
+    "react-router-dom": "^6.26.2",
+    "redux": "^5.0.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",

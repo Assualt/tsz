@@ -4,6 +4,7 @@ import ChatList from './chatList'
 import { ChatListProps } from './chatList/constants'
 import { getChatList } from '@renderer/api/chat'
 import { message } from 'antd'
+import store from '@renderer/store'
 
 const ChatSlider: React.FC = () => {
   /**
@@ -12,7 +13,8 @@ const ChatSlider: React.FC = () => {
   const [chatList, setChatList] = React.useState<ChatListProps[]>([])
 
   useEffect(() => {
-    getChatList('testId')
+    const user = store.getState().user
+    getChatList(user.userId)
       .then((res) => {
         setChatList(res.data.chatList || [])
       })

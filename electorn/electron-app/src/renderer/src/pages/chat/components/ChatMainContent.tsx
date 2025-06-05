@@ -1,13 +1,10 @@
 import ChatMessageBox from './ChatMessageBox'
 import ChatInputBox from './ChatInputBox'
 import { Divider, Layout } from 'antd'
-import { useState } from 'react'
 
 const { Header, Content } = Layout
 
 const ChatMainContent: React.FC = () => {
-  const [needUpdate, setNeedUpdate] = useState<boolean>(false)
-
   return (
     <>
       <Layout>

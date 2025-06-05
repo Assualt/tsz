@@ -7,9 +7,21 @@ import { Divider } from 'antd'
 import { getChatHistory } from '@renderer/api/chat'
 import { message } from 'antd'
 import { useEffect, useState } from 'react'
+import store from '@renderer/store'
 
 const ChatMessageBox: React.FC = () => {
   const [chatMessageList, setChatMessageList] = useState<ChatMessageInfo[]>([])
+
+  const subscribe = store.subscribe(() => {
+    const state = store.getState()
+    if (state.chat.needUpdate) {
+      // 此处更新需要根据具体的状态判断
+      fetchChatHistory()
+      console.log('ChatMessageBox: needUpdate')
+    }
+  })
+
+  void subscribe
 
   const fetchChatHistory = (): void => {
     // 实现获取聊天历史消息的逻辑

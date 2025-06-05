@@ -17,9 +17,11 @@ const getChatList = () => {
   })
 }
 
+let userChatList = []
+
 const getChatHistory = () => {
   const mockData = Mock.mock({
-    'histList|2': [
+    'histList|20': [
       {
         'id|+1': 1,
         name: '@cname()',
@@ -33,15 +35,14 @@ const getChatHistory = () => {
     ]
   })
 
-  mockData.histList = mockData.histList.concat(userChatList)
+  mockData.histList.push(...userChatList)
   return mockData
 }
 
-let userChatList = []
-
 const sendChatMessage = (params) => {
-  const { userId, chatId, content } = params
+  const { userId, chatId, content } = params.body || {}
   if (!userId || !chatId || !content) {
+    console.log('参数错误', params)
     return {}
   }
   console.log(params)
@@ -55,6 +56,7 @@ const sendChatMessage = (params) => {
     msgType: 0,
     isSelf: true
   })
+  console.log('sendChatMessage', userChatList)
   return {}
 }
 
