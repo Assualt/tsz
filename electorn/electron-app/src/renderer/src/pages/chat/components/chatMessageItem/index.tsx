@@ -1,6 +1,9 @@
 import { ChatMessageInfo, MessageType } from './constants'
-import { Avatar, Popover, Card, Image } from 'antd'
+import { Avatar, Popover, Card, Image, Spin } from 'antd'
 import './style.css'
+import ClickMenu from '../clickMenu'
+import { MenuItemInfo } from '../clickMenu/types'
+import { LoadingOutlined } from '@ant-design/icons'
 
 const ChatMessageItem = ({ message }: { message: ChatMessageInfo }): JSX.Element => {
   const showName = (): JSX.Element => {
@@ -112,9 +115,103 @@ const ChatMessageItem = ({ message }: { message: ChatMessageInfo }): JSX.Element
     }
   }
 
+  const rightMenus: MenuItemInfo[] = [
+    {
+      key: 'copy',
+      label: '复制',
+      onClick: (value): void => {
+        // TODO: 复制文本
+        console.log('复制文本', value)
+      },
+      disabled: (): boolean => {
+        return true
+      }
+    },
+    {
+      key: 'revoke',
+      label: '撤回',
+      onClick: (value): void => {
+        // TODO: 撤回消息
+        console.log('撤回消息', value)
+      },
+      disabled: (): boolean => {
+        return false
+      }
+    },
+    {
+      key: 'forward',
+      label: '转发',
+      onClick: (value): void => {
+        console.log('转发', value)
+      },
+      disabled: (): boolean => {
+        return true
+      }
+    },
+    {
+      key: 'collect',
+      label: '收藏',
+      onClick: (value): void => {
+        console.log('收藏', value)
+      },
+      disabled: (): boolean => {
+        return true
+      }
+    },
+    {
+      key: 'muliSelect',
+      label: '多选',
+      onClick: (value): void => {
+        console.log('多选', value)
+      },
+      disabled: (): boolean => {
+        return true
+      }
+    },
+    {
+      key: 'reference',
+      label: '引用',
+      onClick: (value): void => {
+        console.log('引用', value)
+      },
+      disabled: (): boolean => {
+        return true
+      }
+    },
+    {
+      key: 'search',
+      label: '搜一搜',
+      onClick: (value): void => {
+        console.log('搜一搜', value)
+      },
+      disabled: (): boolean => {
+        return true
+      }
+    },
+    {
+      key: 'delete',
+      label: '删除',
+      onClick: (value): void => {
+        console.log('删除', value)
+      },
+      disabled: (): boolean => {
+        return false
+      }
+    }
+  ]
+
+  const showRightMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    ClickMenu(e, rightMenus)
+  }
+
   return (
     <div className={`chat-message-list-container ${message.isSelf ? 'self-message' : ''}`}>
-      <div className="chat-message-list-item">
+      <div
+        className="chat-message-list-item"
+        onContextMenu={(e) => {
+          showRightMenu(e)
+        }}
+      >
         {!message.isSelf && (
           <Popover content={showHoverContent()} placement="rightTop">
             <div className="chat-message-list-item-avatar">

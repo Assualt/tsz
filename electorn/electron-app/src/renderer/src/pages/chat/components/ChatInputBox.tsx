@@ -1,6 +1,6 @@
 import { Button, Col, Layout, Row, Space, Popover, message } from 'antd'
 import { createFromIconfontCN } from '@ant-design/icons'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { sendChatMessage } from '@renderer/api/chat'
 
 import '../style.css'
@@ -12,6 +12,7 @@ import ClickMenu from './clickMenu'
 // store
 import store from '@renderer/store'
 import { ActionTypes } from '@renderer/store/types'
+import { MenuItemInfo } from './clickMenu/types'
 
 const IconFont = createFromIconfontCN({
   scriptUrl: ['//at.alicdn.com/t/c/font_4938016_z65v44mc3dj.js'],
@@ -100,15 +101,6 @@ const ChatInputBox: React.FC = () => {
     setInputValue(newValue)
   }
 
-  /**
-   * TextArea 选择文本事件
-   * @param e
-   *
-   * */
-  const isSelectEmpty = (): boolean => {
-    return selectValue.trim() === ''
-  }
-
   const getSelectedText = (): string => {
     return selectValue
   }
@@ -127,9 +119,10 @@ const ChatInputBox: React.FC = () => {
    */
   const sendContent = (): void => {
     const loginUser = store.getState().user
+    store.dispatch({ type: ActionTypes.STORE_SEND_CHAT, payload: inputValue })
     sendChatMessage(loginUser.userId, '1234567890', inputValue)
       .then(() => {
-        store.dispatch({ type: ActionTypes.REFRESH_CHAT_HISTORY, payload: true })
+        store.dispatch({ type: ActionTypes.STORE_SEND_CHAT, payload: '' })
       })
       .catch((err) => {
         message.error('发送失败' + err)
@@ -137,6 +130,41 @@ const ChatInputBox: React.FC = () => {
     setInputValue('') // 清空输入框内容
     setSendButtonDisabled(true)
   }
+
+  const rightMenu: MenuItemInfo[] = [
+    {
+      key: 'copy',
+      label: '复制',
+      onClick: async (): Promise<void> => {
+        await navigator.clipboard.writeText(getSelectedText())
+      },
+      disabled: (): boolean => {
+        return getSelectedText() === ''
+      }
+    },
+    {
+      key: 'paste',
+      label: '粘贴',
+      onClick: async (): Promise<void> => {
+        const data = await navigator.clipboard.readText()
+        handlePaste(data)
+      },
+      disabled: (): boolean => {
+        return false
+      }
+    },
+    {
+      key: 'cut',
+      label: '剪切',
+      onClick: async (event: React.MouseEvent<HTMLLIElement, MouseEvent>): Promise<void> => {
+        handleCut(event.target['selectionStart'], event.target['selectionEnd'])
+        return await navigator.clipboard.writeText(getSelectedText())
+      },
+      disabled: (): boolean => {
+        return getSelectedText() === ''
+      }
+    }
+  ]
 
   /**
    * 处理截屏事件
@@ -172,7 +200,7 @@ const ChatInputBox: React.FC = () => {
                   icon={
                     <IconFont
                       type="icon-jiandao"
-                      onClick={(e) => {
+                      onClick={() => {
                         return handleScreenCapture()
                       }}
                     />
@@ -210,7 +238,7 @@ const ChatInputBox: React.FC = () => {
               onKeyDown(e)
             }}
             onContextMenu={(e) => {
-              ClickMenu(e, handlePaste, getSelectedText, isSelectEmpty, handleCut)
+              ClickMenu(e, rightMenu)
             }}
             onSelect={(e) => {
               setSelectValue(

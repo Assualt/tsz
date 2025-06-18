@@ -1,15 +1,12 @@
-import { Popover, Menu } from 'antd'
-import { CopyOutlined, ScissorOutlined } from '@ant-design/icons'
+import { Popover, Menu, MenuProps } from 'antd'
 import { createRoot } from 'react-dom/client'
+import { MenuItemInfo } from './types'
 
 const ClickMenu = (
   event: React.MouseEvent<HTMLElement, MouseEvent>,
-  updateText: (text: string) => void,
-  getSelectedText: () => string, // 新增的方法，用于获取选中的文本
-  isSelectEmtpy: () => boolean,
-  cutSelectedText: (start: number, end: number) => void
+  menus: MenuItemInfo[]
 ): void => {
-  event.preventDefault()
+  event.preventDefault() // 阻止默认行为
 
   const closePopover = (): void => {
     const popoverContainer = document.getElementById('popover-container')
@@ -19,36 +16,25 @@ const ClickMenu = (
     document.removeEventListener('mousedown', handleOutsideClick)
   }
 
-  const handleCopy = async (): Promise<void> => {
-    try {
-      await navigator.clipboard.writeText(getSelectedText())
-    } catch (err) {
-      console.error('复制失败', err)
-    } finally {
-      closePopover()
-    }
-  }
+  type MenuItem = Required<MenuProps>['items'][number]
 
-  const handlePaste = async (): Promise<void> => {
-    try {
-      const text = await navigator.clipboard.readText()
-      updateText(text)
-    } catch (err) {
-      console.error('粘贴失败', err)
-    } finally {
-      closePopover()
-    }
-  }
-
-  const handleCut = async (): Promise<void> => {
-    try {
-      // 获取选中的文本
-      cutSelectedText(event.target['selectionStart'], event.target['selectionEnd'])
-    } catch (err) {
-      console.error('剪切失败', err)
-    } finally {
-      closePopover()
-    }
+  // 修改返回类型为数组
+  const getMenuItems = (): MenuItem[] => {
+    return menus.map((item) => ({
+      key: item.key,
+      label: (
+        <>
+          {item.icon}
+          {item?.label}
+        </>
+      ),
+      onClick: (): void => {
+        item.onClick(event)
+        closePopover()
+      },
+      disabled: item.disabled(),
+      theme: 'dark'
+    }))
   }
 
   const popover = (
@@ -60,35 +46,9 @@ const ClickMenu = (
       style={{ position: 'absolute', left: event.clientX, top: event.clientY, zIndex: 9999 }}
     >
       <Menu
-        items={[
-          {
-            key: 'copy',
-            label: (
-              <>
-                <CopyOutlined />
-                复制
-              </>
-            ),
-            onClick: handleCopy,
-            disabled: isSelectEmtpy()
-          },
-          {
-            key: 'paste',
-            label: <>粘贴</>,
-            onClick: handlePaste
-          },
-          {
-            key: 'cut',
-            label: (
-              <>
-                <ScissorOutlined />
-                剪切
-              </>
-            ),
-            onClick: handleCut,
-            disabled: isSelectEmtpy() // 禁用剪切选项，当没有选中文本时为 tru
-          }
-        ]}
+        items={getMenuItems()}
+        mode="inline"
+        style={{ maxWidth: 120 }} // 调整菜单最小宽度
       />
     </Popover>
   )

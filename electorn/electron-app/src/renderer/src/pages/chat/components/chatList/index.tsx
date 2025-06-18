@@ -5,6 +5,8 @@ import { PlusSquareFilled, SearchOutlined } from '@ant-design/icons'
 import { useEffect } from 'react'
 import { createFromIconfontCN } from '@ant-design/icons'
 import { format, isSameDay, isSameYear } from 'date-fns'
+import store from '@renderer/store'
+import { ActionTypes } from '@renderer/store/types'
 
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/c/font_4938016_q2nlcmprvxr.js' // 替换为你的图标库地址
@@ -31,13 +33,29 @@ const ChatList = (props: { data: ChatListProps[] }): JSX.Element => {
     }
   }
 
+  const selectChatItem = (message: ChatListProps): void => {
+    store.dispatch({
+      type: ActionTypes.SELECT_CHAT_ITEM,
+      payload: {
+        id: message.key
+      }
+    })
+  }
+
   const ChatItem = (message: ChatListProps, key: string): JSX.Element => {
     const MAX_UNREAD_DISPLAY = 99
     const displayCount =
       message.unread > MAX_UNREAD_DISPLAY ? `${MAX_UNREAD_DISPLAY}+` : message.unread
 
     return (
-      <div className="chatlist-item" id={`chatlist-item-${key}`} key={key}>
+      <div
+        className="chatlist-item"
+        id={`chatlist-item-${key}`}
+        key={key}
+        onClick={() => {
+          selectChatItem(message)
+        }}
+      >
         <div style={{ position: 'relative', marginRight: '10px' }}>
           {message.unread > 0 && (
             <Badge

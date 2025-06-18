@@ -21,4 +21,5 @@ export interface ChatMessageInfo {
     size: number
     type: string
   }
+  isSending?: boolean
 }

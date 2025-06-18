@@ -8,20 +8,37 @@ import { getChatHistory } from '@renderer/api/chat'
 import { message } from 'antd'
 import { useEffect, useState } from 'react'
 import store from '@renderer/store'
+import { MessageType } from '../constants'
 
 const ChatMessageBox: React.FC = () => {
   const [chatMessageList, setChatMessageList] = useState<ChatMessageInfo[]>([])
 
-  const subscribe = store.subscribe(() => {
+  store.subscribe(() => {
     const state = store.getState()
     if (state.chat.needUpdate) {
       // 此处更新需要根据具体的状态判断
-      fetchChatHistory()
+      // fetchChatHistory()
       console.log('ChatMessageBox: needUpdate')
+    } else if (state.chat.needRefresh) {
+      // 此处刷新需要根据具体的状态判断
+      fetchChatHistory()
+    } else if (state.chat.sendChat.length != 0) {
+      setChatMessageList([
+        ...chatMessageList,
+        {
+          id: state.user.userId,
+          name: state.user.name,
+          nickName: state.user.name,
+          avatar: state.user.avatar,
+          content: state.chat.sendChat,
+          time: '2023-04-01 12:00:00',
+          msgType: MessageType.TEXT,
+          isSelf: true,
+          isSending: true
+        }
+      ])
     }
   })
-
-  void subscribe
 
   const fetchChatHistory = (): void => {
     // 实现获取聊天历史消息的逻辑
