@@ -1,9 +1,9 @@
 import { ChatMessageInfo, MessageType } from './constants'
-import { Avatar, Popover, Card, Image, Spin } from 'antd'
+import { Avatar, Popover, Card, Image } from 'antd'
 import './style.css'
 import ClickMenu from '../clickMenu'
 import { MenuItemInfo } from '../clickMenu/types'
-import { LoadingOutlined } from '@ant-design/icons'
+import MediaCard from '../mediaCard'
 
 const ChatMessageItem = ({ message }: { message: ChatMessageInfo }): JSX.Element => {
   const showName = (): JSX.Element => {
@@ -109,7 +109,7 @@ const ChatMessageItem = ({ message }: { message: ChatMessageInfo }): JSX.Element
       case MessageType.AUDIO:
         return showAudio()
       case MessageType.FILE:
-        return showFile()
+        return <MediaCard />
       default:
         return <span>{message.content}</span>
     }
