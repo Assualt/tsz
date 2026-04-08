@@ -2,8 +2,9 @@ import './assets/main.css'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 
-import { XHR } from './mock/index'
-XHR()
+// 禁用 mock 数据，使用真实后端服务
+// import { XHR } from './mock/index'
+// XHR()
 
 import router from './router/index'
 

@@ -12,10 +12,18 @@ interface UserInfo {
  * @param password 密码
  */
 export const login = async (username: string, password: string): Promise<UserInfo> => {
-  return await api.post('/user/login', {
-    username,
-    password,
-    timestamp: dayjs()
+  const formData = new URLSearchParams()
+  formData.append('username', username)
+  formData.append('password', password)
+  formData.append('grant_type', 'password')
+  formData.append('client_id', 'web')
+  formData.append('scope', '')
+  formData.append('client_secret', '')
+  formData.append('timestamp', dayjs().toString())
+  return await api.post('/auth/login', formData, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   })
 }
 
@@ -24,7 +32,7 @@ export const login = async (username: string, password: string): Promise<UserInf
  */
 export const logout = async (username: string): Promise<void> => {
   try {
-    await api.post('/user/logout', {
+    await api.post('/auth/logout', {
       username,
       timestamp: dayjs()
     })
@@ -40,11 +48,12 @@ export const logout = async (username: string): Promise<void> => {
  * @param password 密码
  * @param verifyCode 验证码
  */
-export const register = (username: string, password: string, verifyCode: string) => {
-  return api.post('/user/register', {
-    username,
-    password,
-    verifyCode,
+export const register = (username: string, password: string, email: string, verifyCode: string) => {
+  return api.post('/auth/register', {
+    username: username,
+    password: password,
+    email: email,
+    code: verifyCode,
     timestamp: dayjs()
   })
 }
@@ -54,11 +63,19 @@ export const register = (username: string, password: string, verifyCode: string)
  * @param username 用户名
  */
 export const getVerifyCode = (username: string) => {
-  return api.post('/user/getVerifyCode', {
+  return api.post('/auth/code', {
     username,
     timestamp: dayjs()
   })
 }
+
+/***
+ * 获取当前用户
+ */
+export const getCurrentUser = () => {
+  return api.get('/users/me')
+}
+
 /**
  * 获取用户乘客列表
  * @param userId 用户ID
@@ -101,7 +118,7 @@ export const checkLoginStatus = async (): Promise<boolean> => {
       return false
     }
 
-    const response = await api.post('/user/checkStatus', { token })
+    const response = await api.post('/users/me', { token })
     return response.code === 0
   } catch (error) {
     console.error('Check login status failed:', error)

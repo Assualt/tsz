@@ -1,0 +1,29 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="root"></canvas>
+    <script type="text/javascript">
+      var canvasRoot = document.getElementById("root");
+      var ctx = canvasRoot.getContext("2d");
+
+      ctx.beginPath();
+      for (var i = 0; i < 20; i++) {
+        ctx.moveTo(i * 10, 100);
+        ctx.lineTo((i + 1) * 10, 100);
+        ctx.lineTo((i + 1) * 10, 95);
+        ctx.stroke();
+      }
+
+      for (var i  = 0; i < 20; i++) {
+        ctx.moveTo(0, 100);
+      }
+
+      ctx.closePath();
+    </script>
+  </body>
+</html>

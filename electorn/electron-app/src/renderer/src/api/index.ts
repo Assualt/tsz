@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const ApiUrl = 'http://localhost:8088/api/'
+export const ApiUrl = '/api/v1'
 
 class ApiClient {
   private static instance: ApiClient
@@ -41,7 +41,7 @@ class ApiClient {
             console.log('Login response data:', data)
 
             // 检查token
-            if (!data?.token) {
+            if (!data?.token && !data?.access_token) {
               return Promise.reject(new Error('登录失败：未获取到有效的登录信息'))
             }
 
@@ -52,17 +52,17 @@ class ApiClient {
             }
 
             // 验证用户信息完整性
-            if (!userInfo.userName || !userInfo.userId) {
+            if (!userInfo.username || !userInfo.user_id) {
               console.error('Invalid user info structure:', userInfo)
               return Promise.reject(new Error('登录失败：用户信息不完整'))
             }
 
             // 保存登录状态
             try {
-              localStorage.setItem('stoken', data.token)
+              localStorage.setItem('stoken', data.token || data.access_token)
               localStorage.setItem('userInfo', JSON.stringify(userInfo))
               console.log('Login state saved:', {
-                token: data.token,
+                token: data.token || data.access_token,
                 userInfo: userInfo
               })
             } catch (error) {
@@ -84,9 +84,12 @@ class ApiClient {
           message: error.message
         })
 
-        if (error.response?.status === 401) {
+        // 处理 401 或 403 错误，跳转到登录页面
+        if (error.response?.status === 401 || error.response?.status === 403) {
           localStorage.removeItem('stoken')
           localStorage.removeItem('userInfo')
+          // 跳转到登录页面
+          window.location.href = '/login'
         }
 
         const errorMessage = error.response?.data?.message || error.message || '请求失败'
@@ -107,8 +110,16 @@ class ApiClient {
     return this.axiosInstance.get(url, params)
   }
 
-  public post(url: string, data?: object) {
-    return this.axiosInstance.post(url, data)
+  public post(url: string, data?: object, config?: object) {
+    return this.axiosInstance.post(url, data, config)
+  }
+
+  public put(url: string, data?: object, config?: object) {
+    return this.axiosInstance.put(url, data, config)
+  }
+
+  public delete(url: string, config?: object) {
+    return this.axiosInstance.delete(url, config)
   }
 
   public result(code: number, message: string, data?: object) {

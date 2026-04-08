@@ -217,16 +217,16 @@ const TicketPreOrder = (): JSX.Element => {
             </span>
             <span
               style={{ fontWeight: 'bold', fontSize: '2.3vh' }}
-            >{`${trainInfo?.trainFrom}`}</span>
+            >{`${trainInfo?.train_from}`}</span>
             <span>站</span>
             <span style={{ fontWeight: 'bold', fontSize: '2.3vh' }}>
-              ({`${dayjs(trainInfo?.trainStartTime, 'YYYY-MM-DD HH:mm:ss').format('HH:mm')}`} 开)
+              ({`${dayjs(trainInfo?.train_start_time, 'YYYY-MM-DD HH:mm:ss').format('HH:mm')}`} 开)
             </span>
             <span>--------</span>
-            <span style={{ fontWeight: 'bold', fontSize: '2.3vh' }}>{`${trainInfo?.trainTo}`}</span>
+            <span style={{ fontWeight: 'bold', fontSize: '2.3vh' }}>{`${trainInfo?.train_to}`}</span>
             <span>站</span>
             <span style={{ fontWeight: 'bold', fontSize: '2.3vh' }}>
-              ({`${dayjs(trainInfo?.trainEndTime, 'YYYY-MM-DD HH:mm:ss').format('HH:mm')}`} 到)
+              ({`${dayjs(trainInfo?.train_end_time, 'YYYY-MM-DD HH:mm:ss').format('HH:mm')}`} 到)
             </span>
           </Space>
           <Divider dashed />

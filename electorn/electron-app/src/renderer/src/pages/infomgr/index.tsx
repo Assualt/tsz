@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { TabProps } from '../common/constants'
 import UserInfo from './tabs/UserInfo'
 import PassagerInfoMgr from './tabs/PassagerInfoMgr'
+import StationInfoMgr from './tabs/StationInfoMgr'
+import CityInfoMgr from './tabs/CityInfoMgr'
 import { useLocation } from 'react-router-dom'
 
 const InfoMgrList: TabProps[] = [
@@ -14,6 +16,16 @@ const InfoMgrList: TabProps[] = [
     key: '/passagerInfo',
     title: '乘客信息管理',
     component: <PassagerInfoMgr />
+  },
+  {
+    key: '/stationInfo',
+    title: '车站信息管理',
+    component: <StationInfoMgr />
+  },
+  {
+    key: '/cityInfo',
+    title: '城市信息管理',
+    component: <CityInfoMgr />
   }
 ]
 

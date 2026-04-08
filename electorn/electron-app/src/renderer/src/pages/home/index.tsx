@@ -14,6 +14,7 @@ import TicketSearch from '@renderer/pages/ticket/tabs/TicketSearch'
 import Chat from '@renderer/pages/chat/index'
 import InfoMgr from '@renderer/pages/infomgr/index'
 import Ticket from '@renderer/pages/ticket/index'
+import { useUserPolling } from '@renderer/hooks/useUserPolling'
 
 const { Header, Content, Sider } = Layout
 
@@ -64,6 +65,14 @@ const sliderItems: MenuProps['items'] = [
       {
         key: 'passagerInfo',
         label: '乘车人管理'
+      },
+      {
+        key: 'stationInfo',
+        label: '车站管理'
+      },
+      {
+        key: 'cityInfo',
+        label: '城市管理'
       }
     ]
   },
@@ -167,11 +176,41 @@ const BreadCrumbs: TabProps[] = [
     content: <InfoMgr />,
     breadCrumb: [
       {
-        href: '/passager/mgr',
+        href: '/passagerInfo',
         title: (
           <>
             <UserOutlined />
-            <span>订单预定</span>
+            <span>乘车人管理</span>
+          </>
+        )
+      }
+    ]
+  },
+  {
+    herf: '/stationInfo',
+    content: <InfoMgr />,
+    breadCrumb: [
+      {
+        href: '/stationInfo',
+        title: (
+          <>
+            <UserOutlined />
+            <span>车站管理</span>
+          </>
+        )
+      }
+    ]
+  },
+  {
+    herf: '/cityInfo',
+    content: <InfoMgr />,
+    breadCrumb: [
+      {
+        href: '/cityInfo',
+        title: (
+          <>
+            <UserOutlined />
+            <span>城市管理</span>
           </>
         )
       }
@@ -201,6 +240,22 @@ const Home: React.FC = () => {
     herf: '/home',
     content: <TicketSearch />,
     breadCrumb: [HomeBreadCrumb]
+  })
+
+  // 使用用户轮询 hook，每60秒调用一次 /api/v1/users/me 接口
+  useUserPolling({
+    interval: 60000, // 60秒
+    onSuccess: (data) => {
+      console.log('User polling success:', data)
+      // 可以在这里更新用户信息到状态管理或本地存储
+      if (data) {
+        localStorage.setItem('userInfo', JSON.stringify(data))
+      }
+    },
+    onError: (error) => {
+      console.error('User polling error:', error)
+    },
+    enabled: true // 启用轮询
   })
 
   useEffect(() => {

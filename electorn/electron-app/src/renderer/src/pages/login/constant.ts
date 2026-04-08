@@ -4,7 +4,7 @@ interface DataType {
   rePassword?: string
   remember: boolean
   verifyCode: string
-  tel: string
+  email: string
 }
 
 export default DataType

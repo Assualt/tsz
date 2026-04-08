@@ -24,7 +24,7 @@ const TicketSearch = (): JSX.Element => {
     for (let i = 0; i < data.length; i++) {
       data[i].begin_time = dayjs(data[i].begin_time, 'YYYY-MM-DD HH:mm:ss')
       data[i].end_time = dayjs(data[i].end_time, 'YYYY-MM-DD HH:mm:ss')
-      const type = data[i].trainNo[0]
+      const type = data[i].train_num[0]
       if (trainTypeList.indexOf(type) === -1) {
         trainTypeList.push(type)
       }
@@ -42,9 +42,9 @@ const TicketSearch = (): JSX.Element => {
         let stations: Train[] = []
         for (let i = 0; i < res.data.length; i++) {
           stations.push({
-            value: res.data[i]?.stationCode,
-            label: res.data[i]?.stationName,
-            code: res.data[i]?.stationCode
+            value: res.data[i]?.code,
+            label: res.data[i]?.name,
+            code: res.data[i]?.code
           })
         }
         setStations(stations)

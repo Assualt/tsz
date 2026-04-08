@@ -39,6 +39,14 @@ const routes = [
         element: <Home />
       },
       {
+        path: 'stationInfo',
+        element: <Home />
+      },
+      {
+        path: 'cityInfo',
+        element: <Home />
+      },
+      {
         path: 'chat',
         element: <Home />
       }

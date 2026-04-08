@@ -1,10 +1,8 @@
 package com.houxin.electron.demo.common;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class Result<T> {
 
     public static <T> Result<T> success(T data) {

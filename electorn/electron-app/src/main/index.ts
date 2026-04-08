@@ -33,7 +33,7 @@ async function loadWindowContent(window: BrowserWindow) {
   }
 }
 
-function closeAllChildWindows() {
+function closeAllChildWindows(): void{
   for (const [id, win] of all_windows) {
     if (!win.isDestroyed()) {
       win.close()
@@ -149,9 +149,16 @@ app.whenReady().then(() => {
       })
 
       if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-        await newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+        const url = `${process.env['ELECTRON_RENDERER_URL']}/home`
+        console.log('Loading URL:', url)
+        await newWindow.loadURL(url)
       } else {
         await newWindow.loadFile(join(__dirname, '../renderer/index.html'))
+        // 等待页面加载完成后跳转到 home 路由
+        newWindow.webContents.once('did-finish-load', () => {
+          console.log('Page loaded, redirecting to /home')
+          newWindow.webContents.executeJavaScript(`window.location.href = '/home'`)
+        })
       }
 
       return true

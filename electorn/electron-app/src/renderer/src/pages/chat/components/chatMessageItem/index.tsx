@@ -4,6 +4,7 @@ import './style.css'
 import ClickMenu from '../clickMenu'
 import { MenuItemInfo } from '../clickMenu/types'
 import MediaCard from '../mediaCard'
+import RightMenu from '../rightMenu'
 
 const ChatMessageItem = ({ message }: { message: ChatMessageInfo }): JSX.Element => {
   const showName = (): JSX.Element => {

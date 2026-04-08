@@ -79,7 +79,7 @@ const checkLoginStatus = async (): Promise<boolean> => {
 
     try {
       const parsedUserInfo = JSON.parse(userInfo)
-      if (!parsedUserInfo?.userName || !parsedUserInfo?.userId) {
+      if (!parsedUserInfo?.userName && !parsedUserInfo?.username || !parsedUserInfo?.userId && !parsedUserInfo?.user_id) {
         localStorage.removeItem('stoken')
         localStorage.removeItem('userInfo')
         return false

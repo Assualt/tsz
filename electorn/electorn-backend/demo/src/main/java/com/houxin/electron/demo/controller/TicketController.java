@@ -28,7 +28,6 @@ public class TicketController {
 
     @GetMapping("/cities")
     private Result<List<Station>> queryStations() {
-        List<Station> stations = ticketService.getStations();
-        return Result.success(stations);
+        return Result.success(ticketService.getStations());
     }
 }

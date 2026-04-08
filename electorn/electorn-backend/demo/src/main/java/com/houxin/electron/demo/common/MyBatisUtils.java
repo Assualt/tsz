@@ -2,7 +2,6 @@ package com.houxin.electron.demo.common;
 
 import lombok.Getter;
 import org.apache.commons.codec.Resources;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import java.io.InputStream;

@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 enum SeatType {
     business(1, "商务座"),
-    speical(2, "特等座"),
+    special(2, "特等座"),
     first(3, "一等座"),
     second(4, "二等座"),
     lying(5, "硬卧"),
@@ -131,7 +131,7 @@ public class Ticket {
 
         Map<String, Integer> seatInfos = new HashMap<String, Integer>();
         seatInfos.put(SeatType.business.name(), 10);
-        seatInfos.put(SeatType.speical.name(), 10);
+        seatInfos.put(SeatType.special.name(), 10);
         seatInfos.put(SeatType.first.name(), 10);
         seatInfos.put(SeatType.second.name(), 10);
         seatInfos.put(SeatType.lying.name(), 10);

@@ -16,6 +16,15 @@ export default defineConfig({
         '@': resolve(__dirname, '/src')
       }
     },
-    plugins: [react()]
+    plugins: [react()],
+    server: {
+      proxy: {
+        '/api/v1': {
+          target: 'http://localhost:8000',
+          changeOrigin: true,
+          secure: false
+        }
+      }
+    }
   }
 })

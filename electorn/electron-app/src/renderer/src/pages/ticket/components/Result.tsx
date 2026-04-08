@@ -22,15 +22,15 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
     },
     {
       title: '到站时间',
-      render: (_, record): string => record.arrivalTime.format('HH:mm:ss')
+      render: (_, record): string => record.arrival_time.format('HH:mm:ss')
     },
     {
       title: '出发时间',
-      render: (_, record): string => record.leaveTime.format('HH:mm:ss')
+      render: (_, record): string => record.left_time.format('HH:mm:ss')
     },
     {
       title: '停留时间',
-      render: (_, record): string => record.leaveTime.diff(record.arrivalTime, 'minute') + '分钟'
+      render: (_, record): string => record.left_time.diff(record.arrivalTime, 'minute') + '分钟'
     }
   ]
 
@@ -41,28 +41,28 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
   const showTrainStationsTitle = (record: SearchResultField): JSX.Element => {
     return (
       <h2>
-        {record.trainNo} ## {record.station_from} - {record.station_to}
+        {record.train_num} ## {record.station_from} - {record.station_to}
       </h2>
     )
   }
 
-  const updatePopOverContent = (trainNo: string, key: React.Key, updateKey: boolean = false) => {
-    fetchStationByTrainNo(trainNo)
+  const updatePopOverContent = (train_num: string, key: React.Key, updateKey: boolean = false) => {
+    fetchStationByTrainNo(train_num)
       .then((res) => {
-        let stations: TrainStation[] = []
+        const stations: TrainStation[] = []
         res.data.map((item, index) => {
           stations.push({
             key: index + 1,
-            name: item.name,
-            code: item.code,
-            arrivalTime: dayjs(item.arrivalTime),
-            leaveTime: dayjs(item.leaveTime)
+            name: item.station_name,
+            code: item.station_code,
+            arrival_time: dayjs(item.arrivalTime),
+            left_time: dayjs(item.leaveTime)
           })
         })
         setPopOverContent(trainStationsWrapper(stations))
       })
       .catch((err) => {
-        message.error(`请求${trainNo} 车站失败,请稍后再试 ${err}`)
+        message.error(`请求${train_num} 车站失败,请稍后再试 ${err}`)
       })
 
     if (updateKey) {
@@ -85,8 +85,8 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
   const searchResultColumns: TableProps<SearchResultField>['columns'] = [
     {
       title: '车次',
-      dataIndex: 'trainNo',
-      key: 'trainNo',
+      dataIndex: 'train_num',
+      key: 'train_num',
       render: (_, record): JSX.Element => {
         return (
           <Space direction="vertical" size={5}>
@@ -96,8 +96,8 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
               content={popOverContent}
               trigger="click"
             >
-              <Button type="link" onClick={() => updatePopOverContent(record.trainNo, record.key)}>
-                {record.trainNo}
+              <Button type="link" onClick={() => updatePopOverContent(record.train_num, record.key)}>
+                {record.train_num}
               </Button>
             </Popover>
             <span>
@@ -445,13 +445,13 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
               if (!expanded) {
                 return
               }
-              fetchPriceByTrainNo(record.trainNo)
+              fetchPriceByTrainNo(record.train_num)
                 .then((res) => {
-                  console.log(res.data.price)
-                  setExpandPriceTblData([res.data.price])
+                  console.log(res.data)
+                  setExpandPriceTblData([res.data])
                 })
                 .catch((err) => {
-                  message.error(`请求 ${record.trainNo}票价失败 ${err}`)
+                  message.error(`请求 ${record.train_num}票价失败 ${err}`)
                 })
             },
             expandedRowKeys: expandTrainKey,

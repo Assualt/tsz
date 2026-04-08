@@ -21,13 +21,13 @@ const formItemLayout = {
   wrapperCol: { span: 24 }
 }
 
-const onFinishFailed = (_): void => {
+const onFinishFailed = (): void => {
   message.error('请检查输入是否正确')
 }
 
 // 提取表单验证规则
 const userNameRules = [{ required: true, message: '请输入用户名' }]
-const telRules = [{ required: true, message: '请输入有效的邮箱地址', type: 'email' }]
+const emailRules = [{ required: true, message: '请输入有效的邮箱地址', type: 'email' }]
 const passwordRules = [
   { required: true, message: '请输入密码' },
   { min: 6, message: '密码长度不能小于6位' },
@@ -151,17 +151,14 @@ const Login: React.FC<LoginProps> = ({ setSpin }) => {
   }, [])
 
   const onRegisterFinish = async (values: DataType): Promise<void> => {
-    const { userName, password, verifyCode: inputCode } = values
-
-    if (inputCode !== verifyCode) {
-      message.error('验证码错误')
-      return
-    }
-
+    console.log(values)
+    const userName = values.userName
+    const password = values.password
+    const email = values.email
+    setVerifyCode(values.verifyCode)
     try {
       setIsLoading(true)
-      setSpin(true, 0)
-      await register(userName, password, inputCode)
+      await register(userName, password, email, verifyCode)
       message.success('注册成功')
 
       setTimeout(() => {
@@ -172,7 +169,6 @@ const Login: React.FC<LoginProps> = ({ setSpin }) => {
       message.error('注册失败')
     } finally {
       setIsLoading(false)
-      setSpin(false, 100)
     }
   }
 
@@ -187,13 +183,22 @@ const Login: React.FC<LoginProps> = ({ setSpin }) => {
     try {
       setIsLoading(true)
       const [userName, password] = [values['userName'], values['password']]
+      console.log('Login attempt with:', { userName, password })
       await login(userName, password)
+      console.log('Login successful')
       message.success('登录成功')
       // 同步登录状态到其他窗口
+      console.log('Syncing login state...')
       await window.api.getLoginState()
       // 打开主窗口
+      console.log('Opening new window...')
       const success = await window.api.openNewWindow()
-      if (!success) {
+      console.log('Open new window result:', success)
+      if (success) {
+        // 关闭当前登录窗口
+        console.log('Closing login window...')
+        window.close()
+      } else {
         message.error('打开主窗口失败，请重试')
       }
     } catch (err) {
@@ -221,7 +226,7 @@ const Login: React.FC<LoginProps> = ({ setSpin }) => {
           <Input prefix={<UserOutlined />} placeholder="用户名" />
         </Form.Item>
 
-        <Form.Item<DataType> name="tel" rules={telRules}>
+        <Form.Item<DataType> name="email" rules={emailRules}>
           <Input prefix={<MailOutlined />} placeholder="邮箱地址" />
         </Form.Item>
 
@@ -271,7 +276,7 @@ const Login: React.FC<LoginProps> = ({ setSpin }) => {
           <Input prefix={<UserOutlined />} placeholder="用户名" />
         </Form.Item>
 
-        <Form.Item<DataType> name="password" rules={passwordRules}>
+        <Form.Item<DataType> name="password" rules={[{ required: true, message: '请输入密码' }]}>
           <Input.Password prefix={<LockOutlined />} placeholder="密码" />
         </Form.Item>
 

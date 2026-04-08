@@ -1,4 +1,4 @@
-import { Popover, Menu, MenuProps } from 'antd'
+import { Popover, Menu, MenuProps, ConfigProvider } from 'antd'
 import { createRoot } from 'react-dom/client'
 import { MenuItemInfo } from './types'
 
@@ -48,7 +48,7 @@ const ClickMenu = (
       <Menu
         items={getMenuItems()}
         mode="inline"
-        style={{ maxWidth: 120 }} // 调整菜单最小宽度
+        style={{ maxWidth: 80 }} // 调整菜单最小宽度
       />
     </Popover>
   )

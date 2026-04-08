@@ -34,13 +34,13 @@ export interface TrainStation {
   key: React.Key
   name: string
   code: string
-  arrivalTime: dayjs.Dayjs
-  leaveTime: dayjs.Dayjs
+  arrival_time: dayjs.Dayjs
+  left_time: dayjs.Dayjs
 }
 
 export interface SearchResultField {
   key: React.Key
-  trainNo: string
+  train_num: string
   station_from: string
   station_to: string
   begin_time: dayjs.Dayjs
@@ -72,12 +72,12 @@ interface TicketInfo {
 }
 
 export interface TrainInfo {
-  trainNo: string
-  trainDate: dayjs.Dayjs
-  trainFrom: string
-  trainTo: string
-  trainStartTime: string
-  trainEndTime: string
+  train_num: string
+  train_date: dayjs.Dayjs
+  train_from: string
+  train_to: string
+  train_start_time: string
+  train_end_time: string
   ticket: TicketInfo[]
 }
 
