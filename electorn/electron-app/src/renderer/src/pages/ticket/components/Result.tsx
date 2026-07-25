@@ -255,9 +255,9 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
             // href={`/order?trainNo=${record.trainNo}&trainDate=${searchParam.date.format('YYYY_MM_DD')}`}
             onClick={() => {
               navigate(
-                `/order?trainNo=${record.trainNo}&trainDate=${searchParam.date.format('YYYY_MM_DD')}`
+                `/order?trainNo=${record.train_num}&trainDate=${searchParam.date.format('YYYY_MM_DD')}`
               )
-              console.log(record.trainNo)
+              console.log(record.train_num)
             }}
           >
             预定

@@ -9,16 +9,18 @@ import {
   TableProps,
   Button,
   Select,
-  Input
+  Input,
+  Tag,
+  Spin
 } from 'antd'
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { UserOutlined, CloseCircleOutlined } from '@ant-design/icons'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { UserOutlined, ArrowLeftOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 
 import { fetchTrainDetail } from '@renderer/api/ticket'
-import { getUserPassengers, getPassengerInfo } from '@renderer/api/user'
-import { TrainInfo, Passager, PassagerTableItem } from '../constants'
+import { getPassengers, addPassenger, type Passenger } from '@renderer/api/user'
+import { TrainInfo, PassagerTableItem } from '../constants'
 
 const CardTitle: JSX.Element = (
   <Space direction="horizontal">
@@ -34,7 +36,7 @@ const UserTitle: JSX.Element = (
   </Space>
 )
 
-const getSeatString = (seatType: string) => {
+const getSeatString = (seatType: string): string => {
   switch (seatType) {
     case 'business':
       return '商务座'
@@ -45,31 +47,69 @@ const getSeatString = (seatType: string) => {
     case 'special':
       return '特等座'
     default:
-      break
+      return seatType
   }
-
-  return ''
 }
 
 const getTicketElement = (leftNumber: number): JSX.Element => {
-  // 如果leftNumber大于20，则返回一个绿色的div
   if (leftNumber > 20) {
     return <div style={{ color: 'green', fontWeight: 'bold' }}>有</div>
   } else if (leftNumber > 0) {
-    // 如果leftNumber等于0，则返回一个黄色的div
     return <div style={{ color: 'orange', fontWeight: 'bold' }}>{leftNumber}</div>
   } else {
     return <div style={{ color: 'gray', fontWeight: 'bold' }}>无</div>
   }
 }
 
+const getPassengerTypeLabel = (type: string): string => {
+  const typeMap: Record<string, string> = {
+    '成人票': '成人票',
+    '儿童票': '儿童票',
+    '学生票': '学生票',
+    'adult': '成人票',
+    'child': '儿童票',
+    'student': '学生票'
+  }
+  return typeMap[type] || type
+}
+
+const getCardTypeLabel = (cardType: string): string => {
+  const typeMap: Record<string, string> = {
+    '居民二代身份证': '居民二代身份证',
+    '港澳通行证': '港澳通行证',
+    '台湾通行证': '台湾通行证',
+    '护照': '护照',
+    'id_card': '居民二代身份证',
+    'hk_macau_pass': '港澳通行证',
+    'taiwan_pass': '台湾通行证',
+    'passport': '护照'
+  }
+  return typeMap[cardType] || cardType
+}
+
+const passageType = [
+  { value: '成人票', label: '成人票' },
+  { value: '儿童票', label: '儿童票' },
+  { value: '学生票', label: '学生票' }
+]
+
+const idCardType = [
+  { value: '居民二代身份证', label: '居民二代身份证' },
+  { value: '港澳通行证', label: '港澳通行证' },
+  { value: '台湾通行证', label: '台湾通行证' },
+  { value: '护照', label: '护照' }
+]
+
 const TicketPreOrder = (): JSX.Element => {
   const location = useLocation()
+  const navigate = useNavigate()
   const [trainNo, setTrainNo] = useState<string>('')
   const [trainDate, setTrainDate] = useState<dayjs.Dayjs>()
   const [trainInfo, setTrainInfo] = useState<TrainInfo>()
-  const [passagers, setPassagers] = useState<Passager[]>([])
+  const [passengers, setPassengers] = useState<Passenger[]>([])
+  const [selectedPassengerIds, setSelectedPassengerIds] = useState<string[]>([])
   const [passagersData, setPassagersData] = useState<PassagerTableItem[]>([])
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const pathName = location.search.replace('?', '')
@@ -79,58 +119,79 @@ const TicketPreOrder = (): JSX.Element => {
     if (no && date) {
       setTrainNo(no)
       setTrainDate(dayjs(date, 'YYYY_MM_DD'))
-      fetchTrainDetail(no, date)
-        .then((res) => {
-          setTrainInfo(res.data)
-        })
-        .catch((err) => {
-          message.error(err)
-        })
-
-      getUserPassengers('')
-        .then((res) => {
-          setPassagers(res.data)
-        })
-        .catch((err) => {
-          message.error(err)
-        })
+      loadData(no, date)
     }
   }, [])
 
-  const passageType = [
-    { value: '成人票', label: '成人票' },
-    { value: '儿童票', label: '儿童票' },
-    { value: '学生票', label: '学生票' }
-  ]
+  const loadData = async (trainNum: string, trainDateStr: string) => {
+    setLoading(true)
+    try {
+      const [trainRes, passengerRes] = await Promise.all([
+        fetchTrainDetail(trainNum, trainDateStr),
+        getPassengers()
+      ])
 
-  const idCardType = [
-    { value: '居民二代身份证', label: '居民二代身份证' },
-    { value: '港澳通行证', label: '港澳通行证' },
-    { value: '台湾通行证', label: '台湾通行证' },
-    { value: '护照', label: '护照' }
-  ]
+      if (trainRes?.data) {
+        setTrainInfo(trainRes.data)
+      }
 
-  const optionDelete = (key: string): JSX.Element => {
-    return (
-      <Button
-        onClick={() => console.log('delete' + record.key)}
-        icon={<CloseCircleOutlined />}
-        type="text"
-      />
-    )
+      if (passengerRes?.data && Array.isArray(passengerRes.data)) {
+        setPassengers(passengerRes.data)
+      } else if (passengerRes?.data?.data) {
+        setPassengers(passengerRes.data.data)
+      }
+    } catch (err: any) {
+      message.error('加载数据失败：' + (err.message || '未知错误'))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (selectedPassengerIds.length > 0 && passengers.length > 0) {
+      const data: PassagerTableItem[] = selectedPassengerIds.map((id, index) => {
+        const passenger = passengers.find(p => p.id === id)
+        return {
+          key: `${index}`,
+          passagerType: passenger?.type || '成人票',
+          seatType: '二等座',
+          name: passenger?.name || '',
+          idCardType: passenger?.id_card_type || '居民二代身份证',
+          idCard: passenger?.id_card || ''
+        }
+      })
+      setPassagersData(data)
+    } else {
+      setPassagersData([])
+    }
+  }, [selectedPassengerIds, passengers])
+
+  const handlePassengerChange = (checkedIds: string[]) => {
+    setSelectedPassengerIds(checkedIds)
+  }
+
+  const handleBack = () => {
+    const searchParams = {
+      from: trainInfo?.train_from || '',
+      to: trainInfo?.train_to || '',
+      date: trainDate?.format('YYYY-MM-DD') || ''
+    }
+    localStorage.setItem('searchParams', JSON.stringify(searchParams))
+    localStorage.setItem('autoSearch', 'true')
+    navigate('/home')
   }
 
   const passagerColumns: TableProps<PassagerTableItem>['columns'] = [
     {
       title: '序号',
-      render: (_, _1, index) => `${index + 1}`
+      render: (_: any, __: PassagerTableItem, index: number) => `${index + 1}`
     },
     {
       title: '票种',
-      render: (_, record): JSX.Element => {
+      render: (_: any, record: PassagerTableItem): JSX.Element => {
         return (
           <Select
-            value={record.passagerType}
+            value={getPassengerTypeLabel(record.passagerType)}
             options={passageType}
             style={{ width: 120 }}
             disabled
@@ -140,7 +201,7 @@ const TicketPreOrder = (): JSX.Element => {
     },
     {
       title: '席别',
-      render: (_, record): JSX.Element => {
+      render: (_: any, record: PassagerTableItem): JSX.Element => {
         return (
           <Select style={{ width: 120 }} value={record.seatType}>
             {trainInfo?.ticket?.map((item) => {
@@ -156,77 +217,60 @@ const TicketPreOrder = (): JSX.Element => {
     },
     {
       title: '姓名',
-      render: (_, record) => `${record.name}`
+      render: (_: any, record: PassagerTableItem) => `${record.name}`
     },
     {
       title: '证件号码',
-      render: (_, record): JSX.Element => {
+      render: (_: any, record: PassagerTableItem): JSX.Element => {
         return <Input value={record.idCard} style={{ width: 160 }} disabled />
       }
     },
     {
       title: '证件类型',
-      render: (_, record): JSX.Element => {
-        return <Select value={record.idCardType} style={{ width: 160 }} options={idCardType} />
+      render: (_: any, record: PassagerTableItem): JSX.Element => {
+        return (
+          <Select value={getCardTypeLabel(record.idCardType)} style={{ width: 160 }} options={idCardType} />
+        )
       }
     },
     {
       title: '状态',
-      render: (_, record): JSX.Element => {
+      render: (_: any, __: PassagerTableItem): JSX.Element => {
         return <Tag color="green">有效</Tag>
       }
     }
   ]
 
-  const updatePassagers = (passagers: string[]) => {
-    let tmpData: PassagerTableItem[] = []
-    passagers.forEach((item, index) => {
-      getPassengerInfo(item)
-        .then((res) => {
-          tmpData = [
-            ...tmpData,
-            {
-              key: `${index}`,
-              passagerType: res.data.type,
-              seatType: '二等座',
-              name: item,
-              idCardType: res.data.idCardType,
-              idCard: res.data.idCard
-            }
-          ]
-
-          setPassagersData(tmpData)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    })
-  }
-
   return (
-    <>
-      <Layout>
+    <Layout>
+      <div style={{ padding: '16px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Button icon={<ArrowLeftOutlined />} onClick={handleBack}>
+          返回车票查询
+        </Button>
+      </div>
+
+      <Spin spinning={loading}>
         <Card title={CardTitle}>
           <Space direction="horizontal">
-            <span
-              style={{ fontWeight: 'bold', fontSize: '2.3vh' }}
-            >{`${trainDate?.format('YYYY-MM-DD')}`}</span>
-            <span style={{ fontWeight: 'bold' }}>周四</span>
-            <span style={{ fontWeight: 'bold', color: 'red', fontSize: '2.3vh' }}>
-              {`${trainNo}`}次
+            <span style={{ fontWeight: 'bold', fontSize: '2.3vh' }}>
+              {trainDate?.format('YYYY-MM-DD')}
             </span>
-            <span
-              style={{ fontWeight: 'bold', fontSize: '2.3vh' }}
-            >{`${trainInfo?.train_from}`}</span>
+            <span style={{ fontWeight: 'bold' }}>{trainDate?.day() === 4 ? '周四' : ''}</span>
+            <span style={{ fontWeight: 'bold', color: 'red', fontSize: '2.3vh' }}>
+              {trainNo}次
+            </span>
+            <span style={{ fontWeight: 'bold', fontSize: '2.3vh' }}>
+              {trainInfo?.train_from}
+            </span>
             <span>站</span>
             <span style={{ fontWeight: 'bold', fontSize: '2.3vh' }}>
-              ({`${dayjs(trainInfo?.train_start_time, 'YYYY-MM-DD HH:mm:ss').format('HH:mm')}`} 开)
+              ({dayjs(trainInfo?.train_start_time, 'YYYY-MM-DD HH:mm:ss').format('HH:mm')} 开)
             </span>
             <span>--------</span>
-            <span style={{ fontWeight: 'bold', fontSize: '2.3vh' }}>{`${trainInfo?.train_to}`}</span>
+            <span style={{ fontWeight: 'bold', fontSize: '2.3vh' }}>{trainInfo?.train_to}</span>
             <span>站</span>
             <span style={{ fontWeight: 'bold', fontSize: '2.3vh' }}>
-              ({`${dayjs(trainInfo?.train_end_time, 'YYYY-MM-DD HH:mm:ss').format('HH:mm')}`} 到)
+              ({dayjs(trainInfo?.train_end_time, 'YYYY-MM-DD HH:mm:ss').format('HH:mm')} 到)
             </span>
           </Space>
           <Divider dashed />
@@ -234,34 +278,36 @@ const TicketPreOrder = (): JSX.Element => {
             {trainInfo?.ticket?.map((item) => {
               return (
                 <Space direction="horizontal" key={item.seatType}>
-                  <span key={item.seatType}>{`${getSeatString(item.seatType)}`}</span>
+                  <span key={item.seatType}>{getSeatString(item.seatType)}</span>
                   <span style={{ color: 'rgb(252, 131, 2)', fontWeight: 'bold' }}>
-                    (￥{`${item.price}`})
+                    (￥{item.price})
                   </span>
                   {getTicketElement(item.left)}
                 </Space>
               )
             })}
           </Space>
-          <Divider type="horizontal"></Divider>
+          <Divider type="horizontal" />
           <Space direction="vertical">
             <span style={{ color: 'blueviolet' }}>
               *显示的卧铺票价均为上铺票价,供您参考,具体票价以您支付时实际购买的铺别票价为准
             </span>
           </Space>
         </Card>
+
         <Divider />
+
         <Card title={UserTitle}>
           <Space direction="vertical">
             <span>
               <UserOutlined />
               乘车人
             </span>
-            <Checkbox.Group onChange={updatePassagers}>
-              {passagers.map((item) => {
+            <Checkbox.Group onChange={handlePassengerChange} value={selectedPassengerIds}>
+              {passengers.map((item) => {
                 return (
-                  <Checkbox value={item.name} key={item.id}>
-                    {item.name}
+                  <Checkbox value={item.id} key={item.id}>
+                    {item.name} ({getPassengerTypeLabel(item.type)})
                   </Checkbox>
                 )
               })}
@@ -271,8 +317,8 @@ const TicketPreOrder = (): JSX.Element => {
         </Card>
 
         <Divider />
-      </Layout>
-    </>
+      </Spin>
+    </Layout>
   )
 }
 

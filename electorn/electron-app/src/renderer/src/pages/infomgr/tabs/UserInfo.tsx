@@ -39,16 +39,14 @@ const UserInfo = () => {
 
   // 加载用户信息
   useEffect(() => {
-    // 这里可以从 API 获取用户信息
-    // 暂时使用模拟数据
     getCurrentUser().then(res => {
-      setUser(res?.data)
+      const userData = res?.data
+      setUser(userData)
+      form.setFieldsValue(userData)
     }).catch(err => {
-      message.error('获取用户信息失败 :' + err.message || '未知错误')
+      message.error('获取用户信息失败: ' + (err.message || '未知错误'))
     })
-
-    form.setFieldsValue(user)
-  }, [user, form])
+  }, [form])
 
   // 开始编辑
   const startEdit = () => {

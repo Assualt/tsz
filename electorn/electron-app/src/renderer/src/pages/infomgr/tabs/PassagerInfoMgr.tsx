@@ -1,177 +1,150 @@
-import React, { useState, useEffect } from 'react'
-import { Table, Button, Modal, Form, Input, Select, Radio, message, Space, Typography } from 'antd'
-import { PlusOutlined, EditOutlined, DeleteOutlined, SaveOutlined, CloseOutlined } from '@ant-design/icons'
+import { useState, useEffect } from 'react'
+import { Table, Button, Modal, Form, Input, Select, Radio, message, Space, Typography, Spin, type TableProps } from 'antd'
+import { PlusOutlined, EditOutlined, DeleteOutlined, CloseOutlined } from '@ant-design/icons'
+
+import { getPassengers, addPassenger, updatePassenger, deletePassenger, type Passenger } from '@renderer/api/user'
 
 const { Title } = Typography
 const { Option } = Select
-const { Group, Button: RadioButton } = Radio
-
-interface Passager {
-  id: string
-  name: string
-  idType: string
-  idNumber: string
-  phone: string
-  email: string
-  type: string
-  remark: string
-}
 
 const PassagerInfoMgr = () => {
-  const [passagers, setPassagers] = useState<Passager[]>([])
+  const [passengers, setPassengers] = useState<Passenger[]>([])
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
-  const [currentPassager, setCurrentPassager] = useState<Passager>({
-    id: '',
-    name: '',
-    idType: '',
-    idNumber: '',
-    phone: '',
-    email: '',
-    type: '',
-    remark: ''
-  })
+  const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
 
-  // 模拟初始数据
-  useEffect(() => {
-    const initialPassagers: Passager[] = [
-      {
-        id: '1',
-        name: '张三',
-        idType: '身份证',
-        idNumber: '110101199001011234',
-        phone: '13800138001',
-        email: 'zhangsan@example.com',
-        type: '成人',
-        remark: '常用乘车人'
-      },
-      {
-        id: '2',
-        name: '李四',
-        idType: '身份证',
-        idNumber: '110101199102022345',
-        phone: '13900139002',
-        email: 'lisi@example.com',
-        type: '成人',
-        remark: '常用乘车人'
-      },
-      {
-        id: '3',
-        name: '王五',
-        idType: '护照',
-        idNumber: 'E12345678',
-        phone: '13700137003',
-        email: 'wangwu@example.com',
-        type: '成人',
-        remark: '偶尔乘车人'
-      },
-      {
-        id: '4',
-        name: '赵六',
-        idType: '身份证',
-        idNumber: '110101200503033456',
-        phone: '13600136004',
-        email: 'zhaoliu@example.com',
-        type: '儿童',
-        remark: '学生'
+  const loadPassengers = async () => {
+    setLoading(true)
+    try {
+      const res = await getPassengers()
+      if (res?.data && Array.isArray(res.data)) {
+        setPassengers(res.data)
+      } else if (res?.data?.data) {
+        setPassengers(res.data.data)
       }
-    ]
-    setPassagers(initialPassagers)
+    } catch (err: any) {
+      message.error('获取乘车人信息失败：' + (err.message || '未知错误'))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadPassengers()
   }, [])
 
-  // 打开添加模态框
   const showAddModal = () => {
     setIsEditing(false)
-    setCurrentPassager({
-      id: '',
-      name: '',
-      idType: '',
-      idNumber: '',
-      phone: '',
-      email: '',
-      type: '',
-      remark: ''
-    })
     form.resetFields()
     setIsModalVisible(true)
   }
 
-  // 打开编辑模态框
-  const showEditModal = (record: Passager) => {
+  const showEditModal = (record: Passenger) => {
     setIsEditing(true)
-    setCurrentPassager(record)
-    form.setFieldsValue(record)
+    form.setFieldsValue({
+      name: record.name,
+      idType: record.id_card_type,
+      idNumber: record.id_card,
+      phone: record.phone || '',
+      email: record.email || '',
+      type: record.type,
+      remark: ''
+    })
+    form.setFieldsValue({ id: record.id })
     setIsModalVisible(true)
   }
 
-  // 关闭模态框
   const handleCancel = () => {
     setIsModalVisible(false)
   }
 
-  // 提交表单
-  const handleOk = () => {
-    form.validateFields().then(values => {
+  const handleOk = async () => {
+    try {
+      const values = await form.validateFields()
+      
+      const passengerData = {
+        name: values.name,
+        id_card: values.idNumber,
+        id_card_type: values.idType,
+        type: values.type,
+        phone: values.phone || undefined,
+        email: values.email || undefined,
+        remark: values.remark || undefined
+      }
+
       if (isEditing) {
-        // 编辑乘车人
-        const updatedPassagers = passagers.map(passager => 
-          passager.id === currentPassager.id ? { ...values, id: currentPassager.id } : passager
-        )
-        setPassagers(updatedPassagers)
+        await updatePassenger(values.id, passengerData)
         message.success('乘车人信息更新成功')
       } else {
-        // 添加乘车人
-        const newPassager: Passager = {
-          ...values,
-          id: Date.now().toString()
-        }
-        setPassagers([...passagers, newPassager])
+        await addPassenger(passengerData)
         message.success('乘车人信息添加成功')
       }
+
       setIsModalVisible(false)
-    }).catch(errorInfo => {
-      console.error('表单验证失败:', errorInfo)
-    })
+      loadPassengers()
+    } catch (error: any) {
+      if (error.errorFields) {
+        console.error('表单验证失败:', error)
+      } else {
+        message.error('操作失败：' + (error.message || '未知错误'))
+      }
+    }
   }
 
-  // 删除乘车人
   const handleDelete = (id: string) => {
     Modal.confirm({
       title: '确定删除这个乘车人吗？',
       content: '删除后无法恢复',
       okText: '确定',
       cancelText: '取消',
-      onOk: () => {
-        const updatedPassagers = passagers.filter(passager => passager.id !== id)
-        setPassagers(updatedPassagers)
-        message.success('乘车人信息删除成功')
+      onOk: async () => {
+        try {
+          await deletePassenger(id)
+          message.success('乘车人信息删除成功')
+          loadPassengers()
+        } catch (err: any) {
+          message.error('删除失败：' + (err.message || '未知错误'))
+        }
       }
     })
   }
 
-  // 表格列配置
-  const columns = [
+  const columns: TableProps<Passenger>['columns'] = [
     {
       title: '乘车人ID',
       dataIndex: 'id',
-      key: 'id'
+      key: 'id',
+      width: 80
     },
     {
       title: '姓名',
       dataIndex: 'name',
       key: 'name',
-      sorter: (a: Passager, b: Passager) => a.name.localeCompare(b.name)
+      sorter: (a: Passenger, b: Passenger) => a.name.localeCompare(b.name)
     },
     {
       title: '证件类型',
-      dataIndex: 'idType',
-      key: 'idType'
+      dataIndex: 'id_card_type',
+      key: 'id_card_type',
+      render: (text: string) => {
+        const typeMap: Record<string, string> = {
+          '居民二代身份证': '身份证',
+          '港澳通行证': '港澳通行证',
+          '台湾通行证': '台湾通行证',
+          '护照': '护照',
+          'id_card': '身份证',
+          'hk_macau_pass': '港澳通行证',
+          'taiwan_pass': '台湾通行证',
+          'passport': '护照'
+        }
+        return typeMap[text] || text
+      }
     },
     {
       title: '证件号码',
-      dataIndex: 'idNumber',
-      key: 'idNumber'
+      dataIndex: 'id_card',
+      key: 'id_card'
     },
     {
       title: '手机号码',
@@ -190,19 +163,38 @@ const PassagerInfoMgr = () => {
       filters: [
         { text: '成人', value: '成人' },
         { text: '儿童', value: '儿童' },
-        { text: '学生', value: '学生' }
+        { text: '学生', value: '学生' },
+        { text: 'adult', value: 'adult' },
+        { text: 'child', value: 'child' },
+        { text: 'student', value: 'student' }
       ],
-      onFilter: (value: string, record: Passager) => record.type === value
+      onFilter: (value: any, record: Passenger) => record.type === value,
+      render: (text: string) => {
+        const typeMap: Record<string, string> = {
+          '成人': '成人',
+          '儿童': '儿童',
+          '学生': '学生',
+          'adult': '成人',
+          'child': '儿童',
+          'student': '学生'
+        }
+        return typeMap[text] || text
+      }
     },
     {
-      title: '备注',
-      dataIndex: 'remark',
-      key: 'remark'
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: (text: string) => {
+        return text === 'active' ? '有效' : text
+      }
     },
     {
       title: '操作',
       key: 'action',
-      render: (_: any, record: Passager) => (
+      fixed: 'right',
+      width: 140,
+      render: (_: any, record: Passenger) => (
         <Space size="middle">
           <Button
             type="primary"
@@ -237,17 +229,19 @@ const PassagerInfoMgr = () => {
           </Button>
         </Space>
 
-        <Table
-          columns={columns}
-          dataSource={passagers}
-          rowKey="id"
-          pagination={{
-            pageSize: 10
-          }}
-          scroll={{
-            x: 1200
-          }}
-        />
+        <Spin spinning={loading}>
+          <Table
+            columns={columns}
+            dataSource={passengers}
+            rowKey="id"
+            pagination={{
+              pageSize: 10
+            }}
+            scroll={{
+              x: 1200
+            }}
+          />
+        </Spin>
 
         <Modal
           title={isEditing ? '编辑乘车人信息' : '添加乘车人信息'}
@@ -258,7 +252,7 @@ const PassagerInfoMgr = () => {
             <Button key="cancel" icon={<CloseOutlined />} onClick={handleCancel}>
               取消
             </Button>,
-            <Button key="submit" type="primary" icon={<SaveOutlined />} onClick={handleOk}>
+            <Button key="submit" type="primary" onClick={handleOk}>
               保存
             </Button>
           ]}
@@ -267,8 +261,8 @@ const PassagerInfoMgr = () => {
           <Form
             form={form}
             layout="vertical"
-            initialValues={currentPassager}
           >
+            <Form.Item name="id" hidden />
             <Form.Item
               name="name"
               label="姓名"
@@ -282,12 +276,10 @@ const PassagerInfoMgr = () => {
               rules={[{ required: true, message: '请选择证件类型' }]}
             >
               <Select placeholder="请选择证件类型">
-                <Option value="身份证">身份证</Option>
+                <Option value="居民二代身份证">身份证</Option>
                 <Option value="护照">护照</Option>
                 <Option value="港澳通行证">港澳通行证</Option>
                 <Option value="台湾通行证">台湾通行证</Option>
-                <Option value="军官证">军官证</Option>
-                <Option value="士兵证">士兵证</Option>
               </Select>
             </Form.Item>
             <Form.Item
@@ -323,9 +315,9 @@ const PassagerInfoMgr = () => {
               rules={[{ required: true, message: '请选择类型' }]}
             >
               <Radio.Group>
-                <RadioButton value="成人">成人</RadioButton>
-                <RadioButton value="儿童">儿童</RadioButton>
-                <RadioButton value="学生">学生</RadioButton>
+                <Radio value="成人">成人</Radio>
+                <Radio value="儿童">儿童</Radio>
+                <Radio value="学生">学生</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item

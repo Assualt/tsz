@@ -76,33 +76,69 @@ export const getCurrentUser = () => {
   return api.get('/users/me')
 }
 
-/**
- * 获取用户乘客列表
- * @param userId 用户ID
- */
-export const getUserPassengers = (userId: string) => {
-  return api.post('/user/getPassagers', {
-    userId,
-    timestamp: dayjs()
-  })
-}
-
-export const getUserPassagers = (userId: string) => {
-  return api.post('/user/getPassagers', {
-    userId,
-    timestamp: dayjs()
-  })
+export interface Passenger {
+  id: string
+  name: string
+  id_card: string
+  id_card_type: string
+  type: string
+  phone?: string
+  email?: string
+  status: string
+  created_at: string
+  updated_at: string
 }
 
 /**
- * 获取乘客信息
- * @param username 用户名
+ * 获取当前用户的乘客列表
+ * GET /api/v1/passengers
  */
-export const getPassengerInfo = (username: string) => {
-  return api.post('/user/getPassagerInfo', {
-    username,
-    timestamp: dayjs()
-  })
+export const getPassengers = () => {
+  return api.get('/passengers')
+}
+
+/**
+ * 新增乘客
+ * POST /api/v1/passengers
+ * @param passenger 乘客信息
+ */
+export const addPassenger = (passenger: {
+  name: string
+  id_card: string
+  id_card_type: string
+  type: string
+  phone?: string
+  email?: string
+  remark?: string
+}) => {
+  return api.post('/passengers', passenger)
+}
+
+/**
+ * 更新乘客信息
+ * PUT /api/v1/passengers/:id
+ * @param id 乘客ID
+ * @param passenger 乘客信息
+ */
+export const updatePassenger = (id: string, passenger: {
+  name: string
+  id_card: string
+  id_card_type: string
+  type: string
+  phone?: string
+  email?: string
+  remark?: string
+}) => {
+  return api.put(`/passengers/${id}`, passenger)
+}
+
+/**
+ * 删除乘客
+ * DELETE /api/v1/passengers/:id
+ * @param id 乘客ID
+ */
+export const deletePassenger = (id: string) => {
+  return api.delete(`/passengers/${id}`)
 }
 
 /**

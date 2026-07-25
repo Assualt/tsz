@@ -8,6 +8,11 @@ body {
   background-image: url('./wavy-lines.svg');
   background-size: cover;
   user-select: none;
+  transition: opacity 0.3s ease-out;
+}
+
+body.logout-fade-out {
+  opacity: 0;
 }
 
 code {

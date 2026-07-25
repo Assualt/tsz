@@ -1,0 +1,11 @@
+{
+    "company_name": "Electorn",
+    "description": "Electorn 是一个专注于铁路票务服务的平台",
+    "mission": "为用户提供便捷、高效的票务服务",
+    "vision": "成为中国领先的铁路票务服务提供商",
+    "contact": {
+        "email": "contact@electorn.com",
+        "phone": "400-123-4567",
+        "address": "北京市朝阳区科技园区"
+    }
+}

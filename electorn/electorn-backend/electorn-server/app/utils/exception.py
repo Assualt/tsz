@@ -76,6 +76,9 @@ class ExceptionMiddleware(BaseHTTPMiddleware):
         white_list = [
             '/api/v1/auth/login',
             '/api/v1/auth/register',
-            '/api/v1/auth/code'
+            '/api/v1/auth/code',
+            '/api/v1/static/user-agreement',
+            '/api/v1/static/privacy-policy',
+            '/api/v1/static/about'
         ]
         return request.url.path not in white_list

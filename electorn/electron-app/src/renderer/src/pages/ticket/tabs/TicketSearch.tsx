@@ -6,7 +6,7 @@ import { fetchAllCities } from '../../../api/ticket'
 import { SearchResultField, SearchBoxField, Train } from '../constants'
 
 import dayjs from 'dayjs'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const TicketSearch = (): JSX.Element => {
   const [stations, setStations] = React.useState<Train[]>([])
@@ -18,6 +18,12 @@ const TicketSearch = (): JSX.Element => {
     date: dayjs()
   })
   const [searchResultTrainTypeList, setSearchResultTrainTypeList] = React.useState<string[]>([])
+  const [initialSearchValues, setInitialSearchValues] = useState<{
+    from: string
+    to: string
+    date: string
+  } | null>(null)
+  const [triggerSearch, setTriggerSearch] = useState(false)
 
   const convertToSearchResult = (data: SearchResultField[]): void => {
     let trainTypeList: string[] = []
@@ -54,6 +60,40 @@ const TicketSearch = (): JSX.Element => {
       })
   }, [])
 
+  useEffect(() => {
+    const autoSearch = localStorage.getItem('autoSearch')
+    const searchParams = localStorage.getItem('searchParams')
+    
+    if (autoSearch === 'true' && searchParams) {
+      try {
+        const params = JSON.parse(searchParams)
+        if (params.from && params.to) {
+          setInitialSearchValues({
+            from: params.from,
+            to: params.to,
+            date: params.date || dayjs().format('YYYY-MM-DD')
+          })
+          setSearchParam({
+            from: params.from,
+            to: params.to,
+            date: dayjs(params.date)
+          })
+        }
+      } catch (e) {
+        console.error('Failed to parse search params:', e)
+      }
+    }
+
+    localStorage.removeItem('autoSearch')
+    localStorage.removeItem('searchParams')
+  }, [])
+
+  useEffect(() => {
+    if (initialSearchValues && stations.length > 0) {
+      setTriggerSearch(true)
+    }
+  }, [initialSearchValues, stations])
+
   return (
     <>
       <SearchBox
@@ -62,6 +102,8 @@ const TicketSearch = (): JSX.Element => {
         setIsSearch={setIsSearch}
         setSearchResult={convertToSearchResult}
         setSearchParam={setSearchParam}
+        initialSearchValues={initialSearchValues || undefined}
+        triggerSearch={triggerSearch}
       />
       <SearchFilter
         isSearch={isSearch}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
 import './style.css'
-import { UserOutlined, HomeOutlined, WechatOutlined } from '@ant-design/icons'
-import { Layout, Menu, MenuProps, Breadcrumb } from 'antd'
+import { UserOutlined, HomeOutlined, WechatOutlined, LogoutOutlined } from '@ant-design/icons'
+import { Layout, Menu, MenuProps, Breadcrumb, Spin } from 'antd'
 import { Footer } from 'antd/es/layout/layout'
 
 import AvatarInfo from '@renderer/pages/common/components/AvatarInfo'
@@ -241,6 +241,11 @@ const Home: React.FC = () => {
     content: <TicketSearch />,
     breadCrumb: [HomeBreadCrumb]
   })
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  const handleLogout = () => {
+    setIsLoggingOut(true)
+  }
 
   // 使用用户轮询 hook，每60秒调用一次 /api/v1/users/me 接口
   useUserPolling({
@@ -270,7 +275,7 @@ const Home: React.FC = () => {
   }, [location.pathname])
 
   return (
-    <Layout className="layout">
+    <Layout className={`layout ${isLoggingOut ? 'logout-animate' : ''}`}>
       <Header style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <div className="demo-logo" />
         <Menu
@@ -280,7 +285,7 @@ const Home: React.FC = () => {
           items={menuItems}
           style={{ flex: 1, minWidth: 0 }}
         />
-        <AvatarInfo />
+        <AvatarInfo onLogout={handleLogout} />
       </Header>
       <Layout>
         <Sider width={200} style={{ background: '#fff' }}>

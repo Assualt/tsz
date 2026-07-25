@@ -10,12 +10,12 @@ import {
 } from 'antd'
 import { SwapOutlined, SearchOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
+import { useEffect } from 'react'
 
 import { SearchBoxField } from '../constants'
 import { fetchTicketInfoNew } from '../../../api/ticket'
 
 const onSwitchPlace = (values: FormInstance<SearchBoxField>): void => {
-  // TODO: 交换出发地和目的地
   const from = values.getFieldValue('from')
   const to = values.getFieldValue('to')
   values.setFieldValue('from', to)
@@ -30,14 +30,46 @@ const onFinishFailed = (errorInfo): void => {
   console.log('Failed:', errorInfo)
 }
 
+interface SearchBoxProps {
+  stations: any[]
+  isSearch: boolean
+  setIsSearch: (value: boolean) => void
+  setSearchResult: (data: any[]) => void
+  setSearchParam: (param: SearchBoxField) => void
+  initialSearchValues?: {
+    from: string
+    to: string
+    date: string
+  }
+  triggerSearch?: boolean
+}
+
 const SearchBox = ({
   stations,
   isSearch,
   setIsSearch,
   setSearchResult,
-  setSearchParam
-}): JSX.Element => {
+  setSearchParam,
+  initialSearchValues,
+  triggerSearch
+}: SearchBoxProps): JSX.Element => {
   const [form] = Form.useForm()
+
+  useEffect(() => {
+    if (initialSearchValues && initialSearchValues.from && initialSearchValues.to) {
+      form.setFieldsValue({
+        from: initialSearchValues.from,
+        to: initialSearchValues.to,
+        date: dayjs(initialSearchValues.date)
+      })
+    }
+  }, [initialSearchValues, form])
+
+  useEffect(() => {
+    if (triggerSearch && initialSearchValues && initialSearchValues.from && initialSearchValues.to) {
+      form.submit()
+    }
+  }, [triggerSearch, initialSearchValues, form])
 
   const onFinish = (values: SearchBoxField): void => {
     if (!values.from || !values.to) {
@@ -57,18 +89,24 @@ const SearchBox = ({
       date: values.date
     })
 
-    setTimeout(() => {
-      message.success('查询成功', 3)
-      fetchTicketInfoNew(values.from, values.to, values.date.format('YYYY-MM-DD'))
-        .then((res) => {
-          console.log(res.data)
+    fetchTicketInfoNew(values.from, values.to, values.date.format('YYYY-MM-DD'))
+      .then((res) => {
+        console.log('Search result:', res)
+        if (res?.data) {
           setSearchResult(res.data)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-      setIsSearch(false)
-    }, 3000)
+        } else if (Array.isArray(res)) {
+          setSearchResult(res)
+        } else {
+          message.error('查询结果格式错误')
+        }
+      })
+      .catch((err) => {
+        console.error('Search failed:', err)
+        message.error('查询失败：' + (err.message || '未知错误'))
+      })
+      .finally(() => {
+        setIsSearch(false)
+      })
   }
 
   return (
@@ -84,7 +122,7 @@ const SearchBox = ({
         layout="inline"
         style={{ width: '100%' }}
         name="searchForm"
-        initialValues={{ remember: true }}
+        initialValues={{ remember: true, date: dayjs() }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"

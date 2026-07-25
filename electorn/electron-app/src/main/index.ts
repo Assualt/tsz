@@ -8,8 +8,10 @@ const all_windows = new Map()
 let loginData = null
 function createWindowConfig(options = {}) {
   return {
-    width: 600,
+    width: 960,
     height: 700,
+    minWidth: 960,
+    minHeight: 700,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
@@ -18,7 +20,7 @@ function createWindowConfig(options = {}) {
       sandbox: false,
       contextIsolation: true,
       nodeIntegration: false,
-      webSecurity: false // 添加此项允许本地资源加载
+      webSecurity: false
     },
     resizable: true,
     ...options
@@ -169,10 +171,31 @@ app.whenReady().then(() => {
   })
 
   // 处理登出请求
-  ipcMain.handle('logout', () => {
+  ipcMain.handle('logout', async (event) => {
     try {
       closeAllChildWindows()
       loginData = null
+      
+      const currentWindow = BrowserWindow.fromWebContents(event.sender)
+      if (currentWindow) {
+        currentWindow.webContents.executeJavaScript(`
+          document.body.classList.add('logout-fade-out');
+        `).catch(() => {})
+        
+        setTimeout(() => {
+          if (!currentWindow.isDestroyed()) {
+            currentWindow.close()
+          }
+          setTimeout(() => {
+            createWindow()
+          }, 100)
+        }, 300)
+      } else {
+        setTimeout(() => {
+          createWindow()
+        }, 100)
+      }
+      
       return true
     } catch (error) {
       console.error('Error during logout:', error)

@@ -8,3 +8,6 @@ tszflask/logs/server.log
 vue-tsz/static/images/*
 
 vue-tsz/static/upload/*
+
+**/venv/**
+**/logs/**

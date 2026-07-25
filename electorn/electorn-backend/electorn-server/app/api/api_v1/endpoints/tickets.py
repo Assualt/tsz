@@ -24,7 +24,7 @@ def query_ticket(from_station: str, to_station: str, date: datetime, db: Session
     # 这里应该根据 from_station, to_station 和 date 查询数据库
     # 暂时返回 mock 数据
     ticket_data = {
-        "train_num": "123456",
+        "train_num": "G1",
         "station_from": from_station,
         "station_to": to_station,
         "begin_time": datetime.now().isoformat(),
@@ -128,15 +128,33 @@ async def get_ticket_prices(train_num: str, date: datetime = datetime.now(), db:
 
 
 @router.get("/{train_num}/detail")
-async def get_train_detail(train_num: str, db: Session = Depends(get_db)):
+async def get_train_detail(train_num: str, date: str = None, db: Session = Depends(get_db)):
     """
     Get train detail by train number
     """
+    if date is None:
+        date = datetime.now().strftime("%Y_%m_%d")
+    
+    trans.info("Get train detail", extra={"extra_data": {
+        "train_num": train_num,
+        "date": date
+    }})
 
+    date_str = date.replace("_", "-")
+    
     data = {
         "train_num": train_num,
-     
+        "train_date": date_str,
+        "train_from": "北京南",
+        "train_to": "上海虹桥",
+        "train_start_time": f"{date_str} 08:00:00",
+        "train_end_time": f"{date_str} 12:30:00",
+        "ticket": [
+            {"seatType": "business", "price": 1888, "left": 5},
+            {"seatType": "first", "price": 944, "left": 15},
+            {"seatType": "second", "price": 576, "left": 120},
+            {"seatType": "special", "price": 760, "left": 8}
+        ]
     }
-
 
     return SuccessResponse(data=data)
