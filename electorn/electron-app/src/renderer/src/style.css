@@ -12,16 +12,45 @@
 .chat-layout {
   height: 700px;
   /* 修改背景颜色为更柔和的淡蓝色 */
-  background-color: #f0f8ff; 
+  background-color: #f0f8ff;
   /* 可以添加背景渐变效果 */
-  background: linear-gradient(135deg, #f0f8ff 0%, #e6f7ff 100%); 
+  background: linear-gradient(135deg, #f0f8ff 0%, #e6f7ff 100%);
   overflow: hidden;
   /* 添加一些阴影效果，增强层次感 */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .chat-content {
   padding: 16px;
   overflow-y: auto;
   padding-right: 30px;
+}
+
+/* 搜索结果过渡动画样式 */
+.result-container {
+  transition:
+    opacity 0.5s ease-in-out,
+    transform 0.5s ease-in-out;
+}
+
+.result-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+.result-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 加载中旋转动画增强 */
+.ant-spin-dot-item {
+  animation: antSpinMove 0.8s linear infinite alternate;
+}
+
+@keyframes antSpinMove {
+  to {
+    opacity: 1;
+  }
 }

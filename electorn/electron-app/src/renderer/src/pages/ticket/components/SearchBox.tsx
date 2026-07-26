@@ -66,7 +66,12 @@ const SearchBox = ({
   }, [initialSearchValues, form])
 
   useEffect(() => {
-    if (triggerSearch && initialSearchValues && initialSearchValues.from && initialSearchValues.to) {
+    if (
+      triggerSearch &&
+      initialSearchValues &&
+      initialSearchValues.from &&
+      initialSearchValues.to
+    ) {
       form.submit()
     }
   }, [triggerSearch, initialSearchValues, form])

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import './style.css'
 import { UserOutlined, HomeOutlined, WechatOutlined, LogoutOutlined } from '@ant-design/icons'
-import { Layout, Menu, MenuProps, Breadcrumb, Spin } from 'antd'
-import { Footer } from 'antd/es/layout/layout'
+import { Layout, Menu, MenuProps, Breadcrumb } from 'antd'
 
 import AvatarInfo from '@renderer/pages/common/components/AvatarInfo'
 import { useNavigate } from 'react-router-dom'
@@ -14,6 +13,7 @@ import TicketSearch from '@renderer/pages/ticket/tabs/TicketSearch'
 import Chat from '@renderer/pages/chat/index'
 import InfoMgr from '@renderer/pages/infomgr/index'
 import Ticket from '@renderer/pages/ticket/index'
+import Copyright from '@renderer/components/Copyright'
 import { useUserPolling } from '@renderer/hooks/useUserPolling'
 
 const { Header, Content, Sider } = Layout
@@ -275,48 +275,68 @@ const Home: React.FC = () => {
   }, [location.pathname])
 
   return (
-    <Layout className={`layout ${isLoggingOut ? 'logout-animate' : ''}`}>
-      <Header style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={['1']}
-          items={menuItems}
-          style={{ flex: 1, minWidth: 0 }}
-        />
-        <AvatarInfo onLogout={handleLogout} />
-      </Header>
-      <Layout>
-        <Sider width={200} style={{ background: '#fff' }}>
+    <div
+      className={`layout-wrapper ${isLoggingOut ? 'logout-animate' : ''}`}
+      style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+    >
+      <Layout style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Header
+          style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}
+        >
+          <div className="demo-logo" />
           <Menu
-            mode="inline"
-            defaultSelectedKeys={[]}
-            defaultOpenKeys={['sub1']}
-            style={{ height: '100%', borderRight: 0 }}
-            items={sliderItems}
-            onClick={({ key }) => {
-              navigator(`/${key}`)
-            }}
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={['1']}
+            items={menuItems}
+            style={{ flex: 1, minWidth: 0 }}
           />
-        </Sider>
-        <Layout style={{ padding: '0 24px 0px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }} items={tabItem.breadCrumb} />
-          <Content
+          <AvatarInfo onLogout={handleLogout} />
+        </Header>
+        <Layout style={{ flex: 1, display: 'flex', minHeight: 0, overflow: 'hidden' }}>
+          <Sider
+            width={200}
+            style={{ background: '#fff', flexShrink: 0, height: '100%', overflow: 'auto' }}
+          >
+            <Menu
+              mode="inline"
+              defaultSelectedKeys={[]}
+              defaultOpenKeys={['sub1']}
+              style={{ height: '100%', borderRight: 0 }}
+              items={sliderItems}
+              onClick={({ key }) => {
+                navigator(`/${key}`)
+              }}
+            />
+          </Sider>
+          <Layout
             style={{
-              padding: 0,
-              margin: 0,
-              height: '100%',
-              background: '#fff',
-              overflowY: 'scroll'
+              padding: '0 24px 0px',
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              minWidth: 0,
+              overflow: 'hidden'
             }}
           >
-            {tabItem.content}
-          </Content>
+            <Breadcrumb style={{ margin: '16px 0', flexShrink: 0 }} items={tabItem.breadCrumb} />
+            <Content
+              style={{
+                padding: 0,
+                margin: 0,
+                flex: 1,
+                background: '#fff',
+                overflow: 'auto',
+                minHeight: 0
+              }}
+            >
+              {tabItem.content}
+            </Content>
+          </Layout>
         </Layout>
       </Layout>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-    </Layout>
+      <Copyright />
+    </div>
   )
 }
 

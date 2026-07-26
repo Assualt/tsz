@@ -1,8 +1,27 @@
 import { useState, useEffect } from 'react'
-import { Table, Button, Modal, Form, Input, Select, Radio, message, Space, Typography, Spin, type TableProps } from 'antd'
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Select,
+  Radio,
+  message,
+  Space,
+  Typography,
+  Spin,
+  type TableProps
+} from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, CloseOutlined } from '@ant-design/icons'
 
-import { getPassengers, addPassenger, updatePassenger, deletePassenger, type Passenger } from '@renderer/api/user'
+import {
+  getPassengers,
+  addPassenger,
+  updatePassenger,
+  deletePassenger,
+  type Passenger
+} from '@renderer/api/user'
 
 const { Title } = Typography
 const { Option } = Select
@@ -62,7 +81,7 @@ const PassagerInfoMgr = () => {
   const handleOk = async () => {
     try {
       const values = await form.validateFields()
-      
+
       const passengerData = {
         name: values.name,
         id_card: values.idNumber,
@@ -129,14 +148,14 @@ const PassagerInfoMgr = () => {
       key: 'id_card_type',
       render: (text: string) => {
         const typeMap: Record<string, string> = {
-          '居民二代身份证': '身份证',
-          '港澳通行证': '港澳通行证',
-          '台湾通行证': '台湾通行证',
-          '护照': '护照',
-          'id_card': '身份证',
-          'hk_macau_pass': '港澳通行证',
-          'taiwan_pass': '台湾通行证',
-          'passport': '护照'
+          居民二代身份证: '身份证',
+          港澳通行证: '港澳通行证',
+          台湾通行证: '台湾通行证',
+          护照: '护照',
+          id_card: '身份证',
+          hk_macau_pass: '港澳通行证',
+          taiwan_pass: '台湾通行证',
+          passport: '护照'
         }
         return typeMap[text] || text
       }
@@ -171,12 +190,12 @@ const PassagerInfoMgr = () => {
       onFilter: (value: any, record: Passenger) => record.type === value,
       render: (text: string) => {
         const typeMap: Record<string, string> = {
-          '成人': '成人',
-          '儿童': '儿童',
-          '学生': '学生',
-          'adult': '成人',
-          'child': '儿童',
-          'student': '学生'
+          成人: '成人',
+          儿童: '儿童',
+          学生: '学生',
+          adult: '成人',
+          child: '儿童',
+          student: '学生'
         }
         return typeMap[text] || text
       }
@@ -196,18 +215,10 @@ const PassagerInfoMgr = () => {
       width: 140,
       render: (_: any, record: Passenger) => (
         <Space size="middle">
-          <Button
-            type="primary"
-            icon={<EditOutlined />}
-            onClick={() => showEditModal(record)}
-          >
+          <Button type="primary" icon={<EditOutlined />} onClick={() => showEditModal(record)}>
             编辑
           </Button>
-          <Button
-            danger
-            icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record.id)}
-          >
+          <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(record.id)}>
             删除
           </Button>
         </Space>
@@ -220,11 +231,7 @@ const PassagerInfoMgr = () => {
       <Space direction="vertical" style={{ width: '100%' }}>
         <Space style={{ marginBottom: '20px', justifyContent: 'space-between', width: '100%' }}>
           <Title level={4}>乘车人信息管理</Title>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={showAddModal}
-          >
+          <Button type="primary" icon={<PlusOutlined />} onClick={showAddModal}>
             添加乘车人
           </Button>
         </Space>
@@ -258,16 +265,9 @@ const PassagerInfoMgr = () => {
           ]}
           width={600}
         >
-          <Form
-            form={form}
-            layout="vertical"
-          >
+          <Form form={form} layout="vertical">
             <Form.Item name="id" hidden />
-            <Form.Item
-              name="name"
-              label="姓名"
-              rules={[{ required: true, message: '请输入姓名' }]}
-            >
+            <Form.Item name="name" label="姓名" rules={[{ required: true, message: '请输入姓名' }]}>
               <Input placeholder="请输入姓名" />
             </Form.Item>
             <Form.Item
@@ -309,21 +309,14 @@ const PassagerInfoMgr = () => {
             >
               <Input placeholder="请输入邮箱" />
             </Form.Item>
-            <Form.Item
-              name="type"
-              label="类型"
-              rules={[{ required: true, message: '请选择类型' }]}
-            >
+            <Form.Item name="type" label="类型" rules={[{ required: true, message: '请选择类型' }]}>
               <Radio.Group>
                 <Radio value="成人">成人</Radio>
                 <Radio value="儿童">儿童</Radio>
                 <Radio value="学生">学生</Radio>
               </Radio.Group>
             </Form.Item>
-            <Form.Item
-              name="remark"
-              label="备注"
-            >
+            <Form.Item name="remark" label="备注">
               <Input.TextArea rows={4} placeholder="请输入备注信息" />
             </Form.Item>
           </Form>

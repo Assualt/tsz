@@ -2,7 +2,7 @@ import { api } from '../api/index'
 import Mock from 'mockjs'
 
 function getPassagers() {
-  let users = Mock.mock({
+  const users = Mock.mock({
     'array|10': [
       {
         'id|+1': 1,
@@ -16,7 +16,7 @@ function getPassagers() {
 }
 
 function getPassagerInfo(name: string) {
-  let user = Mock.mock({
+  const user = Mock.mock({
     idCard: '@id()',
     type: '@pick(成人, 儿童)',
     idCardType: '@pick(身份证, 护照, 港澳通行证, 台湾通行证)'

@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text, inspect
 from app.core.config import settings
 from app.api.api_v1.router import api_router
 from app.core.database import engine, Base
@@ -9,6 +10,18 @@ from app.schemas.response import SuccessResponse
 
 # 创建数据库表
 Base.metadata.create_all(bind=engine)
+
+# 自动迁移：为已有表添加缺失的列
+def migrate_add_columns():
+    inspector = inspect(engine)
+    if "orders" not in inspector.get_table_names():
+        return
+    columns = [col["name"] for col in inspector.get_columns("orders")]
+    with engine.connect() as conn:
+        if "passenger_count" not in columns:
+            conn.execute(text("ALTER TABLE orders ADD COLUMN passenger_count INTEGER DEFAULT 1"))
+            conn.commit()
+migrate_add_columns()
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

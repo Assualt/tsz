@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { message, Modal } from 'antd'
-import { 
-  getCityList, 
-  createCity, 
-  updateCity, 
+import {
+  getCityList,
+  createCity,
+  updateCity,
   deleteCity,
-  type City as ApiCity 
+  type City as ApiCity
 } from '@renderer/api/cities'
 
 // 前端使用的 City 接口（与后端字段映射）
@@ -82,7 +82,7 @@ export const useCityManager = (options: UseCityManagerOptions = {}) => {
       const fetchPage = currentPage || page
       const fetchPerPage = currentPerPage || perPage
       const res = await getCityList(fetchPerPage, fetchPage)
-      
+
       if (res?.data?.data && Array.isArray(res.data.data)) {
         const cityList: City[] = res.data.data.map((city: ApiCity) => mapApiCityToCity(city))
         setCities(cityList)
@@ -218,7 +218,7 @@ export const useCityManager = (options: UseCityManagerOptions = {}) => {
         await createCity(apiCity)
         message.success('城市信息添加成功')
       }
-      
+
       // 保存成功后重新获取城市列表
       await fetchCities()
       setIsModalVisible(false)
@@ -238,7 +238,7 @@ export const useCityManager = (options: UseCityManagerOptions = {}) => {
         try {
           await deleteCity(id)
           message.success('城市信息删除成功')
-          
+
           // 删除成功后重新获取城市列表
           await fetchCities()
         } catch (err: any) {

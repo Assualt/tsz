@@ -1,5 +1,16 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import { Table, Button, Modal, Form, Input, Select, Space, Typography, type TableColumnsType, type PaginationProps } from 'antd'
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Select,
+  Space,
+  Typography,
+  type TableColumnsType,
+  type PaginationProps
+} from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, SaveOutlined } from '@ant-design/icons'
 import { useStationManager, type Station, type UseStationManagerOptions } from './useStationManager'
 import { getCityList } from '@renderer/api/cities'
@@ -15,40 +26,43 @@ const StationInfoMgr = () => {
     pageSizeOptions: ['10', '20', '50', '100'],
     showTotal: (total) => `共 ${total} 条记录`
   })
-  
+
   // 城市列表状态
   const [cities, setCities] = useState<Array<{ value: string; label: string }>>([])
   const [citiesLoading, setCitiesLoading] = useState(false)
 
   // 使用 useMemo 确保 pagination 变化时重新计算 managerOptions
-  const managerOptions = useMemo<UseStationManagerOptions>(() => ({
-    page: pagination.current,
-    perPage: pagination.pageSize
-  }), [pagination.current, pagination.pageSize])
+  const managerOptions = useMemo<UseStationManagerOptions>(
+    () => ({
+      page: pagination.current,
+      perPage: pagination.pageSize
+    }),
+    [pagination.current, pagination.pageSize]
+  )
 
-  const { 
-    stations, 
-    total, 
-    isModalVisible, 
-    isEditing, 
-    currentStation, 
-    showAddModal, 
-    showEditModal, 
-    handleCancel, 
+  const {
+    stations,
+    total,
+    isModalVisible,
+    isEditing,
+    currentStation,
+    showAddModal,
+    showEditModal,
+    handleCancel,
     handleOk,
     handleDelete,
     fetchStations
   } = useStationManager(managerOptions)
-  
+
   const [form] = Form.useForm()
-  
+
   // 获取城市列表
   useEffect(() => {
     const fetchCities = async () => {
       try {
         setCitiesLoading(true)
         const res = await getCityList(100, 1) // 获取足够多的城市
-        
+
         if (res?.data?.data && Array.isArray(res.data.data)) {
           const cityOptions = res.data.data.map((city: any) => ({
             value: city.id,
@@ -68,7 +82,7 @@ const StationInfoMgr = () => {
         setCitiesLoading(false)
       }
     }
-    
+
     fetchCities()
   }, [])
 
@@ -95,7 +109,7 @@ const StationInfoMgr = () => {
       title: '所属城市',
       dataIndex: 'city',
       key: 'city',
-      filters: cities.map(city => ({ text: city.label, value: city.value })),
+      filters: cities.map((city) => ({ text: city.label, value: city.value })),
       onFilter: (value: React.Key | boolean, record: Station) => record.city === String(value)
     },
     {
@@ -152,11 +166,13 @@ const StationInfoMgr = () => {
 
   // 处理表单提交
   const handleFormSubmit = () => {
-    form.validateFields().then(values => {
-      handleOk(values as Station)
-      form.resetFields()
-    }).catch(() => {
-    })
+    form
+      .validateFields()
+      .then((values) => {
+        handleOk(values as Station)
+        form.resetFields()
+      })
+      .catch(() => {})
   }
 
   // 处理添加按钮点击
@@ -170,11 +186,7 @@ const StationInfoMgr = () => {
       <Space direction="vertical" style={{ width: '100%' }}>
         <Space style={{ marginBottom: '20px', justifyContent: 'space-between', width: '100%' }}>
           <Title level={4}>车站信息管理</Title>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={handleAddClick}
-          >
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAddClick}>
             添加车站
           </Button>
         </Space>
@@ -188,14 +200,14 @@ const StationInfoMgr = () => {
               ...pagination,
               total: total,
               onChange: (current, pageSize) => {
-                setPagination(prev => ({
+                setPagination((prev) => ({
                   ...prev,
                   current,
                   pageSize
                 }))
               },
               onShowSizeChange: (current, pageSize) => {
-                setPagination(prev => ({
+                setPagination((prev) => ({
                   ...prev,
                   current: 1,
                   pageSize
@@ -223,11 +235,7 @@ const StationInfoMgr = () => {
             </Button>
           ]}
         >
-          <Form
-            form={form}
-            layout="vertical"
-            initialValues={currentStation}
-          >
+          <Form form={form} layout="vertical" initialValues={currentStation}>
             <Form.Item
               name="name"
               label="车站名称"
@@ -253,7 +261,7 @@ const StationInfoMgr = () => {
                 showSearch
                 optionFilterProp="label"
               >
-                {cities.map(city => (
+                {cities.map((city) => (
                   <Option key={city.value} value={city.value}>
                     {city.label}
                   </Option>
@@ -288,10 +296,7 @@ const StationInfoMgr = () => {
             >
               <Input.TextArea rows={3} placeholder="请输入车站详细地址" />
             </Form.Item>
-            <Form.Item
-              name="remark"
-              label="备注"
-            >
+            <Form.Item name="remark" label="备注">
               <Input.TextArea rows={4} placeholder="请输入备注信息" />
             </Form.Item>
           </Form>

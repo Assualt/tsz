@@ -1,8 +1,24 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Table, Button, Modal, Typography, Tag, Space, Descriptions, type TableColumnsType, type PaginationProps } from 'antd'
-import { EyeOutlined, CloseOutlined, DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons'
+import {
+  Table,
+  Button,
+  Modal,
+  Typography,
+  Tag,
+  Space,
+  Descriptions,
+  type TableColumnsType,
+  type PaginationProps
+} from 'antd'
+import {
+  EyeOutlined,
+  CloseOutlined,
+  ShoppingCartOutlined,
+  PayCircleOutlined
+} from '@ant-design/icons'
 import { useOrderManager, type Order, type UseOrderManagerOptions } from './useOrderManager'
 import { useNavigate } from 'react-router-dom'
+import dayjs from 'dayjs'
 
 const { Title } = Typography
 
@@ -37,32 +53,77 @@ const TicketList = () => {
     localStorage.setItem('orderListPagination', JSON.stringify(pagination))
   }, [pagination])
 
-  const managerOptions = useMemo<UseOrderManagerOptions>(() => ({
-    page: pagination.current,
-    perPage: pagination.pageSize
-  }), [pagination.current, pagination.pageSize])
+  const managerOptions = useMemo<UseOrderManagerOptions>(
+    () => ({
+      page: pagination.current,
+      perPage: pagination.pageSize
+    }),
+    [pagination.current, pagination.pageSize]
+  )
 
-  const { 
-    orders, 
-    total, 
-    isDetailModalVisible, 
-    currentOrder, 
-    showDetailModal, 
+  const {
+    orders,
+    total,
+    isDetailModalVisible,
+    currentOrder,
+    showDetailModal,
     handleCancelDetail,
-    handleCancelOrder,
-    handleDeleteOrder
+    handleCancelOrder
   } = useOrderManager(managerOptions)
 
   const getStatusTag = (status: string) => {
     const statusMap: Record<string, { color: string; text: string }> = {
-      'pending': { color: 'orange', text: '待支付' },
-      'paid': { color: 'green', text: '已支付' },
-      'cancelled': { color: 'gray', text: '已取消' },
-      'completed': { color: 'blue', text: '已完成' },
-      'refunded': { color: 'red', text: '已退款' }
+      pending: { color: 'orange', text: '待支付' },
+      paid: { color: 'green', text: '已支付' },
+      cancelled: { color: 'gray', text: '已取消' },
+      completed: { color: 'blue', text: '已完成' },
+      refunded: { color: 'red', text: '已退款' }
     }
     const config = statusMap[status] || { color: 'default', text: status }
     return <Tag color={config.color}>{config.text}</Tag>
+  }
+
+  const getPaymentMethodLabel = (method: string) => {
+    const methodMap: Record<string, string> = {
+      wechat: '微信支付',
+      alipay: '支付宝',
+      unionpay: '银联支付',
+      balance: '余额支付'
+    }
+    return methodMap[method] || method
+  }
+
+  const formatTime = (timeStr?: string | null): string => {
+    if (!timeStr) return '--'
+    try {
+      return dayjs(timeStr).format('HH:mm')
+    } catch {
+      return timeStr
+    }
+  }
+
+  const formatPassenger = (record: Order): string => {
+    const passengers = parsePassengers(record.passengers)
+    if (passengers.length > 0) {
+      return passengers.map((p) => p.name).join('、')
+    }
+    if (record.passenger_count && record.passenger_count > 1) {
+      return `${record.passenger_name} 等${record.passenger_count}人`
+    }
+    return record.passenger_name
+  }
+
+  const parsePassengers = (
+    passengersStr?: string | null
+  ): { name: string; idCard: string; seatType?: string }[] => {
+    if (!passengersStr) return []
+    try {
+      const data = JSON.parse(passengersStr)
+      if (Array.isArray(data)) return data
+      return []
+    } catch {
+      return []
+    }
   }
 
   const columns: TableColumnsType<Order> = [
@@ -76,37 +137,52 @@ const TicketList = () => {
       title: '车次',
       dataIndex: 'train_num',
       key: 'train_num',
-      width: 100
+      width: 80
     },
     {
       title: '日期',
       dataIndex: 'train_date',
       key: 'train_date',
-      width: 110
+      width: 100
     },
     {
       title: '出发站',
       dataIndex: 'from_station',
       key: 'from_station',
-      width: 100
+      width: 80
     },
     {
       title: '到达站',
       dataIndex: 'to_station',
       key: 'to_station',
-      width: 100
+      width: 80
+    },
+    {
+      title: '出发时间',
+      dataIndex: 'train_start_time',
+      key: 'train_start_time',
+      width: 80,
+      render: (time: string) => formatTime(time)
+    },
+    {
+      title: '到达时间',
+      dataIndex: 'train_end_time',
+      key: 'train_end_time',
+      width: 80,
+      render: (time: string) => formatTime(time)
     },
     {
       title: '座位类型',
       dataIndex: 'seat_type',
       key: 'seat_type',
-      width: 100
+      width: 80
     },
     {
       title: '乘客',
-      dataIndex: 'passenger_name',
-      key: 'passenger_name',
-      width: 80
+      key: 'passenger',
+      width: 120,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      render: (_: any, record: Order) => formatPassenger(record)
     },
     {
       title: '价格',
@@ -126,7 +202,8 @@ const TicketList = () => {
       title: '操作',
       key: 'action',
       fixed: 'right',
-      width: 300,
+      width: 280,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       render: (_: any, record: Order) => (
         <Space size="small">
           <Button
@@ -138,42 +215,59 @@ const TicketList = () => {
           >
             详情
           </Button>
-          <Button
-            type="primary"
-            icon={<ShoppingCartOutlined />}
-            size="small"
-            onClick={() => navigate(`/order?trainNo=${record.train_num}&trainDate=${record.train_date.replace(/-/g, '_')}`)}
-          >
-            预定
-          </Button>
-          <Button
-            icon={<CloseOutlined />}
-            size="small"
-            onClick={() => handleCancelOrder(record.id)}
-          >
-            取消
-          </Button>
-          <Button
-            danger
-            icon={<DeleteOutlined />}
-            size="small"
-            onClick={() => handleDeleteOrder(record.id)}
-          >
-            删除
-          </Button>
+          {record.status === 'pending' ? (
+            <Button
+              type="primary"
+              icon={<PayCircleOutlined />}
+              size="small"
+              onClick={() => navigate(`/payment?orderId=${record.id}`)}
+            >
+              去支付
+            </Button>
+          ) : (
+            <Button
+              type="primary"
+              icon={<ShoppingCartOutlined />}
+              size="small"
+              onClick={() =>
+                navigate(
+                  `/order?trainNo=${record.train_num}&trainDate=${record.train_date.replace(/-/g, '_')}`
+                )
+              }
+            >
+              再次预定
+            </Button>
+          )}
+          {record.status === 'pending' && (
+            <Button
+              icon={<CloseOutlined />}
+              size="small"
+              onClick={() => handleCancelOrder(record.id)}
+            >
+              取消
+            </Button>
+          )}
         </Space>
       )
     }
   ]
 
   return (
-    <div style={{ padding: '20px' }}>
-      <Space direction="vertical" style={{ width: '100%' }}>
+    <div
+      style={{
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        boxSizing: 'border-box'
+      }}
+    >
+      <Space direction="vertical" style={{ width: '100%', flex: 1, minHeight: 0 }}>
         <Space style={{ marginBottom: '20px', justifyContent: 'space-between', width: '100%' }}>
           <Title level={4}>订单查询</Title>
         </Space>
 
-        <div style={{ position: 'relative', height: 'calc(100vh - 200px)' }}>
+        <div style={{ position: 'relative', flex: 1, minHeight: 0 }}>
           <Table
             columns={columns}
             dataSource={orders}
@@ -182,14 +276,14 @@ const TicketList = () => {
               ...pagination,
               total: total,
               onChange: (current, pageSize) => {
-                setPagination(prev => ({
+                setPagination((prev) => ({
                   ...prev,
                   current,
                   pageSize
                 }))
               },
               onShowSizeChange: (_current, pageSize) => {
-                setPagination(prev => ({
+                setPagination((prev) => ({
                   ...prev,
                   current: 1,
                   pageSize
@@ -198,7 +292,7 @@ const TicketList = () => {
             }}
             scroll={{
               x: 1300,
-              y: 'calc(100vh - 300px)'
+              y: 'calc(100vh - 320px)'
             }}
           />
         </div>
@@ -212,7 +306,7 @@ const TicketList = () => {
               关闭
             </Button>
           ]}
-          width={500}
+          width={550}
         >
           {currentOrder && (
             <Descriptions bordered column={1}>
@@ -221,11 +315,66 @@ const TicketList = () => {
               <Descriptions.Item label="出发日期">{currentOrder.train_date}</Descriptions.Item>
               <Descriptions.Item label="出发站">{currentOrder.from_station}</Descriptions.Item>
               <Descriptions.Item label="到达站">{currentOrder.to_station}</Descriptions.Item>
+              <Descriptions.Item label="出发时间">
+                {formatTime(currentOrder.train_start_time)}
+              </Descriptions.Item>
+              <Descriptions.Item label="到达时间">
+                {formatTime(currentOrder.train_end_time)}
+              </Descriptions.Item>
               <Descriptions.Item label="座位类型">{currentOrder.seat_type}</Descriptions.Item>
-              <Descriptions.Item label="乘客姓名">{currentOrder.passenger_name}</Descriptions.Item>
-              <Descriptions.Item label="身份证号">{currentOrder.passenger_id_card}</Descriptions.Item>
+              <Descriptions.Item label="乘客信息">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  {(() => {
+                    const passengers = parsePassengers(currentOrder.passengers)
+                    if (passengers.length > 0) {
+                      return passengers.map((p, idx) => (
+                        <div key={idx} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span>
+                            {p.name}
+                            <span style={{ color: '#999', marginLeft: 8 }}>{p.idCard}</span>
+                          </span>
+                          <Tag color="blue">{p.seatType || currentOrder.seat_type}</Tag>
+                        </div>
+                      ))
+                    }
+                    const count = currentOrder.passenger_count || 1
+                    const rows: JSX.Element[] = []
+                    for (let i = 0; i < count; i++) {
+                      if (i === 0) {
+                        rows.push(
+                          <div key={i} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span>
+                              {currentOrder.passenger_name}
+                              <span style={{ color: '#999', marginLeft: 8 }}>
+                                {currentOrder.passenger_id_card}
+                              </span>
+                            </span>
+                            <Tag color="blue">{currentOrder.seat_type}</Tag>
+                          </div>
+                        )
+                      } else {
+                        rows.push(
+                          <div key={i} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span style={{ color: '#666' }}>同行乘客 {i + 1}</span>
+                            <Tag color="blue">{currentOrder.seat_type}</Tag>
+                          </div>
+                        )
+                      }
+                    }
+                    return rows
+                  })()}
+                </div>
+              </Descriptions.Item>
               <Descriptions.Item label="价格">¥{currentOrder.price.toFixed(2)}</Descriptions.Item>
-              <Descriptions.Item label="状态">{getStatusTag(currentOrder.status)}</Descriptions.Item>
+              <Descriptions.Item label="状态">
+                {getStatusTag(currentOrder.status)}
+              </Descriptions.Item>
+              <Descriptions.Item label="支付方式">
+                {currentOrder.payment_method
+                  ? getPaymentMethodLabel(currentOrder.payment_method)
+                  : '-'}
+              </Descriptions.Item>
+              <Descriptions.Item label="支付时间">{currentOrder.paid_at || '-'}</Descriptions.Item>
               <Descriptions.Item label="创建时间">{currentOrder.created_at}</Descriptions.Item>
               <Descriptions.Item label="更新时间">{currentOrder.updated_at}</Descriptions.Item>
             </Descriptions>

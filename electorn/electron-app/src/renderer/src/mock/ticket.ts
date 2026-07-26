@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { param2Obj } from './utils'
 
 function getCities() {
-  let cities = []
+  const cities = []
   for (let idx = 0; idx < 100; ++idx) {
     cities.push({ value: Mock.Random.city(), label: Mock.Random.city(), code: '' })
   }
@@ -12,25 +12,25 @@ function getCities() {
 }
 
 function getRandomTrainType() {
-  let result = Mock.Random.integer(0, 6)
-  let typeList = 'GDZTYKCS'
+  const result = Mock.Random.integer(0, 6)
+  const typeList = 'GDZTYKCS'
   return typeList[result]
 }
 
 function getNewMockTicketLeftInfo(from, to, date) {
-  let result = {
+  const result = {
     date: date,
     from: from,
     to: to,
     trainList: []
   }
 
-  let trainList = []
+  const trainList = []
   for (let idx = 0; idx < Mock.Random.integer(10, 20); ++idx) {
-    var fromCity = from
-    var toCity = to
-    var type = getRandomTrainType()
-    let trainInfo = {
+    const fromCity = from
+    const toCity = to
+    const type = getRandomTrainType()
+    const trainInfo = {
       trainNo: `${type}${Mock.Random.integer(1, 100)}`,
       station_from: fromCity,
       station_to: toCity,
@@ -61,8 +61,8 @@ function getNewMockTicketLeftInfo(from, to, date) {
 }
 
 function getMockTicketLeftInfo(from: string = '北京', to: string = '上海') {
-  let date = new Date()
-  let ticketInfo = {
+  const date = new Date()
+  const ticketInfo = {
     date: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
     from: '北京',
     to: '上海',
@@ -71,8 +71,8 @@ function getMockTicketLeftInfo(from: string = '北京', to: string = '上海') {
   }
 
   for (let idx = 0; idx < ticketInfo.size; ++idx) {
-    let type = Mock.Random.integer(0, 2) == 0 ? 'G' : 'D'
-    let trainInfo = {
+    const type = Mock.Random.integer(0, 2) == 0 ? 'G' : 'D'
+    const trainInfo = {
       no: `${type}${Mock.Random.integer(1, 100)}`,
       station: `${from} - ${to}`,
       business_special: Mock.Random.integer(0, 20),
@@ -122,7 +122,7 @@ interface StationDetail {
 }
 
 function getMockStations(trainNo: string) {
-  let stations: StationDetail[] = []
+  const stations: StationDetail[] = []
   for (let idx = 0; idx < 10; ++idx) {
     stations.push({
       name: Mock.Random.city(),
@@ -154,7 +154,7 @@ function getMockTrainPrice(trainNo: string) {
 }
 
 function getTrainDetail(trainNo: string, trainDate: string) {
-  let trainInfo = Mock.mock({
+  const trainInfo = Mock.mock({
     trainNo: trainNo,
     trainDate: trainDate,
     trainFrom: '@city()',
@@ -174,7 +174,7 @@ function getTrainDetail(trainNo: string, trainDate: string) {
 
 export const mockFunc = () => {
   Mock.mock(new RegExp('/api/ticket/queryNew'), 'get', function (request) {
-    var queryObj = param2Obj(request.url)
+    const queryObj = param2Obj(request.url)
     console.log(queryObj)
     return api.result(
       200,

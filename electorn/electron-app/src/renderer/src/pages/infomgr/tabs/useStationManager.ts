@@ -1,6 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import { message, Modal } from 'antd'
-import { getStationList, createOrUpdateStation, getStationById, deleteStation } from '@renderer/api/stations'
+import {
+  getStationList,
+  createOrUpdateStation,
+  getStationById,
+  deleteStation
+} from '@renderer/api/stations'
 
 export interface Station {
   id: string
@@ -51,50 +56,53 @@ export const useStationManager = (options: UseStationManagerOptions = {}) => {
   }, [])
 
   // 从API获取车站列表
-  const fetchStations = useCallback(async (currentPage?: number, currentPerPage?: number) => {
-    try {
-      const fetchPage = currentPage || page
-      const fetchPerPage = currentPerPage || perPage
-      const res = await getStationList(fetchPerPage, fetchPage)
-      // 将res.data 数据转换为Station类型
-      if (res?.data?.data) {
-        const stationList: Station[] = res.data.data.map((station: any) => ({
-          id: station.id,
-          name: station.name,
-          code: station.code,
-          city: station.city_name,
-          city_id: station.city_id,
-          level: station.level_name,
-          openDate: formatDate(station.open_date),
-          address: station.address || '',
-          remark: station.keyword
-        }))
-        setStations(stationList)
-        // 设置总记录数
-        if (res.data.total) {
-          setTotal(res.data.total)
+  const fetchStations = useCallback(
+    async (currentPage?: number, currentPerPage?: number) => {
+      try {
+        const fetchPage = currentPage || page
+        const fetchPerPage = currentPerPage || perPage
+        const res = await getStationList(fetchPerPage, fetchPage)
+        // 将res.data 数据转换为Station类型
+        if (res?.data?.data) {
+          const stationList: Station[] = res.data.data.map((station: any) => ({
+            id: station.id,
+            name: station.name,
+            code: station.code,
+            city: station.city_name,
+            city_id: station.city_id,
+            level: station.level_name,
+            openDate: formatDate(station.open_date),
+            address: station.address || '',
+            remark: station.keyword
+          }))
+          setStations(stationList)
+          // 设置总记录数
+          if (res.data.total) {
+            setTotal(res.data.total)
+          }
+        } else if (res?.data && Array.isArray(res.data)) {
+          // 处理不同的响应格式
+          const stationList: Station[] = res.data.map((station: any) => ({
+            id: station.id,
+            name: station.name,
+            code: station.code,
+            city: station.city_name,
+            city_id: station.city_id,
+            level: station.level_name,
+            openDate: formatDate(station.open_date),
+            address: station.address || '',
+            remark: station.keyword
+          }))
+          setStations(stationList)
+        } else {
+          // 处理意外的响应格式
         }
-      } else if (res?.data && Array.isArray(res.data)) {
-        // 处理不同的响应格式
-        const stationList: Station[] = res.data.map((station: any) => ({
-          id: station.id,
-          name: station.name,
-          code: station.code,
-          city: station.city_name,
-          city_id: station.city_id,
-          level: station.level_name,
-          openDate: formatDate(station.open_date),
-          address: station.address || '',
-          remark: station.keyword
-        }))
-        setStations(stationList)
-      } else {
-        // 处理意外的响应格式
+      } catch (err: any) {
+        message.error('获取车站信息失败 :' + err.message || '未知错误')
       }
-    } catch (err: any) {
-      message.error('获取车站信息失败 :' + err.message || '未知错误')
-    }
-  }, [page, perPage, formatDate])
+    },
+    [page, perPage, formatDate]
+  )
 
   // 初始化数据
   useEffect(() => {
@@ -123,7 +131,7 @@ export const useStationManager = (options: UseStationManagerOptions = {}) => {
     try {
       // 调用 getStationById 获取最新的车站信息
       const res = await getStationById(Number(record.id))
-      
+
       if (res?.data?.data) {
         // 使用 API 返回的数据更新 currentStation
         const stationData = res.data.data
@@ -142,7 +150,7 @@ export const useStationManager = (options: UseStationManagerOptions = {}) => {
         // 如果 API 调用失败，使用传入的 record 数据
         setCurrentStation(record)
       }
-      
+
       setIsEditing(true)
       setIsModalVisible(true)
     } catch (err: any) {
@@ -161,12 +169,12 @@ export const useStationManager = (options: UseStationManagerOptions = {}) => {
 
   // 车站等级映射
   const levelMap: Record<string, number> = {
-    '特等站': 0,
-    '一等站': 1,
-    '二等站': 2,
-    '三等站': 3,
-    '四等站': 4,
-    '五等站': 5
+    特等站: 0,
+    一等站: 1,
+    二等站: 2,
+    三等站: 3,
+    四等站: 4,
+    五等站: 5
   }
 
   // 提交表单

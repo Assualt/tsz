@@ -120,15 +120,18 @@ export const addPassenger = (passenger: {
  * @param id 乘客ID
  * @param passenger 乘客信息
  */
-export const updatePassenger = (id: string, passenger: {
-  name: string
-  id_card: string
-  id_card_type: string
-  type: string
-  phone?: string
-  email?: string
-  remark?: string
-}) => {
+export const updatePassenger = (
+  id: string,
+  passenger: {
+    name: string
+    id_card: string
+    id_card_type: string
+    type: string
+    phone?: string
+    email?: string
+    remark?: string
+  }
+) => {
   return api.put(`/passengers/${id}`, passenger)
 }
 

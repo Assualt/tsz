@@ -3,8 +3,8 @@ import Home from '@renderer/pages/home'
 import PageNotFound from '@renderer/pages/common/404'
 import RouterBefore from './router'
 import Login from '@renderer/pages/login/index'
+import Payment from '@renderer/pages/ticket/tabs/Payment'
 
-// 定义路由配置
 const routes = [
   {
     path: '/',
@@ -29,6 +29,10 @@ const routes = [
       {
         path: 'orderlist',
         element: <Home />
+      },
+      {
+        path: 'payment',
+        element: <Payment />
       },
       {
         path: 'userInfo',
@@ -62,7 +66,6 @@ const routes = [
   }
 ]
 
-// 使用 HashRouter 以支持 electron 环境
 const router = createHashRouter(routes)
 
 export default router

@@ -29,7 +29,7 @@ export const useUserPolling = (options: UseUserPollingOptions = {}) => {
     try {
       const response = await getCurrentUser()
       console.log('User polling - getCurrentUser response:', response)
-      
+
       if (response?.code === 0 || response?.status === 200) {
         onSuccess?.(response.data)
       } else {
@@ -38,7 +38,7 @@ export const useUserPolling = (options: UseUserPollingOptions = {}) => {
     } catch (error: any) {
       console.error('User polling - fetch user info failed:', error)
       onError?.(error)
-      
+
       // 如果是401或403错误，说明token已过期，需要重新登录
       if (error.response?.status === 401 || error.response?.status === 403) {
         message.error('登录已过期，请重新登录')
@@ -56,10 +56,10 @@ export const useUserPolling = (options: UseUserPollingOptions = {}) => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
     }
-    
+
     // 立即执行一次
     fetchUserInfo()
-    
+
     // 设置定时轮询
     intervalRef.current = setInterval(() => {
       fetchUserInfo()

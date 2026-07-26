@@ -79,7 +79,10 @@ const checkLoginStatus = async (): Promise<boolean> => {
 
     try {
       const parsedUserInfo = JSON.parse(userInfo)
-      if (!parsedUserInfo?.userName && !parsedUserInfo?.username || !parsedUserInfo?.userId && !parsedUserInfo?.user_id) {
+      if (
+        (!parsedUserInfo?.userName && !parsedUserInfo?.username) ||
+        (!parsedUserInfo?.userId && !parsedUserInfo?.user_id)
+      ) {
         localStorage.removeItem('stoken')
         localStorage.removeItem('userInfo')
         return false
@@ -101,6 +104,8 @@ const RouterConfig: RouteConfig[] = [
   { path: '/login', needLogin: false, title: '登录' },
   { path: '/home', needLogin: true, title: '主页', isMain: true },
   { path: '/order', needLogin: true, title: '订单', isMain: true },
+  { path: '/orderlist', needLogin: true, title: '订单列表', isMain: true },
+  { path: '/payment', needLogin: true, title: '支付' },
   { path: '/404', needLogin: false, title: '页面未找到' },
   { path: '/chat', needLogin: true, title: '聊天', isMain: true }
 ]

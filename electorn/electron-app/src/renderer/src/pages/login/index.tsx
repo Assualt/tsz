@@ -1,11 +1,19 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Form, Button, Input, message, Checkbox, Divider, Modal } from 'antd'
-import { UserOutlined, LockOutlined, MailOutlined, SafetyCertificateOutlined, RocketOutlined, DoubleRightOutlined } from '@ant-design/icons'
+import {
+  UserOutlined,
+  LockOutlined,
+  MailOutlined,
+  SafetyCertificateOutlined,
+  RocketOutlined,
+  DoubleRightOutlined
+} from '@ant-design/icons'
 import type { FormInstance } from 'antd/es/form'
 import { login, register, getVerifyCode } from '@/api/user'
 import { api } from '@renderer/api/index'
 import { marked } from 'marked'
 import DataType from './constant'
+import Copyright from '@renderer/components/Copyright'
 import './style.css'
 
 enum LogType {
@@ -135,13 +143,16 @@ const SlideVerify: React.FC<{
     setStartX(e.clientX - sliderLeft)
   }
 
-  const handleMouseMove = useCallback((e: MouseEvent): void => {
-    if (!isDragging || isVerified) return
-    let newLeft = e.clientX - startX
-    if (newLeft < 0) newLeft = 0
-    if (newLeft > trackWidth - sliderWidth) newLeft = trackWidth - sliderWidth
-    setSliderLeft(newLeft)
-  }, [isDragging, isVerified, startX])
+  const handleMouseMove = useCallback(
+    (e: MouseEvent): void => {
+      if (!isDragging || isVerified) return
+      let newLeft = e.clientX - startX
+      if (newLeft < 0) newLeft = 0
+      if (newLeft > trackWidth - sliderWidth) newLeft = trackWidth - sliderWidth
+      setSliderLeft(newLeft)
+    },
+    [isDragging, isVerified, startX]
+  )
 
   const handleMouseUp = useCallback((): void => {
     if (!isDragging) return
@@ -201,10 +212,7 @@ const SlideVerify: React.FC<{
       <div className="slide-verify-container">
         <p className="slide-verify-tip">请拖动滑块完成验证</p>
         <div className="slide-verify-track" ref={trackRef}>
-          <div
-            className="slide-verify-progress"
-            style={{ width: progressWidth }}
-          />
+          <div className="slide-verify-progress" style={{ width: progressWidth }} />
           {!isVerified && (
             <div
               className="slide-verify-slider"
@@ -214,15 +222,9 @@ const SlideVerify: React.FC<{
               <DoubleRightOutlined />
             </div>
           )}
-          {isVerified && (
-            <div className="slide-verify-success">
-              ✓ 验证成功
-            </div>
-          )}
+          {isVerified && <div className="slide-verify-success">✓ 验证成功</div>}
           {!isVerified && sliderLeft === 0 && (
-            <div className="slide-verify-placeholder">
-              向右拖动滑块完成验证
-            </div>
+            <div className="slide-verify-placeholder">向右拖动滑块完成验证</div>
           )}
         </div>
       </div>
@@ -424,9 +426,25 @@ const Login: React.FC<LoginProps> = ({ setSpin }) => {
           >
             <span className="agreement-text">
               我已阅读并同意
-              <a href="#" onClick={(e) => { e.preventDefault(); openPolicyModal('agreement') }}>《用户服务协议》</a>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault()
+                  openPolicyModal('agreement')
+                }}
+              >
+                《用户服务协议》
+              </a>
               和
-              <a href="#" onClick={(e) => { e.preventDefault(); openPolicyModal('privacy') }}>《隐私政策》</a>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault()
+                  openPolicyModal('privacy')
+                }}
+              >
+                《隐私政策》
+              </a>
             </span>
           </Checkbox>
         </div>
@@ -529,10 +547,8 @@ const Login: React.FC<LoginProps> = ({ setSpin }) => {
             {logType === LogType.Login ? loginForm() : registerForm()}
           </div>
         </div>
-        <div className="login-footer">
-          <span>© 2024-2026 12306 抢票助手</span>
-          <span className="footer-divider">|</span>
-          <span>Designed with ❤</span>
+        <div className="login-footer-wrapper">
+          <Copyright />
         </div>
       </div>
       <SlideVerify

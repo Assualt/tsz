@@ -40,55 +40,72 @@ export const useOrderManager = (options: UseOrderManagerOptions = {}) => {
     return date.toISOString().split('T')[0]
   }, [])
 
-  const fetchOrders = useCallback(async (currentPage?: number, currentPerPage?: number) => {
-    try {
-      const fetchPage = currentPage || page
-      const fetchPerPage = currentPerPage || perPage
-      const res = await getOrderList(fetchPerPage, fetchPage)
-      
-      if (res?.data?.data) {
-        const orderList: OrderType[] = res.data.data.map((order: any) => ({
-          id: order.id,
-          order_no: order.order_no,
-          train_num: order.train_num,
-          train_date: formatDate(order.train_date),
-          from_station: order.from_station,
-          to_station: order.to_station,
-          seat_type: order.seat_type,
-          passenger_name: order.passenger_name,
-          passenger_id_card: order.passenger_id_card,
-          price: order.price,
-          status: order.status,
-          created_at: formatDateTime(order.created_at),
-          updated_at: formatDateTime(order.updated_at)
-        }))
-        setOrders(orderList)
-        if (res.data.total) {
-          setTotal(res.data.total)
+  const fetchOrders = useCallback(
+    async (currentPage?: number, currentPerPage?: number) => {
+      try {
+        const fetchPage = currentPage || page
+        const fetchPerPage = currentPerPage || perPage
+        const res = await getOrderList(fetchPerPage, fetchPage)
+
+        if (res?.data?.data) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const orderList: OrderType[] = res.data.data.map((order: any) => ({
+            id: order.id,
+            order_no: order.order_no,
+            train_num: order.train_num,
+            train_date: formatDate(order.train_date),
+            train_start_time: order.train_start_time,
+            train_end_time: order.train_end_time,
+            from_station: order.from_station,
+            to_station: order.to_station,
+            seat_type: order.seat_type,
+            passenger_name: order.passenger_name,
+            passenger_id_card: order.passenger_id_card,
+            passenger_count: order.passenger_count || 1,
+            passengers: order.passengers || null,
+            price: order.price,
+            status: order.status,
+            payment_method: order.payment_method,
+            paid_at: formatDateTime(order.paid_at),
+            created_at: formatDateTime(order.created_at),
+            updated_at: formatDateTime(order.updated_at)
+          }))
+          setOrders(orderList)
+          if (res.data.total) {
+            setTotal(res.data.total)
+          }
+        } else if (res?.data && Array.isArray(res.data)) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const orderList: OrderType[] = res.data.map((order: any) => ({
+            id: order.id,
+            order_no: order.order_no,
+            train_num: order.train_num,
+            train_date: formatDate(order.train_date),
+            train_start_time: order.train_start_time,
+            train_end_time: order.train_end_time,
+            from_station: order.from_station,
+            to_station: order.to_station,
+            seat_type: order.seat_type,
+            passenger_name: order.passenger_name,
+            passenger_id_card: order.passenger_id_card,
+            passenger_count: order.passenger_count || 1,
+            passengers: order.passengers || null,
+            price: order.price,
+            status: order.status,
+            payment_method: order.payment_method,
+            paid_at: formatDateTime(order.paid_at),
+            created_at: formatDateTime(order.created_at),
+            updated_at: formatDateTime(order.updated_at)
+          }))
+          setOrders(orderList)
+          setTotal(orderList.length)
         }
-      } else if (res?.data && Array.isArray(res.data)) {
-        const orderList: OrderType[] = res.data.map((order: any) => ({
-          id: order.id,
-          order_no: order.order_no,
-          train_num: order.train_num,
-          train_date: formatDate(order.train_date),
-          from_station: order.from_station,
-          to_station: order.to_station,
-          seat_type: order.seat_type,
-          passenger_name: order.passenger_name,
-          passenger_id_card: order.passenger_id_card,
-          price: order.price,
-          status: order.status,
-          created_at: formatDateTime(order.created_at),
-          updated_at: formatDateTime(order.updated_at)
-        }))
-        setOrders(orderList)
-        setTotal(orderList.length)
+      } catch (err) {
+        message.error('获取订单信息失败: ' + (err instanceof Error ? err.message : '未知错误'))
       }
-    } catch (err: any) {
-      message.error('获取订单信息失败: ' + err.message || '未知错误')
-    }
-  }, [page, perPage, formatDate, formatDateTime])
+    },
+    [page, perPage, formatDate, formatDateTime]
+  )
 
   useEffect(() => {
     fetchOrders()
@@ -104,21 +121,27 @@ export const useOrderManager = (options: UseOrderManagerOptions = {}) => {
           order_no: orderData.order_no,
           train_num: orderData.train_num,
           train_date: formatDate(orderData.train_date),
+          train_start_time: orderData.train_start_time,
+          train_end_time: orderData.train_end_time,
           from_station: orderData.from_station,
           to_station: orderData.to_station,
           seat_type: orderData.seat_type,
           passenger_name: orderData.passenger_name,
           passenger_id_card: orderData.passenger_id_card,
+          passenger_count: orderData.passenger_count || 1,
+          passengers: orderData.passengers || null,
           price: orderData.price,
           status: orderData.status,
+          payment_method: orderData.payment_method,
+          paid_at: formatDateTime(orderData.paid_at),
           created_at: formatDateTime(orderData.created_at),
           updated_at: formatDateTime(orderData.updated_at)
         })
       } else {
         setCurrentOrder(record)
       }
-    } catch (err: any) {
-      message.error('获取订单详情失败: ' + err.message || '未知错误')
+    } catch (err) {
+      message.error('获取订单详情失败: ' + (err instanceof Error ? err.message : '未知错误'))
       setCurrentOrder(record)
     }
     setIsDetailModalVisible(true)
@@ -129,7 +152,7 @@ export const useOrderManager = (options: UseOrderManagerOptions = {}) => {
     setCurrentOrder(null)
   }
 
-  const handleCancelOrder = (id: string) => {
+  const handleCancelOrder = (id: number) => {
     Modal.confirm({
       title: '确定取消该订单吗？',
       content: '取消后订单状态将变更为已取消',
@@ -137,17 +160,17 @@ export const useOrderManager = (options: UseOrderManagerOptions = {}) => {
       cancelText: '取消',
       onOk: async () => {
         try {
-          await cancelOrder(Number(id))
+          await cancelOrder(id)
           message.success('订单已取消')
           await fetchOrders()
-        } catch (err: any) {
-          message.error('取消订单失败: ' + err.message || '未知错误')
+        } catch (err) {
+          message.error('取消订单失败: ' + (err instanceof Error ? err.message : '未知错误'))
         }
       }
     })
   }
 
-  const handleDeleteOrder = (id: string) => {
+  const handleDeleteOrder = (id: number) => {
     Modal.confirm({
       title: '确定删除该订单吗？',
       content: '删除后无法恢复',
@@ -155,11 +178,11 @@ export const useOrderManager = (options: UseOrderManagerOptions = {}) => {
       cancelText: '取消',
       onOk: async () => {
         try {
-          await deleteOrder(Number(id))
+          await deleteOrder(id)
           message.success('订单已删除')
           await fetchOrders()
-        } catch (err: any) {
-          message.error('删除订单失败: ' + err.message || '未知错误')
+        } catch (err) {
+          message.error('删除订单失败: ' + (err instanceof Error ? err.message : '未知错误'))
         }
       }
     })

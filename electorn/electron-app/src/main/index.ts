@@ -5,6 +5,7 @@ import icon from '../../resources/icon.png?asset'
 
 // 存储所有窗口实例
 const all_windows = new Map()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let loginData = null
 function createWindowConfig(options = {}) {
   return {
@@ -35,8 +36,8 @@ async function loadWindowContent(window: BrowserWindow) {
   }
 }
 
-function closeAllChildWindows(): void{
-  for (const [id, win] of all_windows) {
+function closeAllChildWindows(): void {
+  for (const [, win] of all_windows) {
     if (!win.isDestroyed()) {
       win.close()
     }
@@ -55,7 +56,7 @@ function createWindow(): void {
   setupWindow(mainWindow)
 }
 
-async function setupWindow(window: BrowserWindow) {
+async function setupWindow(window: BrowserWindow): Promise<BrowserWindow> {
   window.on('ready-to-show', () => {
     window.show()
   })
@@ -175,13 +176,17 @@ app.whenReady().then(() => {
     try {
       closeAllChildWindows()
       loginData = null
-      
+
       const currentWindow = BrowserWindow.fromWebContents(event.sender)
       if (currentWindow) {
-        currentWindow.webContents.executeJavaScript(`
+        currentWindow.webContents
+          .executeJavaScript(
+            `
           document.body.classList.add('logout-fade-out');
-        `).catch(() => {})
-        
+        `
+          )
+          .catch(() => {})
+
         setTimeout(() => {
           if (!currentWindow.isDestroyed()) {
             currentWindow.close()
@@ -195,7 +200,7 @@ app.whenReady().then(() => {
           createWindow()
         }, 100)
       }
-      
+
       return true
     } catch (error) {
       console.error('Error during logout:', error)

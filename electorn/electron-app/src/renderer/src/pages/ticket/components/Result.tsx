@@ -1,11 +1,18 @@
 import React from 'react'
-import { Layout, Space, Table, TableProps, Button, Popover, message } from 'antd'
+import { Layout, Space, Table, TableProps, Button, Popover, message, Spin } from 'antd'
 import { SearchResultField, TrainStation, SeatLeftTicketPrice } from '../constants'
 import dayjs from 'dayjs'
 import { fetchStationByTrainNo, fetchPriceByTrainNo } from '@renderer/api/ticket'
 import { useNavigate } from 'react-router-dom'
 
-const Result = ({ isSearch, searchResult, searchParam }) => {
+interface ResultProps {
+  isSearch: boolean
+  searchResult: SearchResultField[]
+  searchParam: any
+  showResult?: boolean
+}
+
+const Result = ({ isSearch, searchResult, searchParam, showResult }: ResultProps) => {
   const [popOverContent, setPopOverContent] = React.useState<JSX.Element>()
   const [expandPriceTblData, setExpandPriceTblData] = React.useState<SeatLeftTicketPrice[]>([])
   const [expandTrainKey, setExpandTrainKey] = React.useState<React.Key[]>([])
@@ -96,7 +103,10 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
               content={popOverContent}
               trigger="click"
             >
-              <Button type="link" onClick={() => updatePopOverContent(record.train_num, record.key)}>
+              <Button
+                type="link"
+                onClick={() => updatePopOverContent(record.train_num, record.key)}
+              >
                 {record.train_num}
               </Button>
             </Popover>
@@ -412,53 +422,58 @@ const Result = ({ isSearch, searchResult, searchParam }) => {
         marginTop: '2vh'
       }}
     >
-      <Space direction="vertical" size={20}>
-        <h2>
-          {searchParam.from} - {searchParam.to} ({searchParam.date.format('YYYY-MM-DD dddd')}） 共计
-          {searchResult.length}个车次
-        </h2>
+      <Spin spinning={isSearch} tip="正在查询车票...">
+        <div className={`result-container ${showResult ? 'result-visible' : 'result-hidden'}`}>
+          <Space direction="vertical" size={20}>
+            <h2>
+              {searchParam.from} - {searchParam.to} ({searchParam.date.format('YYYY-MM-DD dddd')}）
+              共计
+              {searchResult.length}个车次
+            </h2>
 
-        <Table<SearchResultField>
-          onRow={(record) => ({
-            onClick: (): void => {
-              if (expandTrainKey[0] === record.key) {
-                setExpandTrainKey([])
-              } else {
-                updatePopOverContent(record.trainNo, record.key, true)
-              }
-            }
-          })}
-          dataSource={searchResult}
-          columns={searchResultColumns}
-          pagination={{
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true
-          }}
-          loading={isSearch}
-          scroll={{ y: 500 }}
-          style={{ maxHeight: '400px', overflowY: 'scroll', cursor: 'pointer' }}
-          expandable={{
-            expandedRowRender,
-            expandRowByClick: true,
-            onExpand(expanded, record) {
-              if (!expanded) {
-                return
-              }
-              fetchPriceByTrainNo(record.train_num)
-                .then((res) => {
-                  console.log(res.data)
-                  setExpandPriceTblData([res.data])
-                })
-                .catch((err) => {
-                  message.error(`请求 ${record.train_num}票价失败 ${err}`)
-                })
-            },
-            expandedRowKeys: expandTrainKey,
-            showExpandColumn: false
-          }}
-        />
-      </Space>
+            <Table<SearchResultField>
+              onRow={(record) => ({
+                onClick: (): void => {
+                  if (expandTrainKey[0] === record.key) {
+                    setExpandTrainKey([])
+                  } else {
+                    updatePopOverContent(record.trainNo, record.key, true)
+                  }
+                }
+              })}
+              dataSource={searchResult}
+              columns={searchResultColumns}
+              pagination={{
+                pageSize: 10,
+                showSizeChanger: true,
+                showQuickJumper: true
+              }}
+              loading={isSearch}
+              scroll={{ y: 500 }}
+              style={{ maxHeight: '400px', overflowY: 'scroll', cursor: 'pointer' }}
+              expandable={{
+                expandedRowRender,
+                expandRowByClick: true,
+                onExpand(expanded, record) {
+                  if (!expanded) {
+                    return
+                  }
+                  fetchPriceByTrainNo(record.train_num)
+                    .then((res) => {
+                      console.log(res.data)
+                      setExpandPriceTblData([res.data])
+                    })
+                    .catch((err) => {
+                      message.error(`请求 ${record.train_num}票价失败 ${err}`)
+                    })
+                },
+                expandedRowKeys: expandTrainKey,
+                showExpandColumn: false
+              }}
+            />
+          </Space>
+        </div>
+      </Spin>
     </Layout>
   )
 }

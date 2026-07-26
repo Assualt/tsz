@@ -17,7 +17,7 @@ const getChatList = () => {
   })
 }
 
-let userChatList = []
+const userChatList = []
 
 const getChatHistory = () => {
   const mockData = Mock.mock({

@@ -15,7 +15,7 @@ export function fetchAllCities() {
 
 export function fetchTicketInfoNew(from: string, to: string, date: string) {
   const fetchUrl = '/tickets/query?from_station=' + from + '&to_station=' + to + '&date=' + date
-  let result = api.get(fetchUrl)
+  const result = api.get(fetchUrl)
   console.log(result)
   return result
 }

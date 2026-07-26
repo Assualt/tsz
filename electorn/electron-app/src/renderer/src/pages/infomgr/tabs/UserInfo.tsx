@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Card, Button, Form, Input, Select, message, Space, Typography, Avatar, Upload } from 'antd'
-import { EditOutlined, SaveOutlined, CloseOutlined, UserOutlined, UploadOutlined } from '@ant-design/icons'
+import {
+  EditOutlined,
+  SaveOutlined,
+  CloseOutlined,
+  UserOutlined,
+  UploadOutlined
+} from '@ant-design/icons'
 import { getCurrentUser } from '@renderer/api/user'
 
 const { Title, Paragraph } = Typography
@@ -39,13 +45,15 @@ const UserInfo = () => {
 
   // 加载用户信息
   useEffect(() => {
-    getCurrentUser().then(res => {
-      const userData = res?.data
-      setUser(userData)
-      form.setFieldsValue(userData)
-    }).catch(err => {
-      message.error('获取用户信息失败: ' + (err.message || '未知错误'))
-    })
+    getCurrentUser()
+      .then((res) => {
+        const userData = res?.data
+        setUser(userData)
+        form.setFieldsValue(userData)
+      })
+      .catch((err) => {
+        message.error('获取用户信息失败: ' + (err.message || '未知错误'))
+      })
   }, [form])
 
   // 开始编辑
@@ -62,16 +70,19 @@ const UserInfo = () => {
 
   // 保存修改
   const saveEdit = (): void => {
-    form.validateFields().then(values => {
-      setUser({
-        ...user,
-        ...values
+    form
+      .validateFields()
+      .then((values) => {
+        setUser({
+          ...user,
+          ...values
+        })
+        setIsEditing(false)
+        message.success('个人信息更新成功')
       })
-      setIsEditing(false)
-      message.success('个人信息更新成功')
-    }).catch(errorInfo => {
-      message.error('表单验证失败:', errorInfo)
-    })
+      .catch((errorInfo) => {
+        message.error('表单验证失败:', errorInfo)
+      })
   }
 
   // 处理头像上传
@@ -111,7 +122,14 @@ const UserInfo = () => {
         >
           <div style={{ display: 'flex', gap: '30px' }}>
             {/* 左侧：头像和简略信息 */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '200px' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                minWidth: '200px'
+              }}
+            >
               {/* 头像 */}
               <div style={{ position: 'relative', marginBottom: '20px' }}>
                 <Avatar
@@ -122,7 +140,16 @@ const UserInfo = () => {
                   onClick={handleAvatarClick}
                 />
                 {isEditing && (
-                  <div style={{ position: 'absolute', bottom: 0, right: 0, backgroundColor: 'white', borderRadius: '50%', padding: '5px' }}>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      right: 0,
+                      backgroundColor: 'white',
+                      borderRadius: '50%',
+                      padding: '5px'
+                    }}
+                  >
                     <UploadOutlined style={{ color: '#1890ff' }} />
                   </div>
                 )}
@@ -141,9 +168,13 @@ const UserInfo = () => {
 
               {/* 简略信息 */}
               <Space direction="vertical" style={{ width: '100%', alignItems: 'center' }}>
-                <Paragraph strong style={{ margin: 0, fontSize: '16px' }}>{user.realName}</Paragraph>
+                <Paragraph strong style={{ margin: 0, fontSize: '16px' }}>
+                  {user.realName}
+                </Paragraph>
                 <Paragraph style={{ margin: 0, color: '#666' }}>{user.username}</Paragraph>
-                <Paragraph style={{ margin: 0, color: '#666' }}>{user.gender} | {user.age}岁</Paragraph>
+                <Paragraph style={{ margin: 0, color: '#666' }}>
+                  {user.gender} | {user.age}岁
+                </Paragraph>
                 <Paragraph style={{ margin: 0, color: '#666' }}>{user.phone}</Paragraph>
               </Space>
             </div>
@@ -151,10 +182,7 @@ const UserInfo = () => {
             {/* 右侧：详细信息 */}
             <div style={{ flex: 1 }}>
               {isEditing ? (
-                <Form
-                  form={form}
-                  layout="vertical"
-                >
+                <Form form={form} layout="vertical">
                   <Form.Item
                     name="username"
                     label="用户名"
@@ -217,10 +245,7 @@ const UserInfo = () => {
                   >
                     <Input placeholder="请输入地址" />
                   </Form.Item>
-                  <Form.Item
-                    name="remark"
-                    label="备注"
-                  >
+                  <Form.Item name="remark" label="备注">
                     <Input.TextArea rows={4} placeholder="请输入备注信息" />
                   </Form.Item>
                   <Form.Item>
@@ -237,13 +262,19 @@ const UserInfo = () => {
               ) : (
                 <Space direction="vertical" style={{ width: '100%' }}>
                   <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                    <Paragraph><strong>邮箱:</strong> {user.email}</Paragraph>
+                    <Paragraph>
+                      <strong>邮箱:</strong> {user.email}
+                    </Paragraph>
                   </Space>
                   <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                    <Paragraph><strong>地址:</strong> {user.address}</Paragraph>
+                    <Paragraph>
+                      <strong>地址:</strong> {user.address}
+                    </Paragraph>
                   </Space>
                   <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                    <Paragraph><strong>备注:</strong> {user.remark}</Paragraph>
+                    <Paragraph>
+                      <strong>备注:</strong> {user.remark}
+                    </Paragraph>
                   </Space>
                 </Space>
               )}

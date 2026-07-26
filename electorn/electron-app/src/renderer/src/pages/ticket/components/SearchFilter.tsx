@@ -14,7 +14,7 @@ const onFinishFailed = (errorInfo: any) => {
 }
 
 const getTrainLabel = (value: string) => {
-  let trainLabels = {
+  const trainLabels = {
     G: '高铁',
     D: '动车',
     K: '快速',
@@ -29,7 +29,7 @@ const getTrainLabel = (value: string) => {
 }
 
 const getTrainTypeLabel = (value: string[]) => {
-  let trainTypeLabels: { code: string; label: string }[] = []
+  const trainTypeLabels: { code: string; label: string }[] = []
   for (let i = 0; i < value.length; ++i) {
     trainTypeLabels.push({ code: value[i], label: getTrainLabel(value[i]) })
   }
@@ -41,7 +41,7 @@ const getStationLabel = (stations: string[]) => {
     return []
   }
 
-  let stationLabels: DataType[] = []
+  const stationLabels: DataType[] = []
   for (let i = 0; i < stations.length; ++i) {
     stationLabels.push({ code: stations[i], label: stations[i] })
   }

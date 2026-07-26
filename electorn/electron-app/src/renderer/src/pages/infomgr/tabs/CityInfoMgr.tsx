@@ -1,5 +1,16 @@
 import React, { useState, useMemo } from 'react'
-import { Table, Button, Modal, Form, Input, Select, Space, Typography, type TableColumnsType, type PaginationProps } from 'antd'
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Select,
+  Space,
+  Typography,
+  type TableColumnsType,
+  type PaginationProps
+} from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, SaveOutlined } from '@ant-design/icons'
 import { useCityManager, type City, type UseCityManagerOptions } from './useCityManager'
 
@@ -14,28 +25,31 @@ const CityInfoMgr = () => {
     pageSizeOptions: ['10', '20', '50', '100'],
     showTotal: (total) => `共 ${total} 条记录`
   })
-  
-  // 使用 useMemo 确保 pagination 变化时重新计算 managerOptions
-  const managerOptions = useMemo<UseCityManagerOptions>(() => ({
-    page: pagination.current,
-    perPage: pagination.pageSize
-  }), [pagination.current, pagination.pageSize])
 
-  const { 
-    cities, 
+  // 使用 useMemo 确保 pagination 变化时重新计算 managerOptions
+  const managerOptions = useMemo<UseCityManagerOptions>(
+    () => ({
+      page: pagination.current,
+      perPage: pagination.pageSize
+    }),
+    [pagination.current, pagination.pageSize]
+  )
+
+  const {
+    cities,
     total,
-    isModalVisible, 
-    isEditing, 
-    currentCity, 
+    isModalVisible,
+    isEditing,
+    currentCity,
     loading,
-    showAddModal, 
-    showEditModal, 
-    handleCancel, 
+    showAddModal,
+    showEditModal,
+    handleCancel,
     handleOk,
     handleDelete,
     fetchCities
   } = useCityManager(managerOptions)
-  
+
   const [form] = Form.useForm()
 
   // 格式化日期，将 ISO 格式的日期转换为年月日时分秒格式
@@ -143,11 +157,13 @@ const CityInfoMgr = () => {
 
   // 处理表单提交
   const handleFormSubmit = () => {
-    form.validateFields().then(values => {
-      handleOk(values as City)
-      form.resetFields()
-    }).catch(() => {
-    })
+    form
+      .validateFields()
+      .then((values) => {
+        handleOk(values as City)
+        form.resetFields()
+      })
+      .catch(() => {})
   }
 
   // 处理添加按钮点击
@@ -161,11 +177,7 @@ const CityInfoMgr = () => {
       <Space direction="vertical" style={{ width: '100%' }}>
         <Space style={{ marginBottom: '20px', justifyContent: 'space-between', width: '100%' }}>
           <Title level={4}>城市信息管理</Title>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={handleAddClick}
-          >
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAddClick}>
             添加城市
           </Button>
         </Space>
@@ -180,14 +192,14 @@ const CityInfoMgr = () => {
               ...pagination,
               total: total,
               onChange: (current, pageSize) => {
-                setPagination(prev => ({
+                setPagination((prev) => ({
                   ...prev,
                   current,
                   pageSize
                 }))
               },
               onShowSizeChange: (current, pageSize) => {
-                setPagination(prev => ({
+                setPagination((prev) => ({
                   ...prev,
                   current: 1,
                   pageSize
@@ -215,11 +227,7 @@ const CityInfoMgr = () => {
             </Button>
           ]}
         >
-          <Form
-            form={form}
-            layout="vertical"
-            initialValues={currentCity}
-          >
+          <Form form={form} layout="vertical" initialValues={currentCity}>
             <Form.Item
               name="name"
               label="城市名称"
@@ -271,11 +279,7 @@ const CityInfoMgr = () => {
             >
               <Input placeholder="请输入人口数量，如：1000万" />
             </Form.Item>
-            <Form.Item
-              name="area"
-              label="面积"
-              rules={[{ required: true, message: '请输入面积' }]}
-            >
+            <Form.Item name="area" label="面积" rules={[{ required: true, message: '请输入面积' }]}>
               <Input placeholder="请输入面积，如：10000平方公里" />
             </Form.Item>
             <Form.Item
@@ -285,10 +289,7 @@ const CityInfoMgr = () => {
             >
               <Input placeholder="请输入邮编" />
             </Form.Item>
-            <Form.Item
-              name="description"
-              label="描述"
-            >
+            <Form.Item name="description" label="描述">
               <Input.TextArea rows={4} placeholder="请输入城市描述" />
             </Form.Item>
           </Form>
