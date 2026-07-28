@@ -85,7 +85,16 @@ class ApiClient {
         })
 
         // 处理 401 或 403 错误，跳转到登录页面
-        if (error.response?.status === 401 || error.response?.status === 403) {
+        // 扫码登录相关接口不执行自动跳转，交给组件自行处理
+        const url = error.config?.url || ''
+        const isQRCodeEndpoint =
+          url.includes('/auth/qr-code') ||
+          url.includes('/auth/qr-status') ||
+          url.includes('/auth/qr-confirm')
+        if (
+          (error.response?.status === 401 || error.response?.status === 403) &&
+          !isQRCodeEndpoint
+        ) {
           localStorage.removeItem('stoken')
           localStorage.removeItem('userInfo')
           // 跳转到登录页面

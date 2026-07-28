@@ -20,11 +20,13 @@ class Settings(BaseSettings):
     REDIS_KEY_LOGIN_PREFIX: str = "login:"
     REDIS_KEY_CODE_PREFIX: str = "code:"
     REDIS_KEY_SESSION_PREFIX: str = "session:"
+    REDIS_KEY_QR_CODE_PREFIX: str = "qr_code:"
     
     # Redis 过期时间配置（秒）
     REDIS_LOGIN_EXPIRE: int = 3600  # 1小时
     REDIS_CODE_EXPIRE: int = 300  # 5分钟
     REDIS_SESSION_EXPIRE: int = 86400  # 24小时
+    REDIS_QR_CODE_EXPIRE: int = 60  # 二维码1分钟过期
 
     class Config:
         env_file = ".env"

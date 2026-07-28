@@ -77,8 +77,20 @@ class ExceptionMiddleware(BaseHTTPMiddleware):
             '/api/v1/auth/login',
             '/api/v1/auth/register',
             '/api/v1/auth/code',
+            '/api/v1/auth/qr-code',
+            '/api/v1/auth/qr-confirm',
             '/api/v1/static/user-agreement',
             '/api/v1/static/privacy-policy',
             '/api/v1/static/about'
         ]
-        return request.url.path not in white_list
+        # 检查路径前缀（用于带路径参数的接口，如 /api/v1/auth/qr-status/{session_id}）
+        prefix_white_list = [
+            '/api/v1/auth/qr-status'
+        ]
+        path = request.url.path
+        if path in white_list:
+            return False
+        for prefix in prefix_white_list:
+            if path.startswith(prefix):
+                return False
+        return True

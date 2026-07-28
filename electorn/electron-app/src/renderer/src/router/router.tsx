@@ -118,6 +118,8 @@ export default function RouterBefore(): React.FC {
 
   // 处理登录状态同步
   useEffect(() => {
+    if (!window.api) return
+
     const handleRequestLoginState = async (_, targetId: number): Promise<void> => {
       const data: LoginData = {
         token: localStorage.getItem('stoken') || '',

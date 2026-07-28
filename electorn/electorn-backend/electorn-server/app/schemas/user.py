@@ -52,3 +52,13 @@ class CodeReq(BaseModel):
 class LoginRequest(BaseModel):
     username: str
     password: str
+
+class QRCodeRequest(BaseModel):
+    pass
+
+class QRCodeStatusRequest(BaseModel):
+    session_id: str
+
+class QRCodeConfirmRequest(BaseModel):
+    session_id: str
+    user_id: int

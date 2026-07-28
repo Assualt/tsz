@@ -6,7 +6,8 @@ import {
   MailOutlined,
   SafetyCertificateOutlined,
   RocketOutlined,
-  DoubleRightOutlined
+  DoubleRightOutlined,
+  QrcodeOutlined
 } from '@ant-design/icons'
 import type { FormInstance } from 'antd/es/form'
 import { login, register, getVerifyCode } from '@/api/user'
@@ -14,6 +15,7 @@ import { api } from '@renderer/api/index'
 import { marked } from 'marked'
 import DataType from './constant'
 import Copyright from '@renderer/components/Copyright'
+import QRCodeLogin from './QRCodeLogin'
 import './style.css'
 
 enum LogType {
@@ -243,9 +245,12 @@ const Login: React.FC<LoginProps> = ({ setSpin }) => {
   const [policyTitle, setPolicyTitle] = useState('')
   const [policyContent, setPolicyContent] = useState('')
   const [policyLoading, setPolicyLoading] = useState(false)
+  const [qrCodeLoginVisible, setQrCodeLoginVisible] = useState(false)
   const { verifyButtonText, verifyButtonDisable, startCountdown } = useCountdown()
 
   useEffect(() => {
+    if (!window.api) return
+
     const handleRequestLoginState = (_, targetId: number): void => {
       const loginData = {
         token: localStorage.getItem('stoken'),
@@ -330,6 +335,22 @@ const Login: React.FC<LoginProps> = ({ setSpin }) => {
       localStorage.removeItem('userInfo')
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const onQRCodeLoginSuccess = async (_token: string, _userInfo: unknown): Promise<void> => {
+    setQrCodeLoginVisible(false)
+    message.success('扫码登录成功')
+    try {
+      await window.api.getLoginState()
+      const success = await window.api.openNewWindow()
+      if (success) {
+        window.close()
+      } else {
+        message.error('打开主窗口失败，请重试')
+      }
+    } catch {
+      message.error('跳转失败，请手动登录')
     }
   }
 
@@ -550,11 +571,21 @@ const Login: React.FC<LoginProps> = ({ setSpin }) => {
         <div className="login-footer-wrapper">
           <Copyright />
         </div>
+        {/* 右下角扫码登录按钮 */}
+        <div className="qrcode-login-entry" onClick={() => setQrCodeLoginVisible(true)}>
+          <QrcodeOutlined className="qrcode-login-icon" />
+          <span className="qrcode-login-text">扫码登录</span>
+        </div>
       </div>
       <SlideVerify
         visible={slideVerifyVisible}
         onSuccess={onSlideVerifySuccess}
         onCancel={() => setSlideVerifyVisible(false)}
+      />
+      <QRCodeLogin
+        visible={qrCodeLoginVisible}
+        onClose={() => setQrCodeLoginVisible(false)}
+        onLoginSuccess={onQRCodeLoginSuccess}
       />
       <Modal
         title={policyTitle}

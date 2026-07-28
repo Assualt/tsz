@@ -3,11 +3,14 @@ from fastapi import APIRouter, Depends, HTTPException, status, Request
 from typing import Optional
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import json
+import random
+import uuid
+import asyncio
 from sqlalchemy.orm import Session
-from datetime import timedelta
+from datetime import timedelta, datetime
 from app.core.database import get_db
 from app.core.config import settings
-from app.schemas.user import CodeReq, User, UserCreate, Token, LoginRequest
+from app.schemas.user import CodeReq, User, UserCreate, Token, LoginRequest, QRCodeRequest, QRCodeStatusRequest, QRCodeConfirmRequest
 from app.schemas.response import SuccessResponse
 from app.models.user import User as UserModel
 from app.utils.redis import redis_client
@@ -171,8 +174,6 @@ async def login(request: Request, db: Session = Depends(get_db)):
     })
 
 
-import random
-
 @router.post("/code")
 def get_code(body: CodeReq):
     # 记录日志到文件和控制台
@@ -203,6 +204,7 @@ def generate_code() -> str:
     """生成6位数字的验证码"""
     return str(random.randint(100000, 999999))
         
+
 @router.post("/logout")
 def logout(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     # 获取当前用户
@@ -230,7 +232,6 @@ def logout(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
         trans.error("Logout error", extra={"extra_data": {"user_id": user.id, "username": user.username, "error": str(e)}})
     
     # 获取当前时间
-    from datetime import datetime
     logout_time = datetime.utcnow().isoformat() + "Z"
     
     # 返回成功响应
@@ -243,3 +244,148 @@ def logout(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
         }, 
         message="Logout successful"
     )
+
+
+@router.post("/qr-code")
+def generate_qr_code(request: Request):
+    """生成二维码用于扫码登录"""
+    # 生成唯一的session_id
+    session_id = str(uuid.uuid4())
+    # 生成二维码内容（可以是任意唯一标识）
+    qr_content = f"electorn_login:{session_id}"
+    
+    # 保存到Redis，状态为waiting
+    key = settings.REDIS_KEY_QR_CODE_PREFIX + session_id
+    value = json.dumps({
+        "status": "waiting",
+        "qr_content": qr_content,
+        "created_at": datetime.now().timestamp()
+    })
+    
+    try:
+        redis_client.set(key, value, expire=settings.REDIS_QR_CODE_EXPIRE)
+        console.info(f"QR code generated with session_id: {session_id}")
+    except Exception as e:
+        console.error(f"Failed to save QR code to Redis: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to generate QR code"
+        )
+    
+    return SuccessResponse(data={
+        "session_id": session_id,
+        "qr_content": qr_content,
+        "expire_seconds": settings.REDIS_QR_CODE_EXPIRE
+    })
+
+
+@router.get("/qr-status/{session_id}")
+async def check_qr_status(session_id: str, db: Session = Depends(get_db)):
+    """查询二维码扫码状态（用于前端轮询）"""
+    key = settings.REDIS_KEY_QR_CODE_PREFIX + session_id
+    
+    # 先等待一下，避免频繁请求
+    await asyncio.sleep(1)
+    
+    # 从Redis获取状态
+    value = redis_client.get(key)
+    if not value:
+        return SuccessResponse(data={
+            "status": "expired",
+            "message": "二维码已过期"
+        })
+    
+    data = json.loads(value)
+    current_status = data.get("status", "waiting")
+    
+    # 如果状态是confirmed，生成token并返回
+    if current_status == "confirmed":
+        user_id = data.get("user_id")
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if not user:
+            return SuccessResponse(data={
+                "status": "expired",
+                "message": "用户不存在"
+            })
+        
+        # 创建访问令牌
+        access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": str(user.id)},
+            expires_delta=access_token_expires
+        )
+        
+        # 将用户信息保存到redis
+        login_key = settings.REDIS_KEY_LOGIN_PREFIX + str(user.id) + ':' + user.username
+        login_value = {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": {
+                "user_id": user.id,
+                "username": user.username,
+                "email": user.email,
+            }
+        }
+        redis_client.set(login_key, json.dumps(login_value), expire=settings.REDIS_LOGIN_EXPIRE)
+        
+        # 删除二维码记录
+        redis_client.delete(key)
+        
+        return SuccessResponse(data={
+            "status": "confirmed",
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": {
+                "user_id": user.id,
+                "username": user.username,
+                "email": user.email,
+            }
+        })
+    
+    return SuccessResponse(data={
+        "status": current_status,
+        "message": f"二维码状态: {current_status}"
+    })
+
+
+@router.post("/qr-confirm")
+def confirm_qr_code(body: QRCodeConfirmRequest, db: Session = Depends(get_db)):
+    """手机端确认扫码登录"""
+    key = settings.REDIS_KEY_QR_CODE_PREFIX + body.session_id
+    
+    # 从Redis获取状态
+    value = redis_client.get(key)
+    if not value:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="二维码不存在或已过期"
+        )
+    
+    data = json.loads(value)
+    current_status = data.get("status", "waiting")
+    
+    if current_status == "expired":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="二维码已过期"
+        )
+    
+    # 验证用户是否存在
+    user = db.query(UserModel).filter(UserModel.id == body.user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="用户不存在"
+        )
+    
+    # 更新状态为confirmed
+    data["status"] = "confirmed"
+    data["user_id"] = body.user_id
+    redis_client.set(key, json.dumps(data), expire=settings.REDIS_QR_CODE_EXPIRE)
+    
+    console.info(f"QR code confirmed by user: {user.username}")
+    
+    return SuccessResponse(data={
+        "status": "confirmed",
+        "message": "确认成功"
+    })

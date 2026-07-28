@@ -173,3 +173,22 @@ export const getUserInfo = () => {
   const userInfo = localStorage.getItem('userInfo')
   return userInfo ? JSON.parse(userInfo) : null
 }
+
+/**
+ * 生成扫码登录二维码
+ * @returns 包含 code, message, data 的完整响应
+ */
+export const generateQRCode = async () => {
+  const res = await api.post('/auth/qr-code')
+  return res
+}
+
+/**
+ * 查询扫码状态
+ * @param sessionId 会话ID
+ * @returns 包含 code, message, data 的完整响应
+ */
+export const checkQRCodeStatus = async (sessionId: string) => {
+  const res = await api.get(`/auth/qr-status/${sessionId}`)
+  return res
+}
