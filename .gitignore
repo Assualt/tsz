@@ -9,5 +9,6 @@ vue-tsz/static/images/*
 
 vue-tsz/static/upload/*
 
-**/venv/**
+**/.venv/**
 **/logs/**
+*.db

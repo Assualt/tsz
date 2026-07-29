@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { Modal, Spin, message, Button } from 'antd'
 import QRCodeLib from 'qrcode'
 import { generateQRCode, checkQRCodeStatus } from '@/api/user'
@@ -14,46 +14,66 @@ type QRStatus = 'idle' | 'loading' | 'waiting' | 'expired' | 'error' | 'confirme
 const QRCodeLogin: React.FC<QRCodeLoginProps> = ({ visible, onClose, onLoginSuccess }) => {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('')
   const [expireSeconds, setExpireSeconds] = useState<number>(60)
+  const [totalSeconds, setTotalSeconds] = useState<number>(60)
   const [status, setStatus] = useState<QRStatus>('idle')
   const [errorMsg, setErrorMsg] = useState<string>('')
 
   const sessionIdRef = useRef<string>('')
-  const pollTimerRef = useRef<number | null>(null)
-  const countdownTimerRef = useRef<number | null>(null)
+  const pollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const countdownTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const isPollingRef = useRef(false)
+  const isCountingDownRef = useRef(false)
 
-  const clearTimers = (): void => {
+  const clearPollTimer = useCallback(() => {
     if (pollTimerRef.current) {
-      window.clearTimeout(pollTimerRef.current)
+      clearTimeout(pollTimerRef.current)
       pollTimerRef.current = null
     }
+  }, [])
+
+  const clearCountdownTimer = useCallback(() => {
     if (countdownTimerRef.current) {
-      window.clearInterval(countdownTimerRef.current)
+      clearInterval(countdownTimerRef.current)
       countdownTimerRef.current = null
     }
+  }, [])
+
+  const clearAllTimers = useCallback(() => {
+    clearPollTimer()
+    clearCountdownTimer()
     isPollingRef.current = false
-  }
+    isCountingDownRef.current = false
+  }, [clearPollTimer, clearCountdownTimer])
 
-  const startCountdown = (seconds: number): void => {
-    setExpireSeconds(seconds)
-    if (countdownTimerRef.current) {
-      window.clearInterval(countdownTimerRef.current)
-    }
-    countdownTimerRef.current = window.setInterval(() => {
-      setExpireSeconds((prev) => {
-        if (prev <= 1) {
-          window.clearInterval(countdownTimerRef.current!)
-          setStatus('expired')
-          isPollingRef.current = false
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-  }
+  const stopCountdown = useCallback(() => {
+    clearCountdownTimer()
+    isCountingDownRef.current = false
+  }, [clearCountdownTimer])
 
-  const pollStatus = async (sid: string): Promise<void> => {
+  const startCountdown = useCallback((seconds: number) => {
+    clearCountdownTimer()
+    isCountingDownRef.current = true
+
+    const endTime = Date.now() + seconds * 1000
+
+    countdownTimerRef.current = setInterval(() => {
+      const remaining = Math.round((endTime - Date.now()) / 1000)
+
+      if (remaining <= 0) {
+        clearCountdownTimer()
+        isCountingDownRef.current = false
+        setExpireSeconds(0)
+        setStatus('expired')
+        isPollingRef.current = false
+      } else {
+        setExpireSeconds(remaining)
+      }
+    }, 100)
+  }, [clearCountdownTimer])
+
+  const pollStatus = useCallback(async (sid: string) => {
     if (!isPollingRef.current) return
+
     try {
       const res = await checkQRCodeStatus(sid)
       if (res && res.code === 200 && res.data) {
@@ -62,7 +82,7 @@ const QRCodeLogin: React.FC<QRCodeLoginProps> = ({ visible, onClose, onLoginSucc
 
         if (currentStatus === 'confirmed') {
           isPollingRef.current = false
-          clearTimers()
+          clearAllTimers()
           setStatus('confirmed')
 
           const { access_token, user } = data
@@ -74,7 +94,7 @@ const QRCodeLogin: React.FC<QRCodeLoginProps> = ({ visible, onClose, onLoginSucc
           return
         } else if (currentStatus === 'expired') {
           isPollingRef.current = false
-          clearTimers()
+          clearAllTimers()
           setStatus('expired')
           return
         }
@@ -84,7 +104,7 @@ const QRCodeLogin: React.FC<QRCodeLoginProps> = ({ visible, onClose, onLoginSucc
       const errMsg = error instanceof Error ? error.message : ''
       if (errMsg.includes('401') || errMsg.includes('403')) {
         isPollingRef.current = false
-        clearTimers()
+        clearAllTimers()
         setStatus('error')
         setErrorMsg('登录状态已失效，请重新登录')
         return
@@ -92,19 +112,19 @@ const QRCodeLogin: React.FC<QRCodeLoginProps> = ({ visible, onClose, onLoginSucc
     }
 
     if (isPollingRef.current) {
-      pollTimerRef.current = window.setTimeout(() => {
+      pollTimerRef.current = setTimeout(() => {
         pollStatus(sid)
-      }, 2000) as unknown as number
+      }, 2000)
     }
-  }
+  }, [clearAllTimers, onLoginSuccess])
 
-  const startPolling = (sid: string): void => {
-    clearTimers()
+  const startPolling = useCallback((sid: string) => {
+    clearPollTimer()
     isPollingRef.current = true
     pollStatus(sid)
-  }
+  }, [clearPollTimer, pollStatus])
 
-  const fetchAndGenerateQR = async (): Promise<void> => {
+  const fetchAndGenerateQR = useCallback(async () => {
     setStatus('loading')
     setErrorMsg('')
     setQrCodeUrl('')
@@ -130,6 +150,8 @@ const QRCodeLogin: React.FC<QRCodeLoginProps> = ({ visible, onClose, onLoginSucc
         })
         setQrCodeUrl(url)
         setStatus('waiting')
+        setTotalSeconds(expireSecondsVal)
+        setExpireSeconds(expireSecondsVal)
         startCountdown(expireSecondsVal)
         startPolling(newSessionId)
       } else {
@@ -148,22 +170,22 @@ const QRCodeLogin: React.FC<QRCodeLoginProps> = ({ visible, onClose, onLoginSucc
         setErrorMsg(`生成二维码失败：${errMsg}`)
       }
     }
-  }
+  }, [startCountdown, startPolling])
 
   useEffect(() => {
     if (visible) {
       fetchAndGenerateQR()
     } else {
-      clearTimers()
+      clearAllTimers()
     }
-    const cleanup = (): void => {
-      clearTimers()
+
+    return (): void => {
+      clearAllTimers()
     }
-    return cleanup
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible])
+  }, [visible, fetchAndGenerateQR, clearAllTimers])
 
   const handleRegenerate = (): void => {
+    stopCountdown()
     fetchAndGenerateQR()
   }
 
@@ -187,21 +209,32 @@ const QRCodeLogin: React.FC<QRCodeLoginProps> = ({ visible, onClose, onLoginSucc
       )
     }
 
-    if (status === 'expired') {
-      return (
-        <div className="qrcode-expired">
-          <p>二维码已过期</p>
-          <Button type="primary" onClick={handleRegenerate}>
-            点击刷新
-          </Button>
-        </div>
-      )
-    }
+    if ((status === 'waiting' || status === 'expired') && qrCodeUrl) {
+      const progress = totalSeconds > 0 ? (expireSeconds / totalSeconds) * 100 : 0
 
-    if (status === 'waiting' && qrCodeUrl) {
       return (
-        <div className="qrcode-wrapper">
-          <img src={qrCodeUrl} alt="QR Code" className="qrcode-image" />
+        <div className="qrcode-container">
+          <div className="qrcode-wrapper">
+            <img src={qrCodeUrl} alt="QR Code" className="qrcode-image" />
+            {status === 'expired' && (
+              <div className="qrcode-overlay">
+                <div className="qrcode-overlay-content">
+                  <p className="qrcode-overlay-text">二维码已失效</p>
+                  <Button type="primary" size="small" onClick={handleRegenerate}>
+                    点击刷新
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+          {status === 'waiting' && (
+            <div className="qrcode-progress-wrapper">
+              <div
+                className="qrcode-progress-bar"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          )}
         </div>
       )
     }
@@ -214,7 +247,7 @@ const QRCodeLogin: React.FC<QRCodeLoginProps> = ({ visible, onClose, onLoginSucc
       title="扫码登录"
       open={visible}
       onCancel={() => {
-        clearTimers()
+        clearAllTimers()
         onClose()
       }}
       footer={null}
@@ -231,6 +264,12 @@ const QRCodeLogin: React.FC<QRCodeLoginProps> = ({ visible, onClose, onLoginSucc
             <p className="qrcode-countdown">
               二维码将在 <span className="countdown-number">{expireSeconds}</span> 秒后过期
             </p>
+          </div>
+        )}
+
+        {status === 'expired' && (
+          <div className="qrcode-info">
+            <p className="qrcode-expired-tip">二维码已失效，请点击上方按钮刷新</p>
           </div>
         )}
 

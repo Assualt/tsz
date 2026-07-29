@@ -571,11 +571,13 @@ const Login: React.FC<LoginProps> = ({ setSpin }) => {
         <div className="login-footer-wrapper">
           <Copyright />
         </div>
-        {/* 右下角扫码登录按钮 */}
-        <div className="qrcode-login-entry" onClick={() => setQrCodeLoginVisible(true)}>
-          <QrcodeOutlined className="qrcode-login-icon" />
-          <span className="qrcode-login-text">扫码登录</span>
-        </div>
+        {/* 右下角扫码登录按钮 - 仅在登录模式下显示 */}
+        {logType === LogType.Login && (
+          <div className="qrcode-login-entry" onClick={() => setQrCodeLoginVisible(true)}>
+            <QrcodeOutlined className="qrcode-login-icon" />
+            <span className="qrcode-login-text">扫码登录</span>
+          </div>
+        )}
       </div>
       <SlideVerify
         visible={slideVerifyVisible}
