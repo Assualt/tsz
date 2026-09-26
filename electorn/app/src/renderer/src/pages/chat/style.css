@@ -1,0 +1,12 @@
+/* 聊天页面通用样式 */
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .chat-message-box {
+    padding: 8px 12px;
+  }
+
+  .chat-input-box-toolbar {
+    padding: 4px 8px;
+  }
+}

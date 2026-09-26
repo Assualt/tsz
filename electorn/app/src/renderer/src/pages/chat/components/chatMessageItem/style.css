@@ -1,0 +1,136 @@
+/* 消息列表容器 */
+.chat-message-list-container {
+  display: flex;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+
+/* 自己的消息右对齐 */
+.self-message {
+  flex-direction: row-reverse;
+}
+
+/* 消息列表项 */
+.chat-message-list-item {
+  display: flex;
+  align-items: flex-start;
+  max-width: 70%;
+}
+
+/* 自己的消息最大宽度为聊天栏的80%（加上头像50px空间） */
+.self-message .chat-message-list-item {
+  max-width: calc(80% + 50px);
+  width: fit-content;
+}
+
+/* 自己的消息内容区域：短消息自适应，长消息上限80% */
+.self-message .chat-message-list-item-content {
+  width: fit-content;
+  max-width: 80%;
+  align-items: flex-end;
+}
+
+/* 头像 */
+.chat-message-list-item-avatar {
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.chat-message-list-item-avatar:hover {
+  cursor: pointer;
+}
+
+.self-message .chat-message-list-item-avatar {
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+/* 消息内容 */
+.chat-message-list-item-content {
+  display: flex;
+  flex-direction: column;
+  max-width: calc(100% - 50px);
+}
+
+/* 消息发送者名称 */
+.chat-message-list-item-content-name {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 4px;
+  padding: 0 4px;
+}
+
+/* 消息文本气泡：圆润大圆角 */
+.chat-message-list-item-content-text {
+  background-color: #fff;
+  padding: 9px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  display: inline-block;
+  max-width: 100%;
+  word-break: break-word;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.self-message .chat-message-list-item-content-text {
+  background-color: #95ec69;
+  color: #000;
+  /* 自己发送的气泡：右下角保留小圆角，气泡感更强 */
+  border-radius: 14px 14px 4px 14px;
+}
+
+/* 非自己发送的气泡：左下角小圆角 */
+.chat-message-list-container:not(.self-message) .chat-message-list-item-content-text {
+  border-radius: 14px 14px 14px 4px;
+}
+
+/* 气泡内图片圆润化 */
+.chat-message-list-item-content-text .ant-image,
+.chat-message-list-item-content-text .ant-image img {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* 消息时间 */
+.chat-message-list-item-content-time {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #bbb;
+  padding: 0 4px;
+}
+
+/* 文件链接 */
+.chat-file-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #1890ff;
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: background-color 0.3s;
+}
+
+.chat-file-link:hover {
+  background-color: #f5f5f5;
+}
+
+.chat-file-icon {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.chat-file-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-file-name {
+  font-weight: bold;
+}
+
+.chat-file-size {
+  font-size: 12px;
+  color: #999;
+}
